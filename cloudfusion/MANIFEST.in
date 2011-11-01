@@ -1,0 +1,1 @@
+recursive-include cloudfusion/config *.conf *.ini *.cfg
