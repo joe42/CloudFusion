@@ -148,8 +148,9 @@ class PyFuseBox(Operations):
         self.logger.debug("rename %s to %s" % (old, new))
         try:
             #if file is opened with gedit a hidden file is written and immediately renamed to the target file without flushing 
-            if not old in self.temp_file: 
-                self.flush(old, 0)
+            if old in self.temp_file: 
+                self.logger.debug("flushing before renaming %s" % (old))
+                self.store.store_fileobject(self.temp_file[old], old)
             self.store.move(old, new)
         except NoSuchFilesytemObjectError:
             raise FuseOSError(ENOENT)
