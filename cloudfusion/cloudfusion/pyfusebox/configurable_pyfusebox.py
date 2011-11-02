@@ -165,8 +165,8 @@ class ConfigurablePyFuseBox(FlushingPyFuseBox):
             self.logger.debug("get dropbox store")
             try:
                 store = DropboxStore(auth)
-            except Exception as (e,msg):
-                self.logger.debug(str(e)+" -- "+msg)
+            except Exception as e:
+                self.logger.debug(str(e))
             self.logger.debug("got dropbox store")
         return store
     
