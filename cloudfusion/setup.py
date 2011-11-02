@@ -8,6 +8,7 @@ setuptools.setup(
     name = "CloudFusion",
     packages = setuptools.find_packages(),
     include_package_data = True,
+    install_requires = ['mechanize', 'nose', 'oauth', 'poster', 'simplejson'],
     version = "0.5.0",
     description = "Filesystem interface to cloud storage services",
     author = "Johannes Mueller",

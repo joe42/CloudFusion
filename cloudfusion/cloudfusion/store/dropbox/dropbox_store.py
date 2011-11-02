@@ -6,7 +6,7 @@ Created on 08.04.2011
 
 import time
 import datetime
-from dropbox import client, auth
+from cloudfusion.dropbox import client, auth
 from cloudfusion.store.store import *
 import logging
 import logging.config
