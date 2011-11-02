@@ -9,7 +9,7 @@ from cloudfusion.store.caching_store import CachingStore
 from cloudfusion.store.metadata_caching_store import MetadataCachingStore
 import os.path, time
 import tempfile
-from dropbox import auth
+from cloudfusion.dropbox import auth
 from ConfigParser import SafeConfigParser
 from cloudfusion.store.sugarsync.error_handling_sugarsync_store import ErrorHandlingSugarsyncStore
 import time

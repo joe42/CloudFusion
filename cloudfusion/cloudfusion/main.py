@@ -7,7 +7,7 @@ from cloudfusion.pyfusebox.pyfusebox import PyFuseBox
 from cloudfusion.pyfusebox.configurable_pyfusebox import ConfigurablePyFuseBox
 from cloudfusion.fuse import FUSE
 import os, sys, stat,  time
-from dropbox import auth
+from cloudfusion.dropbox import auth
 import getpass
 from ConfigParser import SafeConfigParser
 

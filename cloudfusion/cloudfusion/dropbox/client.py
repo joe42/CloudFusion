@@ -4,7 +4,7 @@ configure a dropbox.client.Authenticator for this to work, but otherwise
 it's fairly self-explanatory.
 """
 
-from dropbox import rest
+from cloudfusion.dropbox import client
 import urllib
 import urllib2
 import poster
