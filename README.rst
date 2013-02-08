@@ -33,6 +33,10 @@ Enjoy accessing your files in the directory **mnt/data**.
 Notes
 ------
 
+Currently, there is an issue due to which you cannot use CloudFusion with Dropbox due to an API update by the provider. 
+As a workaround, write to me in the respective issue on github so I can give you my API keys - which still work.
+I will see to the problem as soon as possible, which is probably around 26 Feb.
+
 I am not affiliated with Dropbox nor with Sugarsync.
 
 Since the Dropbox API does not allow write synchronization an application like this file system cannot guarantee consistency when several clients try to write the same file. Therefore it cannot obtain production status. Hence, you need to create your own developer keys to use it.
