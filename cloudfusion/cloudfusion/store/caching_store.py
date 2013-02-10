@@ -125,7 +125,7 @@ class CachingStore(Store):
         self.logger.debug("cached storing value %s..." %self.entries.get_value(path)[:10]) 
         if flush:
             self.logger.debug("cache entry for %s is expired -> flushing" % path) 
-            self._flush(path)
+            self.__flush(path)
 
     def delete(self, path):#delete from metadata 
         self.entries.delete(path)
