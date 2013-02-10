@@ -10,25 +10,28 @@ Created on 08.04.2011
 '''
     
 import tempfile
-from cloudfusion.util.cache import Cache
+from cloudfusion.util.persistent_lru_cache import PersistentLRUCache
 from cloudfusion.store.dropbox.file_decorator import *
 from cloudfusion.store.store import *
 import time
 import logging
+import random
 
 """Wrapped store needs a logger as an attribute called logger """
 
 class CachingStore(Store):
-    def __init__(self, store, cache_expiration_time):
+    def __init__(self, store, cache_expiration_time, cache_size_in_mb=2000, cache_id=str(random.random())):
         """":param store: the store whose access should be cached 
-            :param cache_expiration_time: the time in seconds until any cache entry is expired""" 
+            :param cache_expiration_time: the time in seconds until any cache entry is expired
+            :param:`cache_size_in_mb`: Approximate limit of the cache in MB.
+            :param:`cache_id`: Serves as identifier for a persistent cache instance. """ 
         self.store = store
         self.logger = logging.getLogger(self.get_logging_handler())
         self.logger.debug("creating CachingStore object")
 #        self.temp_file = tempfile.SpooledTemporaryFile()
         self.cache_expiration_time = cache_expiration_time
         self.time_of_last_flush = time.time()
-        self.entries = Cache(cache_expiration_time)
+        self.entries = PersistentLRUCache("/tmp/cachingstore_"+cache_id, cache_expiration_time, cache_size_in_mb)
     
     def get_cache_expiration_time(self):
         """:returns: the time in seconds until any cache entry is expired"""
@@ -214,8 +217,7 @@ class CachingStore(Store):
             file.fileno()#
             self.store.store_fileobject(file, path)
             self.entries.flush(path)
-            self.logger.debug("flushing %s with content starting with %s" % (path, self.entries.get_value(path)[0:10]))
-            
+            self.logger.debug("flushed %s " % path)
             
     def get_logging_handler(self):
         return self.store.get_logging_handler()

@@ -13,6 +13,7 @@ from cloudfusion.store.dropbox.dropbox_store import DropboxStore
 from cloudfusion.store.sugarsync.sugarsync_store import SugarsyncStore
 from cloudfusion.store.caching_store import CachingStore
 from cloudfusion.store.metadata_caching_store import MetadataCachingStore
+import random
 
 
 class ConfigurablePyFuseBox(FlushingPyFuseBox):
@@ -133,22 +134,20 @@ class ConfigurablePyFuseBox(FlushingPyFuseBox):
         conf = self.virtual_file.get_store_config_data()
         service = conf['name']
         self.logger.debug("got service name")
-        cache_time = 0
-        metadata_cache_time = 0
-        if 'cache' in conf:
-            cache_time = int(conf['cache']) 
-        if 'metadata_cache' in conf:
-            metadata_cache_time = int(conf['metadata_cache']) 
+        cache_time = int(conf.get('cache', 0))
+        metadata_cache_time = int(conf.get('metadata_cache', 0))
+        cache_size = int(conf.get('cache_size', 2000))
+        cache_id = str(conf.get('cache_id', random.random()))
         self.logger.debug("got cache parameter")
         auth = self.virtual_file.get_service_auth_data()
         self.logger.debug("got auth data: "+str(auth))
         store = self.__get_new_store(service, auth) #catch error?
         self.logger.debug("initialized store")
         if cache_time > 0 and metadata_cache_time > 0:
-            store = MetadataCachingStore( CachingStore( MetadataCachingStore( store, metadata_cache_time ), cache_time ), metadata_cache_time )
+            store = MetadataCachingStore( CachingStore( MetadataCachingStore( store, metadata_cache_time ), cache_time, cache_size, cache_id ), metadata_cache_time )
             self.set_cache_expiration_time(cache_time)
         elif cache_time > 0:
-            store = CachingStore(store, cache_time)
+            store = CachingStore(store, cache_time, cache_size, cache_id)
             self.set_cache_expiration_time(cache_time)
         elif metadata_cache_time > 0:
             store = MetadataCachingStore( store, metadata_cache_time )
