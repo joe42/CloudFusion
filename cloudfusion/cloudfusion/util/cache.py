@@ -32,7 +32,7 @@ class Cache(object):
         self.entries[key] = entry
         
     def get_keys(self):
-        return self.entries
+        return self.entries.keys()
     
     def get_modified(self, key):
         return self.entries[key]['modified']
