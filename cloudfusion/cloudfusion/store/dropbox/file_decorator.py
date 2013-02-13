@@ -105,7 +105,7 @@ class DataFileWrapper(file):
         self.data = data
         self.len = len(self.data)
         self.offset = 0
-        self.file_object = tempfile.SpooledTemporaryFile()
+        self.file_object = tempfile.SpooledTemporaryFile(max_size=1000000)
         self.file_object.write(data)
         self.file_object.seek(0)
     def close(self):
