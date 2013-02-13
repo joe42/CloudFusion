@@ -20,7 +20,7 @@ import random
 """Wrapped store needs a logger as an attribute called logger """
 
 class CachingStore(Store):
-    def __init__(self, store, cache_expiration_time, cache_size_in_mb=2000, cache_id=str(random.random())):
+    def __init__(self, store, cache_expiration_time=60, cache_size_in_mb=2000, cache_id=str(random.random())):
         """":param store: the store whose access should be cached 
             :param cache_expiration_time: the time in seconds until any cache entry is expired
             :param:`cache_size_in_mb`: Approximate limit of the cache in MB.

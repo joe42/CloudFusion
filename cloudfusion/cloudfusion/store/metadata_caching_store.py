@@ -39,7 +39,7 @@ class Entry(object):
 #class Entries(Cache):
         
 class MetadataCachingStore(Store):
-    def __init__(self, store, cache_expiration_time):
+    def __init__(self, store, cache_expiration_time=60):
         self.store = store
         self.logger = logging.getLogger(self.get_logging_handler())
         self.logger.debug("creating MetadataCachingStore object")
