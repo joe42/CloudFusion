@@ -11,7 +11,7 @@ import os.path, time
 import tempfile
 from cloudfusion.dropbox import auth
 from ConfigParser import SafeConfigParser
-from cloudfusion.store.sugarsync.error_handling_sugarsync_store import ErrorHandlingSugarsyncStore
+#from cloudfusion.store.sugarsync.error_handling_sugarsync_store import ErrorHandlingSugarsyncStore
 import time
 import cloudfusion
 LOCAL_TESTFILE_PATH = "cloudfusion/tests/testfile"
