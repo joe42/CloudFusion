@@ -9,7 +9,7 @@ from cloudfusion.store.caching_store import CachingStore
 from cloudfusion.store.metadata_caching_store import MetadataCachingStore
 import os.path, time
 import tempfile
-from cloudfusion.dropbox import auth
+from cloudfusion.dropbox import session
 from ConfigParser import SafeConfigParser
 #from cloudfusion.store.sugarsync.error_handling_sugarsync_store import ErrorHandlingSugarsyncStore
 import time
@@ -33,7 +33,11 @@ REMOTE_DELETED_FILE = REMOTE_TESTDIR+"/"+"i_am_a_file_which_is_deleted"
 REMOTE_DELETED_DIR = REMOTE_TESTDIR+"/"+"i_am_a_folder_which_is_deleted"
 
 def get_dropbox_config():
-    return auth.Authenticator.load_config(os.path.dirname(cloudfusion.__file__)+"/config/dropbox_testing.ini")
+    config = SafeConfigParser()
+    config_file = open(os.path.dirname(cloudfusion.__file__)+"/config/dropbox_testing.ini", "r")
+    config.readfp(config_file)
+    return dict(config.items('auth'))
+
 
 def get_sugarsync_config():
     config = SafeConfigParser()
@@ -44,14 +48,15 @@ def get_sugarsync_config():
 io_apis = []
 
 def setUp():
-    dropbox_config = get_dropbox_config()
+    dropbox_config = get_dropbox_config() 
     sugarsync_config = get_sugarsync_config()
-    io_apis.append( DropboxStore(dropbox_config) ) 
+    dropbox_store = DropboxStore(dropbox_config)
+    io_apis.append( dropbox_store )
     io_apis.append( SugarsyncStore(sugarsync_config) ) 
-    io_apis.append( CachingStore( DropboxStore(dropbox_config) ) ) 
+    io_apis.append( CachingStore( dropbox_store ) ) 
     io_apis.append( CachingStore( SugarsyncStore(sugarsync_config) ) )
     io_apis.append( MetadataCachingStore( CachingStore( SugarsyncStore(sugarsync_config) ) ) )
-    io_apis.append( CachingStore( MetadataCachingStore( DropboxStore(dropbox_config) ) ) )
+    io_apis.append( CachingStore( MetadataCachingStore( dropbox_store ) ) )
     #io_apis.append( ErrorHandlingSugarsyncStore( SugarsyncStore(sugarsync_config) )  ) 
     #time.sleep(10)
     for io_api in io_apis:

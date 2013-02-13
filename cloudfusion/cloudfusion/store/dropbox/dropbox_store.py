@@ -6,7 +6,8 @@ Created on 08.04.2011
 
 import time
 import datetime
-from cloudfusion.dropbox import client, auth
+from cloudfusion.dropbox import client, session
+from cloudfusion.dropbox import rest
 from cloudfusion.store.store import *
 import logging
 import logging.config
@@ -16,6 +17,8 @@ import tempfile
 import ConfigParser
 import StringIO
 import cloudfusion
+import webbrowser
+from cloudfusion.store.dropbox import file_decorator
 
 
 
@@ -41,18 +44,31 @@ class DropboxStore(Store):
                 #TODO: check if is filehandler
         self.logger = logging.getLogger(self._logging_handler)
         self.dir_listing_cache = {}
-        self.logger.debug("get Authenticator")
-        dba = auth.Authenticator(config)
-        self.logger.debug("get access_token: for: "+config['user']+" "+ config['password'])
-        access_token = dba.obtain_trusted_access_token(config['user'], config['password'])
-        self.logger.debug("get DropboxClient")
-        try:
-            self.client = client.DropboxClient(config['server'], config['content_server'], config['port'], dba, access_token)
-        except Exception, e:
+        self.logger.debug("get Dropbox session")
+        if not config['root'] in ['dropbox', 'app_folder']:
+            raise StoreAccessError("Configuration error: root must be one of dropbox or app_folder, check your configuration file", 0)
+        sess = session.DropboxSession(config['consumer_key'], config['consumer_secret'], config['root'])
+        request_token = sess.obtain_request_token()
+        url = sess.build_authorize_url(request_token)
+        # Make the user sign in and authorize this token
+        print "url:", url
+        print "Please visit this website and press the 'Allow' button in the next Minute."
+        webbrowser.open(url)
+        access_token = None
+        error = None
+        for i in range(0,20):
+            time.sleep(3)
             try:
-                self.client = client.DropboxClient(config['server'], config['content_server'], config['port'], dba, access_token)
-            except Exception, e:
-                raise StoreAccessError("Transfer error: "+str(e), 0)
+                access_token = sess.obtain_access_token(request_token)
+                break
+            except Exception as e:
+                error = e
+                pass
+        if not access_token:
+            print "Sorry, please try copying the config file again."
+            raise StoreAccessError("Authorization error: "+str(error), 0)
+        self.logger.debug("get DropboxClient")
+        self.client = client.DropboxClient(sess)
         self.root = config['root']
         self.time_difference = self._get_time_difference()
         self.logger.info("api initialized")
@@ -66,48 +82,54 @@ class DropboxStore(Store):
         self.logger.debug("getting file: " +path_to_file)
         self._raise_error_if_invalid_path(path_to_file)
         try:
-            resp = self.client.get_file(self.root, path_to_file)
+            resp = self.client.get_file(path_to_file)
         except Exception, e:
             try:
-                resp = self.client.get_file(self.root, path_to_file)
+                resp = self.client.get_file(path_to_file)
+            except rest.ErrorResponse as resp:
+                msg= "could not get file: " +path_to_file
+                self._log_http_error("get_file", path_to_file, resp, msg)
+                return ""
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
-        if resp.status != 200:
-            msg= "could not get file: " +path_to_file
-            self._log_http_error("get_file", path_to_file, resp, msg)
-            return ""
         ret = resp.read()
         return ret
     
     def store_fileobject(self, fileobject, path):
         self.logger.debug("storing file object to "+path)
         remote_file_name = os.path.basename(path)
-        dest_dir = os.path.dirname(path);
         namable_file = NameableFile( fileobject, remote_file_name )
         try:
-            resp = self.client.put_file(self.root, dest_dir, namable_file) 
+            resp = self.client.put_file(path, namable_file) 
         except Exception, e:
             try:
-                resp = self.client.put_file(self.root, dest_dir, namable_file) 
+                resp = self.client.put_file(path, namable_file) 
+            except rest.ErrorResponse as resp:
+                msg= "could not store file: " +path+remote_file_name 
+                self._log_http_error("store_fileobject", path, resp, msg)
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
-        if resp.status != 200:
-            msg= "could not store file: " +dest_dir+remote_file_name 
-            self._log_http_error("store_fileobject", path, resp, msg)
     
     def delete(self, path):
         self.logger.debug("deleting " +path)
         self._raise_error_if_invalid_path(path)
+        remote_file_name = os.path.basename(path)
+        dest_dir = os.path.dirname(path);
+        empty_file = NameableFile( file_decorator.DataFileWrapper(""), remote_file_name )
         try:
-            resp = self.client.file_delete(self.root, path)
+          #  if self.is_dir(path):
+                #self.client.put_file('/'+dest_dir, empty_file) 
+            resp = self.client.file_delete(path)
         except Exception, e:
             try:
-                resp = self.client.file_delete(self.root, path)
+                #if self.is_dir(path):
+                    #self.client.put_file('/'+dest_dir, empty_file) 
+                resp = self.client.file_delete(path)
+            except rest.ErrorResponse as resp:
+                msg= "could not delete " +path
+                self._log_http_error("delete", path, resp, msg)
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
-        if resp.status != 200:
-            msg= "could not delete " +path
-            self._log_http_error("delete", path, resp, msg)
             #assert_all_in(resp.data.keys(), [u'is_deleted', u'thumb_exists', u'bytes', u'modified',u'path', u'is_dir', u'size', u'root', u'mime_type', u'icon'])
         
     def account_info(self):
@@ -117,13 +139,13 @@ class DropboxStore(Store):
         except Exception, e:
             try:
                 resp =  self.client.account_info()
+            except rest.ErrorResponse as resp:
+                msg= "could not get account_info "
+                self._log_http_error("delete", None, resp, msg)
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
-        if resp.status != 200:
-            msg= "could not get account_info "
-            self._log_http_error("delete", None, resp, msg)
             #assert_all_in(resp.data.keys(), [u'country', u'display_name', u'uid', u'quota_info'])
-        return str(resp.data)
+        return str(resp)
 
     def create_directory(self, directory):
         self.logger.debug("creating directory " +directory)
@@ -131,15 +153,15 @@ class DropboxStore(Store):
         if directory == "/":
             return
         try:
-            resp = self.client.file_create_folder(self.root, directory)
+            resp = self.client.file_create_folder(directory)
         except Exception, e:
             try:
-                resp = self.client.file_create_folder(self.root, directory)
+                resp = self.client.file_create_folder(directory)
+            except rest.ErrorResponse as resp:
+                msg= "could not create directory: " +directory
+                self._log_http_error("create_directory", directory, resp, msg)
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
-        if resp.status != 200:
-            msg= "could not create directory: " +directory
-            self._log_http_error("create_directory", directory, resp, msg)
         #assert_all_in(resp.data.keys(), [u'thumb_exists', u'bytes', u'modified', u'path', u'is_dir', u'size', u'root', u'icon'])
         
     def duplicate(self, path_to_src, path_to_dest):
@@ -147,15 +169,15 @@ class DropboxStore(Store):
         self._raise_error_if_invalid_path(path_to_src)
         self._raise_error_if_invalid_path(path_to_dest)
         try:
-            resp = self.client.file_copy(self.root, path_to_src, path_to_dest)
+            resp = self.client.file_copy(path_to_src, path_to_dest)
         except Exception, e:
             try:
-                resp = self.client.file_copy(self.root, path_to_src, path_to_dest)
+                resp = self.client.file_copy(path_to_src, path_to_dest)
+            except rest.ErrorResponse as resp:
+                msg= "could not duplicate " +path_to_src+" to "+path_to_dest
+                self._log_http_error("duplicate", None, resp, msg)
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
-        if resp.status != 200:
-            msg= "could not duplicate " +path_to_src+" to "+path_to_dest
-            self._log_http_error("duplicate", None, resp, msg)
         #ssert_all_in(resp.data.keys(), [u'thumb_exists', u'bytes', u'modified',u'path', u'is_dir', u'size', u'root', u'mime_type', u'icon'])
     
     def move(self, path_to_src, path_to_dest):
@@ -163,19 +185,19 @@ class DropboxStore(Store):
         self._raise_error_if_invalid_path(path_to_src)
         self._raise_error_if_invalid_path(path_to_dest)
         try:
-            resp = self.client.file_move(self.root, path_to_src, path_to_dest)
+            resp = self.client.file_move(path_to_src, path_to_dest)
         except Exception, e:
             try:
-                resp = self.client.file_move(self.root, path_to_src, path_to_dest)
+                resp = self.client.file_move(path_to_src, path_to_dest)
+            except rest.ErrorResponse as resp:
+                if resp.status == 400:
+                    self.delete(path_to_dest)
+                    self.move(path_to_src, path_to_dest)
+                else:
+                    msg= "could not move " +path_to_src+" to "+path_to_dest
+                    self._log_http_error("move", None, resp, msg)
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
-        if resp.status != 200:
-            if resp.status == 400:
-                self.delete(path_to_dest)
-                self.move(path_to_src, path_to_dest)
-            else:
-                msg= "could not move " +path_to_src+" to "+path_to_dest
-                self._log_http_error("move", None, resp, msg)
     
     def get_overall_space(self):
         self.logger.debug("retrieving all space")
@@ -184,13 +206,13 @@ class DropboxStore(Store):
         except Exception, e:
             try:
                 resp =  self.client.account_info()
+            except rest.ErrorResponse as resp:
+                msg= "could not retrieve all space"
+                self._log_http_error("move", None, resp, msg)
+                return 0
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
-        if resp.status != 200:
-            msg= "could not retrieve all space"
-            self._log_http_error("move", None, resp, msg)
-            return 0
-        return resp.data[u'quota_info']["quota"]
+        return resp[u'quota_info']["quota"]
 
     def get_used_space(self):
         self.logger.debug("retrieving used space")
@@ -199,13 +221,13 @@ class DropboxStore(Store):
         except Exception, e:
             try:
                 resp =  self.client.account_info()
+            except rest.ErrorResponse as resp:
+                msg= "could not retrieve used space"
+                self._log_http_error("move", None, resp, msg)
+                return 0
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
-        if resp.status != 200:
-            msg= "could not retrieve used space"
-            self._log_http_error("move", None, resp, msg)
-            return 0
-        return resp.data[u'quota_info']["shared"] + resp.data[u'quota_info']["normal"]
+        return resp[u'quota_info']["shared"] + resp[u'quota_info']["normal"]
         
     def get_directory_listing(self, directory):
         self.logger.debug("getting directory listing for "+directory)
@@ -214,24 +236,25 @@ class DropboxStore(Store):
         if directory in self.dir_listing_cache:
             hash = self.dir_listing_cache[directory]['hash']
         try:
-            resp = self.client.metadata(self.root, directory, hash=hash, list=True)
+            resp = self.client.metadata(directory, hash=hash, list=True)
         except Exception, e:
             try:
-                resp = self.client.metadata(self.root, directory, hash=hash, list=True)
+                resp = self.client.metadata(directory, hash=hash, list=True)
+            except rest.ErrorResponse as resp:
+                if resp.status == 304: 
+                    self.logger.debug("retrieving listing from cache " +directory)
+                    ret = self.dir_listing_cache[directory]['dir_listing']
+                    return ret
+                else:
+                    msg= "could not get directory listing for " +directory
+                    self._log_http_error("get_directory_listing", None, resp, msg)
+                    raise StoreAccessError("Transfer error: "+str(e), 0)
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
-        if resp.status != 200: 
-            if resp.status == 304: 
-                self.logger.debug("retrieving listing from cache " +directory)
-                ret = self.dir_listing_cache[directory]['dir_listing']
-            else:
-                msg= "could not get directory listing for " +directory
-                self._log_http_error("move", None, resp, msg)
-        else:
-            ret = self._parse_dir_list(resp.data)
-            self.dir_listing_cache[directory] = {}
-            self.dir_listing_cache[directory]['hash'] = resp.data["hash"]
-            self.dir_listing_cache[directory]['dir_listing'] = ret
+        ret = self._parse_dir_list(resp)
+        self.dir_listing_cache[directory] = {}
+        self.dir_listing_cache[directory]['hash'] = resp["hash"]
+        self.dir_listing_cache[directory]['dir_listing'] = ret
         return ret.keys()
     
     def _parse_dir_list(self, data):
@@ -245,8 +268,8 @@ class DropboxStore(Store):
       
     def _log_http_error(self, method_name, path, resp, msg = None):
         log = method_name + " failed with status: "+str(resp.status)
-        if hasattr(resp,"data") and 'error' in resp.data: # data does not exist, on get_file?
-            log += " -- error:"+resp.data['error']
+        if hasattr(resp,"data") and 'error' in resp.body: # data does not exist, on get_file?
+            log += " -- error:"+resp.body['error']
         else:
             log += " -- reason: "+str(resp.reason) 
         if msg:
@@ -263,26 +286,28 @@ class DropboxStore(Store):
             ret["path"] = "/"
             ret["is_dir"] = True
             return ret;
+
         try:
-            resp = self.client.metadata(self.root, path, list=False)
+            resp = self.client.metadata(path, list=False)
         except Exception, e:
             try:
-                resp = self.client.metadata(self.root, path, list=False)
+                resp = self.client.metadata(path, list=False)
+            except rest.ErrorResponse as resp:
+                if resp.status == 404:
+                    msg = None
+                    self._log_http_error("_get_metadata", path, resp, msg)
+                    raise NoSuchFilesytemObjectError(path, resp.status)
+                elif resp.status != 200:
+                    self._log_http_error("_get_metadata", path, resp)
+                    raise RetrieveMetadataError(path, resp.body['error'], resp.status)
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
-        object_is_deleted = 'is_deleted' in resp.data and resp.data['is_deleted']
-        self.logger.info(repr(resp.data))
-        if resp.status == 404 or object_is_deleted:
-            msg = None
-            if object_is_deleted:
-                msg = "filesystem object has been deleted"
-            self._log_http_error("_get_metadata", path, resp, msg)
-            raise NoSuchFilesytemObjectError(path, resp.status)
-        elif resp.status != 200:
-            self._log_http_error("_get_metadata", path, resp)
-            raise RetrieveMetadataError(path, resp.data['error'], resp.status)
-        elif resp.status == 200:
-            return self._parse_filesys_obj(resp.data)
+        object_is_deleted = 'is_deleted' in resp and resp['is_deleted']
+        if object_is_deleted:
+            msg = "filesystem object has been deleted"
+            raise NoSuchFilesytemObjectError(path, 0)
+        self.logger.info(repr(resp))
+        return self._parse_filesys_obj(resp)
     
     def _parse_filesys_obj(self, data):
         #OverflowError or ValueError
@@ -302,14 +327,7 @@ class DropboxStore(Store):
     
     def _get_time_difference(self):
         self.logger.debug("getting time difference")
-        try:
-            resp =  self.client.account_info()
-        except Exception, e:
-            try:
-                resp =  self.client.account_info()
-            except Exception, e:
-                raise StoreAccessError("Transfer error: "+str(e), 0)
-        return time.mktime( time.strptime(resp.headers['date'], "%a, %d %b %Y %H:%M:%S GMT") ) - time.time()
+        return 0
     
     
     def get_logging_handler(self):
