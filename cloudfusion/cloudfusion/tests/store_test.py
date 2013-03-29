@@ -50,13 +50,13 @@ io_apis = []
 def setUp():
     dropbox_config = get_dropbox_config() 
     sugarsync_config = get_sugarsync_config()
-    dropbox_store = DropboxStore(dropbox_config)
-    io_apis.append( dropbox_store )
+    #dropbox_store = DropboxStore(dropbox_config)
+    #io_apis.append( dropbox_store )
     io_apis.append( SugarsyncStore(sugarsync_config) ) 
-    io_apis.append( CachingStore( dropbox_store ) ) 
+    #io_apis.append( CachingStore( dropbox_store ) ) 
     io_apis.append( CachingStore( SugarsyncStore(sugarsync_config) ) )
     io_apis.append( MetadataCachingStore( CachingStore( SugarsyncStore(sugarsync_config) ) ) )
-    io_apis.append( CachingStore( MetadataCachingStore( dropbox_store ) ) )
+    #io_apis.append( CachingStore( MetadataCachingStore( dropbox_store ) ) )
     #io_apis.append( ErrorHandlingSugarsyncStore( SugarsyncStore(sugarsync_config) )  ) 
     #time.sleep(10)
     for io_api in io_apis:

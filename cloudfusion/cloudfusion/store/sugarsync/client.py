@@ -7,6 +7,7 @@ import httplib2
 import os.path
 from cloudfusion.util.xmlparser import DictXMLParser
 from cloudfusion.util.string import *
+import base64
 
 #make thread safe by adding connection creation to every method call
 
@@ -18,7 +19,16 @@ class SugarsyncClient(object):
         self.private_access_key = config["private_access_key"] 
         self.username = config["user"]
         self.password = config["password"] 
+        self.create_user(self.username, self.password)
         self._reconnect()
+    
+    def create_user(self, username, password):       
+        params = '<?xml version="1.0" encoding="UTF-8" ?><user>    <email>%s</email>    <password>%s</password>    <accessKeyId>%s</accessKeyId>    <privateAccessKey>%s</privateAccessKey></user>' % (username, password, base64.b64decode(self.access_key_id), base64.b64decode(self.private_access_key))
+        headers = {"Host": self.host}#send application/xml; charset=UTF-8
+        conn = httplib2.Http()
+        response, content = conn.request("https://provisioning-api.sugarsync.com/users","POST",params,headers)
+        ret = HTTPResponse( response, content )
+        return ret
     
     def _reconnect(self):
         response = self.create_token()
@@ -29,7 +39,7 @@ class SugarsyncClient(object):
         
     
     def create_token(self):
-        params = '<?xml version="1.0" encoding="UTF-8" ?><authRequest>    <username>%s</username>    <password>%s</password>    <accessKeyId>%s</accessKeyId>    <privateAccessKey>%s</privateAccessKey></authRequest>' % (self.username, self.password, self.access_key_id, self.private_access_key)
+        params = '<?xml version="1.0" encoding="UTF-8" ?><authRequest>    <username>%s</username>    <password>%s</password>    <accessKeyId>%s</accessKeyId>    <privateAccessKey>%s</privateAccessKey></authRequest>' % (self.username, self.password, base64.b64decode(self.access_key_id), base64.b64decode(self.private_access_key))
         headers = {"Host": self.host}#send application/xml; charset=UTF-8
         conn = httplib2.Http()
         response, content = conn.request("https://"+self.host+ "/authorization","POST",params,headers)

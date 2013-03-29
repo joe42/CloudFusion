@@ -30,9 +30,8 @@ Create a Configuration File
 
 Sugarsync
 ++++++++++
-For Sugarsync you need to create a developer account at https://www.sugarsync.com/developer/login. Next, create an application and to get the application specific key and secret.
 Copy the Sugarsync configuration file located at **cloudfusion/cloudfusion/config/Sugarsync.ini** to your home directory.
-Edit the configuration file by adding your username, password, and the application key and secret.
+Edit the configuration file by adding a username (your e-mail address) and a password. 
 
 
 Dropbox

@@ -123,12 +123,9 @@ class CachingStore(Store):
         :param path: The path where the file object's data should be stored, including the filename
         """
         self.logger.debug("cached storing %s" % path)
-        flush = self.entries.exists(path) and self.entries.is_expired(path)
+        flush = self.entries.exists(path) and self.entries.is_expired(path) # update if flush? (check if new version availabel?)
         self.entries.write(path, fileobject.read())
         self.logger.debug("cached storing value %s..." %self.entries.get_value(path)[:10]) 
-        if flush:
-            self.logger.debug("cache entry for %s is expired -> flushing" % path) 
-            self.__flush(path)
 
     def delete(self, path):#delete from metadata 
         self.entries.delete(path)
@@ -155,7 +152,7 @@ class CachingStore(Store):
         return self.store.create_directory(directory)
         
     def duplicate(self, path_to_src, path_to_dest):
-        self.__flush(path_to_src)
+        self.__flush(path_to_src) # should be recursive as directory might not be flushed
         self.__flush(path_to_dest)
         self.logger.debug("cached storing duplicate %s to %s" % (path_to_src, path_to_dest))
         ret = self.store.duplicate(path_to_src, path_to_dest)
@@ -206,6 +203,7 @@ class CachingStore(Store):
         self.time_of_last_flush = time.time()
         for path in self.entries.get_keys():
             self.__flush(path)
+        self.store.flush()
             
     def __flush(self, path):
         """ Writes the entry with the key :param:`path` to the wrapped store, only if it is dirty."""
