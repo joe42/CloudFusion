@@ -107,6 +107,7 @@ class DropboxStore(Store):
             except rest.ErrorResponse as resp:
                 msg= "could not store file: " +path+remote_file_name 
                 self._log_http_error("store_fileobject", path, resp, msg)
+                raise StoreAccessError("Transfer error: "+str(e), 0)
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
     
