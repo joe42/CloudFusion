@@ -117,12 +117,12 @@ class DropboxStore(Store):
         dest_dir = os.path.dirname(path);
         empty_file = NameableFile( file_decorator.DataFileWrapper(""), remote_file_name )
         try:
-          #  if self.is_dir(path):
+          #  if not self.is_dir(path):
                 #self.client.put_file('/'+dest_dir, empty_file) 
             resp = self.client.file_delete(path)
         except Exception, e:
             try:
-                #if self.is_dir(path):
+                #if not self.is_dir(path):
                     #self.client.put_file('/'+dest_dir, empty_file) 
                 resp = self.client.file_delete(path)
             except rest.ErrorResponse as resp:
