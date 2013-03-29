@@ -98,18 +98,35 @@ class DropboxStore(Store):
     def store_fileobject(self, fileobject, path):
         self.logger.debug("storing file object to "+path)
         remote_file_name = os.path.basename(path)
-        namable_file = NameableFile( fileobject, remote_file_name )
+        fileobject.seek(0,2)
+        size = fileobject.tell()
+        nameable_file = NameableFile( fileobject, remote_file_name )
+        uploader = self.client.get_chunked_uploader(nameable_file, size)
+        retry = 5
+        while uploader.offset < size:
+            try:
+                upload = uploader.upload_chunked()
+            except rest.ErrorResponse, e:
+                retry -= 1
+                if retry == 0:
+                    msg= "could not store file: " +path+remote_file_name 
+                    self._log_http_error("store_fileobject", path, resp, msg)
+                    raise StoreAccessError("Transfer error: "+str(e), 0)
+            except Exception, e:
+                raise StoreAccessError("Transfer error: "+str(e), 0)
         try:
-            resp = self.client.put_file(path, namable_file) 
+            resp = self.client.finish(path, overwrite=True)
         except Exception, e:
             try:
-                resp = self.client.put_file(path, namable_file) 
+                resp = self.client.finish(path, overwrite=True)
             except rest.ErrorResponse as resp:
                 msg= "could not store file: " +path+remote_file_name 
                 self._log_http_error("store_fileobject", path, resp, msg)
                 raise StoreAccessError("Transfer error: "+str(e), 0)
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
+        return resp #return metadata
+    
     
     def delete(self, path):
         self.logger.debug("deleting " +path)
