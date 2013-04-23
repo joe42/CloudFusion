@@ -31,14 +31,14 @@ Create a Configuration File
 Sugarsync
 ++++++++++
 Copy the Sugarsync configuration file located at **cloudfusion/cloudfusion/config/Sugarsync.ini** to your home directory.
-Edit the configuration file by adding a username (your e-mail address) and a password. 
+Edit the configuration file by adding your e-mail address as your username and a password. 
 
 
 Dropbox
 ++++++++++
-Create an application in Dropbox to get a key and a secrete. 
-Copy the Dropbox configuration file located at **cloudfusion/cloudfusion/config/Dropbox.ini** to your home directory.
-Edit the configuration file by adding the key and the secrete.
+Simply copy the Dropbox configuration file located at **cloudfusion/cloudfusion/config/Dropbox.ini** to your home directory.
+If you do not have a Dropbox account already, you can create a new one at https://www.dropbox.com.
+No further steps are required. 
 
 Configuring CloudFusion
 ...................................
@@ -59,7 +59,4 @@ Notes
 ------
 
 I am not affiliated with Dropbox nor with Sugarsync.
-
-Since the Dropbox API does not allow write synchronization an application like this file system cannot guarantee consistency when several clients try to write the same file. Therefore it cannot obtain production status. Hence, you need to create your own developer keys to use it.
-
 
