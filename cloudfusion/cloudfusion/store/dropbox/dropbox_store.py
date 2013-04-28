@@ -94,6 +94,24 @@ class DropboxStore(Store):
                 raise StoreAccessError("Transfer error: "+str(e), 0)
         ret = resp.read()
         return ret
+    
+    def store_small_fileobject(self, fileobject, path):
+        self.logger.debug("storing file object to "+path)
+        remote_file_name = os.path.basename(path)
+        namable_file = NameableFile( fileobject, remote_file_name )
+        try:
+            resp = self.client.put_file(path, namable_file)
+        except Exception, e:
+            try:
+                resp = self.client.put_file(path, namable_file)
+            except rest.ErrorResponse as resp:
+                msg= "could not store file: " +path+remote_file_name
+                self._log_http_error("store_fileobject", path, resp, msg)
+                raise StoreAccessError("Transfer error: "+str(e), 0)
+            except Exception, e:
+                raise StoreAccessError("Transfer error: "+str(e), 0)   
+        return resp 
+            
 
     def __get_size(self, fileobject):
         pos = fileobject.tell()
@@ -106,6 +124,8 @@ class DropboxStore(Store):
         self.logger.debug("storing file object to "+path)
         remote_file_name = os.path.basename(path)
         size = self.__get_size(fileobject)
+        if size < 100000:
+            return self.store_small_fileobject(fileobject, path)
         nameable_file = NameableFile( fileobject, remote_file_name )
         uploader = self.client.get_chunked_uploader(nameable_file, size)
         retry = 5
