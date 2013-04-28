@@ -115,10 +115,10 @@ class DropboxStore(Store):
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
         try:
-            resp = self.client.finish(path, overwrite=True)
+            resp = uploader.finish(path, overwrite=True)
         except Exception, e:
             try:
-                resp = self.client.finish(path, overwrite=True)
+                resp = uploader.finish(path, overwrite=True)
             except rest.ErrorResponse as resp:
                 msg= "could not store file: " +path+remote_file_name 
                 self._log_http_error("store_fileobject", path, resp, msg)
