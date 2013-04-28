@@ -35,6 +35,9 @@ Requirements
 * nosy
 * nosetests
 
+First create configuration files for all services in "cloudfusion/config". For the Dropbox service, the configuration file needs to be called
+*dropbox_testing.ini*. For sugarsync the name is *sugarsync_testing.ini*. 
+
 To run all tests call: 
 :program:`nosetests` :option:`-v` :option:`-s` *cloudfusion.tests.store_test*
 

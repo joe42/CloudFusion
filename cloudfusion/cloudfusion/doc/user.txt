@@ -1,19 +1,61 @@
 Users documentation
 ======================================
 
-First Steps
+Start CloudFusion
 ---------------------
 
- 
+Make a directory for the logs::
+
+	**mkdir** *-p .cloudfusion/logs*
+
+Or instead change the logging configuration in *cloudfusion/config/logging.conf* to specify another location for log files.
+
+To run the application make a directory mnt and from your home directory call: 
+
+	**python** *-m cloudfusion.main mnt* 
 
 
-Commands
----------------------
+Create a Configuration File
+------------------------------------
+
+Sugarsync
+++++++++++
+Copy the Sugarsync configuration file located at **cloudfusion/cloudfusion/config/Sugarsync.ini** to your home directory.
+Edit the configuration file by adding your e-mail address as your username and a password. 
+
+
+Dropbox
+++++++++++
+Simply copy the Dropbox configuration file located at **cloudfusion/cloudfusion/config/Dropbox.ini** to your home directory.
+If you do not have a Dropbox account already, you can create a new one at https://www.dropbox.com.
+No further steps are required. 
+
+
+Configuring CloudFusion
+------------------------------------
+
+Now copy the configuration file you edited to your mountpoint::
+
+    cp ~/db.ini mnt/config/config
+
+This assumes that you saved the configuration file as **db.ini** to your home directory. 
+If you simply copied the configuration file as suggested, replace **db.ini** with **Sugarsync.ini** or **Dropbox.ini** respectively.
+If you use Dropbox, your webbrowser will prompt you to login into Dropbox and grant access rights to CloudFusion. 
+The current time limit for this is one minute. If you did not make it in time, copying the configuration file fails.
+But you can simply retry by copying the configuration again
+
+Enjoy accessing your files in the directory **mnt/data**.
 
  
 
 Advanced Usage:
 -------------------------------
  
+Advanced options can be set dynamically by changing parameters in the file *mnt/config/config*:
 
+	#Approximate cache size limit in MB; default 2000:
+	cache_size = 5000
+	#Identifier for persistent database. Use one id per cloud account to keep the cache after application shutdown.
+	#Default value is a random number.
+	cache_id = dropboxacc1
 

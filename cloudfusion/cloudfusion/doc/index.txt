@@ -10,9 +10,14 @@ Welcome to CloudFusion's documentation!
 Introduction
 ---------------------
 
+CloudFusion lets you access your Dropbox or Sugarsync files from Linux like any file on your desktop.
+
 
 Features
 ---------------------
+
+* Flexible caching layers
+
 
 
 
