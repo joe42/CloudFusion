@@ -47,7 +47,8 @@ Now copy the configuration file you edited to your mountpoint::
 
     cp ~/db.ini mnt/config/config
 
-This assumes that you saved the configuration file with your login data as **db.ini** to your home directory.
+This assumes that you saved the configuration file as **db.ini** to your home directory. 
+If you simply copied the configuration file as suggested, replace **db.ini** with **Sugarsync.ini** or **Dropbox.ini** respectively.
 If you use Dropbox, your webbrowser will prompt you to login into Dropbox and grant access rights to CloudFusion. 
 The current time limit for this is one minute. If you did not make it in time, copying the configuration file fails.
 But you can simply retry by copying the configuration again
