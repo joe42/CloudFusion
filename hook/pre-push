@@ -1,0 +1,21 @@
+#!/bin/sh
+
+scriptpath=`readlink -f $0`
+scriptloc=`dirname $scriptpath`
+cd $scriptloc'/../cloudfusion'
+
+output=$(nosetests -v -s cloudfusion.tests.store_test|grep -i ERROR)
+if [ -z "$output" ]
+then
+  echo "Test successful."
+  exit 0
+else
+  echo "Error:"
+  echo $output
+  exit 1
+fi
+
+
+
+
+
