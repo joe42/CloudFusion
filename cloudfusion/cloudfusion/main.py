@@ -1,7 +1,6 @@
 '''
 Created on 12.05.2011
 
-@author: joe
 '''
 from cloudfusion.pyfusebox.pyfusebox import PyFuseBox
 from cloudfusion.pyfusebox.configurable_pyfusebox import ConfigurablePyFuseBox

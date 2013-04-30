@@ -1,12 +1,5 @@
 '''
 Created on 25.04.2011
-
-@author: joe
-'''
-'''
-Created on 08.04.2011
-
-@author: joe
 '''
     
 import tempfile
@@ -21,10 +14,11 @@ import random
 
 class CachingStore(Store):
     def __init__(self, store, cache_expiration_time=60, cache_size_in_mb=2000, cache_id=str(random.random())):
-        """":param store: the store whose access should be cached 
-            :param cache_expiration_time: the time in seconds until any cache entry is expired
-            :param:`cache_size_in_mb`: Approximate limit of the cache in MB.
-            :param:`cache_id`: Serves as identifier for a persistent cache instance. """ 
+        """
+        :param store: the store whose access should be cached 
+        :param cache_expiration_time: the time in seconds until any cache entry is expired
+        :param cache_size_in_mb: Approximate limit of the cache in MB.
+        :param cache_id: Serves as identifier for a persistent cache instance. """ 
         self.store = store
         self.logger = logging.getLogger(self.get_logging_handler())
         self.logger.debug("creating CachingStore object")
@@ -51,7 +45,7 @@ class CachingStore(Store):
         return self.store.get_name()
     
     def _refresh_cache(self, path_to_file):
-        """ Reloads the existing entries entry with the key :param:`path_to_file` from the wrapped store, if the wrapped store version is newer.
+        """ Reloads the existing entries entry with the key *path_to_file* from the wrapped store, if the wrapped store version is newer.
         The entries entries last updated time is set to the current point of time.
         Makes a new entries entry if it does not exist yet.
         If it was changed in the wrapped store after the entries entry's modified time:
@@ -83,7 +77,7 @@ class CachingStore(Store):
         return False
     
     def get_file(self, path_to_file):
-        """ :returns: string -- the data of the file with the path :param: path_to_file
+        """ :returns: string -- the data of the file with the path *path_to_file*
         If the files entry is dirty and expired it is written to the wrapped store first and set to not dirty and update time is set to the current point of time.
         If the file was updated in the wrapped store, then its content will be updated if its entry is expired. 
         """
@@ -119,6 +113,7 @@ class CachingStore(Store):
         """ Stores a fileobject to the :class:`~cloudfusion.util.entries.Cache` and if the existing fileobject has expired it is also flushed to the wrapped store.
         The entry's updated and modified attributes will be reset to the current point of time.
         The entry's dirty flag is set to False if the entry has expired and was hence written to the store. Otherwise it is set to True.
+        
         :param fileobject: The file object with the method read() returning data as a string 
         :param path: The path where the file object's data should be stored, including the filename
         """
@@ -206,7 +201,7 @@ class CachingStore(Store):
         self.store.flush()
             
     def __flush(self, path):
-        """ Writes the entry with the key :param:`path` to the wrapped store, only if it is dirty."""
+        """ Writes the entry with the key *path* to the wrapped store, only if it is dirty."""
         if not self.entries.exists(path):
             return
         self.entries.update(path)

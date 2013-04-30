@@ -1,8 +1,6 @@
 '''
 Created on 23.08.2011
 
-@author: joe
-
 This FUSE module initializes the store at runtime when the user accesses the virtual file /.config/.###config### and writes the appropriate parameters to the file.
 '''
 

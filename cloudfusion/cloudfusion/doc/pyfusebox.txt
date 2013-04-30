@@ -1,7 +1,23 @@
+The :mod:`virtualfile` Module
+-----------------------------
+
+.. automodule:: cloudfusion.pyfusebox.virtualfile
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 The :mod:`flushing_pyfusebox` Module
 ------------------------------------
 
 .. automodule:: cloudfusion.pyfusebox.flushing_pyfusebox
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`pyfusebox` Module
+---------------------------
+
+.. automodule:: cloudfusion.pyfusebox.pyfusebox
     :members:
     :undoc-members:
     :show-inheritance:
@@ -18,22 +34,6 @@ The :mod:`virtualconfigfile` Module
 -----------------------------------
 
 .. automodule:: cloudfusion.pyfusebox.virtualconfigfile
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-The :mod:`pyfusebox` Module
----------------------------
-
-.. automodule:: cloudfusion.pyfusebox.pyfusebox
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-The :mod:`virtualfile` Module
------------------------------
-
-.. automodule:: cloudfusion.pyfusebox.virtualfile
     :members:
     :undoc-members:
     :show-inheritance:

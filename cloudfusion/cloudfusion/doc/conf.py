@@ -214,3 +214,6 @@ man_pages = [
     ('index', 'cloudfusion', u'CloudFusion Documentation',
      [u'Johannes Müller'], 1)
 ]
+
+autoclass_content = 'both'
+autodoc_default_flags = ['private-members' ] 

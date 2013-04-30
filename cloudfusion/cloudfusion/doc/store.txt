@@ -6,18 +6,18 @@ Subpackages
     store.sugarsync
     store.dropbox
 
-The :mod:`metadata_caching_store` Module
-----------------------------------------
-
-.. automodule:: cloudfusion.store.metadata_caching_store
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 The :mod:`caching_store` Module
 -------------------------------
 
 .. automodule:: cloudfusion.store.caching_store
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`metadata_caching_store` Module
+----------------------------------------
+
+.. automodule:: cloudfusion.store.metadata_caching_store
     :members:
     :undoc-members:
     :show-inheritance:

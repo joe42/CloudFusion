@@ -1,7 +1,5 @@
 '''
 Created on 04.05.2011
-
-@author: joe
 '''
 import httplib2
 import os.path

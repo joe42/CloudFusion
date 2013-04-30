@@ -1,7 +1,6 @@
 '''
 Created on 24.08.2011
 
-@author: joe
 '''
 import os
 from cloudfusion.pyfusebox.pyfusebox import zstat

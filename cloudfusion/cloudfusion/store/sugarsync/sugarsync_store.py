@@ -1,7 +1,5 @@
 '''
 Created on 08.04.2011
-
-@author: joe
 '''
 
 import time
@@ -59,7 +57,7 @@ class SugarsyncStore(Store):
             
             
     def _parse_collection(self, translated_path):
-        """:returns: dict a dictionary with all paths of the collection at :param:`translated_path` as keys and the corresponding nested dictionaries with the key/value pair for is_dir and reference."""
+        """:returns: dict a dictionary with all paths of the collection at *translated_path* as keys and the corresponding nested dictionaries with the key/value pair for is_dir and reference."""
         ret = []
         resp = self.client.get_dir_listing(translated_path)
         if resp.status <200 or resp.status >= 300:

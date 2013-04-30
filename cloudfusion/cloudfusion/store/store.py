@@ -1,7 +1,5 @@
 '''
 Created on 08.04.2011
-
-@author: joe
 '''
 import os.path
 
@@ -100,10 +98,12 @@ class Store(object):
     def _get_metadata(self, path):
         """ This method is a hook that can be implemented by subclasses. 
         If it is implemented, the methods :meth:`~.exists`, :meth:`~.get_bytes`, :meth:`~.is_dir` work out of the box.
-        :returns: A dictionary with the keys 'modified', 'bytes' and 'is_dir' containing the corresponding metadata for :param:`path`  
-        The value for 'modified' is a date in seconds, stating when the object corresponding to :param:`path` was last modified.  
-        The value for 'bytes' is the number of bytes of the object corresponding to :param:`path`. It is 0 if the object is a directory.
+        
+        :returns: A dictionary with the keys 'modified', 'bytes' and 'is_dir' containing the corresponding metadata for *path*  
+        The value for 'modified' is a date in seconds, stating when the object corresponding to *path* was last modified.  
+        The value for 'bytes' is the number of bytes of the object corresponding to *path*. It is 0 if the object is a directory.
         The value for 'is_dir' is True if the object is a directory and False otherwise.
+        
         :raises: NoSuchFilesytemObjectError if the object does not exist
         :raises: NotImplementedError if the method is not implemented
         """

@@ -1,7 +1,5 @@
 '''
 Created on 03.06.2011
-
-@author: joe
 '''
 import time
 
@@ -17,12 +15,12 @@ class Entry(object):
 
 class Cache(object):
     def __init__(self, expiration_time):
-        """Return a Cache instance with entries expiring after :param:`expiration_time` seconds."""
+        """Return a Cache instance with entries expiring after *expiration_time* seconds."""
         self.entries = {}
         self.expire = expiration_time
         
     def refresh(self, key, disk_value, modified):
-        """ Refreshes an entry with :param:`disk_value`, if :param:`modified` is bigger than the entry's modified date. """
+        """ Refreshes an entry with *disk_value*, if *modified* is bigger than the entry's modified date. """
         if key in self.entries:
             disk_entry_is_newer = modified > self.entries[key].modified
             if not disk_entry_is_newer:

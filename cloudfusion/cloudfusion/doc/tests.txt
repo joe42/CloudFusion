@@ -6,6 +6,22 @@ The :mod:`store_test` Module
     :undoc-members:
     :show-inheritance:
 
+The :mod:`cache_test` Module
+----------------------------
+
+.. automodule:: cloudfusion.tests.cache_test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`lru_cache_test` Module
+--------------------------------
+
+.. automodule:: cloudfusion.tests.lru_cache_test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 The :mod:`xmlparser_test` Module
 --------------------------------
 
@@ -14,10 +30,10 @@ The :mod:`xmlparser_test` Module
     :undoc-members:
     :show-inheritance:
 
-The :mod:`cache_test` Module
-----------------------------
+The :mod:`persistent_lru_cache_test` Module
+-------------------------------------------
 
-.. automodule:: cloudfusion.tests.cache_test
+.. automodule:: cloudfusion.tests.persistent_lru_cache_test
     :members:
     :undoc-members:
     :show-inheritance:

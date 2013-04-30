@@ -1,15 +1,15 @@
-The :mod:`file_decorator` Module
---------------------------------
-
-.. automodule:: cloudfusion.store.dropbox.file_decorator
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 The :mod:`dropbox_store` Module
 -------------------------------
 
 .. automodule:: cloudfusion.store.dropbox.dropbox_store
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`file_decorator` Module
+--------------------------------
+
+.. automodule:: cloudfusion.store.dropbox.file_decorator
     :members:
     :undoc-members:
     :show-inheritance:

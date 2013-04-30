@@ -1,7 +1,5 @@
 '''
 Created on Feb 5, 2013
-
-@author: joe
 '''
 from cloudfusion.util.cache import *
 import time
@@ -30,8 +28,9 @@ class LRUCache(Cache):
 
     def __init__(self, expiration_time=60, maxsize_in_MB=200):
         """Return an LRUCache instance.
-        :param:`expiration_time`: Time in seconds until entries are expired.
-        :param:`maxsize_in_MB`: Approximate limit of the cache in MB.
+        
+        :param expiration_time: Time in seconds until entries are expired.
+        :param maxsize_in_MB: Approximate limit of the cache in MB.
         """
         super( LRUCache, self ).__init__(expiration_time)
         #self.entries = shelve.open(filename)
@@ -57,7 +56,7 @@ class LRUCache(Cache):
     	
     	
     def _move_used_entry_to_head(self, key):
-        """Put existing entry associated with :param:`key` in front of the LRU queue."""
+        """Put existing entry associated with *key* in front of the LRU queue."""
         used_entry = self.entries[key]
         if not used_entry.next: #entry is list head 
             return
@@ -76,7 +75,7 @@ class LRUCache(Cache):
         return self.entries[self.entries[LISTHEAD]] if self.entries[LISTHEAD] else None
 
     def refresh(self, key, disk_value, modified):
-        """ Refreshes an entry with :param:`disk_value`, if :param:`modified` is bigger than the entry's modified date. """
+        """ Refreshes an entry with *disk_value*, if *modified* is bigger than the entry's modified date. """
         if key in self.entries:
             disk_entry_is_newer = modified > self.entries[key].modified
             if not disk_entry_is_newer:

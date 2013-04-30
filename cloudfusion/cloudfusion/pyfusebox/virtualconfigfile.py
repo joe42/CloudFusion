@@ -1,7 +1,5 @@
 '''
 Created on 24.08.2011
-
-@author: joe
 '''
 from ConfigParser import SafeConfigParser
 from cloudfusion.pyfusebox.virtualfile import VirtualFile
