@@ -1,25 +1,31 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The xmlparser Module &mdash; CloudFusion v0.01 documentation</title>
+    <title>The lru_cache Module &mdash; CloudFusion 0.01 documentation</title>
+    
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
         VERSION:     '0.01',
-        COLLAPSE_MODINDEX: false,
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
-    <link rel="top" title="CloudFusion v0.01 documentation" href="index.html" />
+    <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
     <link rel="up" title="Developers documentation" href="develop.html" />
     <link rel="prev" title="The store_test Module" href="tests.html" /> 
   </head>
@@ -31,12 +37,12 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="tests.html" title="The store_test Module"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">CloudFusion v0.01 documentation</a> &raquo;</li>
+        <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" accesskey="U">Developers documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -46,15 +52,154 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-cloudfusion.util.xmlparser">
-<h1>The <tt class="xref docutils literal"><span class="pre">xmlparser</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.xmlparser" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-cloudfusion.util.lru_cache">
+<span id="the-lru-cache-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">lru_cache</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.lru_cache" title="Permalink to this headline">¶</a></h1>
+<p>Created on Feb 5, 2013</p>
+<dl class="class">
+<dt id="cloudfusion.util.lru_cache.LRUCache">
+<em class="property">class </em><tt class="descclassname">cloudfusion.util.lru_cache.</tt><tt class="descname">LRUCache</tt><big>(</big><em>expiration_time=60</em>, <em>maxsize_in_MB=200</em><big>)</big><a class="headerlink" href="#cloudfusion.util.lru_cache.LRUCache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.util.cache.Cache" title="cloudfusion.util.cache.Cache"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.util.cache.Cache</span></tt></a></p>
+<p>Least Recently Used cache. When adding an entry to the cache exceeds its size limit,
+the cache discards dirty entries starting with the least recently used.
+However, dirty entries or the last entry in the cache are not deleted.</p>
+<p>Return an LRUCache instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>expiration_time</strong> &#8211; Time in seconds until entries are expired.</li>
+<li><strong>maxsize_in_MB</strong> &#8211; Approximate limit of the cache in MB.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cloudfusion.util.lru_cache.LRUCache._get_listhead_entry">
+<tt class="descname">_get_listhead_entry</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.lru_cache.LRUCache._get_listhead_entry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.lru_cache.LRUCache._get_listtail_entry">
+<tt class="descname">_get_listtail_entry</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.lru_cache.LRUCache._get_listtail_entry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.lru_cache.LRUCache._move_used_entry_to_head">
+<tt class="descname">_move_used_entry_to_head</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.lru_cache.LRUCache._move_used_entry_to_head" title="Permalink to this definition">¶</a></dt>
+<dd><p>Put existing entry associated with <em>key</em> in front of the LRU queue.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.lru_cache.LRUCache._resize">
+<tt class="descname">_resize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.lru_cache.LRUCache._resize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resize cache to maxsize.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.lru_cache.LRUCache._store_to_dict">
+<tt class="descname">_store_to_dict</tt><big>(</big><em>linkedEntry</em><big>)</big><a class="headerlink" href="#cloudfusion.util.lru_cache.LRUCache._store_to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is only important for subclasses using shelve with writeback=False as a dictionary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.lru_cache.LRUCache._unlink">
+<tt class="descname">_unlink</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.lru_cache.LRUCache._unlink" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.lru_cache.LRUCache.delete">
+<tt class="descname">delete</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.lru_cache.LRUCache.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove current entry associated with key from the LRU queue.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.lru_cache.LRUCache.get_keys">
+<tt class="descname">get_keys</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.lru_cache.LRUCache.get_keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.lru_cache.LRUCache.get_size_of_cached_data">
+<tt class="descname">get_size_of_cached_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.lru_cache.LRUCache.get_size_of_cached_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.lru_cache.LRUCache.get_size_of_dirty_data">
+<tt class="descname">get_size_of_dirty_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.lru_cache.LRUCache.get_size_of_dirty_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.lru_cache.LRUCache.get_value">
+<tt class="descname">get_value</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.lru_cache.LRUCache.get_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.lru_cache.LRUCache.refresh">
+<tt class="descname">refresh</tt><big>(</big><em>key</em>, <em>disk_value</em>, <em>modified</em><big>)</big><a class="headerlink" href="#cloudfusion.util.lru_cache.LRUCache.refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refreshes an entry with <em>disk_value</em>, if <em>modified</em> is bigger than the entry&#8217;s modified date.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.lru_cache.LRUCache.write">
+<tt class="descname">write</tt><big>(</big><em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#cloudfusion.util.lru_cache.LRUCache.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.util.lru_cache.LinkedEntry">
+<em class="property">class </em><tt class="descclassname">cloudfusion.util.lru_cache.</tt><tt class="descname">LinkedEntry</tt><big>(</big><em>value</em>, <em>dirty</em>, <em>modified=None</em>, <em>updated=None</em>, <em>key=None</em>, <em>next=None</em>, <em>prev=None</em><big>)</big><a class="headerlink" href="#cloudfusion.util.lru_cache.LinkedEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.util.cache.Entry" title="cloudfusion.util.cache.Entry"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.util.cache.Entry</span></tt></a></p>
+<p>Cache entry with next and previous links for chaining into a doubly linked list and a key for direct reference.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.util.xmlparser">
+<span id="the-xmlparser-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">xmlparser</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.xmlparser" title="Permalink to this headline">¶</a></h1>
 <p>Parses an XML file or string, populating a dictionary containing the keys with the desired values.</p>
 <p>The keys of the dictionary are either the names of Tags contained in the XML data or again dictionaries.
 The values can either be dictionaries again or simple strings, but ultimately the leaf values will be</p>
 <dl class="class">
 <dt id="cloudfusion.util.xmlparser.DictXMLParser">
 <em class="property">class </em><tt class="descclassname">cloudfusion.util.xmlparser.</tt><tt class="descname">DictXMLParser</tt><a class="headerlink" href="#cloudfusion.util.xmlparser.DictXMLParser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref docutils literal"><span class="pre">object</span></tt></p>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="cloudfusion.util.xmlparser.DictXMLParser._DictXMLParser__populate_dict">
+<tt class="descname">_DictXMLParser__populate_dict</tt><big>(</big><em>dom_tree</em>, <em>dict_tree</em><big>)</big><a class="headerlink" href="#cloudfusion.util.xmlparser.DictXMLParser._DictXMLParser__populate_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does the work for <a class="reference internal" href="#cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_leaf_textnodes" title="cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_leaf_textnodes"><tt class="xref py py-meth docutils literal"><span class="pre">populate_dict_with_XML_leaf_textnodes()</span></tt></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dom_tree</strong> &#8211; An XML element</li>
+<li><strong>dict_tree</strong> &#8211; A dictionary of keys/values matching the first XML subtree in <em>dom_tree</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.xmlparser.DictXMLParser._DictXMLParser__populate_dict_with_collections">
+<tt class="descname">_DictXMLParser__populate_dict_with_collections</tt><big>(</big><em>dom_tree</em>, <em>dict_tree</em><big>)</big><a class="headerlink" href="#cloudfusion.util.xmlparser.DictXMLParser._DictXMLParser__populate_dict_with_collections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does the work for <a class="reference internal" href="#cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_collection_leaf_textnodes" title="cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_collection_leaf_textnodes"><tt class="xref py py-meth docutils literal"><span class="pre">populate_dict_with_XML_collection_leaf_textnodes()</span></tt></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dom_tree</strong> &#8211; An XML element</li>
+<li><strong>dict_tree</strong> &#8211; A dictionary of keys/values matching the first XML subtree in <em>dom_tree</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="method">
 <dt id="cloudfusion.util.xmlparser.DictXMLParser.getText">
 <tt class="descname">getText</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#cloudfusion.util.xmlparser.DictXMLParser.getText" title="Permalink to this definition">¶</a></dt>
@@ -67,7 +212,7 @@ The values can either be dictionaries again or simple strings, but ultimately th
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">elem a list of elements matching the tags with the name <a href="#id1"><span class="problematic" id="id2">:param:`tag_name`</span></a> on the first level of  <a href="#id3"><span class="problematic" id="id4">:param:`dom_tree`</span></a>.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">elem a list of elements matching the tags with the name <em>tag_name</em> on the first level of  <em>dom_tree</em>.</td>
 </tr>
 </tbody>
 </table>
@@ -76,32 +221,31 @@ The values can either be dictionaries again or simple strings, but ultimately th
 <dl class="method">
 <dt id="cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_collection_leaf_textnodes">
 <tt class="descname">populate_dict_with_XML_collection_leaf_textnodes</tt><big>(</big><em>xml_tree</em>, <em>dict_tree</em><big>)</big><a class="headerlink" href="#cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_collection_leaf_textnodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Puts the text of the XML tags of <a href="#id5"><span class="problematic" id="id6">:param:`xml_tree`</span></a> specified by <a href="#id7"><span class="problematic" id="id8">:param:`dict_tree`</span></a> into <a href="#id9"><span class="problematic" id="id10">:param:`dict_tree`</span></a> .</p>
-<p>The <a href="#id11"><span class="problematic" id="id12">:param:`dict_tree`</span></a> is a dictionary describing a subtree of <a href="#id13"><span class="problematic" id="id14">:param:`xml_data`</span></a>. 
+<dd><p>Puts the text of the XML tags of <em>xml_tree</em> specified by <em>dict_tree</em> into <em>dict_tree</em> .</p>
+<p>The <em>dict_tree</em> is a dictionary describing a subtree of <em>xml_data</em>. 
 The dictionarie&#8217;s keys correspond to the first XML tags with the same name on the same nesting level of the dictionary.
 Additionally, keys with the name surrounded by brackets are seen as a list of such XML tags.
 Therefore the keys in the dictionary {&#8220;root&#8221;: {&#8220;[element]&#8221;: &#8220;&#8221;}} match the root tag &lt;root&gt; 
 as well as the subelements of root &lt;element&gt; and &lt;element&gt;.
 The dictionarie&#8217;s most deeply nested elements must be empty strings. 
 This value is replaced by the text of the corresponding key&#8217;s XML tag.
-Given the previous dictionary and the following XML structure:
-.. code-block:: xml</p>
+Given the previous dictionary and the following XML structure:</p>
 <blockquote>
-<dl class="docutils">
-<dt>&lt;root&gt;</dt>
-<dd>&lt;element&gt;text1&lt;/element&gt;
-&lt;element&gt;text2&lt;/element&gt;</dd>
-</dl>
-<p>&lt;/root&gt;</p>
-</blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;element&gt;</span>text1<span class="nt">&lt;/element&gt;</span>
+    <span class="nt">&lt;element&gt;</span>text2<span class="nt">&lt;/element&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
 <p>The resulting dictionary would be {&#8220;root&#8221;: {&#8220;[element]&#8221;: [&#8220;text1&#8221;, &#8220;text2&#8221;]}}</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><em>xml_tree</em> &#8211; An XML string or an XML file</li>
-<li><em>dict_tree</em> &#8211; A dictionary of keys/values matching the first XML subtree in <a href="#id15"><span class="problematic" id="id16">:param:`xml_tree`</span></a></li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>xml_tree</strong> &#8211; An XML string or an XML file</li>
+<li><strong>dict_tree</strong> &#8211; A dictionary of keys/values matching the first XML subtree in <em>xml_tree</em></li>
 </ul>
 </td>
 </tr>
@@ -112,31 +256,30 @@ Given the previous dictionary and the following XML structure:
 <dl class="method">
 <dt id="cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_leaf_textnodes">
 <tt class="descname">populate_dict_with_XML_leaf_textnodes</tt><big>(</big><em>xml_data</em>, <em>dict_tree</em><big>)</big><a class="headerlink" href="#cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_leaf_textnodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Puts the text of the XML tags of <a href="#id17"><span class="problematic" id="id18">:param:`xml_data`</span></a> specified by <a href="#id19"><span class="problematic" id="id20">:param:`dict_tree`</span></a> into <a href="#id21"><span class="problematic" id="id22">:param:`dict_tree`</span></a> .</p>
-<p>The <a href="#id23"><span class="problematic" id="id24">:param:`dict_tree`</span></a> is a dictionary describing a subtree of <a href="#id25"><span class="problematic" id="id26">:param:`xml_data`</span></a>. 
+<dd><p>Puts the text of the XML tags of <em>xml_data</em> specified by <em>dict_tree</em> into <em>dict_tree</em> .</p>
+<p>The <em>dict_tree</em> is a dictionary describing a subtree of <em>xml_data</em>. 
 The dictionarie&#8217;s keys correspond to the first XML tags with the same name on the same nesting level of the dictionary.
 Therefore the keys in the dictionary {&#8220;root&#8221;: {&#8220;element1&#8221;: &#8220;&#8221;, &#8220;element2&#8221;: &#8220;&#8221;}} match the root tag &lt;root&gt; 
 as well as the subelements of root &lt;element1&gt; and &lt;element2&gt;.
 The dictionarie&#8217;s most deeply nested elements must be empty strings. 
 This value is replaced by the text of the corresponding key&#8217;s XML tag.
-Given the previous dictionary and the following XML structure:
-.. code-block:: xml</p>
+Given the previous dictionary and the following XML structure:</p>
 <blockquote>
-<dl class="docutils">
-<dt>&lt;root&gt;</dt>
-<dd>&lt;element1&gt;text1&lt;/element1&gt;
-&lt;element2&gt;text2&lt;/element2&gt;</dd>
-</dl>
-<p>&lt;/root&gt;</p>
-</blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;element1&gt;</span>text1<span class="nt">&lt;/element1&gt;</span>
+    <span class="nt">&lt;element2&gt;</span>text2<span class="nt">&lt;/element2&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
 <p>The resulting dictionary would be {&#8220;root&#8221;: {&#8220;element1&#8221;: &#8220;text1&#8221;, &#8220;element2&#8221;: &#8220;text2&#8221;}}</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><em>xml_data</em> &#8211; An XML string or an XML file</li>
-<li><em>dict_tree</em> &#8211; A dictionary of keys/values matching the first XML subtree in <a href="#id27"><span class="problematic" id="id28">:param:`xml_tree`</span></a></li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>xml_data</strong> &#8211; An XML string or an XML file</li>
+<li><strong>dict_tree</strong> &#8211; A dictionary of keys/values matching the first XML subtree in <em>xml_tree</em></li>
 </ul>
 </td>
 </tr>
@@ -147,43 +290,19 @@ Given the previous dictionary and the following XML structure:
 </dd></dl>
 
 </div>
-<div class="section" id="module-cloudfusion.util.string">
-<h1>The <tt class="xref docutils literal"><span class="pre">string</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.string" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="cloudfusion.util.string.RegExData">
-<em class="property">class </em><tt class="descclassname">cloudfusion.util.string.</tt><tt class="descname">RegExData</tt><big>(</big><em>regex</em>, <em>matchnr=1</em>, <em>type='int'</em><big>)</big><a class="headerlink" href="#cloudfusion.util.string.RegExData" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.util.string.indentLines">
-<tt class="descclassname">cloudfusion.util.string.</tt><tt class="descname">indentLines</tt><big>(</big><em>str</em>, <em>indent</em><big>)</big><a class="headerlink" href="#cloudfusion.util.string.indentLines" title="Permalink to this definition">¶</a></dt>
-<dd>Indents a string&#8217;s lines by <em>indent</em> spaces.
-Does not indent empty strings.</dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.util.string.regSearchInt">
-<tt class="descclassname">cloudfusion.util.string.</tt><tt class="descname">regSearchInt</tt><big>(</big><em>needle</em>, <em>haystack</em>, <em>grp=1</em><big>)</big><a class="headerlink" href="#cloudfusion.util.string.regSearchInt" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.util.string.regSearchString">
-<tt class="descclassname">cloudfusion.util.string.</tt><tt class="descname">regSearchString</tt><big>(</big><em>needle</em>, <em>haystack</em>, <em>grp=1</em><big>)</big><a class="headerlink" href="#cloudfusion.util.string.regSearchString" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.util.string.to_unicode">
-<tt class="descclassname">cloudfusion.util.string.</tt><tt class="descname">to_unicode</tt><big>(</big><em>text</em>, <em>format</em><big>)</big><a class="headerlink" href="#cloudfusion.util.string.to_unicode" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
 <div class="section" id="module-cloudfusion.util.cache">
-<h1>The <tt class="xref docutils literal"><span class="pre">cache</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.cache" title="Permalink to this headline">¶</a></h1>
+<span id="the-cache-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">cache</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.cache" title="Permalink to this headline">¶</a></h1>
 <p>Created on 03.06.2011</p>
-<p>&#64;author: joe</p>
 <dl class="class">
 <dt id="cloudfusion.util.cache.Cache">
 <em class="property">class </em><tt class="descclassname">cloudfusion.util.cache.</tt><tt class="descname">Cache</tt><big>(</big><em>expiration_time</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref docutils literal"><span class="pre">object</span></tt></p>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Return a Cache instance with entries expiring after <em>expiration_time</em> seconds.</p>
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache._get_size_of_entry">
+<tt class="descname">_get_size_of_entry</tt><big>(</big><em>entry</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache._get_size_of_entry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="cloudfusion.util.cache.Cache.delete">
 <tt class="descname">delete</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.delete" title="Permalink to this definition">¶</a></dt>
@@ -237,7 +356,8 @@ Does not indent empty strings.</dd></dl>
 <dl class="method">
 <dt id="cloudfusion.util.cache.Cache.refresh">
 <tt class="descname">refresh</tt><big>(</big><em>key</em>, <em>disk_value</em>, <em>modified</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.refresh" title="Permalink to this definition">¶</a></dt>
-<dd>Refreshes a entries entry with <a href="#id29"><span class="problematic" id="id30">:param:`disk_value`</span></a>, if <a href="#id31"><span class="problematic" id="id32">:param:`modified`</span></a> is bigger than the entries entry&#8217;s modified date.</dd></dl>
+<dd><p>Refreshes an entry with <em>disk_value</em>, if <em>modified</em> is bigger than the entry&#8217;s modified date.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="cloudfusion.util.cache.Cache.set_dirty">
@@ -256,6 +376,126 @@ Does not indent empty strings.</dd></dl>
 
 </dd></dl>
 
+<dl class="class">
+<dt id="cloudfusion.util.cache.Entry">
+<em class="property">class </em><tt class="descclassname">cloudfusion.util.cache.</tt><tt class="descname">Entry</tt><big>(</big><em>value</em>, <em>dirty</em>, <em>modified=None</em>, <em>updated=None</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Entry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Cache entry.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.util.string">
+<span id="the-string-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">string</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.string" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="cloudfusion.util.string.RegExData">
+<em class="property">class </em><tt class="descclassname">cloudfusion.util.string.</tt><tt class="descname">RegExData</tt><big>(</big><em>regex</em>, <em>matchnr=1</em>, <em>type='int'</em><big>)</big><a class="headerlink" href="#cloudfusion.util.string.RegExData" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.util.string.indentLines">
+<tt class="descclassname">cloudfusion.util.string.</tt><tt class="descname">indentLines</tt><big>(</big><em>str</em>, <em>indent</em><big>)</big><a class="headerlink" href="#cloudfusion.util.string.indentLines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indents a string&#8217;s lines by <em>indent</em> spaces.
+Does not indent empty strings.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.util.string.regSearchInt">
+<tt class="descclassname">cloudfusion.util.string.</tt><tt class="descname">regSearchInt</tt><big>(</big><em>needle</em>, <em>haystack</em>, <em>grp=1</em><big>)</big><a class="headerlink" href="#cloudfusion.util.string.regSearchInt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.util.string.regSearchString">
+<tt class="descclassname">cloudfusion.util.string.</tt><tt class="descname">regSearchString</tt><big>(</big><em>needle</em>, <em>haystack</em>, <em>grp=1</em><big>)</big><a class="headerlink" href="#cloudfusion.util.string.regSearchString" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.util.string.to_unicode">
+<tt class="descclassname">cloudfusion.util.string.</tt><tt class="descname">to_unicode</tt><big>(</big><em>text</em>, <em>format</em><big>)</big><a class="headerlink" href="#cloudfusion.util.string.to_unicode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.util.persistent_lru_cache">
+<span id="the-persistent-lru-cache-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">persistent_lru_cache</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.persistent_lru_cache" title="Permalink to this headline">¶</a></h1>
+<p>Created on Feb 5, 2013</p>
+<dl class="class">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache">
+<em class="property">class </em><tt class="descclassname">cloudfusion.util.persistent_lru_cache.</tt><tt class="descname">PersistentLRUCache</tt><big>(</big><em>directory</em>, <em>expiration_time=60</em>, <em>maxsize_in_MB=2000</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.util.lru_cache.LRUCache" title="cloudfusion.util.lru_cache.LRUCache"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.util.lru_cache.LRUCache</span></tt></a></p>
+<p>A persistent LRU cache for restricting memory usage to a minimum and 
+carrying the cache information over several sessions even after application crashes.</p>
+<p>Return an LRUCache instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>expiration_time</strong> &#8211; Time in seconds until entries are expired.</li>
+<li><strong>maxsize_in_MB</strong> &#8211; Approximate limit of the cache in MB.</li>
+<li><strong>directory</strong> &#8211; Directory to store persistent data, also serves as identifier for a persistent cache instance.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache._close">
+<tt class="descname">_close</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache._close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache._get_file_content">
+<tt class="descname">_get_file_content</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache._get_file_content" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache._get_persistent_size">
+<tt class="descname">_get_persistent_size</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache._get_persistent_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache._get_size_of_entry">
+<tt class="descname">_get_size_of_entry</tt><big>(</big><em>entry</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache._get_size_of_entry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache._write_to_file">
+<tt class="descname">_write_to_file</tt><big>(</big><em>filename</em>, <em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache._write_to_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.delete">
+<tt class="descname">delete</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove current entry associated with key from the LRU queue and delete its persistent representation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.get_keys">
+<tt class="descname">get_keys</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.get_keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.get_size_of_dirty_data">
+<tt class="descname">get_size_of_dirty_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.get_size_of_dirty_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.get_value">
+<tt class="descname">get_value</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.get_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.refresh">
+<tt class="descname">refresh</tt><big>(</big><em>key</em>, <em>disk_value</em>, <em>modified</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refreshes an entry with <em>disk_value</em>, if <em>modified</em> is bigger than the entry&#8217;s modified date.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.write">
+<tt class="descname">write</tt><big>(</big><em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -264,34 +504,36 @@ Does not indent empty strings.</dd></dl>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="index.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="#">The <tt class="docutils literal"><span class="pre">xmlparser</span></tt> Module</a></li>
-<li><a class="reference external" href="#module-cloudfusion.util.string">The <tt class="docutils literal"><span class="pre">string</span></tt> Module</a></li>
-<li><a class="reference external" href="#module-cloudfusion.util.cache">The <tt class="docutils literal"><span class="pre">cache</span></tt> Module</a></li>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">lru_cache</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.util.xmlparser">The <tt class="docutils literal"><span class="pre">xmlparser</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.util.cache">The <tt class="docutils literal"><span class="pre">cache</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.util.string">The <tt class="docutils literal"><span class="pre">string</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.util.persistent_lru_cache">The <tt class="docutils literal"><span class="pre">persistent_lru_cache</span></tt> Module</a></li>
 </ul>
 
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="tests.html"
-                                  title="previous chapter">The <tt class="docutils literal docutils literal docutils literal"><span class="pre">store_test</span></tt> Module</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="_sources/util.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tests.html"
+                        title="previous chapter">The <tt class="docutils literal docutils literal docutils literal"><span class="pre">store_test</span></tt> Module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/util.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -303,18 +545,18 @@ Does not indent empty strings.</dd></dl>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="tests.html" title="The store_test Module"
              >previous</a> |</li>
-        <li><a href="index.html">CloudFusion v0.01 documentation</a> &raquo;</li>
+        <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2011, Johannes Müller.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+        &copy; Copyright 2011, Johannes Müller.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

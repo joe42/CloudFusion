@@ -1,25 +1,31 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The flushing_pyfusebox Module &mdash; CloudFusion v0.01 documentation</title>
+    <title>The virtualfile Module &mdash; CloudFusion 0.01 documentation</title>
+    
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
         VERSION:     '0.01',
-        COLLAPSE_MODINDEX: false,
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
-    <link rel="top" title="CloudFusion v0.01 documentation" href="index.html" />
+    <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
     <link rel="up" title="Developers documentation" href="develop.html" />
     <link rel="next" title="Subpackages" href="store.html" />
     <link rel="prev" title="Developers documentation" href="develop.html" /> 
@@ -32,15 +38,15 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="store.html" title="Subpackages"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="develop.html" title="Developers documentation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">CloudFusion v0.01 documentation</a> &raquo;</li>
+        <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" accesskey="U">Developers documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -50,20 +56,415 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="the-flushing-pyfusebox-module">
-<h1>The <tt class="xref docutils literal"><span class="pre">flushing_pyfusebox</span></tt> Module<a class="headerlink" href="#the-flushing-pyfusebox-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-cloudfusion.pyfusebox.virtualfile">
+<span id="the-virtualfile-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">virtualfile</span></tt> Module<a class="headerlink" href="#module-cloudfusion.pyfusebox.virtualfile" title="Permalink to this headline">¶</a></h1>
+<p>Created on 24.08.2011</p>
+<dl class="class">
+<dt id="cloudfusion.pyfusebox.virtualfile.VirtualFile">
+<em class="property">class </em><tt class="descclassname">cloudfusion.pyfusebox.virtualfile.</tt><tt class="descname">VirtualFile</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.virtualfile.VirtualFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="attribute">
+<dt id="cloudfusion.pyfusebox.virtualfile.VirtualFile.INITIAL_TEXT">
+<tt class="descname">INITIAL_TEXT</tt><em class="property"> = '\nSome virtual Text.\n'</em><a class="headerlink" href="#cloudfusion.pyfusebox.virtualfile.VirtualFile.INITIAL_TEXT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.virtualfile.VirtualFile.get_dir">
+<tt class="descname">get_dir</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.virtualfile.VirtualFile.get_dir" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the pyth of the directory of this virtual file</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.virtualfile.VirtualFile.get_name">
+<tt class="descname">get_name</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.virtualfile.VirtualFile.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.virtualfile.VirtualFile.get_path">
+<tt class="descname">get_path</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.virtualfile.VirtualFile.get_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.virtualfile.VirtualFile.get_subdir">
+<tt class="descname">get_subdir</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.virtualfile.VirtualFile.get_subdir" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the parent directory of this virtualfile&#8217;s path which is a subdirectory of path</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.virtualfile.VirtualFile.get_text">
+<tt class="descname">get_text</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.virtualfile.VirtualFile.get_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.virtualfile.VirtualFile.getattr">
+<tt class="descname">getattr</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.virtualfile.VirtualFile.getattr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.virtualfile.VirtualFile.read">
+<tt class="descname">read</tt><big>(</big><em>size</em>, <em>offset</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.virtualfile.VirtualFile.read" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.virtualfile.VirtualFile.truncate">
+<tt class="descname">truncate</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.virtualfile.VirtualFile.truncate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.virtualfile.VirtualFile.write">
+<tt class="descname">write</tt><big>(</big><em>buf</em>, <em>offset</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.virtualfile.VirtualFile.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="the-configurable-pyfusebox-module">
-<h1>The <tt class="xref docutils literal"><span class="pre">configurable_pyfusebox</span></tt> Module<a class="headerlink" href="#the-configurable-pyfusebox-module" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-cloudfusion.pyfusebox.flushing_pyfusebox">
+<span id="the-flushing-pyfusebox-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">flushing_pyfusebox</span></tt> Module<a class="headerlink" href="#module-cloudfusion.pyfusebox.flushing_pyfusebox" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox">
+<em class="property">class </em><tt class="descclassname">cloudfusion.pyfusebox.flushing_pyfusebox.</tt><tt class="descname">FlushingPyFuseBox</tt><big>(</big><em>root</em>, <em>store</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.pyfusebox.pyfusebox.PyFuseBox" title="cloudfusion.pyfusebox.pyfusebox.PyFuseBox"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.pyfusebox.pyfusebox.PyFuseBox</span></tt></a></p>
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.create">
+<tt class="descname">create</tt><big>(</big><em>path</em>, <em>mode</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.flush">
+<tt class="descname">flush</tt><big>(</big><em>path</em>, <em>fh</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.flush" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.getattr">
+<tt class="descname">getattr</tt><big>(</big><em>path</em>, <em>fh=None</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.getattr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.mkdir">
+<tt class="descname">mkdir</tt><big>(</big><em>path</em>, <em>mode</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.mkdir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.read">
+<tt class="descname">read</tt><big>(</big><em>path</em>, <em>size</em>, <em>offset</em>, <em>fh</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.read" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.readdir">
+<tt class="descname">readdir</tt><big>(</big><em>path</em>, <em>fh</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.readdir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.release">
+<tt class="descname">release</tt><big>(</big><em>path</em>, <em>fh</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.release" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.rename">
+<tt class="descname">rename</tt><big>(</big><em>old</em>, <em>new</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.rename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.rmdir">
+<tt class="descname">rmdir</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.rmdir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.set_cache_expiration_time">
+<tt class="descname">set_cache_expiration_time</tt><big>(</big><em>cache_expiration_time</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.set_cache_expiration_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the time in seconds until any cache entry is expired and will be flushed from cache</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.start_cyclic_flushing">
+<tt class="descname">start_cyclic_flushing</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.start_cyclic_flushing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts the thread which flushes the cache in time intervals of cache_expiration_time if store is initialized</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.statfs">
+<tt class="descname">statfs</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.statfs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.truncate">
+<tt class="descname">truncate</tt><big>(</big><em>path</em>, <em>length</em>, <em>fh=None</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.truncate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.unlink">
+<tt class="descname">unlink</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.unlink" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.write">
+<tt class="descname">write</tt><big>(</big><em>path</em>, <em>buf</em>, <em>offset</em>, <em>fh</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.StoreFlusher">
+<em class="property">class </em><tt class="descclassname">cloudfusion.pyfusebox.flushing_pyfusebox.</tt><tt class="descname">StoreFlusher</tt><big>(</big><em>store</em>, <em>lock</em>, <em>logger=None</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.StoreFlusher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></tt></p>
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.StoreFlusher._StoreFlusher__log_debug">
+<tt class="descname">_StoreFlusher__log_debug</tt><big>(</big><em>msg</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.StoreFlusher._StoreFlusher__log_debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.StoreFlusher._StoreFlusher__log_info">
+<tt class="descname">_StoreFlusher__log_info</tt><big>(</big><em>msg</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.StoreFlusher._StoreFlusher__log_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.StoreFlusher.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.StoreFlusher.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.StoreFlusher.start">
+<tt class="descname">start</tt><big>(</big><em>cache_expiration_time</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.StoreFlusher.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the time in seconds until any cache entry is expired and starts the thread to try to cyclically flush the cache</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.flushing_pyfusebox.StoreFlusher.stop">
+<tt class="descname">stop</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.flushing_pyfusebox.StoreFlusher.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="the-virtualconfigfile-module">
-<h1>The <tt class="xref docutils literal"><span class="pre">virtualconfigfile</span></tt> Module<a class="headerlink" href="#the-virtualconfigfile-module" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-cloudfusion.pyfusebox.pyfusebox">
+<span id="the-pyfusebox-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">pyfusebox</span></tt> Module<a class="headerlink" href="#module-cloudfusion.pyfusebox.pyfusebox" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="cloudfusion.pyfusebox.pyfusebox.PyFuseBox">
+<em class="property">class </em><tt class="descclassname">cloudfusion.pyfusebox.pyfusebox.</tt><tt class="descname">PyFuseBox</tt><big>(</big><em>path</em>, <em>store</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.pyfusebox.PyFuseBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.fuse.Operations</span></tt></p>
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.pyfusebox.PyFuseBox.create">
+<tt class="descname">create</tt><big>(</big><em>path</em>, <em>mode</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.pyfusebox.PyFuseBox.create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.pyfusebox.PyFuseBox.flush">
+<tt class="descname">flush</tt><big>(</big><em>path</em>, <em>fh</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.pyfusebox.PyFuseBox.flush" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.pyfusebox.PyFuseBox.getattr">
+<tt class="descname">getattr</tt><big>(</big><em>path</em>, <em>fh=None</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.pyfusebox.PyFuseBox.getattr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.pyfusebox.PyFuseBox.mkdir">
+<tt class="descname">mkdir</tt><big>(</big><em>path</em>, <em>mode</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.pyfusebox.PyFuseBox.mkdir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.pyfusebox.PyFuseBox.open">
+<tt class="descname">open</tt><big>(</big><em>path</em>, <em>flags</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.pyfusebox.PyFuseBox.open" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.pyfusebox.PyFuseBox.read">
+<tt class="descname">read</tt><big>(</big><em>path</em>, <em>size</em>, <em>offset</em>, <em>fh</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.pyfusebox.PyFuseBox.read" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.pyfusebox.PyFuseBox.readdir">
+<tt class="descname">readdir</tt><big>(</big><em>path</em>, <em>fh</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.pyfusebox.PyFuseBox.readdir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.pyfusebox.PyFuseBox.release">
+<tt class="descname">release</tt><big>(</big><em>path</em>, <em>fh</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.pyfusebox.PyFuseBox.release" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.pyfusebox.PyFuseBox.rename">
+<tt class="descname">rename</tt><big>(</big><em>old</em>, <em>new</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.pyfusebox.PyFuseBox.rename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.pyfusebox.PyFuseBox.rmdir">
+<tt class="descname">rmdir</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.pyfusebox.PyFuseBox.rmdir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.pyfusebox.PyFuseBox.statfs">
+<tt class="descname">statfs</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.pyfusebox.PyFuseBox.statfs" title="Permalink to this definition">¶</a></dt>
+<dd><p>This implementation should be looked at by a linux guru, since I have little experience concerning filesystems.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.pyfusebox.PyFuseBox.truncate">
+<tt class="descname">truncate</tt><big>(</big><em>path</em>, <em>length</em>, <em>fh=None</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.pyfusebox.PyFuseBox.truncate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.pyfusebox.PyFuseBox.unlink">
+<tt class="descname">unlink</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.pyfusebox.PyFuseBox.unlink" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.pyfusebox.PyFuseBox.write">
+<tt class="descname">write</tt><big>(</big><em>path</em>, <em>buf</em>, <em>offset</em>, <em>fh</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.pyfusebox.PyFuseBox.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.pyfusebox.pyfusebox.zstat">
+<tt class="descclassname">cloudfusion.pyfusebox.pyfusebox.</tt><tt class="descname">zstat</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.pyfusebox.zstat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
-<div class="section" id="the-pyfusebox-module">
-<h1>The <tt class="xref docutils literal"><span class="pre">pyfusebox</span></tt> Module<a class="headerlink" href="#the-pyfusebox-module" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-cloudfusion.pyfusebox.configurable_pyfusebox">
+<span id="the-configurable-pyfusebox-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">configurable_pyfusebox</span></tt> Module<a class="headerlink" href="#module-cloudfusion.pyfusebox.configurable_pyfusebox" title="Permalink to this headline">¶</a></h1>
+<p>Created on 23.08.2011</p>
+<p>This FUSE module initializes the store at runtime when the user accesses the virtual file /.config/.###config### and writes the appropriate parameters to the file.</p>
+<dl class="class">
+<dt id="cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox">
+<em class="property">class </em><tt class="descclassname">cloudfusion.pyfusebox.configurable_pyfusebox.</tt><tt class="descname">ConfigurablePyFuseBox</tt><big>(</big><em>root</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox" title="cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.pyfusebox.flushing_pyfusebox.FlushingPyFuseBox</span></tt></a></p>
+<dl class="attribute">
+<dt id="cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.DATA_FOLDER_PATH">
+<tt class="descname">DATA_FOLDER_PATH</tt><em class="property"> = '/data'</em><a class="headerlink" href="#cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.DATA_FOLDER_PATH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.VIRTUAL_CONFIG_FILE">
+<tt class="descname">VIRTUAL_CONFIG_FILE</tt><em class="property"> = '/config/config'</em><a class="headerlink" href="#cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.VIRTUAL_CONFIG_FILE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox._ConfigurablePyFuseBox__get_new_store">
+<tt class="descname">_ConfigurablePyFuseBox__get_new_store</tt><big>(</big><em>service</em>, <em>auth</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox._ConfigurablePyFuseBox__get_new_store" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox._getattr_for_folder_with_full_access">
+<tt class="descname">_getattr_for_folder_with_full_access</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox._getattr_for_folder_with_full_access" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox._initialize_store">
+<tt class="descname">_initialize_store</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox._initialize_store" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.create">
+<tt class="descname">create</tt><big>(</big><em>path</em>, <em>mode</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.flush">
+<tt class="descname">flush</tt><big>(</big><em>path</em>, <em>fh</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.flush" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.getattr">
+<tt class="descname">getattr</tt><big>(</big><em>path</em>, <em>fh=None</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.getattr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.mkdir">
+<tt class="descname">mkdir</tt><big>(</big><em>path</em>, <em>mode</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.mkdir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.read">
+<tt class="descname">read</tt><big>(</big><em>path</em>, <em>size</em>, <em>offset</em>, <em>fh</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.read" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.readdir">
+<tt class="descname">readdir</tt><big>(</big><em>path</em>, <em>fh</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.readdir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.release">
+<tt class="descname">release</tt><big>(</big><em>path</em>, <em>fh</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.release" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.remove_data_folder_prefix">
+<tt class="descname">remove_data_folder_prefix</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.remove_data_folder_prefix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.rename">
+<tt class="descname">rename</tt><big>(</big><em>old</em>, <em>new</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.rename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.rmdir">
+<tt class="descname">rmdir</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.rmdir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.statfs">
+<tt class="descname">statfs</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.statfs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.truncate">
+<tt class="descname">truncate</tt><big>(</big><em>path</em>, <em>length</em>, <em>fh=None</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.truncate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.unlink">
+<tt class="descname">unlink</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.unlink" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.write">
+<tt class="descname">write</tt><big>(</big><em>path</em>, <em>buf</em>, <em>offset</em>, <em>fh</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="the-virtualfile-module">
-<h1>The <tt class="xref docutils literal"><span class="pre">virtualfile</span></tt> Module<a class="headerlink" href="#the-virtualfile-module" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-cloudfusion.pyfusebox.virtualconfigfile">
+<span id="the-virtualconfigfile-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">virtualconfigfile</span></tt> Module<a class="headerlink" href="#module-cloudfusion.pyfusebox.virtualconfigfile" title="Permalink to this headline">¶</a></h1>
+<p>Created on 24.08.2011</p>
+<dl class="class">
+<dt id="cloudfusion.pyfusebox.virtualconfigfile.VirtualConfigFile">
+<em class="property">class </em><tt class="descclassname">cloudfusion.pyfusebox.virtualconfigfile.</tt><tt class="descname">VirtualConfigFile</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.virtualconfigfile.VirtualConfigFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.pyfusebox.virtualfile.VirtualFile" title="cloudfusion.pyfusebox.virtualfile.VirtualFile"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.pyfusebox.virtualfile.VirtualFile</span></tt></a></p>
+<dl class="attribute">
+<dt id="cloudfusion.pyfusebox.virtualconfigfile.VirtualConfigFile.INITIAL_TEXT">
+<tt class="descname">INITIAL_TEXT</tt><em class="property"> = '\n#explanation of config parameter 1\n#explanation of config parameter 2\n#explanation of config parameter 3\n\n'</em><a class="headerlink" href="#cloudfusion.pyfusebox.virtualconfigfile.VirtualConfigFile.INITIAL_TEXT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.virtualconfigfile.VirtualConfigFile.get_service_auth_data">
+<tt class="descname">get_service_auth_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.virtualconfigfile.VirtualConfigFile.get_service_auth_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.pyfusebox.virtualconfigfile.VirtualConfigFile.get_store_config_data">
+<tt class="descname">get_store_config_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.pyfusebox.virtualconfigfile.VirtualConfigFile.get_store_config_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -72,39 +473,39 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="index.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="#">The <tt class="docutils literal"><span class="pre">flushing_pyfusebox</span></tt> Module</a></li>
-<li><a class="reference external" href="#the-configurable-pyfusebox-module">The <tt class="docutils literal"><span class="pre">configurable_pyfusebox</span></tt> Module</a></li>
-<li><a class="reference external" href="#the-virtualconfigfile-module">The <tt class="docutils literal"><span class="pre">virtualconfigfile</span></tt> Module</a></li>
-<li><a class="reference external" href="#the-pyfusebox-module">The <tt class="docutils literal"><span class="pre">pyfusebox</span></tt> Module</a></li>
-<li><a class="reference external" href="#the-virtualfile-module">The <tt class="docutils literal"><span class="pre">virtualfile</span></tt> Module</a></li>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">virtualfile</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.pyfusebox.flushing_pyfusebox">The <tt class="docutils literal"><span class="pre">flushing_pyfusebox</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.pyfusebox.pyfusebox">The <tt class="docutils literal"><span class="pre">pyfusebox</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.pyfusebox.configurable_pyfusebox">The <tt class="docutils literal"><span class="pre">configurable_pyfusebox</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.pyfusebox.virtualconfigfile">The <tt class="docutils literal"><span class="pre">virtualconfigfile</span></tt> Module</a></li>
 </ul>
 
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="develop.html"
-                                  title="previous chapter">Developers documentation</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="store.html"
-                                  title="next chapter">Subpackages</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="_sources/pyfusebox.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="develop.html"
+                        title="previous chapter">Developers documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="store.html"
+                        title="next chapter">Subpackages</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/pyfusebox.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -116,7 +517,7 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="store.html" title="Subpackages"
@@ -124,13 +525,13 @@
         <li class="right" >
           <a href="develop.html" title="Developers documentation"
              >previous</a> |</li>
-        <li><a href="index.html">CloudFusion v0.01 documentation</a> &raquo;</li>
+        <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2011, Johannes Müller.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+        &copy; Copyright 2011, Johannes Müller.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

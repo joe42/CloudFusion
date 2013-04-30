@@ -1,25 +1,31 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Users documentation &mdash; CloudFusion v0.01 documentation</title>
+    <title>Users documentation &mdash; CloudFusion 0.01 documentation</title>
+    
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
         VERSION:     '0.01',
-        COLLAPSE_MODINDEX: false,
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
-    <link rel="top" title="CloudFusion v0.01 documentation" href="index.html" />
+    <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
     <link rel="next" title="Setup documentation" href="setup.html" />
     <link rel="prev" title="Welcome to CloudFusion’s documentation!" href="index.html" /> 
   </head>
@@ -31,15 +37,15 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="setup.html" title="Setup documentation"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to CloudFusion’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">CloudFusion v0.01 documentation</a> &raquo;</li> 
+        <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -50,14 +56,53 @@
             
   <div class="section" id="users-documentation">
 <h1>Users documentation<a class="headerlink" href="#users-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="first-steps">
-<h2>First Steps<a class="headerlink" href="#first-steps" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="start-cloudfusion">
+<h2>Start CloudFusion<a class="headerlink" href="#start-cloudfusion" title="Permalink to this headline">¶</a></h2>
+<p>Make a directory for the logs:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">.</span><span class="n">cloudfusion</span><span class="o">/</span><span class="n">logs</span>
+</pre></div>
 </div>
-<div class="section" id="commands">
-<h2>Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h2>
+<p>Or instead change the logging configuration in <em>cloudfusion/config/logging.conf</em> to specify another location for log files.</p>
+<p>To run the application make a directory mnt and from your home directory call:</p>
+<blockquote>
+<div>python -m cloudfusion.main mnt</div></blockquote>
+</div>
+<div class="section" id="create-a-configuration-file">
+<h2>Create a Configuration File<a class="headerlink" href="#create-a-configuration-file" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="sugarsync">
+<h3>Sugarsync<a class="headerlink" href="#sugarsync" title="Permalink to this headline">¶</a></h3>
+<p>Copy the Sugarsync configuration file located at <strong>cloudfusion/cloudfusion/config/Sugarsync.ini</strong> to your home directory.
+Edit the configuration file by adding your e-mail address as your username and a password.</p>
+</div>
+<div class="section" id="dropbox">
+<h3>Dropbox<a class="headerlink" href="#dropbox" title="Permalink to this headline">¶</a></h3>
+<p>Simply copy the Dropbox configuration file located at <strong>cloudfusion/cloudfusion/config/Dropbox.ini</strong> to your home directory.
+If you do not have a Dropbox account already, you can create a new one at <a class="reference external" href="https://www.dropbox.com">https://www.dropbox.com</a>.
+No further steps are required.</p>
+</div>
+</div>
+<div class="section" id="configuring-cloudfusion">
+<h2>Configuring CloudFusion<a class="headerlink" href="#configuring-cloudfusion" title="Permalink to this headline">¶</a></h2>
+<p>Now copy the configuration file you edited to your mountpoint:</p>
+<div class="highlight-python"><pre>cp ~/db.ini mnt/config/config</pre>
+</div>
+<p>This assumes that you saved the configuration file as <strong>db.ini</strong> to your home directory.
+If you simply copied the configuration file as suggested, replace <strong>db.ini</strong> with <strong>Sugarsync.ini</strong> or <strong>Dropbox.ini</strong> respectively.
+If you use Dropbox, your webbrowser will prompt you to login into Dropbox and grant access rights to CloudFusion.
+The current time limit for this is one minute. If you did not make it in time, copying the configuration file fails.
+But you can simply retry by copying the configuration again</p>
+<p>Enjoy accessing your files in the directory <strong>mnt/data</strong>.</p>
 </div>
 <div class="section" id="advanced-usage">
 <h2>Advanced Usage:<a class="headerlink" href="#advanced-usage" title="Permalink to this headline">¶</a></h2>
+<p>Advanced options can be set dynamically by changing parameters in the file <em>mnt/config/config</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#Approximate cache size limit in MB; default 2000:</span>
+<span class="n">cache_size</span> <span class="o">=</span> <span class="mi">5000</span>
+<span class="c">#Identifier for persistent database. Use one id per cloud account to keep the cache after application shutdown.</span>
+<span class="c">#Default value is a random number.</span>
+<span class="n">cache_id</span> <span class="o">=</span> <span class="n">dropboxacc1</span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -67,40 +112,45 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="index.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="#">Users documentation</a><ul>
-<li><a class="reference external" href="#first-steps">First Steps</a></li>
-<li><a class="reference external" href="#commands">Commands</a></li>
-<li><a class="reference external" href="#advanced-usage">Advanced Usage:</a></li>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Users documentation</a><ul>
+<li><a class="reference internal" href="#start-cloudfusion">Start CloudFusion</a></li>
+<li><a class="reference internal" href="#create-a-configuration-file">Create a Configuration File</a><ul>
+<li><a class="reference internal" href="#sugarsync">Sugarsync</a></li>
+<li><a class="reference internal" href="#dropbox">Dropbox</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuring-cloudfusion">Configuring CloudFusion</a></li>
+<li><a class="reference internal" href="#advanced-usage">Advanced Usage:</a></li>
 </ul>
 </li>
 </ul>
 
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="index.html"
-                                  title="previous chapter">Welcome to CloudFusion&#8217;s documentation!</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="setup.html"
-                                  title="next chapter">Setup documentation</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="_sources/user.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to CloudFusion&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="setup.html"
+                        title="next chapter">Setup documentation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/user.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -112,7 +162,7 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="setup.html" title="Setup documentation"
@@ -120,12 +170,12 @@
         <li class="right" >
           <a href="index.html" title="Welcome to CloudFusion’s documentation!"
              >previous</a> |</li>
-        <li><a href="index.html">CloudFusion v0.01 documentation</a> &raquo;</li> 
+        <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2011, Johannes Müller.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+        &copy; Copyright 2011, Johannes Müller.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>
