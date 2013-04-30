@@ -4,7 +4,8 @@ scriptpath=`readlink -f $0`
 scriptloc=`dirname $scriptpath`
 cd $scriptloc'/../cloudfusion'
 
-output=$(nosetests -v -s cloudfusion.tests.store_test|grep -i ERROR)
+output=$(nosetests -v -s cloudfusion.tests.store_test 2>&1|grep -i 'ERROR\|FAIL')
+echo "Testing before push..."
 if [ -z "$output" ]
 then
   echo "Test successful."
