@@ -16,6 +16,7 @@ Requirements
 
 To generate this documentation first call::
 
+    mkdir -p .cloudfusion/logs # work around for now
 	cloudfusion/doc/generate_modules.py -d cloudfusion/doc -f -m 5 cloudfusion main.py dropbox cloudfusion/fuse.py cloudfusion/conf cloudfusion/doc
 	
 * -d defines the destination directory for the documentation to generate
