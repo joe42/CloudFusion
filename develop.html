@@ -68,7 +68,8 @@
 <li>texlive-full for latex documentation</li>
 </ul>
 <p>To generate this documentation first call:</p>
-<div class="highlight-python"><pre>cloudfusion/doc/generate_modules.py -d cloudfusion/doc -f -m 5 cloudfusion main.py dropbox cloudfusion/fuse.py cloudfusion/conf cloudfusion/doc</pre>
+<div class="highlight-python"><pre>mkdir -p .cloudfusion/logs # work around for now
+    cloudfusion/doc/generate_modules.py -d cloudfusion/doc -f -m 5 cloudfusion main.py dropbox cloudfusion/fuse.py cloudfusion/conf cloudfusion/doc</pre>
 </div>
 <ul class="simple">
 <li>-d defines the destination directory for the documentation to generate</li>
