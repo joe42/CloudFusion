@@ -11,7 +11,7 @@ To install CloudFusion on Ubuntu do the following::
     sudo apt-get install git
     git clone git://github.com/joe42/CloudFusion.git
     sudo apt-get install python-setuptools
-    cd CloudFusion/cloudfusion/
+    cd CloudFusion/
     sudo python setup.py install
 
 Get started
@@ -30,13 +30,13 @@ Create a Configuration File
 
 Sugarsync
 ++++++++++
-Copy the Sugarsync configuration file located at **cloudfusion/cloudfusion/config/Sugarsync.ini** to your home directory.
+Copy the Sugarsync configuration file located at **cloudfusion/config/Sugarsync.ini** to your home directory.
 Edit the configuration file by adding your e-mail address as your username and a password. 
 
 
 Dropbox
 ++++++++++
-Simply copy the Dropbox configuration file located at **cloudfusion/cloudfusion/config/Dropbox.ini** to your home directory.
+Simply copy the Dropbox configuration file located at **cloudfusion/config/Dropbox.ini** to your home directory.
 If you do not have a Dropbox account already, you can create a new one at https://www.dropbox.com.
 No further steps are required. 
 
