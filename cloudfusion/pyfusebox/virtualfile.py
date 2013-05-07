@@ -5,9 +5,11 @@ Created on 24.08.2011
 import os
 from cloudfusion.pyfusebox.pyfusebox import zstat
 import stat
-import logging.config
 import cloudfusion
-logging.config.fileConfig(os.path.dirname(cloudfusion.__file__)+'/config/logging.conf')
+import logging
+from cloudfusion.mylogging.nullhandler import NullHandler
+
+logging.getLogger().addHandler(NullHandler())
         
 class VirtualFile(object):
     INITIAL_TEXT="""

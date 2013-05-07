@@ -4,6 +4,9 @@ import time
 from cloudfusion.util.cache import Cache
 import os.path
 import logging
+from cloudfusion.mylogging.nullhandler import NullHandler
+
+logging.getLogger().addHandler(NullHandler())
 
 class Entry(object):
     def __init__(self):

@@ -5,9 +5,11 @@ from errno import *
 from cloudfusion.fuse import FUSE, FuseOSError, Operations, LoggingMixIn
 import cloudfusion
 import tempfile
-import logging.config
+import logging
+from cloudfusion.mylogging.nullhandler import NullHandler
 
-logging.config.fileConfig(os.path.dirname(cloudfusion.__file__)+'/config/logging.conf')
+print logging.__path__
+logging.getLogger().addHandler(NullHandler())
 
 # Specify what Fuse API use: 0.2
 #fuse.fuse_python_api = (0, 2)

@@ -7,8 +7,11 @@ from cloudfusion.util.persistent_lru_cache import PersistentLRUCache
 from cloudfusion.store.dropbox.file_decorator import *
 from cloudfusion.store.store import *
 import time
-import logging
 import random
+import logging
+from cloudfusion.mylogging.nullhandler import NullHandler
+
+logging.getLogger().addHandler(NullHandler())
 
 """Wrapped store needs a logger as an attribute called logger """
 
@@ -25,7 +28,7 @@ class CachingStore(Store):
 #        self.temp_file = tempfile.SpooledTemporaryFile()
         self.cache_expiration_time = cache_expiration_time
         self.time_of_last_flush = time.time()
-        self.entries = PersistentLRUCache("/tmp/cachingstore_"+cache_id, cache_expiration_time, cache_size_in_mb)
+        self.entries = PersistentLRUCache("/tmp/cloudfusion/cachingstore_"+cache_id, cache_expiration_time, cache_size_in_mb)
     
     def get_cache_expiration_time(self):
         """:returns: the time in seconds until any cache entry is expired"""

@@ -5,8 +5,6 @@ Created on 08.04.2011
 import time
 import datetime
 from cloudfusion.store.store import *
-import logging
-import logging.config
 import os.path
 from cloudfusion.store.sugarsync.client import SugarsyncClient
 from cloudfusion.util.xmlparser import DictXMLParser
@@ -14,6 +12,10 @@ from cloudfusion.util.string import *
 import tempfile
 import httplib
 import xml.dom.minidom as dom
+import logging
+from cloudfusion.mylogging.nullhandler import NullHandler
+
+logging.getLogger().addHandler(NullHandler())
         
 
  
