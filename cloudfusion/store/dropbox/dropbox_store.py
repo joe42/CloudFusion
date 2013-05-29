@@ -19,6 +19,7 @@ import StringIO
 import cloudfusion
 import webbrowser
 from cloudfusion.store.dropbox import file_decorator
+import base64
 
 
 
@@ -47,7 +48,7 @@ class DropboxStore(Store):
         self.logger.debug("get Dropbox session")
         if not config['root'] in ['dropbox', 'app_folder']:
             raise StoreAccessError("Configuration error: root must be one of dropbox or app_folder, check your configuration file", 0)
-        sess = session.DropboxSession(config['consumer_key'], config['consumer_secret'], config['root'])
+        sess = session.DropboxSession(base64.b64decode(config['consumer_key']),base64.b64decode(config['consumer_secret']), config['root'])
         request_token = sess.obtain_request_token()
         url = sess.build_authorize_url(request_token)
         # Make the user sign in and authorize this token
