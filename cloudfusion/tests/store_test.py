@@ -15,10 +15,12 @@ from ConfigParser import SafeConfigParser
 import time
 import cloudfusion
 LOCAL_TESTFILE_PATH = "cloudfusion/tests/testfile"
+LOCAL_BIGTESTFILE_PATH = "cloudfusion/tests/bigtestfile"
 REMOTE_TESTDIR = "/testdir"
 REMOTE_MODIFIED_TESTDIR = REMOTE_TESTDIR+"/"+"testdir"
 REMOTE_METADATA_TESTDIR = REMOTE_TESTDIR+"/"+"testdir"
 LOCAL_TESTFILE_NAME = "testfile"
+LOCAL_BIGTESTFILE_NAME = "bigtestfile"
 REMOTE_TESTFILE_NAME = "testfile_remote"
 REMOTE_DUPLICATE_TESTDIR_ORIGIN = REMOTE_TESTDIR+"/"+"original"
 REMOTE_DUPLICATE_TESTDIR_COPY = REMOTE_TESTDIR+"/"+"copy of original" 
@@ -34,7 +36,7 @@ REMOTE_DELETED_DIR = REMOTE_TESTDIR+"/"+"i_am_a_folder_which_is_deleted"
 
 def get_dropbox_config():
     config = SafeConfigParser()
-    config_file = open(os.path.dirname(cloudfusion.__file__)+"/config/dropbox_testing.ini", "r")
+    config_file = open(os.path.dirname(cloudfusion.__file__)+"/config/Dropbox.ini", "r")
     config.readfp(config_file)
     return dict(config.items('auth'))
 
@@ -310,6 +312,10 @@ def _test_store_delete_file(io_api):
     assert io_api.exists(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME)
     _delete_file(io_api, LOCAL_TESTFILE_NAME, REMOTE_TESTDIR)
     assert not io_api.exists(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME)
+    io_api.store_file(LOCAL_BIGTESTFILE_PATH, REMOTE_TESTDIR)
+    assert io_api.exists(REMOTE_TESTDIR+"/"+LOCAL_BIGTESTFILE_NAME)
+    _delete_file(io_api, LOCAL_BIGTESTFILE_NAME, REMOTE_TESTDIR)
+    assert not io_api.exists(REMOTE_TESTDIR+"/"+LOCAL_BIGTESTFILE_NAME)
     empty_fileobject = tempfile.SpooledTemporaryFile()
     io_api.store_fileobject(empty_fileobject, REMOTE_TESTDIR+"/"+"empty_file")
     assert io_api.exists(REMOTE_TESTDIR+"/"+"empty_file")
