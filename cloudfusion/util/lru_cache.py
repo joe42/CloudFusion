@@ -155,3 +155,15 @@ class LRUCache(Cache):
                 next_entry =  self.entries[entry.next]
                 next_entry.prev = entry.prev
                 self._store_to_dict(next_entry)
+                
+    def __repr__(self):
+        ret = 'LRU key chain: '
+        entry = self._get_listtail_entry()
+        if not entry:
+            return ret+"empty"
+        while entry.next:
+            ret += str(entry.key)+" -> "
+            entry = self.entries[entry.next]
+        ret += str(entry.key)
+        return ret
+
