@@ -122,6 +122,14 @@ def test_delete():
     assert_raises( KeyError, test_obj.get_value, ("some_key") )
     assert not test_obj.exists("42")
     assert not test_obj.exists("some_key")
+
+def test_reorder():
+    test_obj = PersistentLRUCache(directory=directory)
+    test_obj.write("/xxx", "")
+    test_obj.write("/yyy", "")
+    test_obj.get_value("/xxx")
+    test_obj.delete("/xxx")
+    test_obj.delete("/yyy")
         
 def test_persistence():
     test_obj = PersistentLRUCache(directory=directory, maxsize_in_MB=0)

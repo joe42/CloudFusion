@@ -67,6 +67,7 @@ class LRUCache(Cache):
         self.entries[LISTHEAD] = used_entry.key
         previous_listhead.next = used_entry.key
         self._store_to_dict(previous_listhead)
+        self._store_to_dict(used_entry)
         
     def _get_listtail_entry(self):
         return self.entries[self.entries[LISTTAIL]] if self.entries[LISTTAIL] else None
