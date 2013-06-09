@@ -132,7 +132,7 @@ class DropboxStore(Store):
         retry = 5
         while uploader.offset < size:
             try:
-                upload = uploader.upload_chunked()
+                resp = uploader.upload_chunked()
             except rest.ErrorResponse, e:
                 retry -= 1
                 if retry == 0:
