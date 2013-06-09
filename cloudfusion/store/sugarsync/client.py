@@ -113,7 +113,7 @@ class SugarsyncClient(object):
     def put_file(self, fileobject, path_to_file):
         headers = {"Host": self.host, "Authorization: ": self.token}
         conn = httplib2.Http()
-        response, content = conn.request("https://"+self.host+ "/file/:sc:%s:%s/data" % (self.uid, path_to_file),"PUT",fileobject.read(),headers)
+        response, content = conn.request(str("https://"+self.host+ "/file/:sc:%s:%s/data" % (self.uid, path_to_file)),"PUT",str(fileobject.read()),headers)
         ret = HTTPResponse( response, content )
         return ret
     
