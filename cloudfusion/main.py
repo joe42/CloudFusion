@@ -25,7 +25,8 @@ def main():
     if not "log" in sys.argv:
         logging.getLogger().addHandler(NullHandler())
     else:
-        os.mkdir(".cloudfusion/logs")
+        if not os.path.exists(".cloudfusion/logs"):
+            os.mkdir(".cloudfusion/logs")
         logging.config.fileConfig(os.path.dirname(cloudfusion.__file__)+'/config/logging.conf')
     fuse_operations = ConfigurablePyFuseBox(sys.argv[1])
     FUSE(fuse_operations, sys.argv[1], foreground=foreground, nothreads=True)
