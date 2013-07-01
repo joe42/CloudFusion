@@ -11,7 +11,7 @@ logging.getLogger().addHandler(NullHandler())
 class Entry(object):
     def __init__(self):
         self.modified = None
-        self.size = None
+        self.size = 0
         self.is_dir = None
         self.is_file = None
         self.listing = None
