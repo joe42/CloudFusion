@@ -1,1 +1,3 @@
 recursive-include cloudfusion/config *.conf *.ini *.cfg
+include cloudfusion/dropbox/LICENSE cloudfusion/dropbox/trusted-certs.crt
+
