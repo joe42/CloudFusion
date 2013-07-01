@@ -311,7 +311,7 @@ class DropboxStore(Store):
             try:
                 resp = self.client.file_move(path_to_src, path_to_dest)
             except rest.ErrorResponse as resp:
-                if resp.status == 400:
+                if resp.status == 403:
                     self.delete(path_to_dest)
                     resp = self.client.file_move(path_to_src, path_to_dest)
                 else:
