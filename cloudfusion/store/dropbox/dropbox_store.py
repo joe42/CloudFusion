@@ -89,7 +89,7 @@ class DropboxStore(Store):
                 access_token = self.sess.obtain_access_token(self.request_token)
                 break
             except Exception as e:
-                self.logger.debug("Authorization error: "+str(e))
+                self.logger.error("Authorization error: "+str(e))
                 pass
         return access_token
         
@@ -192,8 +192,6 @@ class DropboxStore(Store):
             self.move(resp_path, path)
 
     def store_fileobject(self, fileobject, path):
-        self.logger.debug("storing file object to "+path)
-        remote_file_name = os.path.basename(path)
         size = self.__get_size(fileobject)
         self.logger.debug("storing file object of size %s to %s" % (size,path))
         remote_file_name = os.path.basename(path)
@@ -296,6 +294,7 @@ class DropboxStore(Store):
             except rest.ErrorResponse as resp:
                 msg= "could not duplicate " +path_to_src+" to "+path_to_dest
                 self._log_http_error("duplicate", None, resp, msg)
+                raise
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
         #ssert_all_in(resp.data.keys(), [u'thumb_exists', u'bytes', u'modified',u'path', u'is_dir', u'size', u'root', u'mime_type', u'icon'])
@@ -331,7 +330,7 @@ class DropboxStore(Store):
                 resp =  self.client.account_info()
             except rest.ErrorResponse as resp:
                 msg= "could not retrieve all space"
-                self._log_http_error("move", None, resp, msg)
+                self._log_http_error("get_overall_space", None, resp, msg)
                 return 0
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
@@ -346,7 +345,7 @@ class DropboxStore(Store):
                 resp =  self.client.account_info()
             except rest.ErrorResponse as resp:
                 msg= "could not retrieve used space"
-                self._log_http_error("move", None, resp, msg)
+                self._log_http_error("get_used_space", None, resp, msg)
                 return 0
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
@@ -397,7 +396,7 @@ class DropboxStore(Store):
             log += " -- reason: "+str(resp.reason) 
         if msg:
             log += " -- msg:"+msg
-        self.logger.warn(log)
+        self.logger.error(log)
         
     def _get_metadata(self, path):
         self.logger.debug("getting metadata for "+path)
