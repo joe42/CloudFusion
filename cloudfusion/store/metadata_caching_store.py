@@ -5,6 +5,7 @@ from cloudfusion.util.cache import Cache
 import os.path
 import logging
 from cloudfusion.mylogging.nullhandler import NullHandler
+from copy import deepcopy
 
 logging.getLogger().addHandler(NullHandler())
 
@@ -72,8 +73,9 @@ class MetadataCachingStore(Store):
         try:
             entry.size = len(ret)
         except:
-            pass
+            self.entries.delete(path_to_file)
         self.logger.debug("meta cache returning %s" % repr(ret)[:10])
+        self._add_to_parent_dir_listing(path_to_file)
         return ret
     
     def _add_to_parent_dir_listing(self, path):
@@ -163,11 +165,11 @@ class MetadataCachingStore(Store):
         if self.entries.exists(path_to_src) and self.entries.is_expired(path_to_src):
             self.entries.delete(path_to_src)
         if self.entries.exists(path_to_src):
-            entry = self.entries.get_value(path_to_src)
+            entry = deepcopy(self.entries.get_value(path_to_src))
             self.entries.write(path_to_dest, entry)
         else:
             self.entries.write(path_to_dest, Entry())
-        entry = self.entries.get_value(path_to_src)
+        entry = self.entries.get_value(path_to_dest)
         entry.set_modified()
         self._add_to_parent_dir_listing(path_to_dest)
         self.logger.debug("duplicated %s to %s" % (path_to_src, path_to_dest))
@@ -256,7 +258,7 @@ class MetadataCachingStore(Store):
             self.logger.debug("entry exists")
             if not None in [entry.is_dir, entry.modified, entry.size]:
                 return {'is_dir': entry.is_dir, 'modified': entry.modified, 'bytes': entry.size}
-        self.logger.debug("meta cache _get_metadata entry does not exist")
+        self.logger.debug("meta cache _get_metadata entry does not exist or is expired")
         metadata = self.store._get_metadata(path)
         if not self.entries.exists(path):
             self.entries.write(path, Entry())
