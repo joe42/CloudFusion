@@ -65,7 +65,7 @@ class SugarsyncStore(Store):
         if resp.status <200 or resp.status >= 300:
             self.logger.warn("could not get directory listing: " +translated_path+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
             if resp.status == 401 or resp.status >= 500:
-                self._reconnect()
+                self.reconnect()
             raise NoSuchFilesytemObjectError(translated_path, resp.status)
         xml_tree = dom.parseString(resp.data)
         for collection in xml_tree.documentElement.getElementsByTagName("collection"): 
@@ -128,7 +128,7 @@ class SugarsyncStore(Store):
         if file.status <200 or file.status >= 300:
             self.logger.warn("could not get file: %s\nstatus: %s reason: %s" % (path_to_file, file.status, file.reason))
             if file.status == 401 or file.status >= 500:
-                self._reconnect()
+                self.reconnect()
                 self.robustness -= 1
                 if self.robustness > 0:
                     self.logger.info("retrying")
@@ -143,7 +143,7 @@ class SugarsyncStore(Store):
         if resp.status <200 or resp.status >= 300:
             self.logger.warn("could not store file to " +path_to_file+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
             if resp.status == 401 or resp.status >= 500:
-                self._reconnect()
+                self.reconnect()
                 self.robustness -= 1
                 if self.robustness > 0:
                     self.logger.info("retrying")
@@ -158,7 +158,7 @@ class SugarsyncStore(Store):
         if resp.status <200 or resp.status >= 300:
             self.logger.warn("could not create file " +path+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
             if resp.status == 401 or resp.status >= 500:
-                self._reconnect()
+                self.reconnect()
     
     def delete(self, path):
         self.logger.debug("deleting " +path)
@@ -173,7 +173,7 @@ class SugarsyncStore(Store):
         if resp.status <200 or resp.status >= 300:
             self.logger.warn("could not delete " +path+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
             if resp.status == 401 or resp.status >= 500:
-                self._reconnect()
+                self.reconnect()
         else:
             del self.path_cache[path]
         return resp.status
@@ -194,7 +194,7 @@ class SugarsyncStore(Store):
         if resp.status <200 or resp.status >= 300:
             self.logger.warn("could not create directory: " +path+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
             if resp.status == 401 or resp.status >= 500:
-                self._reconnect()
+                self.reconnect()
         return resp.status
 
     def get_directory_listing(self, directory):
@@ -237,7 +237,7 @@ class SugarsyncStore(Store):
                     if resp.status != 200:
                         self.logger.warn("could not duplicate " +path_to_src+" to "+path_to_dest+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
                         if resp.status == 401 or resp.status >= 500:
-                            self._reconnect()
+                            self.reconnect()
         else:
             #if dest exists remove
             if self.exists(path_to_dest):
@@ -246,7 +246,7 @@ class SugarsyncStore(Store):
             if resp.status < 200 or resp.status >= 300:
                 self.logger.warn("could not duplicate " +path_to_src+" to "+path_to_dest+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
                 if resp.status == 401 or resp.status >= 500:
-                    self._reconnect()
+                    self.reconnect()
 
     def _get_metadata(self, path):
         self.logger.debug("getting metadata for "+path)
@@ -275,7 +275,7 @@ class SugarsyncStore(Store):
             is_file = False
             resp = self.client.get_folder_metadata( self._translate_path(path) )
             if resp.status == 401 or resp.status >= 500:
-                self._reconnect()
+                self.reconnect()
         if resp.status <200 or resp.status >= 300:
             self.logger.warn("could not get metadata: " +path+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
             raise NoSuchFilesytemObjectError(path, resp.status)
@@ -313,7 +313,7 @@ class SugarsyncStore(Store):
         resp =  self.client.user_info()
         return time.mktime( time.strptime(resp.getheader('date'), "%a, %d %b %Y %H:%M:%S GMT") ) - time.time()
     
-    def _reconnect(self):
+    def reconnect(self):
         self.client._reconnect()
         
         

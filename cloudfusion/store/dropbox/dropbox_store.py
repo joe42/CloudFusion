@@ -48,32 +48,35 @@ class DropboxStore(Store):
         self.logger.debug("get Dropbox session")
         if not config['root'] in ['dropbox', 'app_folder']:
             raise StoreAccessError("Configuration error: root must be one of dropbox or app_folder, check your configuration file", 0)
-        sess = session.DropboxSession(base64.b64decode(config['consumer_key']),base64.b64decode(config['consumer_secret']), config['root'])
-        request_token = sess.obtain_request_token()
-        url = sess.build_authorize_url(request_token)
+        self.sess = session.DropboxSession(base64.b64decode(config['consumer_key']),base64.b64decode(config['consumer_secret']), config['root'])
+        self.request_token = self.sess.obtain_request_token()
+        url = self.sess.build_authorize_url(self.request_token)
         # Make the user sign in and authorize this token
         print "url:", url
         print "Please visit this website and press the 'Allow' button in the next Minute."
         webbrowser.open(url)
-        access_token = None
-        error = None
-        for i in range(0,20):
-            time.sleep(3)
-            try:
-                access_token = sess.obtain_access_token(request_token)
-                break
-            except Exception as e:
-                error = e
-                pass
+        access_token = self.reconnect()
         if not access_token:
             print "Sorry, please try copying the config file again."
             raise StoreAccessError("Authorization error: "+str(error), 0)
         self.logger.debug("get DropboxClient")
-        self.client = client.DropboxClient(sess)
+        self.client = client.DropboxClient(self.sess)
         self.root = config['root']
         self.time_difference = self._get_time_difference()
         self.logger.info("api initialized")
-        super(DropboxStore, self).__init__() 
+        super(DropboxStore, self).__init__()
+        
+    def reconnect(self):
+        access_token = None
+        for i in range(0,20):
+            time.sleep(3)
+            try:
+                access_token = self.sess.obtain_access_token(self.request_token)
+                break
+            except Exception as e:
+                self.logger.debug("Authorization error: "+str(e))
+                pass
+        return access_token
         
     def get_name(self):
         self.logger.info("getting name")

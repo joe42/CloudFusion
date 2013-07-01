@@ -42,6 +42,8 @@ class Store(object):
         raise NotImplementedError()
     
     def store_file(self, path_to_file, dest_dir="/", remote_file_name = None):
+        """Store the local file *path_to_file* to directory *dest_dir* on the store.
+        :param remote_file_name: the file name on the store or the original file name if this parameter is None."""
         if dest_dir == "/":
             dest_dir = ""
         fileobject = open(path_to_file)
@@ -50,6 +52,8 @@ class Store(object):
         self.store_fileobject(fileobject, dest_dir + "/" + remote_file_name)
         
     def store_fileobject(self, fileobject, path):
+        """Store the contents of *fileobject* to *path* on the store.
+        :param remote_file_name: the file name on the store or the original file name if this parameter is None."""
         raise NotImplementedError()
             
     def delete(self, path):
@@ -119,5 +123,5 @@ class Store(object):
     def flush(self):
         pass
     
-    def _reconnect(self):
+    def reconnect(self):
         pass
