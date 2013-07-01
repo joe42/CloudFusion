@@ -20,8 +20,13 @@ import cloudfusion
 import webbrowser
 from cloudfusion.store.dropbox import file_decorator
 import base64
+from cloudfusion.util.persistent_lru_cache import PersistentLRUCache
+import shelve
+import random
+from multiprocessing import Manager
+import atexit
 
-
+DATABASE_DIR = '/tmp/cloudfusion'
 
 
 class ServerError(StoreAccessError):
@@ -62,6 +67,18 @@ class DropboxStore(Store):
         self.root = config['root']
         self.time_difference = self._get_time_difference()
         self.logger.info("api initialized")
+        manager = Manager()
+        self._revisions = manager.dict()
+        cache_id = "" # add actual cache_id
+        self._revision_db_dir = "/tmp/cloudfusion/cachingstore_"+cache_id
+        self._revision_db_path = self._revision_db_dir + "Dropbox_revisions.db"
+        try:
+            last_session_revisions = shelve.open(self._revision_db_path)
+            self._revisions.update(last_session_revisions)
+        except:
+            self.logger.debug("Revision database from last session could not be loaded.")
+        self._is_copy = False
+        atexit.register( lambda : self._close() )
         super(DropboxStore, self).__init__()
         
     def reconnect(self):
@@ -76,13 +93,27 @@ class DropboxStore(Store):
                 pass
         return access_token
         
+    def _close(self):
+        if not self._is_copy:
+            try:
+                os.makedirs(self._revision_db_dir)
+            except:
+                pass
+            self.myshelve = shelve.open(self._revision_db_path)
+            self.myshelve.update(self._revisions)
+            self.myshelve.close()
+    
     def __deepcopy__(self, memo):
         from copy import deepcopy
         cls = self.__class__
         result = cls.__new__(cls)
         memo[id(self)] = result
         for k, v in self.__dict__.items():
-            if k == 'logger':
+            if k == '_revisions':
+                setattr(result, k, self._revisions)
+            elif k == '_is_copy':
+                setattr(result, k, True)
+            elif k == 'logger':
                 setattr(result, k, self.logger)
             elif k == '_logging_handler':
                 setattr(result, k, self._logging_handler)
@@ -98,34 +129,46 @@ class DropboxStore(Store):
         self.logger.debug("getting file: " +path_to_file)
         self._raise_error_if_invalid_path(path_to_file)
         try:
-            resp = self.client.get_file(path_to_file)
+            file, metadata = self.client.get_file_and_metadata(path_to_file)
         except Exception, e:
             try:
-                resp = self.client.get_file(path_to_file)
+                file, metadata = self.client.get_file_and_metadata(path_to_file)
             except rest.ErrorResponse as resp:
                 msg= "could not get file: " +path_to_file
                 self._log_http_error("get_file", path_to_file, resp, msg)
                 return ""
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
-        ret = resp.read()
-        return ret
+        self._add_revision(path_to_file, metadata['rev'])
+        return file.read()
+    
+    def _get_revision(self, path):
+        return self._revisions.get(path, None)
+    
+    def _add_revision(self, path, revision):
+        self._revisions[path] = revision
+        
+    def _remove_revision(self, path):
+        if path in self._revisions:
+            del self._revisions[path]
     
     def store_small_fileobject(self, fileobject, path):
-        self.logger.debug("storing file object to "+path)
+        self.logger.debug("storing file object size< 100000 to "+path)
         remote_file_name = os.path.basename(path)
         namable_file = NameableFile( fileobject, remote_file_name )
         try:
-            resp = self.client.put_file(path, namable_file)
+            resp = self.client.put_file(path, namable_file, overwrite=False, parent_rev=self._get_revision(path))
         except Exception, e:
             try:
-                resp = self.client.put_file(path, namable_file)
+                resp = self.client.put_file(path, namable_file, overwrite=False, parent_rev=self._get_revision(path))
             except rest.ErrorResponse as resp:
                 msg= "could not store file: " +path+remote_file_name
                 self._log_http_error("store_fileobject", path, resp, msg)
                 raise StoreAccessError("Transfer error: "+str(e), 0)
             except Exception, e:
-                raise StoreAccessError("Transfer error: "+str(e), 0)   
+                raise StoreAccessError("Transfer error: "+str(e), 0)  
+        self._add_revision(path, resp['rev'])
+        self._backup_overwritten(path, resp['path'])  
         return resp 
             
 
@@ -136,18 +179,32 @@ class DropboxStore(Store):
         fileobject.seek(pos, 0)
         return size
     
+
+    def _backup_overwritten(self, path, resp_path):
+        """Store *path* in the directory '/overwritten' and rename the new file *resp_path* to *path*.
+        If a new file is stored to path, the response from dropbox may say it was stored in to resp_path, instead.
+        This means there has already been a file stored to path and instead of overwriting it, the new file was stored to resp_path, instead.
+        """
+        while resp_path != path:
+            if not self.exists('/overwritten'):
+                self.create_directory('/overwritten')
+            self.move(path, '/overwritten' + path)
+            self.move(resp_path, path)
+
     def store_fileobject(self, fileobject, path):
         self.logger.debug("storing file object to "+path)
         remote_file_name = os.path.basename(path)
         size = self.__get_size(fileobject)
-        if size < 100000:
+        self.logger.debug("storing file object of size %s to %s" % (size,path))
+        remote_file_name = os.path.basename(path)
+        if size < 1000000:
             return self.store_small_fileobject(fileobject, path)
         nameable_file = NameableFile( fileobject, remote_file_name )
         uploader = self.client.get_chunked_uploader(nameable_file, size)
         retry = 5
         while uploader.offset < size:
             try:
-                resp = uploader.upload_chunked()
+                resp = uploader.upload_chunked(1 * 1000 * 1000)
             except rest.ErrorResponse, e:
                 retry -= 1
                 if retry == 0:
@@ -157,17 +214,19 @@ class DropboxStore(Store):
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
         try:
-            resp = uploader.finish(path, overwrite=True)
+            resp = uploader.finish(path, overwrite=False, parent_rev=self._get_revision(path))
         except Exception, e:
             try:
-                resp = uploader.finish(path, overwrite=True)
+                resp = uploader.finish(path, overwrite=False, parent_rev=self._get_revision(path))
             except rest.ErrorResponse as resp:
                 msg= "could not store file: " +path+remote_file_name 
                 self._log_http_error("store_fileobject", path, resp, msg)
                 raise StoreAccessError("Transfer error: "+str(e), 0)
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
-        return resp #return metadata
+        self._add_revision(path, resp['rev'])
+        self._backup_overwritten(path, resp['path'])
+        return self._parse_filesys_obj(resp) #return metadata
     
     
     def delete(self, path):
@@ -191,6 +250,7 @@ class DropboxStore(Store):
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
             #assert_all_in(resp.data.keys(), [u'is_deleted', u'thumb_exists', u'bytes', u'modified',u'path', u'is_dir', u'size', u'root', u'mime_type', u'icon'])
+        self._remove_revision(path)
         
     def account_info(self):
         self.logger.debug("retrieving account info")
@@ -239,6 +299,7 @@ class DropboxStore(Store):
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
         #ssert_all_in(resp.data.keys(), [u'thumb_exists', u'bytes', u'modified',u'path', u'is_dir', u'size', u'root', u'mime_type', u'icon'])
+        self._add_revision(path_to_dest, resp['rev'])
     
     def move(self, path_to_src, path_to_dest):
         self.logger.debug("moving " +path_to_src+" to "+path_to_dest)
@@ -252,12 +313,14 @@ class DropboxStore(Store):
             except rest.ErrorResponse as resp:
                 if resp.status == 400:
                     self.delete(path_to_dest)
-                    self.move(path_to_src, path_to_dest)
+                    resp = self.client.file_move(path_to_src, path_to_dest)
                 else:
                     msg= "could not move " +path_to_src+" to "+path_to_dest
                     self._log_http_error("move", None, resp, msg)
             except Exception, e:
                 raise StoreAccessError("Transfer error: "+str(e), 0)
+        self._remove_revision(path_to_src)
+        self._add_revision(path_to_dest, resp['rev'])
     
     def get_overall_space(self):
         self.logger.debug("retrieving all space")
@@ -367,6 +430,8 @@ class DropboxStore(Store):
             msg = "filesystem object has been deleted"
             raise NoSuchFilesytemObjectError(path, 0)
         self.logger.info(repr(resp))
+        if not resp["is_dir"]: # TODO: cache folder entries
+            self._add_revision(path, resp['rev'])
         return self._parse_filesys_obj(resp)
     
     def _parse_filesys_obj(self, data):
