@@ -5,7 +5,6 @@ This FUSE module initializes the store at runtime when the user accesses the vir
 '''
 
 from cloudfusion.pyfusebox.pyfusebox import *
-from cloudfusion.pyfusebox.flushing_pyfusebox import FlushingPyFuseBox
 from cloudfusion.pyfusebox.virtualconfigfile import VirtualConfigFile
 from cloudfusion.store.dropbox.dropbox_store import DropboxStore
 from cloudfusion.store.sugarsync.sugarsync_store import SugarsyncStore
@@ -14,7 +13,7 @@ from cloudfusion.store.metadata_caching_store import MetadataCachingStore
 import random
 
 
-class ConfigurablePyFuseBox(FlushingPyFuseBox):
+class ConfigurablePyFuseBox(PyFuseBox):
     VIRTUAL_CONFIG_FILE = '/config/config'
     DATA_FOLDER_PATH = "/data"
     def __init__(self, root):
@@ -150,7 +149,6 @@ class ConfigurablePyFuseBox(FlushingPyFuseBox):
         elif metadata_cache_time > 0:
             store = MetadataCachingStore( store, metadata_cache_time )
         self.store = store
-        super( ConfigurablePyFuseBox, self ).start_cyclic_flushing()
         self.logger.debug("initialized service")
         self.store_initialized = True
         
