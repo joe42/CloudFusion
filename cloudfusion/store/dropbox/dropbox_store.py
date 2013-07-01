@@ -37,8 +37,6 @@ class DropboxError(object):
             msg = "Operation forbidden (path exists, wrong token, expired timestamp?)."
         super(ServerError, self).__init__(msg) 
 
-
-
 class DropboxStore(Store):
     def __init__(self, config):
         self._logging_handler = 'dropbox'
@@ -77,6 +75,20 @@ class DropboxStore(Store):
                 self.logger.debug("Authorization error: "+str(e))
                 pass
         return access_token
+        
+    def __deepcopy__(self, memo):
+        from copy import deepcopy
+        cls = self.__class__
+        result = cls.__new__(cls)
+        memo[id(self)] = result
+        for k, v in self.__dict__.items():
+            if k == 'logger':
+                setattr(result, k, self.logger)
+            elif k == '_logging_handler':
+                setattr(result, k, self._logging_handler)
+            else:
+                setattr(result, k, deepcopy(v, memo))
+        return result
         
     def get_name(self):
         self.logger.info("getting name")

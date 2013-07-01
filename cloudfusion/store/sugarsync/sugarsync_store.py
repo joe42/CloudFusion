@@ -36,6 +36,19 @@ class SugarsyncStore(Store):
         self.logger.debug("getting name")
         return "Sugarsync"
     
+    def __deepcopy__(self, memo):
+        from copy import deepcopy
+        cls = self.__class__
+        result = cls.__new__(cls)
+        memo[id(self)] = result
+        for k, v in self.__dict__.items():
+            if k == 'logger':                        
+                setattr(result, k, self.logger)
+            elif k == '_logging_handler':                        
+                setattr(result, k, self._logging_handler) 
+            else:
+                setattr(result, k, deepcopy(v, memo))
+        return result
     
     def _translate_path(self, path):
         self.logger.debug("translating path: "+path) #+" cache: "+str(self.path_cache)

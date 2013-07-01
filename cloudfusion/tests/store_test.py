@@ -5,7 +5,7 @@ from functools import partial
 from nose.tools import *
 from nose.tools import eq_ as eq
 from cloudfusion.store.store import *
-from cloudfusion.store.caching_store import CachingStore
+from cloudfusion.store.caching_store import MultiprocessingCachingStore
 from cloudfusion.store.metadata_caching_store import MetadataCachingStore
 import os.path, time
 import tempfile
@@ -55,10 +55,10 @@ def setUp():
     dropbox_store = DropboxStore(dropbox_config)
     io_apis.append( dropbox_store )
     io_apis.append( SugarsyncStore(sugarsync_config) ) 
-    io_apis.append( CachingStore( dropbox_store ) ) 
-    io_apis.append( CachingStore( SugarsyncStore(sugarsync_config) ) )
-    io_apis.append( MetadataCachingStore( CachingStore( SugarsyncStore(sugarsync_config) ) ) )
-    io_apis.append( CachingStore( MetadataCachingStore( dropbox_store ) ) )
+    io_apis.append( MultiprocessingCachingStore( dropbox_store ) ) 
+    io_apis.append( MultiprocessingCachingStore( SugarsyncStore(sugarsync_config) ) )
+    io_apis.append( MetadataCachingStore( MultiprocessingCachingStore( SugarsyncStore(sugarsync_config) ) ) )
+    io_apis.append( MultiprocessingCachingStore( MetadataCachingStore( dropbox_store ) ) )
     #io_apis.append( ErrorHandlingSugarsyncStore( SugarsyncStore(sugarsync_config) )  ) 
     time.sleep(10)
     for io_api in io_apis:

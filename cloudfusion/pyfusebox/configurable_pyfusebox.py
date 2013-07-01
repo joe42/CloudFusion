@@ -8,7 +8,7 @@ from cloudfusion.pyfusebox.pyfusebox import *
 from cloudfusion.pyfusebox.virtualconfigfile import VirtualConfigFile
 from cloudfusion.store.dropbox.dropbox_store import DropboxStore
 from cloudfusion.store.sugarsync.sugarsync_store import SugarsyncStore
-from cloudfusion.store.caching_store import CachingStore
+from cloudfusion.store.caching_store import MultiprocessingCachingStore
 from cloudfusion.store.metadata_caching_store import MetadataCachingStore
 import random
 
@@ -141,11 +141,9 @@ class ConfigurablePyFuseBox(PyFuseBox):
         store = self.__get_new_store(service, auth) #catch error?
         self.logger.debug("initialized store")
         if cache_time > 0 and metadata_cache_time > 0:
-            store = MetadataCachingStore( CachingStore( MetadataCachingStore( store, metadata_cache_time ), cache_time, cache_size, cache_id ), metadata_cache_time )
-            self.set_cache_expiration_time(cache_time)
+            store = MultiprocessingCachingStore( MetadataCachingStore( store, metadata_cache_time ), cache_time, cache_size, cache_id )
         elif cache_time > 0:
-            store = CachingStore(store, cache_time, cache_size, cache_id)
-            self.set_cache_expiration_time(cache_time)
+            store = MultiprocessingCachingStore(store, cache_time, cache_size, cache_id)
         elif metadata_cache_time > 0:
             store = MetadataCachingStore( store, metadata_cache_time )
         self.store = store

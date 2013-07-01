@@ -2,6 +2,7 @@ from cloudfusion.store.store import Store
 from cloudfusion.util import *
 import time
 from cloudfusion.util.cache import Cache
+from cloudfusion.util.lru_cache import LRUCache
 import os.path
 import logging
 from cloudfusion.mylogging.nullhandler import NullHandler
@@ -47,7 +48,7 @@ class MetadataCachingStore(Store):
         self.store = store
         self.logger = logging.getLogger(self.get_logging_handler())
         self.logger.debug("creating MetadataCachingStore object")
-        self.entries = Cache(cache_expiration_time)
+        self.entries = LRUCache(cache_expiration_time,2)
         self.store_metadata = Cache(cache_expiration_time)
     
     def _is_valid_path(self, path):
@@ -292,3 +293,17 @@ class MetadataCachingStore(Store):
     
     def flush(self):
         self.store.flush()
+        
+    def __deepcopy__(self, memo):
+        from copy import deepcopy
+        cls = self.__class__
+        result = cls.__new__(cls)
+        memo[id(self)] = result
+        for k, v in self.__dict__.items():
+            if k == 'logger':
+                setattr(result, k, self.logger)
+            elif k == '_logging_handler':
+                setattr(result, k, self._logging_handler)
+            else:
+                setattr(result, k, deepcopy(v, memo))
+        return result
