@@ -132,6 +132,28 @@ class LRUCache(Cache):
             if entry.dirty == False:
         	       self.delete(entry.key)
             entry = self.entries[entry.next]
+
+            
+    def peek(self, key):
+        """Get value associated with *key*. 
+        This does not count as the entry being used."""
+        return self.entries[key].value
+    
+    def get_dirty_lru_entries(self, num):
+        """Get list of *num* dirty least recently used entries.
+        returns: list of keys of the *num* least recently used entries"""
+        ret = []
+        i = 0
+        entry = self._get_listtail_entry()
+        while entry:
+            if num <= len(ret):
+                break
+            if entry.dirty:
+                ret.append(entry.key)
+            if not entry.next:
+                break
+            entry = self.entries[entry.next]
+        return ret
     
     def delete(self, key):
         """Remove current entry associated with key from the LRU queue."""

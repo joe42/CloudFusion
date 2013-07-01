@@ -103,6 +103,9 @@ class PersistentLRUCache(LRUCache):
     def get_value(self, key):
         return self._get_file_content(super( PersistentLRUCache, self ).get_value(key))
     
+    def peek(self, key):
+        return self._get_file_content(super( PersistentLRUCache, self ).peek(key))
+    
     def _get_size_of_entry(self, entry):
         return self._get_persistent_size(entry.value)
             
