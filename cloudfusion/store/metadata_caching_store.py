@@ -124,16 +124,24 @@ class MetadataCachingStore(Store):
         self._remove_from_parent_dir_listing(path)
           
     def account_info(self):
-        return self.store.account_info()
+        if not self.store_metadata.exists('account_info'):
+            self.store_metadata.write('account_info', self.store.account_info())
+        return self.store_metadata.get_value('account_info')
     
     def get_free_space(self):
-        return self.store.get_free_space()
+        if not self.store_metadata.exists('free_space'):
+            self.store_metadata.write('free_space', self.store.get_free_space())
+        return self.store_metadata.get_value('free_space')
     
     def get_overall_space(self):
-        return self.store.get_overall_space()
+        if not self.store_metadata.exists('overall_space'):
+            self.store_metadata.write('overall_space', self.store.get_overall_space())
+        return self.store_metadata.get_value('overall_space')
     
     def get_used_space(self):
-        return self.store.get_used_space()
+        if not self.store_metadata.exists('used_space'):
+            self.store_metadata.write('used_space', self.store.get_used_space())
+        return self.store_metadata.get_value('used_space')
 
     def create_directory(self, directory):
         self.logger.debug("meta cache create_directory %s" % directory)
