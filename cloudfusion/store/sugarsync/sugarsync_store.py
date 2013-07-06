@@ -66,7 +66,7 @@ class SugarsyncStore(Store):
                     parent_dir += "/"
                 self.path_cache[ parent_dir+to_unicode( item["name"], "utf8") ] = item["reference"]
             if not path in self.path_cache:
-                self.logger.warn("could not translate path: " +path)
+                self.logger.warning("could not translate path: " +path)
                 raise NoSuchFilesytemObjectError(path,0)
             return self.path_cache[path]
             
@@ -76,7 +76,7 @@ class SugarsyncStore(Store):
         ret = []
         resp = self.client.get_dir_listing(translated_path)
         if resp.status <200 or resp.status >= 300:
-            self.logger.warn("could not get directory listing: " +translated_path+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
+            self.logger.warning("could not get directory listing: " +translated_path+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
             if resp.status == 401 or resp.status >= 500:
                 self.reconnect()
             raise NoSuchFilesytemObjectError(translated_path, resp.status)
@@ -121,7 +121,7 @@ class SugarsyncStore(Store):
         DictXMLParser().populate_dict_with_XML_leaf_textnodes(info.data, partial_tree)
         #print response.status, response.reason, response.getheaders()
         if info.status <200 or info.status >= 300:
-            self.logger.warn("could not retrieve overall space"+"\nstatus: %s reason: %s" % (info.status, info.reason))
+            self.logger.warning("could not retrieve overall space"+"\nstatus: %s reason: %s" % (info.status, info.reason))
         return int(partial_tree['user']['quota']['limit'])
     
     def get_used_space(self):
@@ -131,7 +131,7 @@ class SugarsyncStore(Store):
         DictXMLParser().populate_dict_with_XML_leaf_textnodes(info.data, partial_tree)
         #print response.status, response.reason, response.getheaders()
         if info.status <200 or info.status >= 300:
-            self.logger.warn("could not retrieve used space"+"\nstatus: %s reason: %s" % (info.status, info.reason))
+            self.logger.warning("could not retrieve used space"+"\nstatus: %s reason: %s" % (info.status, info.reason))
         return int(partial_tree['user']['quota']['usage'])
     
     def get_file(self, path_to_file): 
@@ -248,7 +248,7 @@ class SugarsyncStore(Store):
                 else:
                     resp = self.client.duplicate_file(item['reference'], translated_dest_dir, dest_name)
                     if resp.status != 200:
-                        self.logger.warn("could not duplicate " +path_to_src+" to "+path_to_dest+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
+                        self.logger.warning("could not duplicate " +path_to_src+" to "+path_to_dest+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
                         if resp.status == 401 or resp.status >= 500:
                             self.reconnect()
         else:
@@ -257,7 +257,7 @@ class SugarsyncStore(Store):
                 self.delete(path_to_dest)
             resp = self.client.duplicate_file(translated_src, translated_dest_dir, dest_name)
             if resp.status < 200 or resp.status >= 300:
-                self.logger.warn("could not duplicate " +path_to_src+" to "+path_to_dest+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
+                self.logger.warning("could not duplicate " +path_to_src+" to "+path_to_dest+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
                 if resp.status == 401 or resp.status >= 500:
                     self.reconnect()
 

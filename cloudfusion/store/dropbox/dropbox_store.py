@@ -440,7 +440,7 @@ class DropboxStore(Store):
         try:
             ret["modified"] = int(time.mktime( time.strptime(data["modified"], "%a, %d %b %Y %H:%M:%S +0000") ) - self.time_difference)
         except Exception as x:
-            self.logger.warn("Time conversion error: %s" % str(data["modified"]))
+            self.logger.warning("Time conversion error: %s" % str(data["modified"]))
             raise DateParseError("Error parsing modified attribute: %s" % str(x));
         ret["path"] = data["path"]
         ret["is_dir"] = data["is_dir"]
