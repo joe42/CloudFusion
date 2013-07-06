@@ -421,11 +421,14 @@ class MultiprocessingCachingStore(Store):
             self.store.duplicate(path_to_src, path_to_dest)
         
     def move(self, path_to_src, path_to_dest):
-        if not (self.entries.exists(path_to_src) and self.entries.is_dirty(path_to_src)): #it already was up to date at the remote server:
-            self.store.move(path_to_src, path_to_dest)
-        if self.entries.exists(path_to_src): 
+        self.entries.delete(path_to_dest) # delete possible locally cached entry at destination 
+        local_dirty_entry_to_src_exists = self.entries.exists(path_to_src) and self.entries.is_dirty(path_to_src)
+        source_is_in_store = not local_dirty_entry_to_src_exists 
+        if self.entries.exists(path_to_src):  
             self.entries.write(path_to_dest, self.entries.get_value(path_to_src))
             self.entries.delete(path_to_src)
+        if source_is_in_store: 
+            self.store.move(path_to_src, path_to_dest)
  
     def get_modified(self, path):
         if self.entries.exists(path):
