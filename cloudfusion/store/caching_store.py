@@ -410,13 +410,15 @@ class MultiprocessingCachingStore(Store):
     def create_directory(self, directory):
         return self.store.create_directory(directory)
     
-    def duplicate(self, path_to_src, path_to_dest): # TODO only for files?
-        self.logger.debug("cached storing duplicate %s to %s" % (path_to_src, path_to_dest))
-        self.sync_thread.sync()
-        ret = self.store.duplicate(path_to_src, path_to_dest)
-        if self.entries.exists(path_to_src):
+    def duplicate(self, path_to_src, path_to_dest): # TODO only for files? # handle similarly to move
+        self.entries.delete(path_to_dest) # delete possible locally cached entry at destination 
+        local_dirty_entry_to_src_exists = self.entries.exists(path_to_src) and self.entries.is_dirty(path_to_src)
+        source_is_in_store = not local_dirty_entry_to_src_exists
+        if self.entries.exists(path_to_src):  
+            self.logger.debug("cached storing duplicate %s to %s" % (path_to_src, path_to_dest))
             self.entries.write(path_to_dest, self.entries.get_value(path_to_src))
-        return ret
+        if source_is_in_store: 
+            self.store.duplicate(path_to_src, path_to_dest)
         
     def move(self, path_to_src, path_to_dest):
         if not (self.entries.exists(path_to_src) and self.entries.is_dirty(path_to_src)): #it already was up to date at the remote server:
@@ -431,8 +433,14 @@ class MultiprocessingCachingStore(Store):
         return self._get_metadata(path)["modified"]
     
     def get_directory_listing(self, directory):
-        self.sync_thread.sync()
-        return self.store.get_directory_listing(directory) #so far only cached by dropbox
+        #merge cached files and entries from store into set with unique entries
+        store_listing = self.store.get_directory_listing(directory)
+        cache_listing = []
+        for path in self.entries.get_dirty_lru_entries(9999):
+            if os.path.dirname(path) == directory:
+                cache_listing.append( path )
+        ret = list(set( cache_listing + store_listing ))
+        return ret
     
     def get_bytes(self, path):
         if self.entries.exists(path):
