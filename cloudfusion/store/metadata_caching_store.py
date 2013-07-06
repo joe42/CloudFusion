@@ -7,7 +7,7 @@ import os.path
 import logging
 from cloudfusion.mylogging.nullhandler import NullHandler
 from copy import deepcopy
-
+from cloudfusion.store.store_worker import GetFreeSpaceWorker
 logging.getLogger().addHandler(NullHandler())
 
 class Entry(object):
@@ -50,6 +50,8 @@ class MetadataCachingStore(Store):
         self.logger.debug("creating MetadataCachingStore object")
         self.entries = LRUCache(cache_expiration_time,2)
         self.store_metadata = Cache(cache_expiration_time)
+        self.free_space_worker = GetFreeSpaceWorker(deepcopy(store), self.logger)
+        self.free_space_worker.start()
     
     def _is_valid_path(self, path):
         return self.store._is_valid_path(path)
@@ -132,9 +134,7 @@ class MetadataCachingStore(Store):
         return self.store_metadata.get_value('account_info')
     
     def get_free_space(self):
-        if not self.store_metadata.exists('free_space'):
-            self.store_metadata.write('free_space', self.store.get_free_space())
-        return self.store_metadata.get_value('free_space')
+        return self.free_space_worker.get_free_bytes_in_remote_store()
     
     def get_overall_space(self):
         if not self.store_metadata.exists('overall_space'):
