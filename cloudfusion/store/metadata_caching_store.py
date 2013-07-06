@@ -137,12 +137,12 @@ class MetadataCachingStore(Store):
         return self.free_space_worker.get_free_bytes_in_remote_store()
     
     def get_overall_space(self):
-        if not self.store_metadata.exists('overall_space'):
+        if not self.store_metadata.exists('overall_space') or self.store_metadata.is_expired('overall_space'):
             self.store_metadata.write('overall_space', self.store.get_overall_space())
         return self.store_metadata.get_value('overall_space')
     
     def get_used_space(self):
-        if not self.store_metadata.exists('used_space'):
+        if not self.store_metadata.exists('used_space') or self.store_metadata.is_expired('used_space'):
             self.store_metadata.write('used_space', self.store.get_used_space())
         return self.store_metadata.get_value('used_space')
 
