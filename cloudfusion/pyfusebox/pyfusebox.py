@@ -239,6 +239,9 @@ class PyFuseBox(Operations):
     def flush(self, path, fh):
         self.logger.debug("flush %s - fh: %s" % (path, fh))
         if path in self.temp_file: #after writes
+            if self.store.get_free_space() < self.temp_file[path].tell():
+                self.release(path, 0)
+                return FuseOSError(ENOSPC)
             try:
                 self.store.store_fileobject(self.temp_file[path], path)
             except NoSuchFilesytemObjectError:
