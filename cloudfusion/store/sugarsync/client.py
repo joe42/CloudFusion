@@ -163,6 +163,14 @@ class HTTPResponse(object):
         self.data = data
         self.status = response.status
         self.reason = response.reason
+        
+    def __str__(self):
+        ret = ''
+        if self.response:
+            ret += 'Response: %s\n' % self.response
+        if self.response:
+            ret += 'Reason: %s\n' % self.response
+        return ret
     
     def getheaders(self):
         return self.response
