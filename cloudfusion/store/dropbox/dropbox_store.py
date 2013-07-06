@@ -457,6 +457,9 @@ class DropboxStore(Store):
     def get_logging_handler(self):
         return self._logging_handler
     
+    def get_max_filesize(self):
+        """Return maximum number of bytes per file"""
+        return 150*1000*1000
         
 
 

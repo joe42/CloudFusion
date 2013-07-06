@@ -125,3 +125,7 @@ class Store(object):
     
     def reconnect(self):
         pass
+    
+    def get_max_filesize(self):
+        """Return maximum number of bytes per file"""
+        return 1000*1000*1000

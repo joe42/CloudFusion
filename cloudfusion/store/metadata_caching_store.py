@@ -307,3 +307,7 @@ class MetadataCachingStore(Store):
             else:
                 setattr(result, k, deepcopy(v, memo))
         return result
+    
+    def get_max_filesize(self):
+        """Return maximum number of bytes per file"""
+        return self.store.get_max_filesize()

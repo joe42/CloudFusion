@@ -483,3 +483,7 @@ class MultiprocessingCachingStore(Store):
     
     def reconnect(self):
         self.store.reconnect()
+        
+    def get_max_filesize(self):
+        """Return maximum number of bytes per file"""
+        return self.store.get_max_filesize()

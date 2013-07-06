@@ -217,6 +217,10 @@ class PyFuseBox(Operations):
         self.logger.debug("write %s ... starting with %s at %s - fh: %s" % (path, buf[0:10], offset, fh))
         if not path in self.temp_file:
             self.temp_file[path] = tempfile.SpooledTemporaryFile()
+            filesize = offset+len(buf)
+            if self.store.get_max_filesize() < filesize:
+                self.release(path, 0) #to prevent flushing
+                return FuseOSError(EFBIG)
             try:
                 file = self.store.get_file(path)
             except NoSuchFilesytemObjectError:
