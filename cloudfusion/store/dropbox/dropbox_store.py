@@ -394,7 +394,7 @@ class DropboxStore(Store):
             if resp.status == HTTP_STATUS.NOT_CHANGED: 
                 self.logger.debug("retrieving listing from cache " +directory)
                 ret = self.dir_listing_cache[directory]['dir_listing']
-                return ret
+                return ret.keys()
             else:
                 msg= "could not get directory listing for " +directory
                 self._log_http_error("get_directory_listing", None, resp, msg)
