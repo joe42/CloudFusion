@@ -14,15 +14,101 @@ import httplib
 import xml.dom.minidom as dom
 import logging
 from cloudfusion.mylogging.nullhandler import NullHandler
+from cloudfusion.util.exponential_retry import retry
 
 logging.getLogger().addHandler(NullHandler())
+
+
+class HTTP_STATUS(object):
+    OK = range(200, 300)
+    SERVER_ERROR = range(500,600)
+    CREATED = 201        #
+    MOVED_PERMANENTLY = 301       
+    BAD_REQUEST = 400             
+    AUTHORIZATION_REQUIRED = 401  
+    FORBIDDEN = 403
+    NOT_FOUND = 404               
+    NOT_ACCEPTABLE = 406          
+    OVER_STORAGE_LIMIT = 413
+    INCORRECT_RANGE = 416         
+    
+    @staticmethod
+    def generate_exception(code, msg, method_name=''):
+        if code in HTTP_STATUS.OK:
+            pass
+        elif code == HTTP_STATUS.AUTHORIZATION_REQUIRED:
+            raise StoreAutorizationError("StoreAutorizationError Message: "+msg+"\nStatus description: "+HTTP_STATUS.get_status_desc(code), code)
+        elif code == HTTP_STATUS.NOT_FOUND:
+            raise NoSuchFilesytemObjectError("NoSuchFilesytemObjectError Message: "+msg+"\nStatus description: "+HTTP_STATUS.get_status_desc(code), code)
+        elif (method_name == 'create_directory' and code == HTTP_STATUS.BAD_REQUEST): # status means "is no folder" in this case
+            raise AlreadyExistsError("Directory does already ex ist:" +msg, code)
+        else:
+            raise StoreAccessError("StoreAccessError Message: "+msg+"\nStatus description: "+HTTP_STATUS.get_status_desc(code), code)
+            
+        
+    @staticmethod
+    def log_error(logger, code, method_name, msg):
+        if code in HTTP_STATUS.OK:
+            pass
+        else:
+            logger.error("Error in method "+method_name+":\nMessage: "+msg+"\nSTATUS:"+HTTP_STATUS.get_status_desc(code), code)
+    
+    @staticmethod
+    def get_status_desc(code):
+        if code == HTTP_STATUS.OK:
+            return "Request was successful."
+        elif code == HTTP_STATUS.SERVER_ERROR:
+            return "A server error occurred."
+        elif code == HTTP_STATUS.CREATED:
+            return "Created. The Location header of the response contains the URL of the newly created file or folder."
+        elif code == HTTP_STATUS.MOVED_PERMANENTLY:
+            return "Moved Permanently. The folder's URL changed as a result of the PUT request, and the new URL is in Location header."
+        elif code == HTTP_STATUS.BAD_REQUEST:
+            return "Bad request. Check for poorly formed or invalid XML."
+        elif code == HTTP_STATUS.AUTHORIZATION_REQUIRED:
+            return "Authorization required; the presented credentials, if any, are not sufficient."
+        elif code == HTTP_STATUS.FORBIDDEN:
+            return "Forbidden. Can't access the intended URI or URL or operation is not allowed. (For example, cannot delete system folder like Magic Briefcase.)"
+        elif code == HTTP_STATUS.NOT_FOUND:
+            return "Not found. Check the path of the URI or URL for the intended target."
+        elif code == HTTP_STATUS.NOT_ACCEPTABLE:
+            return "Not acceptable. Check for unsupported or invalid Accept header value."
+        elif code == HTTP_STATUS.OVER_STORAGE_LIMIT:
+            return "Over storage limit. Check PUT request entity size."
+        elif code == HTTP_STATUS.INCORRECT_RANGE:
+            return "Incorrect range or cannot be satisfied. Check intended values."
+        else:
+            return "No error description available."
+
+"""exception HttpLib2Error
+    The Base Exception for all exceptions raised by httplib2. 
+
+exception RedirectMissingLocation
+    A 3xx redirect response code was provided but no Location: header was provided to point to the new location. 
+
+exception RedirectLimit
+    The maximum number of redirections was reached without coming to a final URI. 
+
+exception ServerNotFoundError
+    Unable to resolve the host name given. 
+
+exception RelativeURIError
+    A relative, as opposed to an absolute URI, was passed into request(). 
+
+exception FailedToDecompressContent
+    The headers claimed that the content of the response was compressed but the decompression algorithm applied to the content failed. 
+
+exception UnimplementedDigestAuthOptionError
+    The server requested a type of Digest authentication that we are unfamiliar with. 
+
+exception UnimplementedHmacDigestAuthOptionError
+    The server requested a type of HMACDigest authentication that we are unfamiliar with. """
         
 
  
 class SugarsyncStore(Store):
     def __init__(self, config):
         #self.dir_listing_cache = {}
-        self.robustness = 10
         self._logging_handler = 'sugarsync'
         self.logger = logging.getLogger(self._logging_handler)
         self.path_cache = {}
@@ -51,6 +137,8 @@ class SugarsyncStore(Store):
         return result
     
     def _translate_path(self, path):
+        """Translate unix style path into Sugarsync style path.
+        :raise NoSuchFilesytemObjectError: if there is no such path"""
         self.logger.debug("translating path: "+path) #+" cache: "+str(self.path_cache)
         path = to_unicode( path, "utf8")
         if path in self.path_cache:
@@ -75,11 +163,9 @@ class SugarsyncStore(Store):
         """:returns: dict a dictionary with all paths of the collection at *translated_path* as keys and the corresponding nested dictionaries with the key/value pair for is_dir and reference."""
         ret = []
         resp = self.client.get_dir_listing(translated_path)
-        if resp.status <200 or resp.status >= 300:
+        if not resp.status in HTTP_STATUS.OK:
             self.logger.warning("could not get directory listing: " +translated_path+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
-            if resp.status == 401 or resp.status >= 500:
-                self.reconnect()
-            raise NoSuchFilesytemObjectError(translated_path, resp.status)
+            HTTP_STATUS.generate_exception(resp.status, str(resp))
         xml_tree = dom.parseString(resp.data)
         for collection in xml_tree.documentElement.getElementsByTagName("collection"): 
             item = {}
@@ -105,7 +191,11 @@ class SugarsyncStore(Store):
     
     def account_info(self):
         self.logger.debug("retrieving account info")
-        info = self.client.user_info()
+        try:
+            info = self.client.user_info()
+        except Exception, e:
+            self.logger.error("Error retrieving account info.", exc_info=1)
+            return "Sugarsync store."
         partial_tree = {"user": {"quota": {"limit": "limit", "usage": "usage"}}}
         DictXMLParser().populate_dict_with_XML_leaf_textnodes(info.data, partial_tree)
         #print response.status, response.reason, response.getheaders()
@@ -114,53 +204,50 @@ class SugarsyncStore(Store):
         ret['used_space'] = int(partial_tree['user']['quota']['usage'])
         return "Sugarsync overall space: %s, used space: %s" % (ret['overall_space'], ret['used_space']) 
     
+    @retry(Exception)
     def get_overall_space(self):
         self.logger.debug("retrieving all space")
         info = self.client.user_info()
+        #print response.status, response.reason, response.getheaders()
+        if not info.status in HTTP_STATUS.OK:
+            self.logger.warning("could not retrieve overall space"+"\nstatus: %s reason: %s" % (info.status, info.reason))
+            HTTP_STATUS.generate_exception(info.status, str(info))
         partial_tree = {"user": {"quota": {"limit": "limit", "usage": "usage"}}}
         DictXMLParser().populate_dict_with_XML_leaf_textnodes(info.data, partial_tree)
-        #print response.status, response.reason, response.getheaders()
-        if info.status <200 or info.status >= 300:
-            self.logger.warning("could not retrieve overall space"+"\nstatus: %s reason: %s" % (info.status, info.reason))
         return int(partial_tree['user']['quota']['limit'])
     
+    @retry(Exception)
     def get_used_space(self):
         self.logger.debug("retrieving used space")
         info = self.client.user_info()
+        #print response.status, response.reason, response.getheaders()
+        if not info.status in HTTP_STATUS.OK:
+            self.logger.warning("could not retrieve used space"+"\nstatus: %s reason: %s" % (info.status, info.reason))
+            HTTP_STATUS.generate_exception(info.status, str(info))
         partial_tree = {"user": {"quota": {"limit": "limit", "usage": "usage"}}}
         DictXMLParser().populate_dict_with_XML_leaf_textnodes(info.data, partial_tree)
-        #print response.status, response.reason, response.getheaders()
-        if info.status <200 or info.status >= 300:
-            self.logger.warning("could not retrieve used space"+"\nstatus: %s reason: %s" % (info.status, info.reason))
         return int(partial_tree['user']['quota']['usage'])
     
+    @retry(Exception)
     def get_file(self, path_to_file): 
         self.logger.debug("getting file: " +path_to_file)
         self._raise_error_if_invalid_path(path_to_file)
         file = self.client.get_file( self._translate_path(path_to_file) )
-        if file.status <200 or file.status >= 300:
-            self.logger.warn("could not get file: %s\nstatus: %s reason: %s" % (path_to_file, file.status, file.reason))
-            if file.status == 401 or file.status >= 500:
-                self.reconnect()
-                self.robustness -= 1
-                if self.robustness > 0:
-                    self.logger.info("retrying")
-                    return self.get_file(path_to_file)
+        if not file.status in HTTP_STATUS.OK:
+            self.logger.warning("could not get file: %s\nstatus: %s reason: %s" % (path_to_file, file.status, file.reason))
+            HTTP_STATUS.generate_exception(file.status, str(file))
         return file.data 
     
+    # retry does not really matter with caching_store
+    @retry(Exception, tries=1, delay=0) 
     def store_fileobject(self, fileobject, path_to_file):
         self.logger.debug("storing file object to "+path_to_file)
         if not self.exists(path_to_file):
             self._create_file(path_to_file)
         resp = self.client.put_file( fileobject, self._translate_path(path_to_file) ) 
-        if resp.status <200 or resp.status >= 300:
-            self.logger.warn("could not store file to " +path_to_file+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
-            if resp.status == 401 or resp.status >= 500:
-                self.reconnect()
-                self.robustness -= 1
-                if self.robustness > 0:
-                    self.logger.info("retrying")
-                    self.store_fileobject(fileobject, path_to_file)
+        if not resp.status in HTTP_STATUS.OK:
+            self.logger.warning("could not store file to " +path_to_file+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
+            HTTP_STATUS.generate_exception(resp.status, str(resp))
             
     def _create_file(self, path, mime='text/x-cloudfusion'):
         self.logger.debug("creating file object "+path)
@@ -168,11 +255,13 @@ class SugarsyncStore(Store):
         directory = os.path.dirname(path)
         translated_dir = self._translate_path(directory)
         resp = self.client.create_file(translated_dir, name)
-        if resp.status <200 or resp.status >= 300:
-            self.logger.warn("could not create file " +path+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
-            if resp.status == 401 or resp.status >= 500:
-                self.reconnect()
+        if not resp.status in HTTP_STATUS.OK:
+            self.logger.warning("could not create file " +path+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
+            HTTP_STATUS.generate_exception(resp.status, str(resp))
     
+    # worst case: object still exists and takes up space or is appended to, by mistake
+    # with caching_store, the entry in cache is deleted anyways 
+    @retry(Exception, tries=1, delay=0) 
     def delete(self, path):
         self.logger.debug("deleting " +path)
         if path == "/":
@@ -181,17 +270,17 @@ class SugarsyncStore(Store):
             path = path[0:-1]
         self._raise_error_if_invalid_path(path)
         resp = self.client.delete_file( self._translate_path(path) )
-        if resp.status <200 or resp.status >= 300:
+        if not resp.status in HTTP_STATUS.OK:
             resp = self.client.delete_folder( self._translate_path(path) )
-        if resp.status <200 or resp.status >= 300:
-            self.logger.warn("could not delete " +path+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
-            if resp.status == 401 or resp.status >= 500:
-                self.reconnect()
+        if not resp.status in HTTP_STATUS.OK and not resp.status == HTTP_STATUS.NOT_FOUND:
+            self.logger.warning("could not delete " +path+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
+            HTTP_STATUS.generate_exception(resp.status, str(resp))
         else:
             del self.path_cache[path]
         return resp.status
         
-    
+    # worst case: would be annoying  when copying nested directory structure and failure occurs
+    @retry(Exception)
     def create_directory(self, path):
         self.logger.debug("creating directory " +path)
         self._raise_error_if_invalid_path(path)
@@ -200,16 +289,17 @@ class SugarsyncStore(Store):
         if path[-1] == "/":
             path = path[0:-1]
         if self.exists(path):
-            raise AlreadyExistsError("directory %s does already exist"%path, 401)
+            raise AlreadyExistsError("directory %s does already exist"%path, 0)
         name = os.path.basename(path)
         directory = os.path.dirname(path)
         resp = self.client.create_folder( self._translate_path(directory), name ) 
-        if resp.status <200 or resp.status >= 300:
-            self.logger.warn("could not create directory: " +path+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
-            if resp.status == 401 or resp.status >= 500:
-                self.reconnect()
+        if not resp.status in HTTP_STATUS.OK:
+            self.logger.warning("could not create directory: " +path+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
+            HTTP_STATUS.generate_exception(resp.status, str(resp), "create_directory")
         return resp.status
-
+    
+    # worst case: might be critical with backups when only updating changed items in nested structure
+    @retry(Exception)
     def get_directory_listing(self, directory):
         self.logger.debug("getting directory listing for "+directory)
         ret = []
@@ -219,9 +309,11 @@ class SugarsyncStore(Store):
             directory += "/"
         for item in collection:
             ret.append( directory+item['name'] )
-        #self.logger.warn(str(ret))
+        #self.logger.warning(str(ret))
         return ret 
     
+    # worst case: should happen mostly with user interaction, so fast feedback is more important
+    @retry(Exception, tries=1, delay=0)
     def duplicate(self, path_to_src, path_to_dest): #src might be a directory
         self.logger.debug("duplicating " +path_to_src+" to "+path_to_dest)
         self._raise_error_if_invalid_path(path_to_src)
@@ -232,9 +324,6 @@ class SugarsyncStore(Store):
             path_to_dest = path_to_dest[0:-1]
         dest_name = os.path.basename(path_to_dest)
         dest_dir  = os.path.dirname(path_to_dest)
-        if path_to_dest.startswith(path_to_src) and dest_name == os.path.basename(path_to_src):
-            self.logger.warning("cannot copy folder to itself")
-            return #DBG raise error
         translated_dest_dir = self._translate_path( dest_dir )
         translated_src = self._translate_path(path_to_src)
         if self.is_dir(path_to_src):
@@ -249,18 +338,69 @@ class SugarsyncStore(Store):
                     resp = self.client.duplicate_file(item['reference'], translated_dest_dir, dest_name)
                     if resp.status != 200:
                         self.logger.warning("could not duplicate " +path_to_src+" to "+path_to_dest+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
-                        if resp.status == 401 or resp.status >= 500:
-                            self.reconnect()
+                        HTTP_STATUS.generate_exception(resp.status, str(resp))
         else:
             #if dest exists remove
             if self.exists(path_to_dest):
                 self.delete(path_to_dest)
             resp = self.client.duplicate_file(translated_src, translated_dest_dir, dest_name)
-            if resp.status < 200 or resp.status >= 300:
+            if not resp.status in HTTP_STATUS.OK:
                 self.logger.warning("could not duplicate " +path_to_src+" to "+path_to_dest+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
-                if resp.status == 401 or resp.status >= 500:
-                    self.reconnect()
+                HTTP_STATUS.generate_exception(resp.status, str(resp))
+    
+    def _handle_error(self, error, method_name, *args, **kwargs):
+        if isinstance(error, AttributeError):
+            self.logger.debug("Retrying on funny socket error: "+str(error) )
+            #funny socket error in httplib2: AttributeError 'NoneType' object has no attribute 'makefile'
+        elif isinstance(error, StoreAutorizationError):
+            self.logger.debug("Trying to handle authorization error by reconnecting: "+str(error) )
+            self.reconnect()
+        elif isinstance(error, StoreAccessError):
+            if error.status == HTTP_STATUS.OVER_STORAGE_LIMIT or \
+                error.status == HTTP_STATUS.BAD_REQUEST or \
+                error.status == HTTP_STATUS.FORBIDDEN or \
+                isinstance(error, AlreadyExistsError) or \
+                isinstance(error, NoSuchFilesytemObjectError):
+                self.logger.debug("Error could not be handled: " + str(error) )
+                raise error # do not retry (error cannot be handled)
+        else:
+            self.logger.debug("Error is not covered by _handle_error: "+str(error))
+        return False
+        
 
+    def _parse_file(self, path, resp):
+        ret = {}
+        partial_tree = {"file":{"size":"", "lastModified":"", "timeCreated":""}}
+        DictXMLParser().populate_dict_with_XML_leaf_textnodes(resp.data, partial_tree)
+        ret["bytes"] = int(partial_tree['file']['size'])
+        try:
+            lastModified = partial_tree['file']['lastModified']
+            modified = time.mktime(time.strptime(lastModified[0:-6], "%Y-%m-%dT%H:%M:%S.000"))
+            time_offset = time.strptime(lastModified[-5:], "%H:%M")
+            time_delta = 60 * 60 * time_offset.tm_hour + 60 * time_offset.tm_min
+            modified += time_delta
+            ret["modified"] = modified - self.time_difference #"Sat, 21 Aug 2010 22:31:20 +0000"#2011-05-10T06:18:33.000-07:00     Time conversion error: 2011-05-20T05:15:44.000-07:00
+        except Exception as x:
+            self.logger.warning("Time conversion error: %s reason: %s" % (str(partial_tree['file']['lastModified']), str(x)))
+            raise DateParseError("Error parsing modified attribute: %s" % str(x))
+        ret["created"] = partial_tree['file']['timeCreated']
+        ret["path"] = path
+        ret["is_dir"] = False
+        return ret
+
+    def _parse_directory(self, path, resp):
+        ret = {}
+        partial_tree = {"folder":{"timeCreated":""}}
+        DictXMLParser().populate_dict_with_XML_leaf_textnodes(resp.data, partial_tree)
+        ret["bytes"] = 0
+        ret["modified"] = time.time()
+        ret["created"] = partial_tree['folder']['timeCreated']
+        ret["path"] = path
+        ret["is_dir"] = True
+        return ret
+    
+    # worst case: can break backups if it fails
+    @retry(Exception)
     def _get_metadata(self, path):
         self.logger.debug("getting metadata for "+path)
         self._raise_error_if_invalid_path(path)
@@ -274,60 +414,31 @@ class SugarsyncStore(Store):
         if path[-1] == "/":
             path = path[0:-1]
         is_file = True
-        p=None; resp=None;
-        try:
-            p =  self._translate_path(path)
-        except Exception as e:
-            self.logger.debug("getting metadata for  "+path+" failed with: "+str(e))
-            
-        try:
-            resp = self.client.get_file_metadata( p )
-        except Exception as e:
-            self.logger.debug("getting metadata 5 for "+path+" failed with: "+str(e))
-        if resp.status <200 or resp.status >= 300:
+        sugarsync_path =  self._translate_path(path)
+        resp = self.client.get_file_metadata( sugarsync_path )
+        if resp.status == HTTP_STATUS.BAD_REQUEST: # status means "is no folder" in this case
             is_file = False
-            resp = self.client.get_folder_metadata( self._translate_path(path) )
-            if resp.status == 401 or resp.status >= 500:
-                self.reconnect()
-        if resp.status <200 or resp.status >= 300:
-            self.logger.warn("could not get metadata: " +path+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
-            raise NoSuchFilesytemObjectError(path, resp.status)
-        ret = {}
+            resp = self.client.get_folder_metadata( sugarsync_path )
+        else: 
+            HTTP_STATUS.generate_exception(resp.status, str(resp))
+        HTTP_STATUS.generate_exception(resp.status, str(resp))
         if is_file:
-            partial_tree = {"file": {"size": "", "lastModified": "", "timeCreated": ""}}
-            DictXMLParser().populate_dict_with_XML_leaf_textnodes(resp.data, partial_tree)
-            ret["bytes"] = int(partial_tree['file']['size'])
-            
-            try:#"Sat, 21 Aug 2010 22:31:20 +0000"#2011-05-10T06:18:33.000-07:00     Time conversion error: 2011-05-20T05:15:44.000-07:00
-                lastModified = partial_tree['file']['lastModified']
-                modified = time.mktime( time.strptime( lastModified[0:-6], "%Y-%m-%dT%H:%M:%S.000") )
-                time_offset = time.strptime( lastModified[-5:], "%H:%M") 
-                time_delta = 60*60*time_offset.tm_hour + 60*time_offset.tm_min 
-                modified += time_delta
-                ret["modified"] = modified - self.time_difference
-            except Exception as x:
-                self.logger.warn("Time conversion error: %s reason: %s" % ( str(partial_tree['file']['lastModified']), str(x)) )
-                raise DateParseError("Error parsing modified attribute: %s" % str(x));
-
-            ret["created"] = partial_tree['file']['timeCreated']
-            ret["path"] = path
-            ret["is_dir"] = False
+            ret = self._parse_file(path, resp)
         else:
-            partial_tree = {"folder": {"timeCreated": ""}}
-            DictXMLParser().populate_dict_with_XML_leaf_textnodes(resp.data, partial_tree)
-            ret["bytes"] = 0
-            ret["modified"] = time.time()
-            ret["created"] = partial_tree['folder']['timeCreated']
-            ret["path"] = path
-            ret["is_dir"] = True
+            ret = self._parse_directory(path, resp)
         return ret;
             
+    @retry(Exception)
     def _get_time_difference(self):
         resp =  self.client.user_info()
+        HTTP_STATUS.generate_exception(resp.status, str(resp))
         return time.mktime( time.strptime(resp.getheader('date'), "%a, %d %b %Y %H:%M:%S GMT") ) - time.time()
     
     def reconnect(self):
-        self.client._reconnect()
+        try:
+            self.client._reconnect()
+        except Exception, e:
+            self.logger.error("Error reconnecting: "+str(e))
         
         
     def get_logging_handler(self):

@@ -25,22 +25,68 @@ import shelve
 import random
 from multiprocessing import Manager
 import atexit
+from cloudfusion.util.exponential_retry import retry
 
 DATABASE_DIR = '/tmp/cloudfusion'
 
-
-class ServerError(StoreAccessError):
-    def __init__(self, msg):
-        super(ServerError, self).__init__(msg) 
-class DropboxError(object):
-    def __init__(self, status, operation_name):
-        if status == 507:
-            msg = "User over quota."
-        elif status == 503:
-            msg = "Too many requests."
-        elif status == 403:
-            msg = "Operation forbidden (path exists, wrong token, expired timestamp?)."
-        super(ServerError, self).__init__(msg) 
+class HTTP_STATUS(object):
+    OK = range(200, 300)
+    NOT_CHANGED = 304
+    SERVER_ERROR = range(500,600)
+    BAD_REQUEST = 400   
+    AUTHORIZATION_REQUIRED = 401  
+    FORBIDDEN = 403
+    NOT_FOUND = 404   
+    UNEXPECTED_REQUEST = 405  
+    TOO_MANY_ITEMS = 406  
+    TOO_MANY_REQUESTS = 503          
+    OVER_STORAGE_LIMIT = 507    
+    
+    @staticmethod
+    def generate_exception(code, msg, method_name=''):
+        if code in HTTP_STATUS.OK:
+            pass
+        elif code == HTTP_STATUS.NOT_CHANGED:
+            pass
+        elif code == HTTP_STATUS.AUTHORIZATION_REQUIRED:
+            raise StoreAutorizationError("StoreAutorizationError Message: "+msg+"\nStatus description: "+HTTP_STATUS.get_status_desc(code), code)
+        elif code == HTTP_STATUS.NOT_FOUND:
+            raise NoSuchFilesytemObjectError("NoSuchFilesytemObjectError Message: "+msg+"\nStatus description: "+HTTP_STATUS.get_status_desc(code), code)
+        elif (method_name == 'create_directory' and code == HTTP_STATUS.FORBIDDEN):
+                raise AlreadyExistsError("Directory does already existt:" +msg, code)
+        else:
+            raise StoreAccessError("StoreAccessError Message: "+msg+"\nStatus description: "+HTTP_STATUS.get_status_desc(code), code)
+            
+    @staticmethod
+    def get_status_desc(code):
+        if code in HTTP_STATUS.OK:
+            return "Request was successful."
+        elif code == HTTP_STATUS.NOT_CHANGED:
+            return "The folder contents have not changed (relies on hash parameter)."
+        elif code == HTTP_STATUS.TOO_MANY_ITEMS:
+            return "There are too many file entries to return. Or too many files and directories involved in the operation."
+        elif code == HTTP_STATUS.TOO_MANY_REQUESTS:
+            return "Your app is making too many requests and is being rate limited. 503s can trigger on a per-app or per-user basis.\n\
+            The limit is currently 10.000 files and folders."
+        elif code == HTTP_STATUS.OVER_STORAGE_LIMIT:
+            return "User is over Dropbox storage quota."
+        elif code == HTTP_STATUS.SERVER_ERROR:
+            return "A server error occured. Check DropboxOps."
+        elif code == HTTP_STATUS.UNEXPECTED_REQUEST:
+            return "Request method not expected (generally should be GET or POST)."
+        elif code == HTTP_STATUS.BAD_REQUEST:
+            return "Bad input parameter. Error message should indicate which one and why. \n\
+            Or, the file extension is on Dropbox's ignore list (e.g. thumbs.db or .ds_store).\n\
+            Or, the request does not contain an upload_id or if there is no chunked upload matching the given upload_id."
+        elif code == HTTP_STATUS.AUTHORIZATION_REQUIRED:
+            return "Bad or expired token. This can happen if the user or Dropbox revoked or expired an access token. To fix, you should re-authenticate the user."
+        elif code == HTTP_STATUS.FORBIDDEN:
+            return "Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here.\n\
+            Or, an invalid copy/move operation was attempted (e.g. there is already a file at the given destination, or trying to copy a shared folder)."
+        elif code == HTTP_STATUS.NOT_FOUND:
+            return "File or folder not found at the specified path." 
+        else:
+            return "No error description available."
 
 class DropboxStore(Store):
     def __init__(self, config):
@@ -61,7 +107,7 @@ class DropboxStore(Store):
         access_token = self.reconnect()
         if not access_token:
             print "Sorry, please try copying the config file again."
-            raise StoreAccessError("Authorization error: "+str(error), 0)
+            raise StoreAccessError("Authorization error", 0)
         self.logger.debug("get DropboxClient")
         self.client = client.DropboxClient(self.sess)
         self.root = config['root']
@@ -81,6 +127,28 @@ class DropboxStore(Store):
         atexit.register( lambda : self._close() )
         super(DropboxStore, self).__init__()
         
+    
+    def _handle_error(self, error, method_name, *args, **kwargs):
+        """Used by retry decorator to react to errors."""
+        if isinstance(error, AttributeError):
+            self.logger.debug("Retrying on funny socket error: "+str(error) )
+            #funny socket error in httplib2: AttributeError 'NoneType' object has no attribute 'makefile'
+        elif isinstance(error, StoreAutorizationError):
+            self.logger.debug("Trying to handle authorization error by reconnecting: "+str(error) )
+            self.reconnect()
+        elif isinstance(error, StoreAccessError):
+            if error.status == HTTP_STATUS.OVER_STORAGE_LIMIT or \
+                error.status == HTTP_STATUS.TOO_MANY_ITEMS or \
+                error.status == HTTP_STATUS.BAD_REQUEST or \
+                error.status == HTTP_STATUS.FORBIDDEN or \
+                isinstance(error, AlreadyExistsError) or \
+                isinstance(error, NoSuchFilesytemObjectError):
+                self.logger.debug("Error could not be handled: " + str(error) )
+                raise error
+        else:
+            self.logger.debug("Error is not covered by _handle_error: "+str(error))
+        return False
+        
     def reconnect(self):
         access_token = None
         for i in range(0,20):
@@ -97,8 +165,8 @@ class DropboxStore(Store):
         if not self._is_copy:
             try:
                 os.makedirs(self._revision_db_dir)
-            except:
-                pass
+            except Exception, e: 
+                self.logger.error("Could not create directory to store revisions: "+str(e))
             self.myshelve = shelve.open(self._revision_db_path)
             self.myshelve.update(self._revisions)
             self.myshelve.close()
@@ -125,20 +193,16 @@ class DropboxStore(Store):
         self.logger.info("getting name")
         return "Dropbox"
     
+    @retry(Exception)
     def get_file(self, path_to_file): 
         self.logger.debug("getting file: " +path_to_file)
         self._raise_error_if_invalid_path(path_to_file)
         try:
             file, metadata = self.client.get_file_and_metadata(path_to_file)
-        except Exception, e:
-            try:
-                file, metadata = self.client.get_file_and_metadata(path_to_file)
-            except rest.ErrorResponse as resp:
-                msg= "could not get file: " +path_to_file
-                self._log_http_error("get_file", path_to_file, resp, msg)
-                return ""
-            except Exception, e:
-                raise StoreAccessError("Transfer error: "+str(e), 0)
+        except rest.ErrorResponse as resp:
+            msg= "Could not get file: " +path_to_file
+            self._log_http_error("get_file", path_to_file, resp, msg)
+            HTTP_STATUS.generate_exception(resp.status, str(resp))
         self._add_revision(path_to_file, metadata['rev'])
         return file.read()
     
@@ -158,15 +222,10 @@ class DropboxStore(Store):
         namable_file = NameableFile( fileobject, remote_file_name )
         try:
             resp = self.client.put_file(path, namable_file, overwrite=False, parent_rev=self._get_revision(path))
-        except Exception, e:
-            try:
-                resp = self.client.put_file(path, namable_file, overwrite=False, parent_rev=self._get_revision(path))
-            except rest.ErrorResponse as resp:
-                msg= "could not store file: " +path+remote_file_name
-                self._log_http_error("store_fileobject", path, resp, msg)
-                raise StoreAccessError("Transfer error: "+str(e), 0)
-            except Exception, e:
-                raise StoreAccessError("Transfer error: "+str(e), 0)  
+        except rest.ErrorResponse as resp:
+            msg= "Could not store file: " +path+remote_file_name
+            self._log_http_error("store_fileobject", path, resp, msg)
+            HTTP_STATUS.generate_exception(resp.status, str(resp))
         self._add_revision(path, resp['rev'])
         self._backup_overwritten(path, resp['path'])  
         return resp 
@@ -191,9 +250,11 @@ class DropboxStore(Store):
             self.move(path, '/overwritten' + path)
             self.move(resp_path, path)
 
+    # retry does not really matter with caching_store
+    @retry(Exception, tries=1, delay=0) 
     def store_fileobject(self, fileobject, path):
         size = self.__get_size(fileobject)
-        self.logger.debug("storing file object of size %s to %s" % (size,path))
+        self.logger.debug("Storing file object of size %s to %s" % (size,path))
         remote_file_name = os.path.basename(path)
         if size < 1000000:
             return self.store_small_fileobject(fileobject, path)
@@ -206,65 +267,50 @@ class DropboxStore(Store):
             except rest.ErrorResponse, e:
                 retry -= 1
                 if retry == 0:
-                    msg= "could not store file: " +path+remote_file_name 
+                    msg= "Could not store file: " +path+remote_file_name 
                     self._log_http_error("store_fileobject", path, resp, msg)
-                    raise StoreAccessError("Transfer error: "+str(e), 0)
-            except Exception, e:
-                raise StoreAccessError("Transfer error: "+str(e), 0)
+                    HTTP_STATUS.generate_exception(e.status, str(e))
         try:
             resp = uploader.finish(path, overwrite=False, parent_rev=self._get_revision(path))
         except Exception, e:
             try:
                 resp = uploader.finish(path, overwrite=False, parent_rev=self._get_revision(path))
             except rest.ErrorResponse as resp:
-                msg= "could not store file: " +path+remote_file_name 
+                msg= "Could not store file: " +path+remote_file_name 
                 self._log_http_error("store_fileobject", path, resp, msg)
-                raise StoreAccessError("Transfer error: "+str(e), 0)
-            except Exception, e:
-                raise StoreAccessError("Transfer error: "+str(e), 0)
+                HTTP_STATUS.generate_exception(resp.status, str(resp))
         self._add_revision(path, resp['rev'])
         self._backup_overwritten(path, resp['path'])
         return self._parse_filesys_obj(resp) #return metadata
     
     
+    # worst case: object still exists and takes up space or is appended to, by mistake
+    # with caching_store, the entry in cache is deleted anyways 
+    @retry(Exception, tries=1, delay=0) 
     def delete(self, path):
         self.logger.debug("deleting " +path)
         self._raise_error_if_invalid_path(path)
-        remote_file_name = os.path.basename(path)
-        dest_dir = os.path.dirname(path);
-        empty_file = NameableFile( file_decorator.DataFileWrapper(""), remote_file_name )
         try:
-          #  if not self.is_dir(path):
-                #self.client.put_file('/'+dest_dir, empty_file) 
             resp = self.client.file_delete(path)
-        except Exception, e:
-            try:
-                #if not self.is_dir(path):
-                    #self.client.put_file('/'+dest_dir, empty_file) 
-                resp = self.client.file_delete(path)
-            except rest.ErrorResponse as resp:
-                msg= "could not delete " +path
-                self._log_http_error("delete", path, resp, msg)
-            except Exception, e:
-                raise StoreAccessError("Transfer error: "+str(e), 0)
-            #assert_all_in(resp.data.keys(), [u'is_deleted', u'thumb_exists', u'bytes', u'modified',u'path', u'is_dir', u'size', u'root', u'mime_type', u'icon'])
+        except rest.ErrorResponse as resp:
+            msg= "could not delete " +path
+            self._log_http_error("delete", path, resp, msg)
+            if not resp.status == HTTP_STATUS.NOT_FOUND:
+                HTTP_STATUS.generate_exception(resp.status, str(resp))
         self._remove_revision(path)
         
+    @retry(Exception)
     def account_info(self):
         self.logger.debug("retrieving account info")
         try:
             resp =  self.client.account_info()
-        except Exception, e:
-            try:
-                resp =  self.client.account_info()
-            except rest.ErrorResponse as resp:
-                msg= "could not get account_info "
-                self._log_http_error("delete", None, resp, msg)
-            except Exception, e:
-                raise StoreAccessError("Transfer error: "+str(e), 0)
-            #assert_all_in(resp.data.keys(), [u'country', u'display_name', u'uid', u'quota_info'])
+        except rest.ErrorResponse as resp:
+            msg= "could not get account_info "
+            self._log_http_error("delete", None, resp, msg)
+            HTTP_STATUS.generate_exception(resp.status, str(resp))
         return str(resp)
 
+    @retry(Exception)
     def create_directory(self, directory):
         self.logger.debug("creating directory " +directory)
         self._raise_error_if_invalid_path(directory)
@@ -272,85 +318,70 @@ class DropboxStore(Store):
             return
         try:
             resp = self.client.file_create_folder(directory)
-        except Exception, e:
-            try:
-                resp = self.client.file_create_folder(directory)
-            except rest.ErrorResponse as resp:
-                msg= "could not create directory: " +directory
-                self._log_http_error("create_directory", directory, resp, msg)
-            except Exception, e:
-                raise StoreAccessError("Transfer error: "+str(e), 0)
-        #assert_all_in(resp.data.keys(), [u'thumb_exists', u'bytes', u'modified', u'path', u'is_dir', u'size', u'root', u'icon'])
+        except rest.ErrorResponse as resp:
+            msg= "could not create directory: " +directory
+            self._log_http_error("create_directory", directory, resp, msg)
+            HTTP_STATUS.generate_exception(resp.status, str(resp), "create_directory")
         
+    # worst case: should happen mostly with user interaction, so fast feedback is more important
+    @retry(Exception, tries=1, delay=0)
     def duplicate(self, path_to_src, path_to_dest):
         self.logger.debug("duplicating " +path_to_src+" to "+path_to_dest)
         self._raise_error_if_invalid_path(path_to_src)
         self._raise_error_if_invalid_path(path_to_dest)
         try:
             resp = self.client.file_copy(path_to_src, path_to_dest)
-        except Exception, e:
-            try:
-                resp = self.client.file_copy(path_to_src, path_to_dest)
-            except rest.ErrorResponse as resp:
-                msg= "could not duplicate " +path_to_src+" to "+path_to_dest
-                self._log_http_error("duplicate", None, resp, msg)
-                raise
-            except Exception, e:
-                raise StoreAccessError("Transfer error: "+str(e), 0)
-        #ssert_all_in(resp.data.keys(), [u'thumb_exists', u'bytes', u'modified',u'path', u'is_dir', u'size', u'root', u'mime_type', u'icon'])
+        except rest.ErrorResponse as resp:
+            msg= "could not duplicate " +path_to_src+" to "+path_to_dest
+            self._log_http_error("duplicate", None, resp, msg)
+            HTTP_STATUS.generate_exception(resp.status, str(resp))
         self._add_revision(path_to_dest, resp['rev'])
     
+    # worst case: should happen mostly with user interaction, so fast feedback is more important
+    @retry(Exception, tries=1, delay=0)
     def move(self, path_to_src, path_to_dest):
         self.logger.debug("moving " +path_to_src+" to "+path_to_dest)
         self._raise_error_if_invalid_path(path_to_src)
         self._raise_error_if_invalid_path(path_to_dest)
         try:
-            resp = self.client.file_move(path_to_src, path_to_dest)
-        except Exception, e:
             try:
                 resp = self.client.file_move(path_to_src, path_to_dest)
-            except rest.ErrorResponse as resp:
-                if resp.status == 403:
+            except rest.ErrorResponse as resp: # catch error "destination exists"
+                if resp.status == HTTP_STATUS.FORBIDDEN:
                     self.delete(path_to_dest)
                     resp = self.client.file_move(path_to_src, path_to_dest)
                 else:
-                    msg= "could not move " +path_to_src+" to "+path_to_dest
-                    self._log_http_error("move", None, resp, msg)
-            except Exception, e:
-                raise StoreAccessError("Transfer error: "+str(e), 0)
+                    raise
+        except rest.ErrorResponse as resp:
+            msg= "could not move " +path_to_src+" to "+path_to_dest
+            self._log_http_error("move", None, resp, msg)
+            HTTP_STATUS.generate_exception(resp.status, str(resp))
         self._remove_revision(path_to_src)
         self._add_revision(path_to_dest, resp['rev'])
     
+    @retry(Exception)
     def get_overall_space(self):
         self.logger.debug("retrieving all space")
         try:
             resp =  self.client.account_info()
-        except Exception, e:
-            try:
-                resp =  self.client.account_info()
-            except rest.ErrorResponse as resp:
-                msg= "could not retrieve all space"
-                self._log_http_error("get_overall_space", None, resp, msg)
-                return 0
-            except Exception, e:
-                raise StoreAccessError("Transfer error: "+str(e), 0)
+        except rest.ErrorResponse as resp:
+            msg= "could not retrieve all space"
+            self._log_http_error("get_overall_space", None, resp, msg)
+            HTTP_STATUS.generate_exception(resp.status, str(resp))
         return resp[u'quota_info']["quota"]
 
+    @retry(Exception)
     def get_used_space(self):
         self.logger.debug("retrieving used space")
         try:
             resp =  self.client.account_info()
-        except Exception, e:
-            try:
-                resp =  self.client.account_info()
-            except rest.ErrorResponse as resp:
-                msg= "could not retrieve used space"
-                self._log_http_error("get_used_space", None, resp, msg)
-                return 0
-            except Exception, e:
-                raise StoreAccessError("Transfer error: "+str(e), 0)
+        except rest.ErrorResponse as resp:
+            msg= "could not retrieve used space"
+            self._log_http_error("get_used_space", None, resp, msg)
+            HTTP_STATUS.generate_exception(resp.status, str(resp))
         return resp[u'quota_info']["shared"] + resp[u'quota_info']["normal"]
         
+    @retry(Exception)
     def get_directory_listing(self, directory):
         self.logger.debug("getting directory listing for "+directory)
         self._raise_error_if_invalid_path(directory)
@@ -359,20 +390,15 @@ class DropboxStore(Store):
             hash = self.dir_listing_cache[directory]['hash']
         try:
             resp = self.client.metadata(directory, hash=hash, list=True)
-        except Exception, e:
-            try:
-                resp = self.client.metadata(directory, hash=hash, list=True)
-            except rest.ErrorResponse as resp:
-                if resp.status == 304: 
-                    self.logger.debug("retrieving listing from cache " +directory)
-                    ret = self.dir_listing_cache[directory]['dir_listing']
-                    return ret
-                else:
-                    msg= "could not get directory listing for " +directory
-                    self._log_http_error("get_directory_listing", None, resp, msg)
-                    raise StoreAccessError("Transfer error: "+str(e), 0)
-            except Exception, e:
-                raise StoreAccessError("Transfer error: "+str(e), 0)
+        except rest.ErrorResponse as resp:
+            if resp.status == HTTP_STATUS.NOT_CHANGED: 
+                self.logger.debug("retrieving listing from cache " +directory)
+                ret = self.dir_listing_cache[directory]['dir_listing']
+                return ret
+            else:
+                msg= "could not get directory listing for " +directory
+                self._log_http_error("get_directory_listing", None, resp, msg)
+                HTTP_STATUS.generate_exception(resp.status, str(resp))
         ret = self._parse_dir_list(resp)
         self.dir_listing_cache[directory] = {}
         self.dir_listing_cache[directory]['hash'] = resp["hash"]
@@ -398,6 +424,7 @@ class DropboxStore(Store):
             log += " -- msg:"+msg
         self.logger.error(log)
         
+    @retry(Exception)
     def _get_metadata(self, path):
         self.logger.debug("getting metadata for "+path)
         self._raise_error_if_invalid_path(path)
@@ -408,22 +435,16 @@ class DropboxStore(Store):
             ret["path"] = "/"
             ret["is_dir"] = True
             return ret;
-
         try:
-            resp = self.client.metadata(path, list=False)
-        except Exception, e:
-            try:
-                resp = self.client.metadata(path, list=False)
-            except rest.ErrorResponse as resp:
-                if resp.status == 404:
-                    msg = None
-                    self._log_http_error("_get_metadata", path, resp, msg)
-                    raise NoSuchFilesytemObjectError(path, resp.status)
-                elif resp.status != 200:
-                    self._log_http_error("_get_metadata", path, resp)
-                    raise RetrieveMetadataError(path, resp.body['error'], resp.status)
-            except Exception, e:
-                raise StoreAccessError("Transfer error: "+str(e), 0)
+            resp = self.client.metadata(path, list=False) #optimize to return & cache direcory listing
+        except rest.ErrorResponse as resp:
+            if resp.status == HTTP_STATUS.NOT_FOUND:
+                msg = None
+                self._log_http_error("_get_metadata", path, resp, msg)
+                HTTP_STATUS.generate_exception(resp.status, str(resp))
+            elif resp.status != 200:
+                self._log_http_error("_get_metadata", path, resp)
+                HTTP_STATUS.generate_exception(resp.status, str(resp))
         object_is_deleted = 'is_deleted' in resp and resp['is_deleted']
         if object_is_deleted:
             msg = "filesystem object has been deleted"
