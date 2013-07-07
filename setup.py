@@ -9,7 +9,7 @@ setuptools.setup(
     packages = setuptools.find_packages(),
     include_package_data = True,
     install_requires = ['mechanize', 'nose', 'oauth', 'poster', 'simplejson'],
-    version = "0.5.0",
+    version = "1.0.0",
     description = "Filesystem interface to cloud storage services",
     author = "Johannes Mueller",
     author_email = "johannes.mueller1@mail.inf.tu-dresden.de",
@@ -17,20 +17,16 @@ setuptools.setup(
     download_url = "https://github.com/joe42/cloudfusion.tgz",
     keywords = ["encoding", "i18n", "xml"],
     classifiers = [
-        "Programming Language :: Python",
         "Programming Language :: Python :: 2.6",
-        "Development Status :: 4 - Beta",
-        "Environment :: Other Environment",
         "Intended Audience :: Developers",
         "Intended Audience :: End Users/Desktop",
         "License :: Other/Proprietary License",
         "Operating System :: Linux",
         "Topic :: Software Development :: Libraries :: Python Modules",
-        "Topic :: Security :: Cryptography",
         "Topic :: System :: Archiving :: Backup",
         "Topic :: System :: Filesystems",
         ],
     long_description = """\
-blubb
+CloudFusion lets you access your Dropbox or Sugarsync files from Linux like any file on your desktop.
 """
 )
