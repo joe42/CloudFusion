@@ -25,6 +25,8 @@ def main():
         if not os.path.exists(".cloudfusion/logs"):
             os.makedirs(".cloudfusion/logs")
         logging.config.fileConfig(os.path.dirname(cloudfusion.__file__)+'/config/logging.conf')
+    if not os.path.exists(sys.argv[1]):
+        os.makedirs(sys.argv[1])
     fuse_operations = ConfigurablePyFuseBox(sys.argv[1])
     FUSE(fuse_operations, sys.argv[1], foreground=foreground, nothreads=True)
     
