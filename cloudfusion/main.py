@@ -2,13 +2,10 @@
 Created on 12.05.2011
 
 '''
-from cloudfusion.pyfusebox.pyfusebox import PyFuseBox
 from cloudfusion.pyfusebox.configurable_pyfusebox import ConfigurablePyFuseBox
 from cloudfusion.fuse import FUSE
-import os, sys, stat,  time
-import getpass
-from ConfigParser import SafeConfigParser
-import logging
+import os, sys
+import logging.config
 from cloudfusion.mylogging.nullhandler import NullHandler
 import cloudfusion
 

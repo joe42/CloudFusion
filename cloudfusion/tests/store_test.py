@@ -3,17 +3,14 @@ from cloudfusion.store.dropbox.dropbox_store import DropboxStore
 from cloudfusion.store.sugarsync.sugarsync_store import SugarsyncStore
 from functools import partial
 from nose.tools import *
-from nose.tools import eq_ as eq
 from cloudfusion.store.store import *
 from cloudfusion.store.caching_store import MultiprocessingCachingStore
 from cloudfusion.store.metadata_caching_store import MetadataCachingStore
 import os.path, time
 import tempfile
-from cloudfusion.dropbox import session
 from ConfigParser import SafeConfigParser
-#from cloudfusion.store.sugarsync.error_handling_sugarsync_store import ErrorHandlingSugarsyncStore
-import time
 import cloudfusion
+
 LOCAL_TESTFILE_PATH = "cloudfusion/tests/testfile"
 LOCAL_BIGTESTFILE_PATH = "cloudfusion/tests/bigtestfile"
 REMOTE_TESTDIR = "/testdir"
@@ -57,9 +54,7 @@ def setUp():
     io_apis.append( SugarsyncStore(sugarsync_config) ) 
     io_apis.append( MultiprocessingCachingStore( dropbox_store ) ) 
     io_apis.append( MultiprocessingCachingStore( SugarsyncStore(sugarsync_config) ) )
-    #io_apis.append( MetadataCachingStore( MultiprocessingCachingStore( SugarsyncStore(sugarsync_config) ) ) )
     io_apis.append( MultiprocessingCachingStore( MetadataCachingStore( dropbox_store ) ) )
-    #io_apis.append( ErrorHandlingSugarsyncStore( SugarsyncStore(sugarsync_config) )  ) 
     time.sleep(10)
     for io_api in io_apis:
         try:
@@ -336,10 +331,10 @@ def _test_exists(io_api):
     assert not io_api.exists(REMOTE_NON_EXISTANT_DIR)
     assert not io_api.exists(REMOTE_NON_EXISTANT_FILE)
 
-def _delete_file(io_api, file, root_dir="/"):
+def _delete_file(io_api, filename, root_dir="/"):
     if root_dir[-1] != "/":
         root_dir += "/"
-    io_api.delete(root_dir+file)
+    io_api.delete(root_dir+filename)
     
 def _test_duplicate(io_api):
     io_api.create_directory(REMOTE_DUPLICATE_TESTDIR_ORIGIN)
@@ -355,7 +350,7 @@ def _test_duplicate(io_api):
     io_api.delete(REMOTE_DUPLICATE_TESTFILE_ORIGIN)
     io_api.delete(REMOTE_DUPLICATE_TESTFILE_COPY)
     
- #assert_all_in(resp.data.keys(), [u'is_deleted', u'thumb_exists',u'bytes', u'modified', u'path', u'is_dir',u'size', u'root', u'hash', u'contents', u'icon'])
+#assert_all_in(resp.data.keys(), [u'is_deleted', u'thumb_exists',u'bytes', u'modified', u'path', u'is_dir',u'size', u'root', u'hash', u'contents', u'icon'])
        
 
         

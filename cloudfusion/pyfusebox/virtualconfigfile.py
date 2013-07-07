@@ -3,7 +3,6 @@ Created on 24.08.2011
 '''
 from ConfigParser import SafeConfigParser
 from cloudfusion.pyfusebox.virtualfile import VirtualFile
-import StringIO
 from cloudfusion.store.dropbox import file_decorator
 
 class VirtualConfigFile(VirtualFile):

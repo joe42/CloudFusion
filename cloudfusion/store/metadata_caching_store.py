@@ -41,8 +41,6 @@ class Entry(object):
         if path in self.listing: 
             self.listing.remove(path)
 
-#class Entries(Cache):
-        
 class MetadataCachingStore(Store):
     def __init__(self, store, cache_expiration_time=60):
         self.store = store
@@ -295,7 +293,6 @@ class MetadataCachingStore(Store):
         self.store.flush()
         
     def __deepcopy__(self, memo):
-        from copy import deepcopy
         cls = self.__class__
         result = cls.__new__(cls)
         memo[id(self)] = result

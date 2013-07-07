@@ -3,14 +3,10 @@ Created on 08.04.2011
 '''
 
 import time
-import datetime
 from cloudfusion.store.store import *
-import os.path
 from cloudfusion.store.sugarsync.client import SugarsyncClient
 from cloudfusion.util.xmlparser import DictXMLParser
 from cloudfusion.util.string import *
-import tempfile
-import httplib
 import xml.dom.minidom as dom
 import logging
 from cloudfusion.mylogging.nullhandler import NullHandler
@@ -233,11 +229,11 @@ class SugarsyncStore(Store):
     def get_file(self, path_to_file): 
         self.logger.debug("getting file: " +path_to_file)
         self._raise_error_if_invalid_path(path_to_file)
-        file = self.client.get_file( self._translate_path(path_to_file) )
-        if not file.status in HTTP_STATUS.OK:
-            self.logger.warning("could not get file: %s\nstatus: %s reason: %s" % (path_to_file, file.status, file.reason))
-            HTTP_STATUS.generate_exception(file.status, str(file))
-        return file.data 
+        resp = self.client.get_file( self._translate_path(path_to_file) )
+        if not resp.status in HTTP_STATUS.OK:
+            self.logger.warning("could not get file: %s\nstatus: %s reason: %s" % (path_to_file, resp.status, resp.reason))
+            HTTP_STATUS.generate_exception(resp.status, str(resp))
+        return resp.data 
     
     # retry does not really matter with caching_store
     @retry((Exception,socket.error), tries=1, delay=0) 

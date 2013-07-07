@@ -2,7 +2,6 @@
 Created on 04.05.2011
 '''
 import httplib2
-import os.path
 from cloudfusion.util.xmlparser import DictXMLParser
 from cloudfusion.util.string import *
 import base64

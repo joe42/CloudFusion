@@ -43,8 +43,8 @@ class NameableFile(object):
         return self.file_object.tell()
     def truncate(self, size):
         self.file_object.truncate(size)
-    def write(self, str):
-        return self.file_object.write(str)
+    def write(self, string):
+        return self.file_object.write(string)
     def writelines(self, sequence):
         return self.file_object.writelines(sequence)
     def __repr__(self):
@@ -90,8 +90,8 @@ class NonclosingFile(object):
         return self.file_object.tell()
     def truncate(self, size):
         self.file_object.truncate(size)
-    def write(self, str):
-        return self.file_object.write(str)
+    def write(self, string):
+        return self.file_object.write(string)
     def writelines(self, sequence):
         return self.file_object.writelines(sequence)
     def __repr__(self):
@@ -136,8 +136,8 @@ class DataFileWrapper(file):
         return self.file_object.tell()
     def truncate(self, size):
         self.file_object.truncate(size)
-    def write(self, str):
-        return self.file_object.write(str)
+    def write(self, string):
+        return self.file_object.write(string)
     def writelines(self, sequence):
         return self.file_object.writelines(sequence)
     def __repr__(self):

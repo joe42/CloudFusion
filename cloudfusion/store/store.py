@@ -60,24 +60,41 @@ class Store(object):
         raise NotImplementedError()
           
     def account_info(self):
+        """:returns: a human readable string describing account info like provider, name, statistics"""
         raise NotImplementedError()
     
     def get_free_space(self):
+        """:returns: free space in bytes"""
         return self.get_overall_space()-self.get_used_space()
     
     def get_overall_space(self):
+        """:returns: overal space in bytes"""
         raise NotImplementedError()
     
     def get_used_space(self):
+        """:returns: space used by files in bytes"""
         raise NotImplementedError()
 
     def create_directory(self, directory):
         raise NotImplementedError()
         
     def duplicate(self, path_to_src, path_to_dest):
+        """Duplicate file or directory from *path_to_src* to *directory path_to_dest*.
+        If *path_to_dest* exists, it is overwritten by the file or directory specified by *path_to_src*
+        If *path_to_src* is a directory, the directory is duplicated with all its files and directories.
+        Either this method or :meth:`~.move` needs to be implemented in a subclass to work with :class:`cloudfusion.pyfusebox.pyfusebox.PyFuseBox`.
+        :param path_to_src: must never be the same as *path_to_dest*
+        :param path_to_dest: must end in the name of the child directory or the file specified by *path_to_src*"""
         raise NotImplementedError()
         
     def move(self, path_to_src, path_to_dest):
+        """Move file or directory from *path_to_src* to *directory path_to_dest*.
+        If *path_to_dest* exists, it is overwritten by the file or directory specified by *path_to_src*
+        If *path_to_src* is a directory, the directory is moved with all its files and directories.
+        Default implementation relies on an implementation of :meth:`~.duplicate` in a subclass, but it should be overwritten.
+        Either this method or :meth:`~.duplicate` needs to be implemented in a subclass to work with :class:`cloudfusion.pyfusebox.pyfusebox.PyFuseBox`.
+        :param path_to_src: must never be the same as *path_to_dest*
+        :param path_to_dest: must end in the name of the child directory or the file specified by *path_to_src*"""
         self.duplicate(path_to_src, path_to_dest)
         self.delete(path_to_src)
  

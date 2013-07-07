@@ -3,7 +3,6 @@ Created on Feb 5, 2013
 '''
 from cloudfusion.util.lru_cache import *
 import shelve
-import hashlib
 import os
 import atexit
 

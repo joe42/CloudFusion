@@ -4,7 +4,6 @@ Created on Jun 10, 2013
 @author: joe
 '''
     
-import tempfile
 from cloudfusion.util.persistent_lru_cache import PersistentLRUCache
 from cloudfusion.store.dropbox.file_decorator import *
 from cloudfusion.store.store import *
@@ -213,6 +212,7 @@ class _StoreSyncThread(object):
     
     def enqueue_lru_entries(self): 
         """Start new writer jobs with expired least recently used cache entries."""
+        #TODO: check for user quota error and pause or do exponential backoff
         with self.lock:
             dirty_entry_keys = self.cache.get_dirty_lru_entries(self.max_writer_threads)
             for path in dirty_entry_keys:
@@ -378,7 +378,7 @@ class MultiprocessingCachingStore(Store):
         return ret
                 
     def store_fileobject(self, fileobject, path):
-        """ Stores a fileobject to the :class:`~cloudfusion.util.entries.Cache` and if the existing fileobject has expired it is also written to the wrapped store.
+        """ Stores a fileobject to the :class:`cloudfusion.util.cache.Cache` and if the existing fileobject has expired it is also written to the wrapped store.
         The cached file's updated and modified attributes will be reset to the current point of time.
         The cached file's dirty flag is set to False if the entry has expired and was hence written to the store. Otherwise it is set to True.
         

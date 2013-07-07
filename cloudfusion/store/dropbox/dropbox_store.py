@@ -5,25 +5,15 @@ Created on 08.04.2011
 '''
 
 import time
-import datetime
 from cloudfusion.dropbox import client, session
 from cloudfusion.dropbox import rest
 from cloudfusion.dropbox.rest import RESTSocketError
 from cloudfusion.store.store import *
 import logging
-import logging.config
-import os.path
 from cloudfusion.store.dropbox.file_decorator import NameableFile
-import tempfile
-import ConfigParser
-import StringIO
-import cloudfusion
 import webbrowser
-from cloudfusion.store.dropbox import file_decorator
 import base64
-from cloudfusion.util.persistent_lru_cache import PersistentLRUCache
 import shelve
-import random
 from multiprocessing import Manager
 import atexit
 from cloudfusion.util.exponential_retry import retry
@@ -199,13 +189,13 @@ class DropboxStore(Store):
         self.logger.debug("getting file: " +path_to_file)
         self._raise_error_if_invalid_path(path_to_file)
         try:
-            file, metadata = self.client.get_file_and_metadata(path_to_file)
+            data, metadata = self.client.get_file_and_metadata(path_to_file)
         except rest.ErrorResponse as resp:
             msg= "Could not get file: " +path_to_file
             self._log_http_error("get_file", path_to_file, resp, msg)
             HTTP_STATUS.generate_exception(resp.status, str(resp))
         self._add_revision(path_to_file, metadata['rev'])
-        return file.read()
+        return data.read()
     
     def _get_revision(self, path):
         return self._revisions.get(path, None)
@@ -386,11 +376,11 @@ class DropboxStore(Store):
     def get_directory_listing(self, directory):
         self.logger.debug("getting directory listing for "+directory)
         self._raise_error_if_invalid_path(directory)
-        hash = None
+        dir_hash = None
         if directory in self.dir_listing_cache:
-            hash = self.dir_listing_cache[directory]['hash']
+            dir_hash = self.dir_listing_cache[directory]['hash']
         try:
-            resp = self.client.metadata(directory, hash=hash, list=True)
+            resp = self.client.metadata(directory, hash=dir_hash, list=True)
         except rest.ErrorResponse as resp:
             if resp.status == HTTP_STATUS.NOT_CHANGED: 
                 self.logger.debug("retrieving listing from cache " +directory)
@@ -468,9 +458,6 @@ class DropboxStore(Store):
         ret["is_dir"] = data["is_dir"]
         return ret;
         
-    def _handleError(self, status):
-        pass;
-    
     def _get_time_difference(self):
         self.logger.debug("getting time difference")
         return 0

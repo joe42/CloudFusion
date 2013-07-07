@@ -34,7 +34,7 @@ class GetFreeSpaceWorker(object):
             try:
                 self.free_bytes = self.store.get_free_space()
             except Exception, e:
-                self.logger.error("Error on getting number of free bytes of store")
+                self.logger.error("Error on getting number of free bytes of store: "+ str(e))
             time.sleep(self.poll_wait_time_in_s)
     
     def __deepcopy__(self, memo):

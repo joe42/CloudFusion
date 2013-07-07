@@ -1,14 +1,12 @@
 from cloudfusion.store.store import NoSuchFilesytemObjectError,\
     AlreadyExistsError, StoreAccessError, StoreAutorizationError
-import os, sys, stat,  time
+import os, stat,  time
 from errno import *
-from cloudfusion.fuse import FUSE, FuseOSError, Operations, LoggingMixIn
-import cloudfusion
+from cloudfusion.fuse import FuseOSError, Operations
 import tempfile
 import logging
 from cloudfusion.mylogging.nullhandler import NullHandler
 
-print logging.__path__
 logging.getLogger().addHandler(NullHandler())
 
 # Specify what Fuse API use: 0.2
@@ -200,18 +198,18 @@ class PyFuseBox(Operations):
         if not path in self.read_temp_file:
             self.read_temp_file[path] = tempfile.SpooledTemporaryFile()
             try:
-                file = self.store.get_file(path)
+                data = self.store.get_file(path)
             except NoSuchFilesytemObjectError:
                 raise FuseOSError(ENOENT)
             except StoreAccessError:
                 raise FuseOSError(EIO)
             except StoreAutorizationError:
                 raise FuseOSError(EACCES) #keine Berechtigung
-            self.read_temp_file[path].write(file)
+            self.read_temp_file[path].write(data)
         self.read_temp_file[path].seek(0)
-        file =  self.read_temp_file[path].read()
-        #file.seek(offset)
-        return  file[offset: offset+size]
+        data =  self.read_temp_file[path].read()
+        #data.seek(offset)
+        return  data[offset: offset+size]
 
     def write(self, path, buf, offset, fh):
         self.logger.debug("write %s ... starting with %s at %s - fh: %s" % (path, buf[0:10], offset, fh))
@@ -222,14 +220,14 @@ class PyFuseBox(Operations):
                 self.release(path, 0) #to prevent flushing
                 return FuseOSError(EFBIG)
             try:
-                file = self.store.get_file(path)
+                data = self.store.get_file(path)
             except NoSuchFilesytemObjectError:
                 raise FuseOSError(ENOENT)
             except StoreAccessError:
                 raise FuseOSError(EIO)
             except StoreAutorizationError:
                 raise FuseOSError(EACCES) #keine Berechtigung
-            self.temp_file[path].write(file)
+            self.temp_file[path].write(data)
         self.temp_file[path].seek(offset)
         self.temp_file[path].write(buf)
         self.temp_file[path].seek(0)

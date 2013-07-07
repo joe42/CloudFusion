@@ -5,7 +5,6 @@ Created on Jun 11, 2013
 '''
 from cloudfusion.util.synchronize_proxy import SynchronizeProxy
 from nose.tools import *
-import time
 import threading
 from random import random
 
