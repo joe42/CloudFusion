@@ -298,7 +298,8 @@ class MultiprocessingCachingStore(Store):
         :param cache_expiration_time: the time in seconds until any cache entry is expired
         :param cache_size_in_mb: Approximate limit of the cache in MB.
         :param cache_id: Serves as identifier for a persistent cache instance. """ 
-        self.store = store
+        #prevent simultaneous access to store (synchronous use of __deepcopy__ by _store SyncThread and a different method): 
+        self.store = SynchronizeProxy(store, private_methods_to_synchronize=['_get_metadata', '__deepcopy__']) 
         self.logger = logging.getLogger(self.get_logging_handler())
         self.logger.debug("creating CachingStore object")
 #        self.temp_file = tempfile.SpooledTemporaryFile()

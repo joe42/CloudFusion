@@ -27,15 +27,16 @@ class SynchronizeProxy(object):
     """
     Proxy object that synchronizes access to a core object methods and attributes that don't start with _.
     """
-    def __init__( self, core ):
+    def __init__( self, core, private_methods_to_synchronize=[] ):
         self._obj = core
         self.rlock = RLock()
+        self.methods_to_synchronize = private_methods_to_synchronize or [] # python quirks for mutable default parameter
 
     def __getattribute__( self, name ):
         """
         Return a proxy wrapper object if this is a method call.
         """
-        if name.startswith('_'):
+        if name == 'methods_to_synchronize' or (name.startswith('_') and not name in self.methods_to_synchronize):
             return object.__getattribute__(self, name)
         else:
             att = getattr(self._obj, name)
