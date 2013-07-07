@@ -57,7 +57,7 @@ def setUp():
     io_apis.append( SugarsyncStore(sugarsync_config) ) 
     io_apis.append( MultiprocessingCachingStore( dropbox_store ) ) 
     io_apis.append( MultiprocessingCachingStore( SugarsyncStore(sugarsync_config) ) )
-    io_apis.append( MetadataCachingStore( MultiprocessingCachingStore( SugarsyncStore(sugarsync_config) ) ) )
+    #io_apis.append( MetadataCachingStore( MultiprocessingCachingStore( SugarsyncStore(sugarsync_config) ) ) )
     io_apis.append( MultiprocessingCachingStore( MetadataCachingStore( dropbox_store ) ) )
     #io_apis.append( ErrorHandlingSugarsyncStore( SugarsyncStore(sugarsync_config) )  ) 
     time.sleep(10)
