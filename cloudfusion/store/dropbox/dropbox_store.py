@@ -8,6 +8,7 @@ import time
 import datetime
 from cloudfusion.dropbox import client, session
 from cloudfusion.dropbox import rest
+from cloudfusion.dropbox.rest import RESTSocketError
 from cloudfusion.store.store import *
 import logging
 import logging.config
@@ -193,7 +194,7 @@ class DropboxStore(Store):
         self.logger.info("getting name")
         return "Dropbox"
     
-    @retry(Exception)
+    @retry((Exception,RESTSocketError))
     def get_file(self, path_to_file): 
         self.logger.debug("getting file: " +path_to_file)
         self._raise_error_if_invalid_path(path_to_file)
@@ -251,7 +252,7 @@ class DropboxStore(Store):
             self.move(resp_path, path)
 
     # retry does not really matter with caching_store
-    @retry(Exception, tries=1, delay=0) 
+    @retry((Exception,RESTSocketError), tries=1, delay=0) 
     def store_fileobject(self, fileobject, path):
         size = self.__get_size(fileobject)
         self.logger.debug("Storing file object of size %s to %s" % (size,path))
@@ -286,7 +287,7 @@ class DropboxStore(Store):
     
     # worst case: object still exists and takes up space or is appended to, by mistake
     # with caching_store, the entry in cache is deleted anyways 
-    @retry(Exception, tries=1, delay=0) 
+    @retry((Exception,RESTSocketError), tries=1, delay=0) 
     def delete(self, path):
         self.logger.debug("deleting " +path)
         self._raise_error_if_invalid_path(path)
@@ -299,7 +300,7 @@ class DropboxStore(Store):
                 HTTP_STATUS.generate_exception(resp.status, str(resp))
         self._remove_revision(path)
         
-    @retry(Exception)
+    @retry((Exception,RESTSocketError))
     def account_info(self):
         self.logger.debug("retrieving account info")
         try:
@@ -310,7 +311,7 @@ class DropboxStore(Store):
             HTTP_STATUS.generate_exception(resp.status, str(resp))
         return str(resp)
 
-    @retry(Exception)
+    @retry((Exception,RESTSocketError))
     def create_directory(self, directory):
         self.logger.debug("creating directory " +directory)
         self._raise_error_if_invalid_path(directory)
@@ -324,7 +325,7 @@ class DropboxStore(Store):
             HTTP_STATUS.generate_exception(resp.status, str(resp), "create_directory")
         
     # worst case: should happen mostly with user interaction, so fast feedback is more important
-    @retry(Exception, tries=1, delay=0)
+    @retry((Exception,RESTSocketError), tries=1, delay=0)
     def duplicate(self, path_to_src, path_to_dest):
         self.logger.debug("duplicating " +path_to_src+" to "+path_to_dest)
         self._raise_error_if_invalid_path(path_to_src)
@@ -338,7 +339,7 @@ class DropboxStore(Store):
         self._add_revision(path_to_dest, resp['rev'])
     
     # worst case: should happen mostly with user interaction, so fast feedback is more important
-    @retry(Exception, tries=1, delay=0)
+    @retry((Exception,RESTSocketError), tries=1, delay=0)
     def move(self, path_to_src, path_to_dest):
         self.logger.debug("moving " +path_to_src+" to "+path_to_dest)
         self._raise_error_if_invalid_path(path_to_src)
@@ -359,7 +360,7 @@ class DropboxStore(Store):
         self._remove_revision(path_to_src)
         self._add_revision(path_to_dest, resp['rev'])
     
-    @retry(Exception)
+    @retry((Exception,RESTSocketError))
     def get_overall_space(self):
         self.logger.debug("retrieving all space")
         try:
@@ -370,7 +371,7 @@ class DropboxStore(Store):
             HTTP_STATUS.generate_exception(resp.status, str(resp))
         return resp[u'quota_info']["quota"]
 
-    @retry(Exception)
+    @retry((Exception,RESTSocketError))
     def get_used_space(self):
         self.logger.debug("retrieving used space")
         try:
@@ -381,7 +382,7 @@ class DropboxStore(Store):
             HTTP_STATUS.generate_exception(resp.status, str(resp))
         return resp[u'quota_info']["shared"] + resp[u'quota_info']["normal"]
         
-    @retry(Exception)
+    @retry((Exception,RESTSocketError))
     def get_directory_listing(self, directory):
         self.logger.debug("getting directory listing for "+directory)
         self._raise_error_if_invalid_path(directory)
@@ -424,7 +425,7 @@ class DropboxStore(Store):
             log += " -- msg:"+msg
         self.logger.error(log)
         
-    @retry(Exception)
+    @retry((Exception,RESTSocketError))
     def _get_metadata(self, path):
         self.logger.debug("getting metadata for "+path)
         self._raise_error_if_invalid_path(path)

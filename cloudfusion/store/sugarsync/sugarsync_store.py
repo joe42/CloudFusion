@@ -15,6 +15,7 @@ import xml.dom.minidom as dom
 import logging
 from cloudfusion.mylogging.nullhandler import NullHandler
 from cloudfusion.util.exponential_retry import retry
+import socket
 
 logging.getLogger().addHandler(NullHandler())
 
@@ -204,7 +205,7 @@ class SugarsyncStore(Store):
         ret['used_space'] = int(partial_tree['user']['quota']['usage'])
         return "Sugarsync overall space: %s, used space: %s" % (ret['overall_space'], ret['used_space']) 
     
-    @retry(Exception)
+    @retry((Exception,socket.error))
     def get_overall_space(self):
         self.logger.debug("retrieving all space")
         info = self.client.user_info()
@@ -216,7 +217,7 @@ class SugarsyncStore(Store):
         DictXMLParser().populate_dict_with_XML_leaf_textnodes(info.data, partial_tree)
         return int(partial_tree['user']['quota']['limit'])
     
-    @retry(Exception)
+    @retry((Exception,socket.error))
     def get_used_space(self):
         self.logger.debug("retrieving used space")
         info = self.client.user_info()
@@ -228,7 +229,7 @@ class SugarsyncStore(Store):
         DictXMLParser().populate_dict_with_XML_leaf_textnodes(info.data, partial_tree)
         return int(partial_tree['user']['quota']['usage'])
     
-    @retry(Exception)
+    @retry((Exception,socket.error))
     def get_file(self, path_to_file): 
         self.logger.debug("getting file: " +path_to_file)
         self._raise_error_if_invalid_path(path_to_file)
@@ -239,7 +240,7 @@ class SugarsyncStore(Store):
         return file.data 
     
     # retry does not really matter with caching_store
-    @retry(Exception, tries=1, delay=0) 
+    @retry((Exception,socket.error), tries=1, delay=0) 
     def store_fileobject(self, fileobject, path_to_file):
         self.logger.debug("storing file object to "+path_to_file)
         if not self.exists(path_to_file):
@@ -261,7 +262,7 @@ class SugarsyncStore(Store):
     
     # worst case: object still exists and takes up space or is appended to, by mistake
     # with caching_store, the entry in cache is deleted anyways 
-    @retry(Exception, tries=1, delay=0) 
+    @retry((Exception,socket.error), tries=1, delay=0) 
     def delete(self, path):
         self.logger.debug("deleting " +path)
         if path == "/":
@@ -280,7 +281,7 @@ class SugarsyncStore(Store):
         return resp.status
         
     # worst case: would be annoying  when copying nested directory structure and failure occurs
-    @retry(Exception)
+    @retry((Exception,socket.error))
     def create_directory(self, path):
         self.logger.debug("creating directory " +path)
         self._raise_error_if_invalid_path(path)
@@ -299,7 +300,7 @@ class SugarsyncStore(Store):
         return resp.status
     
     # worst case: might be critical with backups when only updating changed items in nested structure
-    @retry(Exception)
+    @retry((Exception,socket.error))
     def get_directory_listing(self, directory):
         self.logger.debug("getting directory listing for "+directory)
         ret = []
@@ -313,7 +314,7 @@ class SugarsyncStore(Store):
         return ret 
     
     # worst case: should happen mostly with user interaction, so fast feedback is more important
-    @retry(Exception, tries=1, delay=0)
+    @retry((Exception,socket.error), tries=1, delay=0)
     def duplicate(self, path_to_src, path_to_dest): #src might be a directory
         self.logger.debug("duplicating " +path_to_src+" to "+path_to_dest)
         self._raise_error_if_invalid_path(path_to_src)
@@ -400,7 +401,7 @@ class SugarsyncStore(Store):
         return ret
     
     # worst case: can break backups if it fails
-    @retry(Exception)
+    @retry((Exception,socket.error))
     def _get_metadata(self, path):
         self.logger.debug("getting metadata for "+path)
         self._raise_error_if_invalid_path(path)
@@ -428,7 +429,7 @@ class SugarsyncStore(Store):
             ret = self._parse_directory(path, resp)
         return ret;
             
-    @retry(Exception)
+    @retry((Exception,socket.error))
     def _get_time_difference(self):
         resp =  self.client.user_info()
         HTTP_STATUS.generate_exception(resp.status, str(resp))
