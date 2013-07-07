@@ -277,7 +277,7 @@ class DropboxStore(Store):
     
     # worst case: object still exists and takes up space or is appended to, by mistake
     # with caching_store, the entry in cache is deleted anyways 
-    @retry((Exception,RESTSocketError), tries=1, delay=0) 
+    @retry((Exception,RESTSocketError), tries=5, delay=0) 
     def delete(self, path):
         self.logger.debug("deleting " +path)
         self._raise_error_if_invalid_path(path)

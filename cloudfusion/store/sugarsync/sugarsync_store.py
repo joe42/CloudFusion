@@ -258,7 +258,7 @@ class SugarsyncStore(Store):
     
     # worst case: object still exists and takes up space or is appended to, by mistake
     # with caching_store, the entry in cache is deleted anyways 
-    @retry((Exception,socket.error), tries=1, delay=0) 
+    @retry((Exception,socket.error), tries=5, delay=0) 
     def delete(self, path):
         self.logger.debug("deleting " +path)
         if path == "/":
