@@ -3,44 +3,45 @@ CloudFusion
 
 CloudFusion lets you access your Dropbox or Sugarsync files from Linux like any file on your desktop.
 
-Install
--------
+Install 
+--------
 
 To install CloudFusion on Ubuntu do the following::
 
     sudo apt-get install git
     git clone git://github.com/joe42/CloudFusion.git
     sudo apt-get install python-setuptools
-    cd CloudFusion/
+    cd CloudFusion
     sudo python setup.py install
 
 Get started
------------
+------------
 
 Start CloudFusion::
 
     python -m cloudfusion.main mnt
 
-This will create a directory for your logs and a mountpoint **mnt**. 
+If the directory **mnt** does not yet exist, it will b created. (If you want to find an error, write the word **log**
+at the end of the command, which will create the directory **.cloudfusion/logs** with log files.) 
 After configuring CloudFusion, you can access the files from your cloud provider in **mnt/data**.
 
 Create a Configuration File
-...........................
+.................................
 
 Sugarsync
-+++++++++
-Copy the Sugarsync configuration file located at **cloudfusion/config/Sugarsync.ini** to your home directory.
+++++++++++
+Copy the Sugarsync configuration file located at **cloudfusion/cloudfusion/config/Sugarsync.ini** to your home directory.
 Edit the configuration file by adding your e-mail address as your username and a password. 
 
 
 Dropbox
-+++++++
-Simply copy the Dropbox configuration file located at **cloudfusion/config/Dropbox.ini** to your home directory.
+++++++++++
+Simply copy the Dropbox configuration file located at **cloudfusion/cloudfusion/config/Dropbox.ini** to your home directory.
 If you do not have a Dropbox account already, you can create a new one at https://www.dropbox.com.
 No further steps are required. 
 
 Configuring CloudFusion
-.......................
+...................................
 
 Now copy the configuration file you edited to your mountpoint::
 
@@ -55,8 +56,24 @@ But you can simply retry by copying the configuration again
 Enjoy accessing your files in the directory **mnt/data**.
 
 
+Restrictions
+---------------
+
+There is no automatic sync from the online store to local disk. But 
+
+ * you can manually refresh the directory to see changes
+ * with Dropbox, files are moved to /overwritten directory (online) instead of being overwritten accidentially
+There is no differential update, which means files are uploaded or downloaded as a whole.
+
+Dropbox has a maximum file upload size of 150MB and operations can at most work on 10.000 files and folders.
+It does not allow thumbs.db or .ds_store files.
+
+Sugarsync has a maximum file upload size of 100MB. It does not allow Outlook .pst, Quicken, and Quickbooks.
+
+
 Notes
------
+------
 
 I am not affiliated with Dropbox nor with Sugarsync.
+
 
