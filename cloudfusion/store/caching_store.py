@@ -3,11 +3,12 @@ Created on Jun 10, 2013
 
 @author: joe
 '''
-    
+#TODO: implement reading slowly from cache, to reduce memory
 from cloudfusion.util.persistent_lru_cache import PersistentLRUCache
 from cloudfusion.store.dropbox.file_decorator import *
 from cloudfusion.store.store import *
 from cloudfusion.util.synchronize_proxy import SynchronizeProxy
+import os
 import time
 import random
 import logging
@@ -19,25 +20,34 @@ import copy
 logging.getLogger().addHandler(NullHandler())
 
 class WriteWorker(object):
-    def __init__(self, store, path, value, logger):
+    def __init__(self, store, path, file, logger):
         self.store = copy.deepcopy(store)
         self.path = path
-        self._value = value
+        self._file = file
         self.logger = logger
         self.logger.debug("writing "+path)
         self._result_queue = multiprocessing.Queue()
         self.process = multiprocessing.Process(target=self._run, args=(self._result_queue,))
-        
-    def get_value(self):
-        return self._value
+        self.process.daemon = True
+        self._is_successful = False
+        self._error = None 
     
     def is_finished(self):
         return not self.process.is_alive() 
     
+    def get_error(self):
+        return self._error
+    
     def is_successful(self):
         if not self._result_queue.empty():
+            result = self._result_queue.get()
+            if result == True:
+                self._is_successful = True
+            else:
+                self._is_successful = False
+                self._error = result
             self.logger.debug("finished writing "+self.path)
-        return not self._result_queue.empty()
+        return self._is_successful
     
     def stop(self):
         self.process.terminate()
@@ -46,12 +56,14 @@ class WriteWorker(object):
         self.process.start()
     
     def _run(self,result_queue):
-        fileobj = DataFileWrapper(self._value)
+        self.logger.debug("Start WriteWorker process %s to write %s" % (os.getpid(), self.path))
         try:
-            self.store.store_fileobject(fileobj, self.path)
+            self.store.store_fileobject(self._file, self.path)
             result_queue.put(True)
         except Exception, e:
+            result_queue.put(e)
             self.logger.debug("Error on storing %s in WriteWorker: %s" % (self.path, e))
+        self.logger.debug("Finish WriteWorker process %s to write %s" % (os.getpid(), self.path))
             
 class RemoveWorker(object):
     def __init__(self, store, path, logger):
@@ -119,7 +131,7 @@ class ReadWorker(object):
 
 class _StoreSyncThread(object):
     """Synchronizes between cache and store"""
-    def __init__(self, cache, store, logger, max_writer_threads=8):
+    def __init__(self, cache, store, logger, max_writer_threads=3):
         self.logger = logger
         self.cache = cache
         self.store = store
@@ -148,6 +160,13 @@ class _StoreSyncThread(object):
             if writer.is_successful() and self.cache.exists(writer.path): #stop() call in delete method might not have prevented successful write 
                 self.cache.set_dirty(writer.path, False)
                 
+    def _check_for_failed_writers(self):
+        for writer in self.writers:
+            if writer.is_finished():
+                if writer.get_error():
+                    #TODO:is quota error -< stop writers
+                    pass
+                    
     def _remove_finished_readers(self):
         for reader in self.readers:
             if reader.is_finished():
@@ -189,7 +208,8 @@ class _StoreSyncThread(object):
         return None
 
     def run(self): 
-        #TODO: check if the cached entries have changed (delta request) and update asynchronously
+        #TODO: check if the cached entries have changed remotely (delta request) and update asynchronously
+        #TODO: check if entries being transferred have changed and stop transfer
         while not self._stop:
             self.logger.debug("StoreSyncThread run")
             time.sleep( 60 )
@@ -213,16 +233,17 @@ class _StoreSyncThread(object):
     def enqueue_lru_entries(self): 
         """Start new writer jobs with expired least recently used cache entries."""
         #TODO: check for user quota error and pause or do exponential backoff
+        #TODO: check for internet connection availability and pause or do exponential backoff
         with self.lock:
             dirty_entry_keys = self.cache.get_dirty_lru_entries(self.max_writer_threads)
             for path in dirty_entry_keys:
                 if len(self.writers) >= self.max_writer_threads:
                     break
-                if not self.cache.is_expired(path):
+                if not self.cache.is_expired(path): 
                     break
                 if self._is_in_progress(path):
                     continue
-                content = self.cache.peek(path)
+                content = self.cache.peek_file(path)
                 new_worker = WriteWorker(self.store, path, content, self.logger)
                 new_worker.start()
                 self.writers.append(new_worker)
@@ -237,7 +258,7 @@ class _StoreSyncThread(object):
                     break
                 if self._is_in_progress(path):
                     continue
-                content = self.cache.peek(path)
+                content = self.cache.peek_file(path)
                 new_worker = WriteWorker(self.store, path, content, self.logger)
                 new_worker.start()
                 self.writers.append(new_worker)
