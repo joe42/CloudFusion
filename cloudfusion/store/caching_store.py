@@ -198,7 +198,7 @@ class _StoreSyncThread(object):
             self.enqueue_lru_entries()
     
     def _reconnect(self):
-        if time.time() > self.last_reconnect + 60*10: 
+        if time.time() > self.last_reconnect + 60*60: #reconnect after 1h
             self.store.reconnect()
             self.last_reconnect = time.time()
     
