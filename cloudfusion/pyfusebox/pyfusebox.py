@@ -83,16 +83,28 @@ class PyFuseBox(Operations):
     
     def truncate(self, path, length, fh=None):
         self.logger.debug("truncate %s to %s" % (path, length))
-        try:
-            self.store.delete(path)
-        except NoSuchFilesytemObjectError:
-            raise FuseOSError(ENOENT)
-        except StoreAccessError:
-            raise FuseOSError(EIO)
-        except StoreAutorizationError:
-            raise FuseOSError(EACCES) 
-        temp_file = tempfile.SpooledTemporaryFile()
-        self.store.store_fileobject(temp_file, path)
+        if not path in self.temp_file:
+            data = ""
+            self.temp_file[path] = tempfile.SpooledTemporaryFile()
+            if self.store.get_max_filesize() < length:
+                self._release(path, 0) #to prevent flushing
+                return FuseOSError(EFBIG)
+            try:
+                data = self.store.get_file(path)
+            except NoSuchFilesytemObjectError:
+                raise FuseOSError(ENOENT)
+            except StoreAccessError:
+                raise FuseOSError(EIO)
+            except StoreAutorizationError:
+                raise FuseOSError(EACCES) 
+        else:
+            data = self.temp_file[path].read()
+        self.temp_file[path].truncate()
+        self.temp_file[path].write(data[:length])
+        padding = length - len(data)
+        if padding > 0:
+            self.temp_file[path].write('\x00'*padding)
+        self.temp_file[path].seek(0)
         return 0
     
     def rmdir(self, path):
