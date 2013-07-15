@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import types
-from pprint import pformat
 from threading import RLock
 
 class SynchronizeMethodWrapper:

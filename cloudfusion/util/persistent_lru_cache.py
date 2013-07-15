@@ -78,10 +78,8 @@ class PersistentLRUCache(LRUCache):
             return 0
     
     def _get_file_content(self, filepath):
-        fh = open(filepath)
-        content = fh.read()
-        fh.close() 
-        return content
+        with open(filepath) as fh:
+            return fh.read()
     
     def write(self, key, value): 
         if key in self.entries:

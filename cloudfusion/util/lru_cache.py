@@ -51,10 +51,9 @@ class LRUCache(Cache):
         return keys
         
     def _store_to_dict(self, linkedEntry):
-    	"""This is only important for subclasses using shelve with writeback=False as a dictionary."""
+        """This is only important for subclasses using shelve with writeback=False as a dictionary."""
         self.entries[linkedEntry.key] = linkedEntry
-    	
-    	
+
     def _move_used_entry_to_head(self, key):
         """Put existing entry associated with *key* in front of the LRU queue."""
         used_entry = self.entries[key]
@@ -130,7 +129,7 @@ class LRUCache(Cache):
         entry = self._get_listtail_entry()
         while self.entries[CACHESIZE]/1000000 >= self.maxsize and entry.next:
             if entry.dirty == False:
-        	       self.delete(entry.key)
+                self.delete(entry.key)
             entry = self.entries[entry.next]
 
             
@@ -143,7 +142,6 @@ class LRUCache(Cache):
         """Get list of *num* dirty least recently used entries.
         returns: list of keys of the *num* least recently used entries"""
         ret = []
-        i = 0
         entry = self._get_listtail_entry()
         while entry:
             if num <= len(ret):

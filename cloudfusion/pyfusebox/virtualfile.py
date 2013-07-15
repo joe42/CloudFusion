@@ -5,7 +5,6 @@ Created on 24.08.2011
 import os
 from cloudfusion.pyfusebox.pyfusebox import zstat
 import stat
-import cloudfusion
 import logging
 from cloudfusion.mylogging.nullhandler import NullHandler
 
@@ -31,14 +30,14 @@ Some virtual Text.
         return self.text
     def get_path(self):
         return self.path
-    def get_subdir(self, path):
-        """:returns: the parent directory of this virtualfile's path which is a subdirectory of path"""
-        dir = self.get_path()
-        while dir != "/":
-            parent_dir = os.path.dirname(dir)
-            if parent_dir == path:
-                return  os.path.basename(dir)
-            dir = parent_dir
+    def get_subdir(self, real_directory):
+        """:returns: the parent directory of this virtualfile's path which is a subdirectory of **real_directory**"""
+        vfile_path = self.get_path()
+        while vfile_path != "/":
+            parent_dir = os.path.dirname(vfile_path)
+            if parent_dir == real_directory:
+                return  os.path.basename(vfile_path)
+            vfile_path = parent_dir
         return None
     def __str__(self):
         return self.path

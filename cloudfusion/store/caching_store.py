@@ -51,7 +51,7 @@ class WriteWorker(object):
             self.store.store_fileobject(fileobj, self.path)
             result_queue.put(True)
         except Exception, e:
-            self.logger.debug("Error on removing %s in WriteWorker: %s" % (self.path, e))
+            self.logger.debug("Error on storing %s in WriteWorker: %s" % (self.path, e))
             
 class RemoveWorker(object):
     def __init__(self, store, path, logger):
@@ -111,10 +111,10 @@ class ReadWorker(object):
     
     def _run(self, result_queue):
         try:
-            self.content = self.store.get_file(self.path)
-            result_queue.put(self.content)
+            content = self.store.get_file(self.path)
+            result_queue.put(content)
         except Exception, e:
-            self.logger.debug("Error on removing %s in ReadWorker: %s" % (self.path, e))
+            self.logger.debug("Error on reading %s in ReadWorker: %s" % (self.path, e))
         
 
 class _StoreSyncThread(object):
@@ -160,7 +160,7 @@ class _StoreSyncThread(object):
     def _remove_successful_removers(self):
         for remover in self.removers:
             if remover.is_finished() and remover.is_successful():
-                    self.removers.remove(remover)
+                self.removers.remove(remover)
                     
     def _restart_unsuccessful_removers(self):
         for remover in self.removers:

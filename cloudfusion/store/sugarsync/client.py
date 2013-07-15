@@ -56,20 +56,19 @@ class SugarsyncClient(object):
         response, content = conn.request("https://"+self.host+ "/file/:sc:%s:%s" % (self.uid, path_to_file),"GET",None,headers)
         ret = HTTPResponse( response, content )
         return ret
-        """
-       <?xml version="1.0" encoding="UTF-8"?>
-<file>
-    <displayName>Foo</displayName>
-    <size>120233</size>
-    <lastModified>2009-09-25T16:49:56.000-07:00</lastModified>
-    <timeCreated>2009-09-25T16:49:56.000-07:00</timeCreated>
-    <mediaType>image/jpeg</mediaType>
-    <presentOnServer>true</presentOnServer>
-    <parent>http://api.sugarsync.com/folder/xyzzy</parent>
-    <fileData>http://api.sugarsync.com/file/abc123/data</fileData>
-</file>
-
-       """  
+#===============================================================================
+#        <?xml version="1.0" encoding="UTF-8"?>
+# <file>
+#     <displayName>Foo</displayName>
+#     <size>120233</size>
+#     <lastModified>2009-09-25T16:49:56.000-07:00</lastModified>
+#     <timeCreated>2009-09-25T16:49:56.000-07:00</timeCreated>
+#     <mediaType>image/jpeg</mediaType>
+#     <presentOnServer>true</presentOnServer>
+#     <parent>http://api.sugarsync.com/folder/xyzzy</parent>
+#     <fileData>http://api.sugarsync.com/file/abc123/data</fileData>
+# </file>
+#===============================================================================
     def get_dir_listing(self, path):
         headers = {"Host": self.host, "Authorization: ": self.token}
         conn = httplib2.Http()
@@ -84,20 +83,20 @@ class SugarsyncClient(object):
         response, content = conn.request("https://"+self.host+ "/folder/:sc:%s:%s" % (self.uid, path),"GET",None,headers)
         ret = HTTPResponse( response, content )
         return ret
-        """
-<?xml version="1.0" encoding="UTF-8"?>
-<folder>
-   <displayName>folder1</displayName>
-   <timeCreated>2009-06-25T11:31:05.000-07:00</timeCreated>
-   <parent>https://api.sugarsync.com/folder/myfolderId</parent>
-   <collections>https://api.sugarsync.com/folder/myfolderId/contents?type=folder
-   </collections>
-   <files>https://api.sugarsync.com/folder/myfolderId/contents?type=file</files>
-   <contents>https://api.sugarsync.com/folder/myfolderId/contents</contents>
-</folder>
 
+#===============================================================================
+# <?xml version="1.0" encoding="UTF-8"?>
+# <folder>
+#    <displayName>folder1</displayName>
+#    <timeCreated>2009-06-25T11:31:05.000-07:00</timeCreated>
+#    <parent>https://api.sugarsync.com/folder/myfolderId</parent>
+#    <collections>https://api.sugarsync.com/folder/myfolderId/contents?type=folder
+#    </collections>
+#    <files>https://api.sugarsync.com/folder/myfolderId/contents?type=file</files>
+#    <contents>https://api.sugarsync.com/folder/myfolderId/contents</contents>
+# </folder>
+#===============================================================================
 
-       """
     
     def get_file(self, path_to_file):
         headers = {"Host": self.host, "Authorization: ": self.token}

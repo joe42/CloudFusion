@@ -28,13 +28,13 @@ class ConfigurablePyFuseBox(PyFuseBox):
         st['st_mode'] = 0777 | stat.S_IFDIR
         st['st_nlink']=2
         st['st_size'] = 4096
-        st['st_blocks'] = (int) ((st['st_size'] + 4095L) / 4096L);
-        return st;
+        st['st_blocks'] = (int) ((st['st_size'] + 4095L) / 4096L)
+        return st
     
     def getattr(self, path, fh=None):
         self.logger.debug("getattr "+path+"")
         if path == "/": 
-            return self._getattr_for_folder_with_full_access();
+            return self._getattr_for_folder_with_full_access()
         if path == self.virtual_file.get_path():
             return self.virtual_file.getattr()
         if self.virtual_file.get_subdir(path):
@@ -43,7 +43,7 @@ class ConfigurablePyFuseBox(PyFuseBox):
             path = self.remove_data_folder_prefix(path)
             return super( ConfigurablePyFuseBox, self ).getattr(path, fh)
         if path == self.DATA_FOLDER_PATH: 
-            return self._getattr_for_folder_with_full_access();
+            return self._getattr_for_folder_with_full_access()
         raise FuseOSError(ENOENT)
     
     def truncate(self, path, length, fh=None):
@@ -210,7 +210,7 @@ class ConfigurablePyFuseBox(PyFuseBox):
             if file_object != "/":
                 file_object = os.path.basename(file_object.encode('utf8'))
                 file_objects.append( file_object )
-        return file_objects;
+        return file_objects
 
         
 #TODO:
