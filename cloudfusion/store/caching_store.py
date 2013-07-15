@@ -400,7 +400,10 @@ class MultiprocessingCachingStore(Store):
         return self.store.account_info()
     
     def get_free_space(self):
-        return self.store.get_free_space() - self.entries.get_size_of_dirty_data()
+        free_bytes = self.store.get_free_space() - self.entries.get_size_of_dirty_data()
+        if free_bytes < 0:
+            free_bytes = 0
+        return free_bytes
     
     def get_overall_space(self):
         return self.store.get_overall_space()
