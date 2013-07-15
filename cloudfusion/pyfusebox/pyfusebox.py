@@ -217,7 +217,7 @@ class PyFuseBox(Operations):
             self.temp_file[path] = tempfile.SpooledTemporaryFile()
             filesize = offset+len(buf)
             if self.store.get_max_filesize() < filesize:
-                self.release(path, 0) #to prevent flushing
+                self._release(path, 0) #to prevent flushing
                 return FuseOSError(EFBIG)
             try:
                 data = self.store.get_file(path)
@@ -238,7 +238,7 @@ class PyFuseBox(Operations):
         self.logger.debug("flush %s - fh: %s" % (path, fh))
         if path in self.temp_file: #after writes
             if self.store.get_free_space() < self.temp_file[path].tell():
-                self.release(path, 0)
+                self._release(path, 0)
                 return FuseOSError(ENOSPC)
             try:
                 self.store.store_fileobject(self.temp_file[path], path)
@@ -252,15 +252,16 @@ class PyFuseBox(Operations):
     
     def release(self, path, fh):
         self.logger.debug("release %s - fh: %s" % (path, fh))
+        return self._release(path, fh) #UnicodeEncodeError: 'ascii' codec can't encode character u'\xed' in position 20: ordinal not in range(128)
+    
+    def _release(self, path, fh): #release implementation
         if path in self.temp_file: #after writes
             self.temp_file[path].close()
             del self.temp_file[path]
         if path in self.read_temp_file:
             self.read_temp_file[path].close()
             del self.read_temp_file[path]
-             
-        #self.temp_file.close()
-        return 0 #UnicodeEncodeError: 'ascii' codec can't encode character u'\xed' in position 20: ordinal not in range(128)    
+        return 0  
        
     def readdir(self, path, fh):
         self.logger.debug("readdir "+path+"")
