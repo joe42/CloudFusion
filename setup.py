@@ -14,7 +14,7 @@ setuptools.setup(
     author = "Johannes Mueller",
     author_email = "johannes.mueller1@mail.inf.tu-dresden.de",
     url = "https://github.com/joe42/CloudFusion",
-    download_url = "https://github.com/joe42/cloudfusion.tgz",
+    download_url = "https://github.com/joe42/CloudFusion/archive/master.zip",
     keywords = ["encoding", "i18n", "xml"],
     classifiers = [
         "Programming Language :: Python :: 2.6",
