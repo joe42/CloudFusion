@@ -69,8 +69,8 @@ class PyFuseBox(Operations):
     def open(self, path, flags):
         self.logger.debug("open "+path+"")
         """self.logger.debug("open "+path+"")
-        temp_file = tempfile.SpooledTemporaryFile()
-        #self.temp_file = tempfile.SpooledTemporaryFile()
+        temp_file = tempfile.SpooledTemporaryFile(max_size=20*1000*1000)
+        #self.temp_file = tempfile.SpooledTemporaryFile(max_size=20*1000*1000)
         if self.store.exists(path):
             file = self.store.get_file(path)
             self.temp_file.write(file)
@@ -85,7 +85,7 @@ class PyFuseBox(Operations):
         self.logger.debug("truncate %s to %s" % (path, length))
         if not path in self.temp_file:
             data = ""
-            self.temp_file[path] = tempfile.SpooledTemporaryFile()
+            self.temp_file[path] = tempfile.SpooledTemporaryFile(max_size=20*1000*1000)
             if self.store.get_max_filesize() < length:
                 self._release(path, 0) #to prevent flushing
                 return FuseOSError(EFBIG)
@@ -174,7 +174,7 @@ class PyFuseBox(Operations):
 
     def create(self, path, mode):
         self.logger.debug("create %s with mode %s" % (path, str(mode)))
-        temp_file = tempfile.SpooledTemporaryFile()
+        temp_file = tempfile.SpooledTemporaryFile(max_size=20*1000*1000)
         try:
             self.store.store_fileobject(temp_file, path)
         except NoSuchFilesytemObjectError:
@@ -208,7 +208,7 @@ class PyFuseBox(Operations):
     def read(self, path, size, offset, fh):
         self.logger.debug("read %s bytes from %s at %s - fh %s" % (size, path, offset, fh))
         if not path in self.read_temp_file:
-            self.read_temp_file[path] = tempfile.SpooledTemporaryFile()
+            self.read_temp_file[path] = tempfile.SpooledTemporaryFile(max_size=20*1000*1000)
             try:
                 data = self.store.get_file(path)
             except NoSuchFilesytemObjectError:
@@ -226,7 +226,7 @@ class PyFuseBox(Operations):
     def write(self, path, buf, offset, fh):
         self.logger.debug("write %s ... starting with %s at %s - fh: %s" % (path, buf[0:10], offset, fh))
         if not path in self.temp_file:
-            self.temp_file[path] = tempfile.SpooledTemporaryFile()
+            self.temp_file[path] = tempfile.SpooledTemporaryFile(max_size=20*1000*1000)
             filesize = offset+len(buf)
             if self.store.get_max_filesize() < filesize:
                 self._release(path, 0) #to prevent flushing
