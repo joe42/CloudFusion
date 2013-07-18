@@ -101,11 +101,12 @@ class NonclosingFile(object):
     
         
 class DataFileWrapper(file):
-    def __init__(self, data):
-        self.data = data
-        self.len = len(self.data)
+    def __init__(self, data, mem_size=1*1000*1000):
+        """Create a file like object with data. 
+        :param mem_size: Data is written to disk if it is bigger than *mem_size* bytes"""
+        self.len = len(data)
         self.offset = 0
-        self.file_object = tempfile.SpooledTemporaryFile(max_size=1000000)
+        self.file_object = tempfile.SpooledTemporaryFile(max_size=mem_size)
         self.file_object.write(data)
         self.file_object.seek(0)
     def close(self):
