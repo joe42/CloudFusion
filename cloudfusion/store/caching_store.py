@@ -39,14 +39,16 @@ class WriteWorker(object):
         return self._error
     
     def is_successful(self):
-        if not self._result_queue.empty():
-            result = self._result_queue.get()
-            if result == True:
-                self._is_successful = True
-            else:
-                self._is_successful = False
-                self._error = result
-            self.logger.debug("finished writing "+self.path)
+        try:
+            if not self._result_queue.empty():
+                result = self._result_queue.get()
+                if result == True:
+                    self._is_successful = True
+                else:
+                    self._is_successful = False
+                    self._error = result
+        except: #Error thrown by broken queue
+            pass
         return self._is_successful
     
     def stop(self):
