@@ -1,7 +1,7 @@
 '''
 Created on 04.05.2011
 '''
-import httplib2
+import httplib2, requests
 from cloudfusion.util.xmlparser import DictXMLParser
 from cloudfusion.util.string import *
 import base64
@@ -109,10 +109,9 @@ class SugarsyncClient(object):
         return ret
     
     def put_file(self, fileobject, path_to_file):
-        headers = {"Host": self.host, "Authorization: ": self.token}
-        conn = httplib2.Http()
-        response, content = conn.request(str("https://"+self.host+ "/file/:sc:%s:%s/data" % (self.uid, path_to_file)),"PUT",str(fileobject.read()),headers)
-        ret = HTTPResponse( response, content )
+        headers = {"Host": self.host, "Authorization": self.token}
+        response = requests.put("https://"+self.host+"/file/:sc:%s:%s/data" % (self.uid, path_to_file), data=fileobject, headers=headers)
+        ret = HTTPResponse.get_instance( response.status_code, "No reason given", response.headers, response.content)
         return ret
     
     def create_file(self, directory, name, mime='text/x-cloudfusion'):
@@ -157,23 +156,32 @@ class SugarsyncClient(object):
     
 class HTTPResponse(object):
     def __init__(self, response, data):
-        self.response = response
         self.data = data
         self.status = response.status
         self.reason = response.reason
+        self.headers = response
         
+    @classmethod 
+    def get_instance(cls, status, reason, headers, data):
+        self = cls.__new__(cls)
+        self.data = data
+        self.status = status
+        self.reason = reason
+        self.headers = headers
+        return self
+    
     def __str__(self):
         ret = ''
-        if self.response:
-            ret += 'Response: %s\n' % self.response
-        if self.response:
-            ret += 'Reason: %s\n' % self.response
+        if self.status:
+            ret += 'Response: %s\n' % self.status
+        if self.reason:
+            ret += 'Reason: %s\n' % self.reason
         return ret
     
     def getheaders(self):
-        return self.response
+        return self.headers
    
     def getheader(self, name, default=None):
-        if not name in self.response:
+        if not name in self.headers:
             return default
-        return self.response[name]
+        return self.headers[name]
