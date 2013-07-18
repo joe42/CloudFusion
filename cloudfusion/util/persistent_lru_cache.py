@@ -5,6 +5,7 @@ from cloudfusion.util.lru_cache import *
 import shelve
 import os
 import atexit
+import tempfile
 
 LASTFILEID = "############################## #### file_id ###### #############################'"
 
@@ -74,7 +75,7 @@ class PersistentLRUCache(LRUCache):
     def _get_persistent_size(self, filepath):
         try:
             return os.path.getsize(filepath)
-        except:
+        except: # log error
             return 0
     
     def _get_file_content(self, filepath):
@@ -99,6 +100,20 @@ class PersistentLRUCache(LRUCache):
     
     def get_value(self, key):
         return self._get_file_content(super( PersistentLRUCache, self ).get_value(key))
+    
+    def peek_file(self, key):
+        """Like peek, but memory efficient
+        :returns: temporary file object with the value """
+        ret = tempfile.SpooledTemporaryFile(max_size=1000000)
+        filepath = super( PersistentLRUCache, self ).get_value(key)
+        with open(filepath) as fh:
+            while True:
+                data = fh.read(1000000)
+                if data == '':
+                    break
+                ret.write(data)
+            ret.seek(0)
+        return ret
     
     def peek(self, key):
         return self._get_file_content(super( PersistentLRUCache, self ).peek(key))
