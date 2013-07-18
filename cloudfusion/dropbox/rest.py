@@ -34,7 +34,7 @@ class ProperHTTPSConnection(httplib.HTTPConnection):
     """
 
     def __init__(self, host, port, trusted_cert_file=TRUSTED_CERT_FILE):
-        httplib.HTTPConnection.__init__(self, host, port)
+        httplib.HTTPConnection.__init__(self, host, port, timeout=30) #change timeout to 30 seconds
         self.ca_certs = trusted_cert_file
         self.cert_reqs = ssl.CERT_REQUIRED
 

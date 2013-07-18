@@ -22,7 +22,7 @@ class SugarsyncClient(object):
     def create_user(self, username, password):       
         params = '<?xml version="1.0" encoding="UTF-8" ?><user>    <email>%s</email>    <password>%s</password>    <accessKeyId>%s</accessKeyId>    <privateAccessKey>%s</privateAccessKey></user>' % (username, password, base64.b64decode(self.access_key_id), base64.b64decode(self.private_access_key))
         headers = {"Host": self.host}#send application/xml; charset=UTF-8
-        conn = httplib2.Http()
+        conn = httplib2.Http(timeout=30)
         response, content = conn.request("https://provisioning-api.sugarsync.com/users","POST",params,headers)
         ret = HTTPResponse( response, content )
         return ret
@@ -38,21 +38,21 @@ class SugarsyncClient(object):
     def create_token(self):
         params = '<?xml version="1.0" encoding="UTF-8" ?><authRequest>    <username>%s</username>    <password>%s</password>    <accessKeyId>%s</accessKeyId>    <privateAccessKey>%s</privateAccessKey></authRequest>' % (self.username, self.password, base64.b64decode(self.access_key_id), base64.b64decode(self.private_access_key))
         headers = {"Host": self.host}#send application/xml; charset=UTF-8
-        conn = httplib2.Http()
+        conn = httplib2.Http(timeout=30)
         response, content = conn.request("https://"+self.host+ "/authorization","POST",params,headers)
         ret = HTTPResponse( response, content )
         return ret
     
     def user_info(self):
         headers = {"Host": self.host, "Authorization: ": self.token}
-        conn = httplib2.Http()
+        conn = httplib2.Http(timeout=30)
         response, content = conn.request("https://"+self.host+ "/user","GET",None,headers)
         ret = HTTPResponse( response, content )
         return ret
     
     def get_file_metadata(self, path_to_file):
         headers = {"Host": self.host, "Authorization: ": self.token}
-        conn = httplib2.Http()
+        conn = httplib2.Http(timeout=30)
         response, content = conn.request("https://"+self.host+ "/file/:sc:%s:%s" % (self.uid, path_to_file),"GET",None,headers)
         ret = HTTPResponse( response, content )
         return ret
@@ -71,7 +71,7 @@ class SugarsyncClient(object):
 #===============================================================================
     def get_dir_listing(self, path):
         headers = {"Host": self.host, "Authorization: ": self.token}
-        conn = httplib2.Http()
+        conn = httplib2.Http(timeout=30)
         response, content = conn.request("https://"+self.host+ "/folder/:sc:%s:%s/contents" % (self.uid, path),"GET",None,headers)
         ret = HTTPResponse( response, content )
         return ret
@@ -79,7 +79,7 @@ class SugarsyncClient(object):
     
     def get_folder_metadata(self, path):
         headers = {"Host": self.host, "Authorization: ": self.token}
-        conn = httplib2.Http()
+        conn = httplib2.Http(timeout=30)
         response, content = conn.request("https://"+self.host+ "/folder/:sc:%s:%s" % (self.uid, path),"GET",None,headers)
         ret = HTTPResponse( response, content )
         return ret
@@ -103,7 +103,7 @@ class SugarsyncClient(object):
         #metadata = self.get_metadata(path_to_file)
         #partial_tree = {"file": {"displayName": "", "size": "", "lastModified": "", "timeCreated": "", "mediaType": "", "presentOnServer": "", "parent": "", "fileData": ""}}
         #DictXMLParser().populate_dict_with_XML_leaf_textnodes(metadata.data, partial_tree)
-        conn = httplib2.Http()
+        conn = httplib2.Http(timeout=30)
         response, content = conn.request("https://"+self.host+ "/file/:sc:%s:%s/data" % (self.uid, path_to_file),"GET",None,headers)
         ret = HTTPResponse( response, content )
         return ret
@@ -117,21 +117,21 @@ class SugarsyncClient(object):
     def create_file(self, directory, name, mime='text/x-cloudfusion'):
         headers = {"Host": self.host, "Authorization: ": self.token}
         params = '<?xml version="1.0" encoding="UTF-8"?><file><displayName>%s</displayName><mediaType>%s</mediaType></file>' % (name, mime)
-        conn = httplib2.Http()
+        conn = httplib2.Http(timeout=30)
         response, content = conn.request("https://"+self.host+ "/folder/:sc:%s:%s" % (self.uid, directory),"POST",params,headers)
         ret = HTTPResponse( response, content )
         return ret
         
     def delete_file(self, path):
         headers = {"Host": self.host, "Authorization: ": self.token}
-        conn = httplib2.Http()
+        conn = httplib2.Http(timeout=30)
         response, content = conn.request("https://"+self.host+ "/file/:sc:%s:%s" % (self.uid, path),"DELETE",None,headers)
         ret = HTTPResponse( response, content )
         return ret
     
     def delete_folder(self, path):
         headers = {"Host": self.host, "Authorization: ": self.token}
-        conn = httplib2.Http()
+        conn = httplib2.Http(timeout=30)
         response, content = conn.request("https://"+self.host+ "/folder/:sc:%s:%s" % (self.uid, path),"DELETE",None,headers)
         ret = HTTPResponse( response, content )
         return ret
@@ -139,7 +139,7 @@ class SugarsyncClient(object):
     def create_folder(self, directory, name):
         headers = {"Host": self.host, "Authorization: ": self.token}
         params = '<?xml version="1.0" encoding="UTF-8"?><folder><displayName>%s</displayName></folder>' % name
-        conn = httplib2.Http()
+        conn = httplib2.Http(timeout=30)
         response, content = conn.request("https://"+self.host+ "/folder/:sc:%s:%s" % (self.uid, directory),"POST",params,headers)
         ret = HTTPResponse( response, content )
         return ret
@@ -147,7 +147,7 @@ class SugarsyncClient(object):
     def duplicate_file(self, path_to_src, path_to_dest, name):
         headers = {"Host": self.host, "Authorization: ": self.token}
         params = '<?xml version="1.0" encoding="UTF-8"?><fileCopy source="%sfile/:sc:%s:%s">   <displayName>%s</displayName></fileCopy>' % (self.server_url, self.uid, path_to_src, name)
-        conn = httplib2.Http()
+        conn = httplib2.Http(timeout=30)
         response, content = conn.request("https://"+self.host+ "/folder/:sc:%s:%s" % (self.uid, path_to_dest),"POST",params,headers)
         ret = HTTPResponse( response, content )
         return ret
