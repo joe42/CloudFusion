@@ -13,6 +13,9 @@ class DateParseError(Exception):
 class RetrieveMetadataError(StoreAccessError): 
     def __init__(self, path, msg, status):
         super(RetrieveMetadataError, self).__init__("Could not retrieve metadata for "+path+"\nDescription: "+msg, status)
+class StoreSpaceLimitError(StoreAccessError):
+    def __init__(self, msg, status):
+        super(StoreSpaceLimitError, self).__init__(msg, status)
 class NoSuchFilesytemObjectError(StoreAccessError):
     def __init__(self, path, status):
         super(NoSuchFilesytemObjectError, self).__init__("%s does not exist." % path, status)

@@ -145,6 +145,8 @@ class _StoreSyncThread(object):
         self._stop = False
         self.thread = None
         self.last_reconnect = time.time()
+        #used for waiting when quota errors occur
+        self.skip_starting_new_writers_for_next_x_cycles = 0
         self.logger.debug("initialized StoreSyncThread")
     
     def start(self):
@@ -166,8 +168,8 @@ class _StoreSyncThread(object):
         for writer in self.writers:
             if writer.is_finished():
                 if writer.get_error():
-                    #TODO:is quota error -< stop writers
-                    pass
+                    if isinstance(writer.get_error(), StoreSpaceLimitError): #quota error? -> stop writers 
+                        self.skip_starting_new_writers_for_next_x_cycles = 10
                     
     def _remove_finished_readers(self):
         for reader in self.readers:
@@ -217,6 +219,9 @@ class _StoreSyncThread(object):
             time.sleep( 60 )
             self._reconnect()
             self.tidy_up()
+            if self.skip_starting_new_writers_for_next_x_cycles > 0:
+                self.skip_starting_new_writers_for_next_x_cycles -= 1
+                continue
             self.enqueue_lru_entries()
     
     def _reconnect(self):
@@ -227,6 +232,7 @@ class _StoreSyncThread(object):
     def tidy_up(self):
         """Remove finished workers and restart unsuccessful delete jobs."""
         with self.lock:
+            self._check_for_failed_writers()
             self._remove_finished_writers()
             self._remove_finished_readers()
             self._remove_successful_removers()

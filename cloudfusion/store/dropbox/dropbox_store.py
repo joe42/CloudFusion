@@ -41,6 +41,8 @@ class HTTP_STATUS(object):
             pass
         elif code == HTTP_STATUS.AUTHORIZATION_REQUIRED:
             raise StoreAutorizationError("StoreAutorizationError Message: "+msg+"\nStatus description: "+HTTP_STATUS.get_status_desc(code), code)
+        elif code == HTTP_STATUS.OVER_STORAGE_LIMIT:
+            raise StoreSpaceLimitError("StoreSpaceLimitError Message: "+msg+"\nStatus description: "+HTTP_STATUS.get_status_desc(code), code)
         elif code == HTTP_STATUS.NOT_FOUND:
             raise NoSuchFilesytemObjectError("NoSuchFilesytemObjectError Message: "+msg+"\nStatus description: "+HTTP_STATUS.get_status_desc(code), code)
         elif (method_name == 'create_directory' and code == HTTP_STATUS.FORBIDDEN):
