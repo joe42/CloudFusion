@@ -6,10 +6,7 @@ import os
 from cloudfusion.pyfusebox.pyfusebox import zstat
 import stat
 import logging
-from cloudfusion.mylogging.nullhandler import NullHandler
 
-logging.getLogger().addHandler(NullHandler())
-        
 class VirtualFile(object):
     INITIAL_TEXT="""
 Some virtual Text.

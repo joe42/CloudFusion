@@ -13,11 +13,8 @@ import time
 import random
 import logging
 from threading import Thread, RLock
-from cloudfusion.mylogging.nullhandler import NullHandler
 import multiprocessing 
 import copy
-
-logging.getLogger().addHandler(NullHandler())
 
 class WriteWorker(object):
     def __init__(self, store, path, file, logger):

@@ -5,9 +5,7 @@ from errno import *
 from cloudfusion.fuse import FuseOSError, Operations
 import tempfile
 import logging
-from cloudfusion.mylogging.nullhandler import NullHandler
 
-logging.getLogger().addHandler(NullHandler())
 
 # Specify what Fuse API use: 0.2
 #fuse.fuse_python_api = (0, 2)

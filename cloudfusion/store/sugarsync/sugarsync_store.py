@@ -9,11 +9,9 @@ from cloudfusion.util.xmlparser import DictXMLParser
 from cloudfusion.util.string import *
 import xml.dom.minidom as dom
 import logging
-from cloudfusion.mylogging.nullhandler import NullHandler
 from cloudfusion.util.exponential_retry import retry
 import socket
 
-logging.getLogger().addHandler(NullHandler())
 
 
 class HTTP_STATUS(object):

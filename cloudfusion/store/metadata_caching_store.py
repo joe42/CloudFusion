@@ -5,10 +5,8 @@ from cloudfusion.util.cache import Cache
 from cloudfusion.util.lru_cache import LRUCache
 import os.path
 import logging
-from cloudfusion.mylogging.nullhandler import NullHandler
 from copy import deepcopy
 from cloudfusion.store.store_worker import GetFreeSpaceWorker
-logging.getLogger().addHandler(NullHandler())
 
 class Entry(object):
     def __init__(self):
