@@ -6,6 +6,7 @@ from cloudfusion.pyfusebox.configurable_pyfusebox import ConfigurablePyFuseBox
 from cloudfusion.fuse import FUSE
 import os, sys
 import logging.config
+from mylogging import db_logging_thread
 from cloudfusion.mylogging.nullhandler import NullHandler
 import cloudfusion
 
@@ -25,6 +26,10 @@ def main():
         if not os.path.exists(".cloudfusion/logs"):
             os.makedirs(".cloudfusion/logs")
         logging.config.fileConfig(os.path.dirname(cloudfusion.__file__)+'/config/logging.conf')
+        db_logging_thread.start()
+        db_handler = db_logging_thread.create_dbhandler()
+        logging.getLogger().addHandler(db_handler)
+
     if not os.path.exists(sys.argv[1]):
         os.makedirs(sys.argv[1])
     fuse_operations = ConfigurablePyFuseBox(sys.argv[1])
