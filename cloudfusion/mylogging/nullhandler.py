@@ -11,3 +11,9 @@ class NullHandler(logging.Handler):
     '''
     def emit(self, *args, **kwargs):
         pass
+    
+    def handle(self, record):
+        pass
+    
+    def createLock(self):
+        return None
