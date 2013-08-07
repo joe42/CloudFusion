@@ -204,8 +204,9 @@ class PyFuseBox(Operations):
             raise FuseOSError(EACCES) #keine Berechtigung
 
     def read(self, path, size, offset, fh):
-        self.logger.debug("read %s bytes from %s at %s - fh %s", size, path, offset, fh)
+        #self.logger.debug("read %s bytes from %s at %s - fh %s", size, path, offset, fh)
         if not path in self.read_temp_file:
+            self.logger.debug("first read of %s bytes from %s at %s - fh %s", size, path, offset, fh)
             self.read_temp_file[path] = tempfile.SpooledTemporaryFile(max_size=20*1000*1000)
             try:
                 data = self.store.get_file(path)
@@ -222,8 +223,9 @@ class PyFuseBox(Operations):
         return  data[offset: offset+size]
 
     def write(self, path, buf, offset, fh):
-        self.logger.debug("write %s ... starting with %s at %s - fh: %s", path, buf[0:10], offset, fh)
+        #self.logger.debug("write %s ... starting with %s at %s - fh: %s", path, buf[0:10], offset, fh)
         if not path in self.temp_file:
+            self.logger.debug("first write to %s ... starting with %s at %s - fh: %s", path, buf[0:10], offset, fh)
             self.temp_file[path] = tempfile.SpooledTemporaryFile(max_size=20*1000*1000)
             filesize = offset+len(buf)
             if self.store.get_max_filesize() < filesize:

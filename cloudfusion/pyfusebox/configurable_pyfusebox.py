@@ -119,7 +119,7 @@ class ConfigurablePyFuseBox(PyFuseBox):
             super( ConfigurablePyFuseBox, self ).unlink(path)
 
     def read(self, path, size, offset, fh):
-        self.logger.debug("read %s", path)
+        #self.logger.debug("read %s", path)
         if path == self.virtual_file.get_path():
             return self.virtual_file.read(size, offset)
         if self.store_initialized and path.startswith(self.DATA_FOLDER_PATH):
@@ -164,7 +164,7 @@ class ConfigurablePyFuseBox(PyFuseBox):
         return store
     
     def write(self, path, buf, offset, fh):
-        self.logger.debug("write %s ... starting with %s at %s - fh: %s", path, buf[0:10], offset, fh)
+        #self.logger.debug("write %s ... starting with %s at %s - fh: %s", path, buf[0:10], offset, fh)
         if path == self.virtual_file.get_path():
             self.logger.debug("writing to virtual file %s", path)
             written_bytes = self.virtual_file.write(buf, offset)
