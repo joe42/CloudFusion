@@ -61,7 +61,7 @@ class MetadataCachingStore(Store):
         return self.store_metadata.get_value('store_name')
     
     def get_file(self, path_to_file):
-        self.logger.debug("meta cache get_file %s" % path_to_file)
+        self.logger.debug("meta cache get_file %s", path_to_file)
         ret = self.store.get_file(path_to_file)
         if self.entries.exists(path_to_file) and self.entries.is_expired(path_to_file):
             self.entries.delete(path_to_file)
@@ -73,7 +73,7 @@ class MetadataCachingStore(Store):
             entry.size = len(ret)
         except:
             self.entries.delete(path_to_file)
-        self.logger.debug("meta cache returning %s" % repr(ret)[:10])
+        self.logger.debug("meta cache returning %s", repr(ret)[:10])
         self._add_to_parent_dir_listing(path_to_file)
         return ret
     
@@ -96,13 +96,13 @@ class MetadataCachingStore(Store):
             dest_dir = ""
         if not remote_file_name:
             remote_file_name = os.path.basename(path_to_file)
-        self.logger.debug("meta cache store_file %s" % dest_dir + "/" + remote_file_name)
+        self.logger.debug("meta cache store_file %s", dest_dir + "/" + remote_file_name)
         fileobject = open(path_to_file)
         self.store_fileobject(fileobject, dest_dir + "/" + remote_file_name)
         fileobject.close()
         
     def store_fileobject(self, fileobject, path):
-        self.logger.debug("meta cache store_fileobject %s" % path)
+        self.logger.debug("meta cache store_fileobject %s", path)
         fileobject.seek(0)
         data_len = len(fileobject.read())
         fileobject.seek(0)
@@ -119,7 +119,7 @@ class MetadataCachingStore(Store):
         self._add_to_parent_dir_listing(path)
             
     def delete(self, path): 
-        self.logger.debug("meta cache delete %s" % path)
+        self.logger.debug("meta cache delete %s", path)
         self.store.delete(path)
         self.entries.delete(path)
         self._remove_from_parent_dir_listing(path)
@@ -143,7 +143,7 @@ class MetadataCachingStore(Store):
         return self.store_metadata.get_value('used_space')
 
     def create_directory(self, directory):
-        self.logger.debug("meta cache create_directory %s" % directory)
+        self.logger.debug("meta cache create_directory %s", directory)
         ret = self.store.create_directory(directory)
         if self.entries.exists(directory) and self.entries.is_expired(directory):
             self.entries.delete(directory)
@@ -157,7 +157,7 @@ class MetadataCachingStore(Store):
         return ret
         
     def duplicate(self, path_to_src, path_to_dest):
-        self.logger.debug("meta cache duplicate %s to %s" % (path_to_src, path_to_dest))
+        self.logger.debug("meta cache duplicate %s to %s", path_to_src, path_to_dest)
         ret = self.store.duplicate(path_to_src, path_to_dest)
         if self.entries.exists(path_to_src) and self.entries.is_expired(path_to_src):
             self.entries.delete(path_to_src)
@@ -169,11 +169,11 @@ class MetadataCachingStore(Store):
         entry = self.entries.get_value(path_to_dest)
         entry.set_modified()
         self._add_to_parent_dir_listing(path_to_dest)
-        self.logger.debug("duplicated %s to %s" % (path_to_src, path_to_dest))
+        self.logger.debug("duplicated %s to %s", path_to_src, path_to_dest)
         return ret
         
     def move(self, path_to_src, path_to_dest):
-        self.logger.debug("meta cache move %s to %s" % (path_to_src, path_to_dest))
+        self.logger.debug("meta cache move %s to %s", path_to_src, path_to_dest)
         self.store.move(path_to_src, path_to_dest)
         if self.entries.exists(path_to_dest) and self.entries.is_expired(path_to_src):
             self.entries.delete(path_to_src)
@@ -189,7 +189,7 @@ class MetadataCachingStore(Store):
         self._add_to_parent_dir_listing(path_to_dest)
  
     def get_modified(self, path):
-        self.logger.debug("meta cache get_modified %s" % path)
+        self.logger.debug("meta cache get_modified %s", path)
         if self.entries.exists(path) and self.entries.is_expired(path):
             self.entries.delete(path)
         if self.entries.exists(path):
@@ -204,26 +204,26 @@ class MetadataCachingStore(Store):
         return entry.modified
     
     def get_directory_listing(self, directory):
-        self.logger.debug("meta cache get_directory_listing %s" % directory)
+        self.logger.debug("meta cache get_directory_listing %s", directory)
         if self.entries.exists(directory) and self.entries.is_expired(directory):
             self.entries.delete(directory)
         if self.entries.exists(directory):
             entry = self.entries.get_value(directory)
             if not entry.listing == None:
-                self.logger.debug("return cached listing %s" % repr(entry.listing))
+                self.logger.debug("return cached listing %s", repr(entry.listing))
                 return list(entry.listing)
         listing =  self.store.get_directory_listing(directory)
-        self.logger.debug("meta cache caching %s" % repr(listing))
+        self.logger.debug("meta cache caching %s", repr(listing))
         if not self.entries.exists(directory):
             self.entries.write(directory, Entry())
             entry = self.entries.get_value(directory)
         entry.listing =  listing
         assert self.entries.get_value(directory).listing == entry.listing
-        self.logger.debug("asserted %s" % repr(self.entries.get_value(directory).listing))
+        self.logger.debug("asserted %s", repr(self.entries.get_value(directory).listing))
         return list(entry.listing)
     
     def get_bytes(self, path):
-        self.logger.debug("meta cache get_bytes %s" % path)
+        self.logger.debug("meta cache get_bytes %s", path)
         if self.entries.exists(path) and self.entries.is_expired(path):
             self.entries.delete(path)
         if self.entries.exists(path):
@@ -238,7 +238,7 @@ class MetadataCachingStore(Store):
         return entry.size
     
     def exists(self, path):
-        self.logger.debug("meta cache exists %s" % path)
+        self.logger.debug("meta cache exists %s", path)
         if self.entries.exists(path) and self.entries.is_expired(path):
             self.entries.delete(path)
         if not self.entries.exists(path):
@@ -247,7 +247,7 @@ class MetadataCachingStore(Store):
         return self.entries.exists(path)
     
     def _get_metadata(self, path):
-        self.logger.debug("meta cache _get_metadata %s" % path)
+        self.logger.debug("meta cache _get_metadata %s", path)
         if self.entries.exists(path) and self.entries.is_expired(path):
             self.entries.delete(path)
         if self.entries.exists(path):
@@ -269,7 +269,7 @@ class MetadataCachingStore(Store):
         return {'is_dir': entry.is_dir, 'modified': entry.modified, 'bytes': entry.size}
 
     def is_dir(self, path):
-        self.logger.debug("meta cache is_dir %s" % path)
+        self.logger.debug("meta cache is_dir %s", path)
         if self.entries.exists(path) and self.entries.is_expired(path):
             self.entries.delete(path)
         if self.entries.exists(path):

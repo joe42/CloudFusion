@@ -136,7 +136,7 @@ class SugarsyncStore(Store):
     def _translate_path(self, path):
         """Translate unix style path into Sugarsync style path.
         :raise NoSuchFilesytemObjectError: if there is no such path"""
-        self.logger.debug("translating path: "+path) #+" cache: "+str(self.path_cache)
+        self.logger.debug("translating path: %s", path) #+" cache: "+str(self.path_cache)
         path = to_unicode( path, "utf8")
         if path in self.path_cache:
             return self.path_cache[path]
@@ -151,7 +151,7 @@ class SugarsyncStore(Store):
                     parent_dir += "/"
                 self.path_cache[ parent_dir+to_unicode( item["name"], "utf8") ] = item["reference"]
             if not path in self.path_cache:
-                self.logger.warning("could not translate path: " +path)
+                self.logger.warning("could not translate path: %s", path)
                 raise NoSuchFilesytemObjectError(path,0)
             return self.path_cache[path]
             
@@ -161,7 +161,7 @@ class SugarsyncStore(Store):
         ret = []
         resp = self.client.get_dir_listing(translated_path)
         if not resp.status in HTTP_STATUS.OK:
-            self.logger.warning("could not get directory listing: " +translated_path+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
+            self.logger.warning("could not get directory listing: %s\nstatus: %s reason: %s", translated_path, resp.status, resp.reason)
             HTTP_STATUS.generate_exception(resp.status, str(resp))
         xml_tree = dom.parseString(resp.data)
         for collection in xml_tree.documentElement.getElementsByTagName("collection"): 
@@ -207,7 +207,7 @@ class SugarsyncStore(Store):
         info = self.client.user_info()
         #print response.status, response.reason, response.getheaders()
         if not info.status in HTTP_STATUS.OK:
-            self.logger.warning("could not retrieve overall space"+"\nstatus: %s reason: %s" % (info.status, info.reason))
+            self.logger.warning("could not retrieve overall space\nstatus: %s reason: %s", info.status, info.reason)
             HTTP_STATUS.generate_exception(info.status, str(info))
         partial_tree = {"user": {"quota": {"limit": "limit", "usage": "usage"}}}
         DictXMLParser().populate_dict_with_XML_leaf_textnodes(info.data, partial_tree)
@@ -219,7 +219,7 @@ class SugarsyncStore(Store):
         info = self.client.user_info()
         #print response.status, response.reason, response.getheaders()
         if not info.status in HTTP_STATUS.OK:
-            self.logger.warning("could not retrieve used space"+"\nstatus: %s reason: %s" % (info.status, info.reason))
+            self.logger.warning("could not retrieve used space\nstatus: %s reason: %s", info.status, info.reason)
             HTTP_STATUS.generate_exception(info.status, str(info))
         partial_tree = {"user": {"quota": {"limit": "limit", "usage": "usage"}}}
         DictXMLParser().populate_dict_with_XML_leaf_textnodes(info.data, partial_tree)
@@ -227,40 +227,40 @@ class SugarsyncStore(Store):
     
     @retry((Exception,socket.error))
     def get_file(self, path_to_file): 
-        self.logger.debug("getting file: " +path_to_file)
+        self.logger.debug("getting file: %s", path_to_file)
         self._raise_error_if_invalid_path(path_to_file)
         resp = self.client.get_file( self._translate_path(path_to_file) )
         if not resp.status in HTTP_STATUS.OK:
-            self.logger.warning("could not get file: %s\nstatus: %s reason: %s" % (path_to_file, resp.status, resp.reason))
+            self.logger.warning("could not get file: %s\nstatus: %s reason: %s", path_to_file, resp.status, resp.reason)
             HTTP_STATUS.generate_exception(resp.status, str(resp))
         return resp.data 
     
     # retry does not really matter with caching_store
     @retry((Exception,socket.error), tries=1, delay=0) 
     def store_fileobject(self, fileobject, path_to_file):
-        self.logger.debug("storing file object to "+path_to_file)
+        self.logger.debug("storing file object to %s", path_to_file)
         if not self.exists(path_to_file):
             self._create_file(path_to_file)
         resp = self.client.put_file( fileobject, self._translate_path(path_to_file) ) 
         if not resp.status in HTTP_STATUS.OK:
-            self.logger.warning("could not store file to " +path_to_file+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
+            self.logger.warning("could not store file to %s\nstatus: %s reason: %s", path_to_file, resp.status, resp.reason)
             HTTP_STATUS.generate_exception(resp.status, str(resp))
             
     def _create_file(self, path, mime='text/x-cloudfusion'):
-        self.logger.debug("creating file object "+path)
+        self.logger.debug("creating file object %s", path)
         name = os.path.basename(path)
         directory = os.path.dirname(path)
         translated_dir = self._translate_path(directory)
         resp = self.client.create_file(translated_dir, name)
         if not resp.status in HTTP_STATUS.OK:
-            self.logger.warning("could not create file " +path+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
+            self.logger.warning("could not create file %s\nstatus: %s reason: %s", path, resp.status, resp.reason)
             HTTP_STATUS.generate_exception(resp.status, str(resp))
     
     # worst case: object still exists and takes up space or is appended to, by mistake
     # with caching_store, the entry in cache is deleted anyways 
     @retry((Exception,socket.error), tries=5, delay=0) 
     def delete(self, path):
-        self.logger.debug("deleting " +path)
+        self.logger.debug("deleting %s", path)
         if path == "/":
             return
         if path[-1] == "/":
@@ -270,7 +270,7 @@ class SugarsyncStore(Store):
         if not resp.status in HTTP_STATUS.OK:
             resp = self.client.delete_folder( self._translate_path(path) )
         if not resp.status in HTTP_STATUS.OK and not resp.status == HTTP_STATUS.NOT_FOUND:
-            self.logger.warning("could not delete " +path+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
+            self.logger.warning("could not delete %s\nstatus: %s reason: %s", path, resp.status, resp.reason)
             HTTP_STATUS.generate_exception(resp.status, str(resp))
         else:
             del self.path_cache[path]
@@ -279,7 +279,7 @@ class SugarsyncStore(Store):
     # worst case: would be annoying  when copying nested directory structure and failure occurs
     @retry((Exception,socket.error))
     def create_directory(self, path):
-        self.logger.debug("creating directory " +path)
+        self.logger.debug("creating directory %s", path)
         self._raise_error_if_invalid_path(path)
         if path == "/":
             return
@@ -291,14 +291,14 @@ class SugarsyncStore(Store):
         directory = os.path.dirname(path)
         resp = self.client.create_folder( self._translate_path(directory), name ) 
         if not resp.status in HTTP_STATUS.OK:
-            self.logger.warning("could not create directory: " +path+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
+            self.logger.warning("could not create directory: %s\nstatus: %s reason: %s", path, resp.status, resp.reason)
             HTTP_STATUS.generate_exception(resp.status, str(resp), "create_directory")
         return resp.status
     
     # worst case: might be critical with backups when only updating changed items in nested structure
     @retry((Exception,socket.error))
     def get_directory_listing(self, directory):
-        self.logger.debug("getting directory listing for "+directory)
+        self.logger.debug("getting directory listing for %s", directory)
         ret = []
         translated_dir = self._translate_path(directory)
         collection = self._parse_collection(translated_dir)
@@ -312,7 +312,7 @@ class SugarsyncStore(Store):
     # worst case: should happen mostly with user interaction, so fast feedback is more important
     @retry((Exception,socket.error), tries=1, delay=0)
     def duplicate(self, path_to_src, path_to_dest): #src might be a directory
-        self.logger.debug("duplicating " +path_to_src+" to "+path_to_dest)
+        self.logger.debug("duplicating %s to %s", path_to_src, path_to_dest)
         self._raise_error_if_invalid_path(path_to_src)
         self._raise_error_if_invalid_path(path_to_dest)
         if path_to_src[-1] == "/":
@@ -334,7 +334,7 @@ class SugarsyncStore(Store):
                 else:
                     resp = self.client.duplicate_file(item['reference'], translated_dest_dir, dest_name)
                     if resp.status != 200:
-                        self.logger.warning("could not duplicate " +path_to_src+" to "+path_to_dest+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
+                        self.logger.warning("could not duplicate %s to %s\nstatus: %s reason: %s", path_to_src, path_to_dest, resp.status, resp.reason)
                         HTTP_STATUS.generate_exception(resp.status, str(resp))
         else:
             #if dest exists remove
@@ -342,15 +342,15 @@ class SugarsyncStore(Store):
                 self.delete(path_to_dest)
             resp = self.client.duplicate_file(translated_src, translated_dest_dir, dest_name)
             if not resp.status in HTTP_STATUS.OK:
-                self.logger.warning("could not duplicate " +path_to_src+" to "+path_to_dest+"\nstatus: %s reason: %s" % (resp.status, resp.reason))
+                self.logger.warning("could not duplicate %s to %s\nstatus: %s reason: %s", path_to_src, path_to_dest, resp.status, resp.reason)
                 HTTP_STATUS.generate_exception(resp.status, str(resp))
     
     def _handle_error(self, error, method_name, *args, **kwargs):
         if isinstance(error, AttributeError):
-            self.logger.debug("Retrying on funny socket error: "+str(error) )
+            self.logger.debug("Retrying on funny socket error: %s", error)
             #funny socket error in httplib2: AttributeError 'NoneType' object has no attribute 'makefile'
         elif isinstance(error, StoreAutorizationError):
-            self.logger.debug("Trying to handle authorization error by reconnecting: "+str(error) )
+            self.logger.debug("Trying to handle authorization error by reconnecting: %s", error)
             self.reconnect()
         elif isinstance(error, StoreAccessError):
             if error.status == HTTP_STATUS.OVER_STORAGE_LIMIT or \
@@ -358,10 +358,10 @@ class SugarsyncStore(Store):
                 error.status == HTTP_STATUS.FORBIDDEN or \
                 isinstance(error, AlreadyExistsError) or \
                 isinstance(error, NoSuchFilesytemObjectError):
-                self.logger.debug("Error could not be handled: " + str(error) )
+                self.logger.debug("Error could not be handled: %s", error)
                 raise error # do not retry (error cannot be handled)
         else:
-            self.logger.debug("Error is not covered by _handle_error: "+str(error))
+            self.logger.debug("Error is not covered by _handle_error: %s", error)
         return False
         
 
@@ -378,7 +378,7 @@ class SugarsyncStore(Store):
             modified += time_delta
             ret["modified"] = modified - self.time_difference #"Sat, 21 Aug 2010 22:31:20 +0000"#2011-05-10T06:18:33.000-07:00     Time conversion error: 2011-05-20T05:15:44.000-07:00
         except Exception as x:
-            self.logger.warning("Time conversion error: %s reason: %s" % (str(partial_tree['file']['lastModified']), str(x)))
+            self.logger.warning("Time conversion error: %s reason: %s", partial_tree['file']['lastModified'], x)
             raise DateParseError("Error parsing modified attribute: %s" % str(x))
         ret["created"] = partial_tree['file']['timeCreated']
         ret["path"] = path
@@ -399,7 +399,7 @@ class SugarsyncStore(Store):
     # worst case: can break backups if it fails
     @retry((Exception,socket.error))
     def _get_metadata(self, path):
-        self.logger.debug("getting metadata for "+path)
+        self.logger.debug("getting metadata for %s", path)
         self._raise_error_if_invalid_path(path)
         if path == "/": # workaraund for root metadata necessary for sugarsync?
             ret = {}

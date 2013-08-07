@@ -22,7 +22,7 @@ class WriteWorker(object):
         self.path = path
         self._file = file
         self.logger = logger
-        self.logger.debug("writing "+path)
+        self.logger.debug("writing %s", path)
         self._result_queue = multiprocessing.Queue()
         self.process = multiprocessing.Process(target=self._run, args=(self._result_queue,))
         self.process.daemon = True
@@ -55,14 +55,14 @@ class WriteWorker(object):
         self.process.start()
     
     def _run(self,result_queue):
-        self.logger.debug("Start WriteWorker process %s to write %s" % (os.getpid(), self.path))
+        self.logger.debug("Start WriteWorker process %s to write %s", os.getpid(), self.path)
         try:
             self.store.store_fileobject(self._file, self.path)
             result_queue.put(True)
         except Exception, e:
             result_queue.put(e)
-            self.logger.debug("Error on storing %s in WriteWorker: %s" % (self.path, e))
-        self.logger.debug("Finish WriteWorker process %s to write %s" % (os.getpid(), self.path))
+            self.logger.debug("Error on storing %s in WriteWorker: %s", self.path, e)
+        self.logger.debug("Finish WriteWorker process %s to write %s", os.getpid(), self.path)
             
 class RemoveWorker(object):
     def __init__(self, store, path, logger):
@@ -91,7 +91,7 @@ class RemoveWorker(object):
             self.store.delete(self.path)
             self.successful = True
         except Exception, e:
-            self.logger.debug("Error on removing %s in RemoveWorker: %s" % (self.path, e))
+            self.logger.debug("Error on removing %s in RemoveWorker: %s", self.path, e)
 
 class ReadWorker(object):
     def __init__(self, store, path, logger):
@@ -125,7 +125,7 @@ class ReadWorker(object):
             content = self.store.get_file(self.path)
             result_queue.put(content)
         except Exception, e:
-            self.logger.debug("Error on reading %s in ReadWorker: %s" % (self.path, e))
+            self.logger.debug("Error on reading %s in ReadWorker: %s", self.path, e)
         
 
 class _StoreSyncThread(object):
@@ -380,7 +380,7 @@ class MultiprocessingCachingStore(Store):
         """ :returns: string -- the data of the file with the path *path_to_file*
         If the file was updated in the wrapped store, then its content in the cache will be updated if its entry is expired but not dirty. 
         """
-        self.logger.debug("cached get_file %s" % path_to_file)
+        self.logger.debug("cached get_file %s", path_to_file)
         if not self.entries.exists(path_to_file):
             self._refresh_cache(path_to_file)
             self.logger.debug("cached get_file from new entry")
@@ -412,12 +412,12 @@ class MultiprocessingCachingStore(Store):
         :param fileobject: The file object with the method read() returning data as a string 
         :param path: The path where the file object's data should be stored, including the filename
         """
-        self.logger.debug("cached storing %s" % path)
+        self.logger.debug("cached storing %s", path)
         self.entries.write(path, fileobject.read())
-        self.logger.debug("cached storing value %s..." %self.entries.get_value(path)[:10]) 
+        self.logger.debug("cached storing value %s...", self.entries.get_value(path)[:10]) 
 
     def delete(self, path):#should be atomic
-        self.logger.debug("delete %s" % path)
+        self.logger.debug("delete %s", path)
         if self.store.exists(path):  
             self.sync_thread.delete(path)
         self.entries.delete(path)
@@ -445,7 +445,7 @@ class MultiprocessingCachingStore(Store):
         local_dirty_entry_to_src_exists = self.entries.exists(path_to_src) and self.entries.is_dirty(path_to_src)
         source_is_in_store = not local_dirty_entry_to_src_exists
         if self.entries.exists(path_to_src):  
-            self.logger.debug("cached storing duplicate %s to %s" % (path_to_src, path_to_dest))
+            self.logger.debug("cached storing duplicate %s to %s", path_to_src, path_to_dest)
             self.entries.write(path_to_dest, self.entries.get_value(path_to_src))
         if source_is_in_store: 
             self.store.duplicate(path_to_src, path_to_dest)

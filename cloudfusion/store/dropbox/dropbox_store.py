@@ -124,10 +124,10 @@ class DropboxStore(Store):
     def _handle_error(self, error, method_name, *args, **kwargs):
         """Used by retry decorator to react to errors."""
         if isinstance(error, AttributeError):
-            self.logger.debug("Retrying on funny socket error: "+str(error) )
+            self.logger.debug("Retrying on funny socket error: %s", error)
             #funny socket error in httplib2: AttributeError 'NoneType' object has no attribute 'makefile'
         elif isinstance(error, StoreAutorizationError):
-            self.logger.debug("Trying to handle authorization error by reconnecting: "+str(error) )
+            self.logger.debug("Trying to handle authorization error by reconnecting: %s", error)
             self.reconnect()
         elif isinstance(error, StoreAccessError):
             if error.status == HTTP_STATUS.OVER_STORAGE_LIMIT or \
@@ -136,10 +136,10 @@ class DropboxStore(Store):
                 error.status == HTTP_STATUS.FORBIDDEN or \
                 isinstance(error, AlreadyExistsError) or \
                 isinstance(error, NoSuchFilesytemObjectError):
-                self.logger.debug("Error could not be handled: " + str(error) )
+                self.logger.debug("Error could not be handled: %s", error)
                 raise error
         else:
-            self.logger.debug("Error is not covered by _handle_error: "+str(error))
+            self.logger.debug("Error is not covered by _handle_error: %s", error)
         return False
         
     def reconnect(self):
@@ -150,7 +150,7 @@ class DropboxStore(Store):
                 access_token = self.sess.obtain_access_token(self.request_token)
                 break
             except Exception as e:
-                self.logger.error("Authorization error: "+str(e))
+                self.logger.error("Authorization error: %s", e)
                 pass
         return access_token
         
@@ -159,7 +159,7 @@ class DropboxStore(Store):
             try:
                 os.makedirs(self._revision_db_dir)
             except Exception, e: 
-                self.logger.error("Could not create directory to store revisions: "+str(e))
+                self.logger.error("Could not create directory to store revisions: %s", e)
             self.myshelve = shelve.open(self._revision_db_path)
             self.myshelve.update(self._revisions)
             self.myshelve.close()
@@ -188,7 +188,7 @@ class DropboxStore(Store):
     
     @retry((Exception,RESTSocketError))
     def get_file(self, path_to_file): 
-        self.logger.debug("getting file: " +path_to_file)
+        self.logger.debug("getting file: %s", path_to_file)
         self._raise_error_if_invalid_path(path_to_file)
         try:
             data, metadata = self.client.get_file_and_metadata(path_to_file)
@@ -210,7 +210,7 @@ class DropboxStore(Store):
             del self._revisions[path]
     
     def store_small_fileobject(self, fileobject, path):
-        self.logger.debug("storing file object size< 100000 to "+path)
+        self.logger.debug("storing file object size< 100000 to %s", path)
         remote_file_name = os.path.basename(path)
         namable_file = NameableFile( fileobject, remote_file_name )
         try:
@@ -247,7 +247,7 @@ class DropboxStore(Store):
     @retry((Exception,RESTSocketError), tries=1, delay=0) 
     def store_fileobject(self, fileobject, path):
         size = self.__get_size(fileobject)
-        self.logger.debug("Storing file object of size %s to %s" % (size,path))
+        self.logger.debug("Storing file object of size %s to %s", size, path)
         remote_file_name = os.path.basename(path)
         if size < 1000000:
             return self.store_small_fileobject(fileobject, path)
@@ -281,7 +281,7 @@ class DropboxStore(Store):
     # with caching_store, the entry in cache is deleted anyways 
     @retry((Exception,RESTSocketError), tries=5, delay=0) 
     def delete(self, path):
-        self.logger.debug("deleting " +path)
+        self.logger.debug("deleting %s", path)
         self._raise_error_if_invalid_path(path)
         try:
             resp = self.client.file_delete(path)
@@ -305,7 +305,7 @@ class DropboxStore(Store):
 
     @retry((Exception,RESTSocketError))
     def create_directory(self, directory):
-        self.logger.debug("creating directory " +directory)
+        self.logger.debug("creating directory %s", directory)
         self._raise_error_if_invalid_path(directory)
         if directory == "/":
             return
@@ -319,7 +319,7 @@ class DropboxStore(Store):
     # worst case: should happen mostly with user interaction, so fast feedback is more important
     @retry((Exception,RESTSocketError), tries=1, delay=0)
     def duplicate(self, path_to_src, path_to_dest):
-        self.logger.debug("duplicating " +path_to_src+" to "+path_to_dest)
+        self.logger.debug("duplicating %s to %s", path_to_src, path_to_dest)
         self._raise_error_if_invalid_path(path_to_src)
         self._raise_error_if_invalid_path(path_to_dest)
         try:
@@ -333,7 +333,7 @@ class DropboxStore(Store):
     # worst case: should happen mostly with user interaction, so fast feedback is more important
     @retry((Exception,RESTSocketError), tries=1, delay=0)
     def move(self, path_to_src, path_to_dest):
-        self.logger.debug("moving " +path_to_src+" to "+path_to_dest)
+        self.logger.debug("moving %s to %s", path_to_src, path_to_dest)
         self._raise_error_if_invalid_path(path_to_src)
         self._raise_error_if_invalid_path(path_to_dest)
         try:
@@ -376,7 +376,7 @@ class DropboxStore(Store):
         
     @retry((Exception,RESTSocketError))
     def get_directory_listing(self, directory):
-        self.logger.debug("getting directory listing for "+directory)
+        self.logger.debug("getting directory listing for %s", directory)
         self._raise_error_if_invalid_path(directory)
         dir_hash = None
         if directory in self.dir_listing_cache:
@@ -385,7 +385,7 @@ class DropboxStore(Store):
             resp = self.client.metadata(directory, hash=dir_hash, list=True)
         except rest.ErrorResponse as resp:
             if resp.status == HTTP_STATUS.NOT_CHANGED: 
-                self.logger.debug("retrieving listing from cache " +directory)
+                self.logger.debug("retrieving listing from cache %s", directory)
                 ret = self.dir_listing_cache[directory]['dir_listing']
                 return ret.keys()
             else:
@@ -419,7 +419,7 @@ class DropboxStore(Store):
         
     @retry((Exception,RESTSocketError))
     def _get_metadata(self, path):
-        self.logger.debug("getting metadata for "+path)
+        self.logger.debug("getting metadata for %s", path)
         self._raise_error_if_invalid_path(path)
         if path == "/": # workaraund for root metadata
             ret = {}
@@ -454,8 +454,8 @@ class DropboxStore(Store):
         try:
             ret["modified"] = int(time.mktime( time.strptime(data["modified"], "%a, %d %b %Y %H:%M:%S +0000") ) - self.time_difference)
         except Exception as x:
-            self.logger.warning("Time conversion error: %s" % str(data["modified"]))
-            raise DateParseError("Error parsing modified attribute: %s" % str(x));
+            self.logger.warning("Time conversion error: %s", data["modified"])
+            raise DateParseError("Error parsing modified attribute: %s", x)
         ret["path"] = data["path"]
         ret["is_dir"] = data["is_dir"]
         return ret;

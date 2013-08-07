@@ -32,7 +32,7 @@ class ConfigurablePyFuseBox(PyFuseBox):
         return st
     
     def getattr(self, path, fh=None):
-        self.logger.debug("getattr "+path+"")
+        self.logger.debug("getattr %s", path)
         if path == "/": 
             return self._getattr_for_folder_with_full_access()
         if path == self.virtual_file.get_path():
@@ -47,7 +47,7 @@ class ConfigurablePyFuseBox(PyFuseBox):
         raise FuseOSError(ENOENT)
     
     def truncate(self, path, length, fh=None):
-        self.logger.debug("truncate %s to %s" % (path, length))
+        self.logger.debug("truncate %s to %s", path, length)
         if path == self.virtual_file.get_path():
             self.virtual_file.truncate()
             return 0
@@ -57,7 +57,7 @@ class ConfigurablePyFuseBox(PyFuseBox):
         raise FuseOSError(ENOENT)
     
     def rmdir(self, path):
-        self.logger.debug("rmdir %s" % (path))
+        self.logger.debug("rmdir %s", path)
         if  path == self.DATA_FOLDER_PATH or path == self.virtual_file.get_dir():
             raise FuseOSError(EACCES)             
         if self.store_initialized and path.startswith(self.DATA_FOLDER_PATH):
@@ -66,7 +66,7 @@ class ConfigurablePyFuseBox(PyFuseBox):
         raise FuseOSError(ENOENT)
         
     def mkdir(self, path, mode):
-        self.logger.debug("mkdir %s with mode: %s" % (path, str(mode)))
+        self.logger.debug("mkdir %s with mode: %s", path, mode)
         if path == self.DATA_FOLDER_PATH: 
             raise FuseOSError(EEXIST) 
         if self.store_initialized and path.startswith(self.DATA_FOLDER_PATH):
@@ -81,13 +81,13 @@ class ConfigurablePyFuseBox(PyFuseBox):
         return path
     
     def statfs(self, path):#add size of vtf
-        self.logger.debug("statfs %s" % (path))
+        self.logger.debug("statfs %s", path)
         if self.store_initialized:
             path = self.remove_data_folder_prefix(path)
             return super( ConfigurablePyFuseBox, self ).statfs(path)
     
     def rename(self, old, new):
-        self.logger.debug("rename %s to %s" % (old, new))
+        self.logger.debug("rename %s to %s", old, new)
         """if new == self.virtual_file.get_path():
             buf = 
             written_bytes =  self.virtual_file.write(buf, offset)
@@ -105,7 +105,7 @@ class ConfigurablePyFuseBox(PyFuseBox):
         raise FuseOSError(EACCES) 
 
     def create(self, path, mode):
-        self.logger.debug("create %s with mode %s" % (path, str(mode)))
+        self.logger.debug("create %s with mode %s", path, mode)
         if path == self.DATA_FOLDER_PATH : 
             raise FuseOSError(EACCES) 
         if self.store_initialized and path.startswith(self.DATA_FOLDER_PATH):
@@ -119,7 +119,7 @@ class ConfigurablePyFuseBox(PyFuseBox):
             super( ConfigurablePyFuseBox, self ).unlink(path)
 
     def read(self, path, size, offset, fh):
-        self.logger.debug("read %s" % path)
+        self.logger.debug("read %s", path)
         if path == self.virtual_file.get_path():
             return self.virtual_file.read(size, offset)
         if self.store_initialized and path.startswith(self.DATA_FOLDER_PATH):
@@ -137,7 +137,7 @@ class ConfigurablePyFuseBox(PyFuseBox):
         cache_id = str(conf.get('cache_id', random.random()))
         self.logger.debug("got cache parameter")
         auth = self.virtual_file.get_service_auth_data()
-        self.logger.debug("got auth data: "+str(auth))
+        self.logger.debug("got auth data: %s", auth)
         store = self.__get_new_store(service, auth) #catch error?
         self.logger.debug("initialized store")
         if cache_time > 0 and metadata_cache_time > 0:
@@ -159,16 +159,16 @@ class ConfigurablePyFuseBox(PyFuseBox):
             try:
                 store = DropboxStore(auth)
             except Exception as e:
-                self.logger.debug(str(e))
+                self.logger.debug(e)
             self.logger.debug("got dropbox store")
         return store
     
     def write(self, path, buf, offset, fh):
-        self.logger.debug("write %s ... starting with %s at %s - fh: %s" % (path, buf[0:10], offset, fh))
+        self.logger.debug("write %s ... starting with %s at %s - fh: %s", path, buf[0:10], offset, fh)
         if path == self.virtual_file.get_path():
-            self.logger.debug("writing to virtual file "+path)
+            self.logger.debug("writing to virtual file %s", path)
             written_bytes = self.virtual_file.write(buf, offset)
-            self.logger.debug("written bytes:"+str(written_bytes))
+            self.logger.debug("written bytes:%s", written_bytes)
             if written_bytes >0: # configuration changed
                 self._initialize_store()
             return written_bytes
@@ -178,7 +178,7 @@ class ConfigurablePyFuseBox(PyFuseBox):
         return 0
     
     def flush(self, path, fh):
-        self.logger.debug("flush %s - fh: %s" % (path, fh))
+        self.logger.debug("flush %s - fh: %s", path, fh)
         if path == self.virtual_file.get_path():
             return 0
         if self.store_initialized and path.startswith(self.DATA_FOLDER_PATH):
@@ -186,7 +186,7 @@ class ConfigurablePyFuseBox(PyFuseBox):
             return super( ConfigurablePyFuseBox, self ).flush(path, fh)
     
     def release(self, path, fh):
-        self.logger.debug("release %s - fh: %s" % (path, fh))
+        self.logger.debug("release %s - fh: %s", path, fh)
         if path == self.virtual_file.get_path():
             return 0
         if self.store_initialized and path.startswith(self.DATA_FOLDER_PATH):
@@ -194,7 +194,7 @@ class ConfigurablePyFuseBox(PyFuseBox):
             return super( ConfigurablePyFuseBox, self ).release(path, fh) 
        
     def readdir(self, path, fh):
-        self.logger.debug("readdir "+path+"")
+        self.logger.debug("readdir %s", path)
         directories = []
         if path == self.virtual_file.get_dir(): #add virtual file
             directories.append(self.virtual_file.get_name())

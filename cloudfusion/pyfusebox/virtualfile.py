@@ -41,9 +41,9 @@ Some virtual Text.
     def read(self, size, offset):
         return self.text[offset: offset+size]
     def write(self, buf, offset):
-        self.logger.debug("write %s to %s" % (buf,offset))
+        self.logger.debug("write %s to %s", buf, offset)
         self.text = self.text[:offset]+buf+self.text[len(buf)+offset:] 
-        self.logger.debug("wrote %s bytes starting with %s..." % (len(buf), self.text[0:30]))
+        self.logger.debug("wrote %s bytes starting with %s...", len(buf), self.text[0:30])
         return len(buf)
     def get_dir(self):
         """:returns: the pyth of the directory of this virtual file"""
