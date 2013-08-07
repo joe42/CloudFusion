@@ -9,6 +9,7 @@ class GetFreeSpaceWorker(object):
         self.logger = logger
         self.poll_wait_time_in_s = poll_wait_time_in_s
         self._thread = Thread(target=self._run)
+        self._thread.setDaemon(True)
         self._stop = False
         self.free_bytes = 30000000
     

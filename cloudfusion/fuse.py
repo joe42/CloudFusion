@@ -299,8 +299,12 @@ class FUSE(object):
         """Decorator for the methods that follow"""
         try:
             return func(*args, **kwargs) or 0
+        except SystemExit, e:
+            raise e
         except OSError, e:
             return -(e.errno or EFAULT)
+        except KeyboardInterrupt, e:
+            raise SystemExit()
         except:
             print_exc()
             return -EFAULT

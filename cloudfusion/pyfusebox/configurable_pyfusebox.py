@@ -11,6 +11,8 @@ from cloudfusion.store.sugarsync.sugarsync_store import SugarsyncStore
 from cloudfusion.store.caching_store import MultiprocessingCachingStore
 from cloudfusion.store.metadata_caching_store import MetadataCachingStore
 import random
+import os, signal
+import sys
 
 
 class ConfigurablePyFuseBox(PyFuseBox):
@@ -112,8 +114,18 @@ class ConfigurablePyFuseBox(PyFuseBox):
             path = self.remove_data_folder_prefix(path)
             return super( ConfigurablePyFuseBox, self ).create(path, mode)
         raise FuseOSError(EACCES) 
-    
+
     def unlink(self, path):
+        if path == self.virtual_file.get_path():    
+            if sys.platform == "darwin":
+                args = ["diskutil", "umount", self.root]
+            elif "freebsd" in sys.platform:
+                args = ["umount", "-l", self.root]
+            else:
+                args = ["fusermount", "-zu", self.root]
+            import subprocess
+            subprocess.Popen(args)
+            os.kill(os.getpid(), signal.SIGINT)
         if self.store_initialized and path.startswith(self.DATA_FOLDER_PATH):
             path = self.remove_data_folder_prefix(path)
             super( ConfigurablePyFuseBox, self ).unlink(path)

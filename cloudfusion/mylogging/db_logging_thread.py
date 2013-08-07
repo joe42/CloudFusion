@@ -26,6 +26,7 @@ def start():
     _logging_db_file = tempfile.NamedTemporaryFile()
     _logging_db_filename = _logging_db_file.name
     thread = Thread(target=_serve_until_stopped)
+    thread.setDaemon(True)
     thread.start()
     
 def create_dbhandler():
