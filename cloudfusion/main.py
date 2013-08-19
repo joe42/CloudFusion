@@ -11,21 +11,18 @@ from cloudfusion.mylogging.nullhandler import NullHandler
 import cloudfusion
 
 def check_arguments(args):
-    if not len(args) in [2,3,4,5]:
-        print 'usage: %s mountpoint [foreground] [log] [big_writes]' % args[0]
+    if not len(args) in [2,3,4]:
+        print 'usage: %s mountpoint [foreground] [log]' % args[0]
         print 'foreground: run program in foreground'
         print 'log: write logs to the directory .cloudfusion/logs'
-        print 'big_writes: enable better throughput with fuse (requires fuse 2.8 or higher)'
+        print 'big_write option of fuse is used automatically to optimize throughput if the system supports it (requires fuse 2.8 or higher)'
         exit(1)
 
 def main():
     check_arguments(sys.argv)
     foreground  = False 
-    big_writes = {}
     if "foreground" in sys.argv:
         foreground = True
-    if "big_writes" in sys.argv: #set parameters for big writes to fuse
-        big_writes = {"big_writes":True, "max_read":131072, "max_write":131072}
     if not "log" in sys.argv:
         logging.getLogger().addHandler(NullHandler())
     else:
@@ -39,7 +36,10 @@ def main():
     if not os.path.exists(sys.argv[1]):
         os.makedirs(sys.argv[1])
     fuse_operations = ConfigurablePyFuseBox(sys.argv[1])
-    FUSE(fuse_operations, sys.argv[1], foreground=foreground, nothreads=True, **big_writes)
+    try:
+        FUSE(fuse_operations, sys.argv[1], foreground=foreground, nothreads=True, big_writes=True, max_read=131072, max_write=131072)
+    except RuntimeError, e:
+        FUSE(fuse_operations, sys.argv[1], foreground=foreground, nothreads=True)
     
 if __name__ == '__main__':
     main()
