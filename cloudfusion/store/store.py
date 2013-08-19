@@ -28,6 +28,9 @@ class AlreadyExistsError(StoreAccessError):
 class InvalidPathValueError(ValueError):
     def __init__(self, path):
         super(InvalidPathValueError, self).__init__(path+" "+"is no valid path!!") 
+class InterruptedException(Exception):
+    def __init__(self, msg):
+        super(InterruptedException, self).__init__(msg)
 
     
 class Store(object):
@@ -44,9 +47,11 @@ class Store(object):
     def get_file(self, path_to_file):
         raise NotImplementedError()
     
-    def store_file(self, path_to_file, dest_dir="/", remote_file_name = None):
+    def store_file(self, path_to_file, dest_dir="/", remote_file_name = None, interrupt_event=None):
         """Store the local file *path_to_file* to directory *dest_dir* on the store.
-        :param remote_file_name: the file name on the store or the original file name if this parameter is None."""
+        :param remote_file_name: the file name on the store or the original file name if this parameter is None.
+        :param interrupt_event: (optional) If the value is not None, listen for an interrupt event with with interrupt_event.wait() \
+        until the file has been stored. Abort the upload if interrupt_event.wait() returns."""
         if dest_dir == "/":
             dest_dir = ""
         fileobject = open(path_to_file)
@@ -54,9 +59,11 @@ class Store(object):
             remote_file_name = os.path.basename(path_to_file)
         self.store_fileobject(fileobject, dest_dir + "/" + remote_file_name)
         
-    def store_fileobject(self, fileobject, path):
+    def store_fileobject(self, fileobject, path, interrupt_event=None):
         """Store the contents of *fileobject* to *path* on the store.
-        :param remote_file_name: the file name on the store or the original file name if this parameter is None."""
+        :param remote_file_name: the file name on the store or the original file name if this parameter is None.
+        :param interrupt_event: (optional) If the value is not None, listen for an interrupt event with with interrupt_event.wait() \
+        until the file has been stored. Abort the upload if interrupt_event.wait() returns."""
         raise NotImplementedError()
             
     def delete(self, path):

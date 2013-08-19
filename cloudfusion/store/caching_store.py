@@ -23,8 +23,9 @@ class WriteWorker(object):
         self._file = file
         self.logger = logger
         self.logger.debug("writing %s", path)
+        self.interrupt_event = multiprocessing.Event()
         self._result_queue = multiprocessing.Queue()
-        self.process = multiprocessing.Process(target=self._run, args=(self._result_queue,))
+        self.process = multiprocessing.Process(target=self._run, args=(self._result_queue, self.interrupt_event))
         self.process.daemon = True
         self._is_successful = False
         self._error = None 
@@ -36,28 +37,26 @@ class WriteWorker(object):
         return self._error
     
     def is_successful(self):
-        try:
-            if not self._result_queue.empty():
-                result = self._result_queue.get()
-                if result == True:
-                    self._is_successful = True
-                else:
-                    self._is_successful = False
-                    self._error = result
-        except: #Error thrown by broken queue
-            pass
+        if not self._result_queue.empty():
+            result = self._result_queue.get()
+            if result == True:
+                self._is_successful = True
+            else:
+                self._is_successful = False
+                self._error = result
         return self._is_successful
     
     def stop(self):
-        self.process.terminate()
+        self.interrupt_event.set()
+        self.process.join()
     
     def start(self):
         self.process.start()
     
-    def _run(self,result_queue):
+    def _run(self, result_queue, interrupt_event):
         self.logger.debug("Start WriteWorker process %s to write %s", os.getpid(), self.path)
         try:
-            self.store.store_fileobject(self._file, self.path)
+            self.store.store_fileobject(self._file, self.path, interrupt_event)
             result_queue.put(True)
         except Exception, e:
             result_queue.put(e)

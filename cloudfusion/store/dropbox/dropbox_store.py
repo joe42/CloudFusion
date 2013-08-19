@@ -245,7 +245,7 @@ class DropboxStore(Store):
 
     # retry does not really matter with caching_store
     @retry((Exception,RESTSocketError), tries=1, delay=0) 
-    def store_fileobject(self, fileobject, path):
+    def store_fileobject(self, fileobject, path, interrupt_event=None):
         size = self.__get_size(fileobject)
         self.logger.debug("Storing file object of size %s to %s", size, path)
         remote_file_name = os.path.basename(path)
@@ -256,6 +256,9 @@ class DropboxStore(Store):
         retry = 5
         while uploader.offset < size:
             try:
+                if interrupt_event and interrupt_event.is_set():
+                    self.logger.debug("terminating stale upload of %s", path)
+                    raise InterruptedException("Stale upload has been interrupted.")
                 resp = uploader.upload_chunked(1 * 1000 * 1000)
             except rest.ErrorResponse, e:
                 retry -= 1

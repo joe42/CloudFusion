@@ -91,23 +91,24 @@ class MetadataCachingStore(Store):
             entry = self.entries.get_value(parent_dir)
             entry.remove_from_listing(path)
         
-    def store_file(self, path_to_file, dest_dir="/", remote_file_name = None):
+    def store_file(self, path_to_file, dest_dir="/", remote_file_name = None, interrupt_event=None):
         if dest_dir == "/":
             dest_dir = ""
         if not remote_file_name:
             remote_file_name = os.path.basename(path_to_file)
         self.logger.debug("meta cache store_file %s", dest_dir + "/" + remote_file_name)
-        fileobject = open(path_to_file)
-        self.store_fileobject(fileobject, dest_dir + "/" + remote_file_name)
-        fileobject.close()
+        with open(path_to_file) as fileobject:
+            self.store_fileobject(fileobject, dest_dir + "/" + remote_file_name, interrupt_event)
         
-    def store_fileobject(self, fileobject, path):
+    def store_fileobject(self, fileobject, path, interrupt_event=None):
         self.logger.debug("meta cache store_fileobject %s", path)
         fileobject.seek(0)
         data_len = len(fileobject.read())
         fileobject.seek(0)
-        self.store.store_fileobject(fileobject, path)
-        fileobject.close()
+        try:
+            self.store.store_fileobject(fileobject, path, interrupt_event)
+        finally:
+            fileobject.close()
         if self.entries.exists(path) and self.entries.is_expired(path):
             self.entries.delete(path)
         if not self.entries.exists(path):
