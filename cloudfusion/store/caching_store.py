@@ -20,7 +20,8 @@ class WriteWorker(object):
     def __init__(self, store, path, file, logger):
         self.store = copy.deepcopy(store)
         self.path = path
-        self._file = file
+        self._filename = file.name
+        file.close()
         self.logger = logger
         self.logger.debug("writing %s", path)
         self.interrupt_event = multiprocessing.Event()
@@ -48,6 +49,7 @@ class WriteWorker(object):
     def stop(self):
         self.interrupt_event.set()
         self.process.join()
+        os.remove(self._filename)
     
     def start(self):
         self.process.start()
@@ -55,7 +57,7 @@ class WriteWorker(object):
     def _run(self, result_queue, interrupt_event):
         self.logger.debug("Start WriteWorker process %s to write %s", os.getpid(), self.path)
         try:
-            self.store.store_fileobject(self._file, self.path, interrupt_event)
+            self.store.store_file(self._filename, os.path.dirname(self.path), os.path.basename(self.path), interrupt_event)
             result_queue.put(True)
         except Exception, e:
             result_queue.put(e)
@@ -247,8 +249,8 @@ class _StoreSyncThread(object):
                     break
                 if self._is_in_progress(path):
                     continue
-                content = self.cache.peek_file(path)
-                new_worker = WriteWorker(self.store, path, content, self.logger)
+                file = self.cache.peek_file(path)
+                new_worker = WriteWorker(self.store, path, file, self.logger)
                 new_worker.start()
                 self.writers.append(new_worker)
     
@@ -262,8 +264,8 @@ class _StoreSyncThread(object):
                     break
                 if self._is_in_progress(path):
                     continue
-                content = self.cache.peek_file(path)
-                new_worker = WriteWorker(self.store, path, content, self.logger)
+                file = self.cache.peek_file(path)
+                new_worker = WriteWorker(self.store, path, file, self.logger)
                 new_worker.start()
                 self.writers.append(new_worker)
     

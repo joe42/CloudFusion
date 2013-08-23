@@ -103,8 +103,9 @@ class PersistentLRUCache(LRUCache):
     
     def peek_file(self, key):
         """Like peek, but memory efficient
+        The temporary file needs to be closed if it is not used anymore
         :returns: temporary file object with the value """
-        ret = tempfile.SpooledTemporaryFile(max_size=1000000)
+        ret = tempfile.NamedTemporaryFile(delete=False)
         filepath = super( PersistentLRUCache, self ).get_value(key)
         with open(filepath) as fh:
             while True:
