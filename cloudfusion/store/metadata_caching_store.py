@@ -98,7 +98,20 @@ class MetadataCachingStore(Store):
             remote_file_name = os.path.basename(path_to_file)
         self.logger.debug("meta cache store_file %s", dest_dir + "/" + remote_file_name)
         with open(path_to_file) as fileobject:
-            self.store_fileobject(fileobject, dest_dir + "/" + remote_file_name, interrupt_event)
+            fileobject.seek(0,2)
+            data_len = fileobject.tell()
+        path = dest_dir + "/" + remote_file_name
+        self.logger.debug("meta cache store_file %s", path)
+        self.store.store_file(path_to_file, dest_dir, remote_file_name, interrupt_event)
+        if self.entries.exists(path) and self.entries.is_expired(path):
+            self.entries.delete(path)
+        if not self.entries.exists(path):
+            self.entries.write(path, Entry())
+        entry = self.entries.get_value(path)
+        entry.set_is_file()
+        entry.size = data_len
+        entry.set_modified()
+        self._add_to_parent_dir_listing(path)
         
     def store_fileobject(self, fileobject, path, interrupt_event=None):
         self.logger.debug("meta cache store_fileobject %s", path)
