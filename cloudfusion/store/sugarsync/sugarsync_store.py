@@ -244,7 +244,54 @@ class SugarsyncStore(Store):
         except Exception, e:
             return e
          
+    def mystore(self, path_to_file, path):
+        fileobject = open(path_to_file)
+        self.client.put_file(fileobject, self._translate_path(path_to_file))
     
+    # retry does not really matter with caching_store
+    @retry((Exception,socket.error), tries=1, delay=0) 
+    def store_file(self, path_to_file, dest_dir="/", remote_file_name = None, interrupt_event=None):
+        path = dest_dir + "/" + remote_file_name
+        self.logger.debug("storingYY file object to %s", path)
+        
+        if not remote_file_name:
+            remote_file_name = os.path.basename(path_to_file)
+        if not self.exists(path_to_file):
+            self._create_file(path_to_file)
+            
+        self.logger.debug("pool")
+        pool = multiprocessing.Pool(processes=2)
+        import pickle  
+        self.logger.debug("dmp path")
+        pickle.dumps(self._translate_path(path_to_file))
+        self.logger.debug("dmp putfile")
+        pickle.dumps(self.client.put_file)
+        self.logger.debug("11111111111111111")
+        resp = pool.apply_async(self.mystore, args=(path_to_file, self._translate_path(path_to_file)))
+        self.logger.debug("22222222222222222")
+        interrupted = None
+        if interrupt_event:
+            interrupted = pool.apply_async(interrupt_event.wait, args=())
+        while True:
+            resp.wait(1)
+            if resp.ready():
+                self.logger.debug("finishing process %s", os.getpid())
+                pool.terminate()
+                self.logger.debug("finished process %s", os.getpid())
+                break
+            if interrupted and interrupted.ready():
+                self.logger.debug("terminating process %s", os.getpid())
+                pool.terminate()
+                self.logger.debug("terminated process %s", os.getpid())
+                raise InterruptedException()
+            
+        if isinstance(resp, Exception):
+            raise resp
+        
+        if not resp.status in HTTP_STATUS.OK:
+            self.logger.warning("could not store file to %s\nstatus: %s reason: %s", path_to_file, resp.status, resp.reason)
+            HTTP_STATUS.generate_exception(resp.status, str(resp))
+            
     # retry does not really matter with caching_store
     @retry((Exception,socket.error), tries=1, delay=0) 
     def store_fileobject(self, fileobject, path_to_file, interrupt_event=None):
