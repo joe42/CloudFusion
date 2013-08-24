@@ -216,11 +216,17 @@ class PyFuseBox(Operations):
                 raise FuseOSError(EIO)
             except StoreAutorizationError:
                 raise FuseOSError(EACCES) #keine Berechtigung
-            self.read_temp_file[path].write(data)
-        self.read_temp_file[path].seek(0)
-        data =  self.read_temp_file[path].read()
-        #data.seek(offset)
-        return  data[offset: offset+size]
+            tmp_offset = 0
+            chunk_size = 10*1000*1000
+            while True:
+                chunk = data[tmp_offset:tmp_offset+chunk_size]
+                bytes_written = self.read_temp_file[path].write(chunk)
+                tmp_offset += chunk_size
+                if tmp_offset > len(data):
+                    break
+        self.read_temp_file[path].seek(offset)
+        data =  self.read_temp_file[path].read(size)
+        return  data
 
     def write(self, path, buf, offset, fh):
         #self.logger.debug("write %s ... starting with %s at %s - fh: %s", path, buf[0:10], offset, fh)
