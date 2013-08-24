@@ -114,6 +114,16 @@ class SugarsyncClient(object):
         ret = HTTPResponse.get_instance( response.status_code, "No reason given", response.headers, response.content)
         return ret
     
+    def put_file_async(self, path_to_src, path_to_dest, response_queue):
+        headers = {"Host": self.host, "Authorization": self.token}
+        try:
+            with open(path_to_src) as fileobject:
+                response = requests.put("https://"+self.host+"/file/:sc:%s:%s/data" % (self.uid, path_to_dest), data=fileobject, headers=headers)
+            ret = HTTPResponse.get_instance( response.status_code, "No reason given", response.headers, response.content)
+        except Exception, e:
+            ret = e
+        response_queue.put(ret)
+    
     def create_file(self, directory, name, mime='text/x-cloudfusion'):
         headers = {"Host": self.host, "Authorization: ": self.token}
         params = '<?xml version="1.0" encoding="UTF-8"?><file><displayName>%s</displayName><mediaType>%s</mediaType></file>' % (name, mime)
