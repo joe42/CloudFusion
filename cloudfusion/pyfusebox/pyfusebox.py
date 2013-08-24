@@ -81,12 +81,12 @@ class PyFuseBox(Operations):
     
     def truncate(self, path, length, fh=None):
         self.logger.debug("truncate %s to %s", path, length)
+        if self.store.get_max_filesize() < length:
+            self._release(path, 0) #to prevent flushing
+            return FuseOSError(EFBIG)
         if not path in self.temp_file:
             data = ""
             self.temp_file[path] = tempfile.SpooledTemporaryFile(max_size=20*1000*1000)
-            if self.store.get_max_filesize() < length:
-                self._release(path, 0) #to prevent flushing
-                return FuseOSError(EFBIG)
             try:
                 data = self.store.get_file(path)
             except NoSuchFilesytemObjectError:
