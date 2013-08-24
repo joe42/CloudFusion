@@ -115,8 +115,8 @@ class MetadataCachingStore(Store):
         
     def store_fileobject(self, fileobject, path, interrupt_event=None):
         self.logger.debug("meta cache store_fileobject %s", path)
-        fileobject.seek(0)
-        data_len = len(fileobject.read())
+        fileobject.seek(0,2)
+        data_len = len(fileobject.tell())
         fileobject.seek(0)
         try:
             self.store.store_fileobject(fileobject, path, interrupt_event)
