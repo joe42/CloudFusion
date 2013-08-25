@@ -417,6 +417,8 @@ class SugarsyncStore(Store):
         partial_tree = {"file":{"size":"", "lastModified":"", "timeCreated":""}}
         DictXMLParser().populate_dict_with_XML_leaf_textnodes(resp.data, partial_tree)
         ret["bytes"] = int(partial_tree['file']['size'])
+        if ret["bytes"] == -1: #-1 if file was created but has no data
+            ret["bytes"] = 0
         try:
             lastModified = partial_tree['file']['lastModified']
             modified = time.mktime(time.strptime(lastModified[0:-6], "%Y-%m-%dT%H:%M:%S.000"))
