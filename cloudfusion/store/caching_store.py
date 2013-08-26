@@ -50,6 +50,7 @@ class WriteWorker(object):
         self.interrupt_event.set()
         self.process.join()
         os.remove(self._filename)
+        self.logger.debug("Stopped WriteWorker process to write %s", self.path)
     
     def start(self):
         self.process.start()
