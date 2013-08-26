@@ -13,6 +13,10 @@ from cloudfusion.util.exponential_retry import retry
 import socket
 import multiprocessing
 import cloudfusion.util.pickle_methods
+import signal
+import sys
+
+signal.signal(signal.SIGTERM, lambda signum, stack_frame: sys.exit(1))
 
 
 
