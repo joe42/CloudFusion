@@ -60,7 +60,7 @@ class WriteWorker(object):
             result_queue.put(True)
         except Exception, e:
             result_queue.put(e)
-            self.logger.debug("Error on storing %s in WriteWorker: %s", self.path, e)
+            self.logger.error("Error on storing %s in WriteWorker: %s", self.path, e)
         self.logger.debug("Finish WriteWorker process %s to write %s", os.getpid(), self.path)
             
 class RemoveWorker(object):
