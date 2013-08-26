@@ -26,7 +26,6 @@ class WriteWorker(object):
         self.interrupt_event = multiprocessing.Event()
         self._result_queue = multiprocessing.Queue()
         self.process = multiprocessing.Process(target=self._run, args=(self._result_queue, self.interrupt_event))
-        self.process.daemon = True
         self._is_successful = False
         self._error = None 
     
