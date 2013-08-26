@@ -148,6 +148,7 @@ class _StoreSyncThread(object):
     def start(self):
         self._stop = False
         self.thread = Thread(target=self.run)
+        self.thread.setDaemon(True)
         self.thread.start()
     
     def stop(self):
