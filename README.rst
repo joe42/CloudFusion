@@ -56,6 +56,13 @@ But you can simply retry by copying the configuration again
 Enjoy accessing your files in the directory **mnt/data**.
 
 
+
+Shut Down
+------------
+
+To shut down CloudFusion, you can delete the file **mnt/config/config**. 
+
+
 Restrictions
 ---------------
 

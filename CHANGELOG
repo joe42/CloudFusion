@@ -1,0 +1,21 @@
+Version number schema: vA.B.C[_stable]
+A: Changes to the store interface
+B: Added Features
+C: Bugfixes
+_stable means that the changes were successfully tested with all tests in the test suite, and a stress test for at least 24h
+
+v.2.5.10_stable:
+    * improved mechanism to stop file transfers to the server when the file is deleted (changed store interface)
+    * exit application when deleting /config/config
+    * read/write speed improvement
+    * application entry point
+    * improved logging
+    * reduced memory requirement
+v.1.0.0_stable:
+    * change architecture to more asynchronous remote communication (faster)
+    * file transfers to the server are stopped when the file is deleted (more efficient utilisation of bandwidth)
+    * decreased memory overhead (tested under load for several days)
+    * improved caching (data is kept after restart & no data lost on unexpected shutdown)
+    * robust error handling (socket errors: internet connection may be broken, stops adding write transfers when hitting quota limit, reauthenticates if required, retries several times)
+    * Provider Provisioning (no more need to create a developer account)
+
