@@ -110,7 +110,7 @@ class SugarsyncClient(object):
     
     def put_file(self, fileobject, path_to_file):
         headers = {"Host": self.host, "Authorization": self.token}
-        response = requests.put("https://"+self.host+"/file/:sc:%s:%s/data" % (self.uid, path_to_file), data=fileobject, headers=headers)
+        response = requests.put("https://"+self.host+"/file/:sc:%s:%s/data" % (self.uid, path_to_file), data=fileobject, headers=headers, timeout=30)
         ret = HTTPResponse.get_instance( response.status_code, "No reason given", response.headers, response.content)
         return ret
     
@@ -118,7 +118,7 @@ class SugarsyncClient(object):
         headers = {"Host": self.host, "Authorization": self.token}
         try:
             with open(path_to_src) as fileobject:
-                response = requests.put("https://"+self.host+"/file/:sc:%s:%s/data" % (self.uid, path_to_dest), data=fileobject, headers=headers)
+                response = requests.put("https://"+self.host+"/file/:sc:%s:%s/data" % (self.uid, path_to_dest), data=fileobject, headers=headers, timeout=30)
             ret = HTTPResponse.get_instance( response.status_code, "No reason given", response.headers, response.content)
         except Exception, e:
             ret = e
