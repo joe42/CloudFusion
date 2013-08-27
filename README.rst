@@ -19,7 +19,7 @@ Get started
 
 Start CloudFusion::
 
-    python -m cloudfusion.main mnt
+    cloudfusion mnt
 
 If the directory **mnt** does not yet exist, it will b created. (If you want to find an error, write the word **log**
 at the end of the command, which will create the directory **.cloudfusion/logs** with log files.) 
