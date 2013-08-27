@@ -15,6 +15,7 @@ import logging
 from threading import Thread, RLock
 import multiprocessing 
 import copy
+import pickle
 
 class WriteWorker(object):
     def __init__(self, store, path, file, logger):
@@ -61,8 +62,13 @@ class WriteWorker(object):
             self.store.store_file(self._filename, os.path.dirname(self.path), os.path.basename(self.path), interrupt_event)
             result_queue.put(True)
         except Exception, e:
-            result_queue.put(e)
             self.logger.error("Error on storing %s in WriteWorker: %s", self.path, e)
+            try:
+                pickle.loads(pickle.dumps(e)) #check if exception can be de/serialized
+                result_queue.put(e)
+            except Exception, e:
+                self.logger.error("Error on serializing exception in WriteWorker: %s", repr(e))
+                result_queue.put(Exception(repr(e)))
         self.logger.debug("Finish WriteWorker process %s to write %s", os.getpid(), self.path)
             
 class RemoveWorker(object):
