@@ -20,7 +20,7 @@ except ImportError:
     import simplejson as json
 
 SDK_VERSION = "1.5.1"
-
+socket.setdefaulttimeout(120) #set global default timeout of 120 sec
 TRUSTED_CERT_FILE = pkg_resources.resource_filename(__name__, 'trusted-certs.crt')
 
 class ProperHTTPSConnection(httplib.HTTPConnection):
@@ -176,7 +176,7 @@ class RESTClientObject(object):
         except socket.error, e:
             raise RESTSocketError(host, e)
         except CertificateError, e:
-            raise RESTSocketError(host, "SSL certificate error: " + e)
+            raise RESTSocketError(host, "SSL certificate error: %s" % e)
 
         r = conn.getresponse()
         if r.status != 200:
