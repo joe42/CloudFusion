@@ -187,4 +187,15 @@ class LRUCache(Cache):
             entry = self.entries[entry.next]
         ret += str(entry.key)
         return ret
+    
+    def flush(self, key):
+        self.update(key) 
+        self.set_dirty(key, False) 
+        self._resize()
+    
+    def set_dirty(self, key, is_dirty):
+        entry = self.entries[key]
+        entry.dirty = is_dirty
+        self.entries[key] = entry
+        self._resize()
 
