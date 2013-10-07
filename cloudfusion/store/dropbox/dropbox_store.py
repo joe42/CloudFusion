@@ -17,6 +17,8 @@ import shelve
 from multiprocessing import Manager
 import atexit
 from cloudfusion.util.exponential_retry import retry
+import requests
+from bs4 import BeautifulSoup
 
 DATABASE_DIR = '/tmp/cloudfusion'
 
@@ -93,14 +95,20 @@ class DropboxStore(Store):
         self.sess = session.DropboxSession(base64.b64decode(config['consumer_key']),base64.b64decode(config['consumer_secret']), config['root'])
         self.request_token = self.sess.obtain_request_token()
         url = self.sess.build_authorize_url(self.request_token)
-        # Make the user sign in and authorize this token
-        print "url:", url
-        print "Please visit this website and press the 'Allow' button in the next Minute."
-        webbrowser.open(url)
-        access_token = self.reconnect()
+        try:
+            self._auto_connect(url, config['user'] ,config['password'])
+        except:
+            self.logger.exception("Automatic login failed, falling back to manual login")
+        access_token = self.reconnect(1)
         if not access_token:
-            print "Sorry, please try copying the config file again."
-            raise StoreAccessError("Authorization error", 0)
+            # Make the user sign in and authorize this token
+            print "url:", url
+            print "Please visit this website and press the 'Allow' button in the next Minute."
+            webbrowser.open(url)
+            access_token = self.reconnect()
+            if not access_token:
+                print "Sorry, please try copying the config file again."
+                raise StoreAccessError("Authorization error", 0)
         self.logger.debug("get DropboxClient")
         self.client = client.DropboxClient(self.sess)
         self.root = config['root']
@@ -120,6 +128,32 @@ class DropboxStore(Store):
         atexit.register( lambda : self._close() )
         super(DropboxStore, self).__init__()
         
+    def _auto_connect(self, authorize_url, user, password):
+        headers = {'Host' : 'www.dropbox.com', 'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0', 'Accept' :  'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'Accept-Language' : 'en-gb,en;q=0.5', 'Accept-Encoding' : 'gzip, deflate', 'DNT' : '1', 'Connection' : 'keep-alive'}
+        auth_page_req = requests.get(authorize_url, headers=headers, allow_redirects=False)
+        cookies = auth_page_req.cookies
+        redirect_path = auth_page_req.headers['location']
+        auth_page_req = requests.get('https://www.dropbox.com'+redirect_path, headers=headers, allow_redirects=False, cookies=cookies)
+        attr={} # collect input for login form
+        soup = BeautifulSoup(auth_page_req.text) #authorization page
+        for input_tag in soup.form.find_all("input"):
+            if input_tag.has_attr('value'):
+                attr[input_tag['name']] = input_tag['value']
+        attr['login_email'] = user
+        attr['login_password'] = password
+        login_req = requests.post('https://www.dropbox.com/login',attr, headers=headers,cookies=cookies, allow_redirects=False)
+        cookies.update(login_req.cookies)
+        redirect_path = login_req.headers['location']
+        login_req = requests.get(redirect_path, headers=headers, allow_redirects=False, cookies=cookies)
+        attr={} # collect input for acknowledging app access form
+        soup = BeautifulSoup(login_req.text)
+        for input_tag in soup.form.find_all("input"):
+            if input_tag['name'] != 'deny_access':
+                attr[input_tag['name']] = input_tag['value']
+        cookies.update(login_req.cookies)
+        # acknowledge application access authorization
+        requests.post('https://www.dropbox.com/1/oauth/authorize', attr, headers=headers,cookies=cookies)
+
     
     def _handle_error(self, error, method_name, *args, **kwargs):
         """Used by retry decorator to react to errors."""
@@ -142,9 +176,9 @@ class DropboxStore(Store):
             self.logger.debug("Error is not covered by _handle_error: %s", error)
         return False
         
-    def reconnect(self):
+    def reconnect(self, tries = 20):
         access_token = None
-        for i in range(0,20):
+        for i in range(0,tries):
             time.sleep(3)
             try:
                 access_token = self.sess.obtain_access_token(self.request_token)
