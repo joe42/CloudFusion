@@ -246,11 +246,20 @@ class PyFuseBox(Operations):
             except StoreAutorizationError:
                 raise FuseOSError(EACCES) #keine Berechtigung
             self.temp_file[path].write(data)
+        self.slow_down_if_cache_full(filesize)
         self.temp_file[path].seek(offset)
         self.temp_file[path].write(buf)
         self.temp_file[path].seek(0)
         #self.store.store_fileobject(self.temp_file[path],path)
         return len(buf)
+    
+    def slow_down_if_cache_full(self, filesize):
+        """Reduce write speed to 10kB/s if cache has reached its hard limit"""
+        try:
+            if self.store.exceeds_hard_limit():
+                time.sleep(filesize/1000/10)
+        except AttributeError:
+            pass
     
     def flush(self, path, fh):
         self.logger.debug("flush %s - fh: %s", path, fh)
