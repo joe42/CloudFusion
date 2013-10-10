@@ -54,20 +54,39 @@ class GetFreeSpaceWorker(object):
             else:
                 setattr(result, k, deepcopy(v, memo))
         return result
-    
+
 class WriteWorker(object):
     def __init__(self, store, path, file, logger):
         self.store = copy.deepcopy(store)
         self.path = path
         self._filename = file.name
+        self._filesize = os.path.getsize(file.name)
         file.close()
         self.logger = logger
         self.logger.debug("writing %s", path)
         self.interrupt_event = multiprocessing.Event()
         self._result_queue = multiprocessing.Queue()
-        self.process = multiprocessing.Process(target=self._run, args=(self._result_queue, self.interrupt_event))
+        self.start_time = 0
+        self.end_time = multiprocessing.Value('d', 0.0)
+        self.process = multiprocessing.Process(target=self._run, args=(self._result_queue, self.interrupt_event, self.end_time))
         self._is_successful = False
         self._error = None 
+        
+    def get_duration(self):
+        """Get duration of upload in seconds"""
+        return self.end_time.value-self.start_time
+    
+    def get_endtime(self):
+        """Get the end time of the upload in seconds from the epoche"""
+        return self.end_time.value
+    
+    def get_starttime(self):
+        """Get the start time of the upload in seconds from the epoche"""
+        return self.start_time
+    
+    def get_filesize(self):
+        """Get size of the file to write in bytes"""
+        return self._filesize
     
     def is_finished(self):
         return not self.process.is_alive() 
@@ -92,12 +111,14 @@ class WriteWorker(object):
         self.logger.debug("Stopped WriteWorker process to write %s", self.path)
     
     def start(self):
+        self.start_time = time.time()
         self.process.start()
     
-    def _run(self, result_queue, interrupt_event):
+    def _run(self, result_queue, interrupt_event, end_time):
         self.logger.debug("Start WriteWorker process %s to write %s", os.getpid(), self.path)
         try:
             self.store.store_file(self._filename, os.path.dirname(self.path), os.path.basename(self.path), interrupt_event)
+            end_time.value = time.time()
             result_queue.put(True)
         except Exception, e:
             self.logger.error("Error on storing %s in WriteWorker: %s", self.path, e)
@@ -142,9 +163,30 @@ class ReadWorker(object):
     def __init__(self, store, path, logger):
         self.store = copy.deepcopy(store)
         self.path = path
+        self._filesize = None
         self.logger = logger
         self._result_queue = multiprocessing.Queue()
-        self.process = multiprocessing.Process(target=self._run, args=(self._result_queue,))
+        self.start_time = 0
+        self.end_time = multiprocessing.Value('d', 0.0)
+        self.process = multiprocessing.Process(target=self._run, args=(self._result_queue, self.end_time))
+
+    def get_duration(self):
+        """Get duration of download in seconds"""
+        return self.end_time.value-self.start_time
+    
+    def get_starttime(self):
+        """Get the start time of the download in seconds from the epoche"""
+        return self.start_time
+    
+    def get_endtime(self):
+        """Get the end time of the download in seconds from the epoche"""
+        return self.end_time.value
+    
+    def get_filesize(self):
+        """Get size of the file to write in bytes"""
+        if not self._filesize:
+            raise RuntimeError, 'Cannot obtain file size: the download did not yet end'
+        return self._filesize
     
     def is_finished(self):
         return not self.process.is_alive() 
@@ -163,11 +205,14 @@ class ReadWorker(object):
         self.process.terminate()
     
     def start(self):
+        self.start_time = time.time()
         self.process.start()
     
-    def _run(self, result_queue):
+    def _run(self, result_queue, end_time):
         try:
+            start = time.time()
             content = self.store.get_file(self.path)
+            end_time.value = time.time() - start
             result_queue.put(content)
         except Exception, e:
             self.logger.debug("Error on reading %s in ReadWorker: %s", self.path, e)
