@@ -8,7 +8,7 @@ from cloudfusion.pyfusebox.pyfusebox import *
 from cloudfusion.pyfusebox.virtualconfigfile import VirtualConfigFile
 from cloudfusion.store.dropbox.dropbox_store import DropboxStore
 from cloudfusion.store.sugarsync.sugarsync_store import SugarsyncStore
-from cloudfusion.store.caching_store import MultiprocessingCachingStore
+from cloudfusion.store.transparent_caching_store import TransparentMultiprocessingCachingStore
 from cloudfusion.store.metadata_caching_store import MetadataCachingStore
 import random
 import os, signal
@@ -146,6 +146,7 @@ class ConfigurablePyFuseBox(PyFuseBox):
         cache_time = int(conf.get('cache', 0))
         metadata_cache_time = int(conf.get('metadata_cache', 0))
         cache_size = int(conf.get('cache_size', 2000))
+        hard_cache_size_limit = int(conf.get('hard_cache_size_limit', 10000))
         cache_id = str(conf.get('cache_id', random.random()))
         self.logger.debug("got cache parameter")
         auth = self.virtual_file.get_service_auth_data()
@@ -153,9 +154,9 @@ class ConfigurablePyFuseBox(PyFuseBox):
         store = self.__get_new_store(service, auth) #catch error?
         self.logger.debug("initialized store")
         if cache_time > 0 and metadata_cache_time > 0:
-            store = MultiprocessingCachingStore( MetadataCachingStore( store, metadata_cache_time ), cache_time, cache_size, cache_id )
+            store = TransparentMultiprocessingCachingStore( MetadataCachingStore( store, metadata_cache_time ), cache_time, cache_size, hard_cache_size_limit, cache_id )
         elif cache_time > 0:
-            store = MultiprocessingCachingStore(store, cache_time, cache_size, cache_id)
+            store = TransparentMultiprocessingCachingStore(store, cache_time, cache_size, hard_cache_size_limit, cache_id)
         elif metadata_cache_time > 0:
             store = MetadataCachingStore( store, metadata_cache_time )
         self.store = store
