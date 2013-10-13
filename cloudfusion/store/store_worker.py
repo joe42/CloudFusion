@@ -125,7 +125,7 @@ class WriteWorker(object):
             try:
                 pickle.loads(pickle.dumps(e)) #check if exception can be de/serialized
                 result_queue.put(e)
-            except Exception, e:
+            except Exception:
                 self.logger.error("Error on serializing exception in WriteWorker: %s", repr(e))
                 result_queue.put(Exception(repr(e)))
         self.logger.debug("Finish WriteWorker process %s to write %s", os.getpid(), self.path)
