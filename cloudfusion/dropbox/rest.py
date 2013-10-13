@@ -20,7 +20,6 @@ except ImportError:
     import simplejson as json
 
 SDK_VERSION = "1.5.1"
-socket.setdefaulttimeout(120) #set global default timeout of 120 sec
 TRUSTED_CERT_FILE = pkg_resources.resource_filename(__name__, 'trusted-certs.crt')
 
 class ProperHTTPSConnection(httplib.HTTPConnection):
@@ -105,6 +104,7 @@ def create_connection(address):
         try:
             sock = socket.socket(af, socktype, proto)
             sock.connect(sa)
+            sock.settimeout(120) # set socket timeout to 2 Min
             return sock
 
         except socket.error, _:
