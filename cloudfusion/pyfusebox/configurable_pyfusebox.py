@@ -165,15 +165,16 @@ class ConfigurablePyFuseBox(PyFuseBox):
         
     def __get_new_store(self, service, auth):
         self.logger.debug("__get_new_store:")
-        if service.lower() == "sugarsync":
-            store = SugarsyncStore(auth)
-        else: # default
-            self.logger.debug("get dropbox store")
-            try:
+        try:
+            if service.lower() == "sugarsync":
+                store = SugarsyncStore(auth)
+            else: # default
                 store = DropboxStore(auth)
-            except Exception as e:
-                self.logger.debug(e)
-            self.logger.debug("got dropbox store")
+            self.logger.debug("got store")
+        except Exception as e:
+            import traceback
+            self.logger.debug(traceback.format_exc())
+            raise e
         return store
     
     def write(self, path, buf, offset, fh):
