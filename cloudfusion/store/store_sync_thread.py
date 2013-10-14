@@ -37,12 +37,15 @@ class StoreStats(object):
         if len(self.write_workers) > 100*1000 or len(self.read_workers) > 100*1000:
             return self.reset()
         if isinstance(worker, WriteWorker):
-            if not worker.is_successful() and worker.get_error():
+            if worker.get_error():
                 self._log_exception(worker.get_error())
                 return
             self.write_workers.append(worker)
             self.uploaded += worker.get_filesize()
         if isinstance(worker, ReadWorker):
+            if worker.get_error():
+                self._log_exception(worker.get_error())
+                return
             self.read_workers.append(worker)
             self.downloaded += worker.get_filesize()
             

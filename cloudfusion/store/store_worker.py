@@ -176,6 +176,9 @@ class ReadWorker(object):
         self._filesize = None
         self.logger = logger
         self._result_queue = multiprocessing.Queue()
+        self._temp_result = None 
+        self._is_successful = False
+        self._error = None
         self.start_time = 0
         self.end_time = multiprocessing.Value('d', 0.0)
         self.process = multiprocessing.Process(target=self._run, args=(self._result_queue, self.end_time))
@@ -208,14 +211,23 @@ class ReadWorker(object):
         return not self.process.is_alive() 
     
     def is_successful(self):
-        return not self._result_queue.empty()
+        self._check_result()
+        return self._is_successful
+    
+    def get_error(self):
+        self._check_result()
+        return self._error
     
     def get_result(self): 
         """Get the data of the read file.
         This only works once after a successful read and is a blocking call.
         Use is_successful to check if the read has been successful without blocking.
         """ 
-        return self._result_queue.get()
+        if not self._temp_result:
+            self._get_result()
+        ret = self._temp_result
+        self._temp_result = None
+        return ret
     
     def stop(self):
         self.process.terminate()
@@ -223,12 +235,32 @@ class ReadWorker(object):
     def start(self):
         self.start_time = time.time()
         self.process.start()
+
+    def _check_result(self):
+        if not self._result_queue.empty():
+            self._get_result()
     
+    def _get_result(self):
+        result = self._result_queue.get()
+        if isinstance(result, str) or isinstance(result, unicode):
+            self._is_successful = True
+            self._temp_result = result
+            self._filesize = len(result)
+        else:
+            self._is_successful = False
+            self._error = result
+
     def _run(self, result_queue, end_time):
         try:
             content = self.store.get_file(self.path)
             end_time.value = time.time() 
             result_queue.put(content)
         except Exception, e:
-            self.logger.debug("Error on reading %s in ReadWorker: %s", self.path, e)
+            self.logger.error("Error on reading %s in ReadWorker: %s", self.path, e)
+            try:
+                pickle.loads(pickle.dumps(e)) #check if exception can be de/serialized
+                result_queue.put(e)
+            except Exception:
+                self.logger.error("Error on serializing exception in ReadWorker: %s", repr(e))
+                result_queue.put(Exception(repr(e)))
         
