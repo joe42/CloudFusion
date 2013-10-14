@@ -74,14 +74,20 @@ class WriteWorker(object):
         
     def get_duration(self):
         """Get duration of upload in seconds"""
+        if self.start_time == 0 or self.end_time.value == 0:
+            raise RuntimeError, 'Cannot obtain duration: the upload did not yet end'
         return self.end_time.value-self.start_time
     
     def get_endtime(self):
         """Get the end time of the upload in seconds from the epoche"""
+        if self.end_time.value == 0:
+            raise RuntimeError, 'Cannot obtain end time: the upload did not yet end'
         return self.end_time.value
     
     def get_starttime(self):
         """Get the start time of the upload in seconds from the epoche"""
+        if self.start_time == 0:
+            raise RuntimeError, 'Cannot obtain start time: the upload did not yet start'
         return self.start_time
     
     def get_filesize(self):
@@ -172,14 +178,20 @@ class ReadWorker(object):
 
     def get_duration(self):
         """Get duration of download in seconds"""
+        if self.start_time == 0 or self.end_time.value == 0:
+            raise RuntimeError, 'Cannot obtain end time: the download did not yet end'
         return self.end_time.value-self.start_time
     
     def get_starttime(self):
         """Get the start time of the download in seconds from the epoche"""
+        if self.start_time == 0:
+            raise RuntimeError, 'Cannot obtain end time: the download did not yet start'
         return self.start_time
     
     def get_endtime(self):
         """Get the end time of the download in seconds from the epoche"""
+        if self.end_time.value == 0:
+            raise RuntimeError, 'Cannot obtain end time: the download did not yet end'
         return self.end_time.value
     
     def get_filesize(self):
@@ -210,9 +222,8 @@ class ReadWorker(object):
     
     def _run(self, result_queue, end_time):
         try:
-            start = time.time()
             content = self.store.get_file(self.path)
-            end_time.value = time.time() - start
+            end_time.value = time.time() 
             result_queue.put(content)
         except Exception, e:
             self.logger.debug("Error on reading %s in ReadWorker: %s", self.path, e)
