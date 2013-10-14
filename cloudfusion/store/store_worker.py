@@ -230,7 +230,7 @@ class ReadWorker(object):
         return ret
     
     def stop(self):
-        self.process.terminate()
+        pass #Remove terminate to allow for logging with multiprocessing
     
     def start(self):
         self.start_time = time.time()
