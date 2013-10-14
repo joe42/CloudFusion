@@ -98,9 +98,10 @@ class WriteWorker(object):
         return not self.process.is_alive() 
     
     def get_error(self):
+        self._check_result()
         return self._error
     
-    def is_successful(self):
+    def _check_result(self):
         if not self._result_queue.empty():
             result = self._result_queue.get()
             if result == True:
@@ -108,6 +109,9 @@ class WriteWorker(object):
             else:
                 self._is_successful = False
                 self._error = result
+    
+    def is_successful(self):
+        self._check_result()
         return self._is_successful
     
     def stop(self):
