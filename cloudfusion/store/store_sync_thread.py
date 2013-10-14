@@ -300,6 +300,8 @@ class StoreSyncThread(object):
             #disk_entry_is_newer = modified > self.entries[key].modified
             content = reader.get_result() # block until read is done
             self.stats.add_finished_worker(reader)
+            if reader.get_error():
+                raise reader.get_error()
             self.cache.refresh(path, content, self.store._get_metadata(path)['modified'])
             self.readers.remove(reader)
             
