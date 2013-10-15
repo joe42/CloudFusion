@@ -41,13 +41,15 @@ class TransparentMultiprocessingCachingStore(MultiprocessingCachingStore, Transp
                 e_stat.lasttime = time.time()
                 e_stat.count += 1
             else:
-                e_stat = ExceptionStats(name, desc='The cache exceeds the hard size limit of %s MB ' % self.cache.get_hard_limit())
+                e_stat = ExceptionStats(name, desc='The cache exceeds the hard size limit of %s MB ' % self.get_hard_limit())
                 self.exceptions_log[name] = e_stat
         
     def get_file(self, path_to_file):
         if self.entries.exists(path_to_file):
+            self.logger.debug("cache hit %s"%path_to_file)
             self.cache_hits += 1
         else:
+            self.logger.debug("cache miss %s"%path_to_file)
             self.cache_misses += 1
         return super( TransparentMultiprocessingCachingStore, self ).get_file(path_to_file)
         

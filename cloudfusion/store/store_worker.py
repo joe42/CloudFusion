@@ -63,7 +63,6 @@ class WriteWorker(object):
         self._filesize = os.path.getsize(file.name)
         file.close()
         self.logger = logger
-        self.logger.debug("writing %s", path)
         self.interrupt_event = multiprocessing.Event()
         self._result_queue = multiprocessing.Queue()
         self.start_time = 0
@@ -122,6 +121,7 @@ class WriteWorker(object):
     
     def start(self):
         self.start_time = time.time()
+        self.logger.debug("Create WriteWorker process to write %s", self.path)
         self.process.start()
     
     def _run(self, result_queue, interrupt_event, end_time):
@@ -131,7 +131,7 @@ class WriteWorker(object):
             end_time.value = time.time()
             result_queue.put(True)
         except Exception, e:
-            self.logger.error("Error on storing %s in WriteWorker: %s", self.path, e)
+            self.logger.exception("Error on storing %s in WriteWorker", self.path)
             try:
                 pickle.loads(pickle.dumps(e)) #check if exception can be de/serialized
                 result_queue.put(e)
@@ -251,16 +251,18 @@ class ReadWorker(object):
             self._error = result
 
     def _run(self, result_queue, end_time):
+        self.logger.debug("Starting ReadWorker process %s to read %s", os.getpid(), self.path)
         try:
             content = self.store.get_file(self.path)
             end_time.value = time.time() 
             result_queue.put(content)
         except Exception, e:
-            self.logger.error("Error on reading %s in ReadWorker: %s", self.path, e)
+            self.logger.exception("Error on reading %s in ReadWorker", self.path)
             try:
                 pickle.loads(pickle.dumps(e)) #check if exception can be de/serialized
                 result_queue.put(e)
             except Exception:
                 self.logger.error("Error on serializing exception in ReadWorker: %s", repr(e))
                 result_queue.put(Exception(repr(e)))
+        self.logger.debug("Finish ReadWorker process %s to read %s", os.getpid(), self.path)
         

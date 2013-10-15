@@ -84,8 +84,8 @@ class MultiprocessingCachingStore(Store):
         """
         self.logger.debug("cached get_file %s", path_to_file)
         if not self.entries.exists(path_to_file):
-            self._refresh_cache(path_to_file)
             self.logger.debug("cached get_file from new entry")
+            self._refresh_cache(path_to_file)
             return self.entries.get_value(path_to_file)
         if self.entries.is_expired(path_to_file) and not self.entries.is_dirty(path_to_file):
             self.logger.debug("cached get_file update from store if newer")
