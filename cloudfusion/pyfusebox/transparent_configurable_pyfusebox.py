@@ -7,14 +7,15 @@ from cloudfusion.pyfusebox.configurable_pyfusebox import *
 from cloudfusion.pyfusebox.virtualfile import VirtualFile
 from cloudfusion.store.transparent_store import TransparentStore, ExceptionStats
 from cloudfusion.store.transparent_caching_store import TransparentMultiprocessingCachingStore
+import os.path
 
 class TransparentConfigurablePyFuseBox(ConfigurablePyFuseBox):
     '''
     '''
-    CONFIG_DIR = '/config'
-    VIRTUAL_DIRTY_FILELIST_FILE = '/config/notuploaded'
-    VIRTUAL_ERRORS_FILE = '/config/errors'
-    VIRTUAL_STATISTICS_FILE = '/config/stats'
+    STATS_DIR = '/stats'
+    VIRTUAL_DIRTY_FILELIST_FILE = STATS_DIR+'/notuploaded'
+    VIRTUAL_ERRORS_FILE = STATS_DIR+'/errors'
+    VIRTUAL_STATISTICS_FILE = STATS_DIR+'/stats'
     DATA_FOLDER_PATH = "/data"
     XATTR_IS_DIRTY = 'XATTR_IS_DIRTY'
     
@@ -40,6 +41,8 @@ class TransparentConfigurablePyFuseBox(ConfigurablePyFuseBox):
         return []
         
     def getattr(self, path, fh=None):
+        if self.STATS_DIR == path:
+            return self._getattr_for_folder_with_full_access()
         if path in self.virtual_files.keys():
             return self.virtual_files[path].getattr()
         return super( TransparentConfigurablePyFuseBox, self ).getattr(path, fh)
@@ -118,8 +121,10 @@ class TransparentConfigurablePyFuseBox(ConfigurablePyFuseBox):
        
     def readdir(self, path, fh):
         ret = super( TransparentConfigurablePyFuseBox, self ).readdir(path, fh) 
-        if path == self.CONFIG_DIR: #add virtual files
+        if path == self.STATS_DIR: #add virtual files
             for path in self.virtual_files.keys():
                 ret.append(self.virtual_files[path].get_name())
+        if path == "/":# add stats folder
+            ret.append(os.path.basename(self.STATS_DIR))
         return ret
     
