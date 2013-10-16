@@ -51,7 +51,8 @@ class Store(object):
         """Store the local file *path_to_file* to directory *dest_dir* on the store.
         :param remote_file_name: the file name on the store or the original file name if this parameter is None.
         :param interrupt_event: (optional) If the value is not None, listen for an interrupt event with with interrupt_event.wait() \
-        until the file has been stored. Abort the upload if interrupt_event.wait() returns."""
+        until the file has been stored. Abort the upload if interrupt_event.wait() returns.
+        :returns: (optional) the date in seconds, when the file was updated"""
         if dest_dir == "/":
             dest_dir = ""
         fileobject = open(path_to_file)
@@ -63,7 +64,8 @@ class Store(object):
         """Store the contents of *fileobject* to *path* on the store.
         :param remote_file_name: the file name on the store or the original file name if this parameter is None.
         :param interrupt_event: (optional) If the value is not None, listen for an interrupt event with with interrupt_event.wait() \
-        until the file has been stored. Abort the upload if interrupt_event.wait() returns."""
+        until the file has been stored. Abort the upload if interrupt_event.wait() returns.
+        :returns: (optional) the date in seconds, when the file was updated"""
         raise NotImplementedError()
             
     def delete(self, path):

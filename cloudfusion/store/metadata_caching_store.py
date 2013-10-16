@@ -102,7 +102,7 @@ class MetadataCachingStore(Store):
             data_len = fileobject.tell()
         path = dest_dir + "/" + remote_file_name
         self.logger.debug("meta cache store_file %s", path)
-        self.store.store_file(path_to_file, dest_dir, remote_file_name, interrupt_event)
+        ret = self.store.store_file(path_to_file, dest_dir, remote_file_name, interrupt_event)
         if self.entries.exists(path) and self.entries.is_expired(path):
             self.entries.delete(path)
         if not self.entries.exists(path):
@@ -112,6 +112,7 @@ class MetadataCachingStore(Store):
         entry.size = data_len
         entry.set_modified()
         self._add_to_parent_dir_listing(path)
+        return ret
         
     def store_fileobject(self, fileobject, path, interrupt_event=None):
         self.logger.debug("meta cache store_fileobject %s", path)
@@ -119,7 +120,7 @@ class MetadataCachingStore(Store):
         data_len = len(fileobject.tell())
         fileobject.seek(0)
         try:
-            self.store.store_fileobject(fileobject, path, interrupt_event)
+            ret = self.store.store_fileobject(fileobject, path, interrupt_event)
         finally:
             fileobject.close()
         if self.entries.exists(path) and self.entries.is_expired(path):
@@ -131,6 +132,7 @@ class MetadataCachingStore(Store):
         entry.size = data_len
         entry.set_modified()
         self._add_to_parent_dir_listing(path)
+        return ret
             
     def delete(self, path): 
         self.logger.debug("meta cache delete %s", path)

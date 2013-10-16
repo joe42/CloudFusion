@@ -255,7 +255,7 @@ class DropboxStore(Store):
             HTTP_STATUS.generate_exception(resp.status, str(resp))
         self._add_revision(path, resp['rev'])
         self._backup_overwritten(path, resp['path'])  
-        return resp 
+        return self._parse_filesys_obj(resp)["modified"] 
             
 
     def __get_size(self, fileobject):
@@ -311,7 +311,7 @@ class DropboxStore(Store):
                 HTTP_STATUS.generate_exception(resp.status, str(resp))
         self._add_revision(path, resp['rev'])
         self._backup_overwritten(path, resp['path'])
-        return self._parse_filesys_obj(resp) #return metadata
+        return self._parse_filesys_obj(resp)["modified"]
     
     
     # worst case: object still exists and takes up space or is appended to, by mistake

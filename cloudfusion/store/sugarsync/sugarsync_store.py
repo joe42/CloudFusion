@@ -282,6 +282,7 @@ class SugarsyncStore(Store):
         if not resp.status in HTTP_STATUS.OK:
             self.logger.warning("could not store file to %s\nstatus: %s reason: %s", remote_path, resp.status, resp.reason)
             HTTP_STATUS.generate_exception(resp.status, str(resp))
+        return int(time.mktime( time.strptime(resp.headers['Date'], "%a, %d %b %Y %H:%M:%S GMT") ) - self.time_difference) 
             
     @retry((Exception,socket.error), tries=1, delay=0) 
     def store_fileobject(self, fileobject, path_to_file):
@@ -292,6 +293,7 @@ class SugarsyncStore(Store):
         if not resp.status in HTTP_STATUS.OK:
             self.logger.warning("could not store file to %s\nstatus: %s reason: %s", path_to_file, resp.status, resp.reason)
             HTTP_STATUS.generate_exception(resp.status, str(resp))
+        return int(time.mktime( time.strptime(resp.headers['Date'], "%a, %d %b %Y %H:%M:%S GMT") ) - self.time_difference) 
             
     def _create_file(self, path, mime='text/x-cloudfusion'):
         self.logger.debug("creating file object %s", path)
