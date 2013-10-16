@@ -67,6 +67,7 @@ class WriteWorker(object):
         self._result_queue = multiprocessing.Queue()
         self.start_time = 0
         self.end_time = multiprocessing.Value('d', 0.0)
+        self._update_time = None
         self.process = multiprocessing.Process(target=self._run, args=(self._result_queue, self.interrupt_event, self.end_time))
         self._is_successful = False
         self._error = None 
@@ -89,6 +90,12 @@ class WriteWorker(object):
             raise RuntimeError, 'Cannot obtain start time: the upload did not yet start'
         return self.start_time
     
+    def get_updatetime(self):
+        """Get the point of time the file has been updated in the store in seconds from the epoche"""
+        if not self._update_time:
+            raise RuntimeError, 'Cannot obtain last point of time the file has been updated: the upload did not yet end'
+        return self._update_time
+    
     def get_filesize(self):
         """Get size of the file to write in bytes"""
         return self._filesize
@@ -103,7 +110,8 @@ class WriteWorker(object):
     def _check_result(self):
         if not self._result_queue.empty():
             result = self._result_queue.get()
-            if result == True:
+            if isinstance( result, ( int, long ) ):
+                self._update_time = result
                 self._is_successful = True
             else:
                 self._is_successful = False
@@ -127,9 +135,11 @@ class WriteWorker(object):
     def _run(self, result_queue, interrupt_event, end_time):
         self.logger.debug("Start WriteWorker process %s to write %s", os.getpid(), self.path)
         try:
-            self.store.store_file(self._filename, os.path.dirname(self.path), os.path.basename(self.path), interrupt_event)
+            update_time = self.store.store_file(self._filename, os.path.dirname(self.path), os.path.basename(self.path), interrupt_event)
             end_time.value = time.time()
-            result_queue.put(True)
+            if not update_time:
+                update_time = end_time.value
+            result_queue.put(update_time)
         except Exception, e:
             self.logger.exception("Error on storing %s in WriteWorker", self.path)
             try:
