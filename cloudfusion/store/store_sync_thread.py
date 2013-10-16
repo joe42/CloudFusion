@@ -152,6 +152,8 @@ class StoreSyncThread(object):
                 self.stats.add_finished_worker(writer)
             if writer.is_successful() and self.cache.exists(writer.path): #stop() call in delete method might not have prevented successful write 
                 self.cache.set_dirty(writer.path, False)
+                if self.cache.get_modified(writer.path) < writer.get_updatetime():
+                    self.cache.set_modified(writer.path, writer.get_updatetime())
                 
     def _check_for_failed_writers(self):
         for writer in self.writers:
