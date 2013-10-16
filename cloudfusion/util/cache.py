@@ -36,6 +36,9 @@ class Cache(object):
     def get_modified(self, key):
         return self.entries[key].modified
     
+    def set_modified(self, key, modified):
+        self.entries[key].modified = modified
+    
     def _get_size_of_entry(self, entry):
         try:
             return entry.value.get_size()
