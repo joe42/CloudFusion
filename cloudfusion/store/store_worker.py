@@ -173,7 +173,7 @@ class ReadWorker(object):
     def __init__(self, store, path, logger):
         self.store = copy.deepcopy(store)
         self.path = path
-        self._filesize = None
+        self._filesize = -1
         self.logger = logger
         self._result_queue = multiprocessing.Queue()
         self._temp_result = None 
@@ -203,7 +203,7 @@ class ReadWorker(object):
     
     def get_filesize(self):
         """Get size of the file to write in bytes"""
-        if not self._filesize:
+        if self._filesize == -1: # might be zero
             raise RuntimeError, 'Cannot obtain file size: the download did not yet end'
         return self._filesize
     
