@@ -4,6 +4,14 @@ B: Added Features
 C: Bugfixes
 _stable means that the changes were successfully tested with all tests in the test suite, and a stress test for at least 24h
 
+v.3.7.6_stable:
+    * Close Issue #9 Automatic Login to Dropbox
+    * Close Issue #8 Set Hard Limit for Cache Size
+    * Close Issue #7 Show Sync Status of File 
+    * Close Issue #5 Show Statistical Information
+    * Close Issue #6 Gracefully handle errors on first connection
+	* Bugfix in caching layer, to avoid unnecessary downloads 
+	* Improved error handling
 v.2.5.10_stable:
     * improved mechanism to stop file transfers to the server when the file is deleted (changed store interface)
     * exit application when deleting /config/config
