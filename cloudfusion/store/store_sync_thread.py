@@ -285,7 +285,6 @@ class StoreSyncThread(object):
                 reader.stop()
             remover = RemoveWorker(self.store, path, self.logger)
             remover.start()
-            self.removers.append(remover)
             
     def read(self, path):
         with self.lock:
