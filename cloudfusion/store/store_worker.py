@@ -13,8 +13,7 @@ class GetFreeSpaceWorker(object):
         self.store = deepcopy(store)
         self.logger = logger
         self.poll_wait_time_in_s = poll_wait_time_in_s
-        self._thread = Thread(target=self._run)
-        self._thread.setDaemon(True)
+        self._thread = None
         self._stop = False
         self.free_bytes = 30000000
     
@@ -22,6 +21,8 @@ class GetFreeSpaceWorker(object):
         return self.free_bytes  
     
     def start(self):
+        self._thread = Thread(target=self._run)
+        self._thread.setDaemon(True)
         if self._thread:
             self._stop = False
             self._thread.start()
