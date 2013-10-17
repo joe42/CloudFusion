@@ -5,6 +5,7 @@ import multiprocessing
 import copy
 import pickle
 import os
+from cloudfusion.store.store import NoSuchFilesytemObjectError
 
 class GetFreeSpaceWorker(object):
     """Worker to cyclically poll for free space on store."""
@@ -155,26 +156,30 @@ class RemoveWorker(object):
         store.delete(path)
         self.store = copy.deepcopy(store)
         self.path = path
+        self.thread = None
         self.logger = logger
-        self.thread = Thread(target=self._run)
         self.successful = False
     
     def is_finished(self):
-        return True#return not self.thread.is_alive()
+        return not self.thread.is_alive()
     
     def is_successful(self):
-        return True#return self.successful 
+        return self.successful 
     
     def stop(self):
-        pass#self.thread.join()
+        self.thread.join()
     
     def start(self):
-        #self.thread.start()
-        pass
+        self.thread = Thread(target=self._run)
+        self.thread.setDaemon(True)
+        self.thread.start()
+        self.thread.join()
     
     def _run(self):
         try:
             self.store.delete(self.path)
+            self.successful = True
+        except NoSuchFilesytemObjectError, e: #file does not exist anyway
             self.successful = True
         except Exception, e:
             self.logger.debug("Error on removing %s in RemoveWorker: %s", self.path, e)
