@@ -111,6 +111,7 @@ class WriteWorker(object):
     
     def _check_result(self):
         if not self._result_queue.empty():
+            self._remove_tmpfile()
             result = self._result_queue.get()
             if isinstance( result, ( int, long, float ) ):
                 self._update_time = result
@@ -125,15 +126,33 @@ class WriteWorker(object):
     
     def stop(self):
         self.interrupt_event.set()
-        self.process.join()
-        os.remove(self._filename)
-        self.logger.debug("Stopped WriteWorker process to write %s", self.path)
+        self.process.join(60)
+        if not self.process.is_alive():
+            print "stop joined"
+            self._error = Exception("Stopped WriteWorker process %s to write %s", self.process.pid, self.path)
+        else:
+            import os
+            print "forceful terminateion1"
+            self.process.terminate()
+            print "forceful terminateion2 %s" % self.process.pid
+            os.system('kill -9 {0}'.format(self.process.pid)) 
+
+            self._error = Exception("Forcefully terminated WriteWorker process %s to write %s", self.process.pid, self.path) 
+        self.process.terminate()
+        print "forceful terminateion3"
+        self.end_time.value = time.time()
+        self._remove_tmpfile()
+        self.logger.debug("Stopped WriteWorker process %s to write %s", self.process.pid, self.path)
+        
+    def _remove_tmpfile(self):
+        if os.path.exists(self._filename):
+            os.remove(self._filename)
     
     def start(self):
         self.start_time = time.time()
         self.logger.debug("Create WriteWorker process to write %s", self.path)
         self.process.start()
-    
+        
     def _run(self, result_queue, interrupt_event, end_time):
         self.logger.debug("Start WriteWorker process %s to write %s", os.getpid(), self.path)
         try:
