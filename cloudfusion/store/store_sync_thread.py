@@ -176,7 +176,7 @@ class StoreSyncThread(object):
             if writer.is_finished():
                 if writer.get_error():
                     if isinstance(writer.get_error(), StoreSpaceLimitError): #quota error? -> stop writers 
-                        self.skip_starting_new_writers_for_next_x_cycles = 10
+                        self.skip_starting_new_writers_for_next_x_cycles = 4*30 #4 means one minute
                     
     def _remove_finished_readers(self):
         for reader in self.readers:
@@ -221,7 +221,8 @@ class StoreSyncThread(object):
     
     def last_heartbeat(self):
         ''''Get time since last heartbeat in seconds.'''
-        return time.time()-self._heartbeat
+        last_heartbeat = self._heartbeat
+        return time.time()-last_heartbeat
 
     def run(self): 
         #TODO: check if the cached entries have changed remotely (delta request) and update asynchronously
@@ -229,7 +230,7 @@ class StoreSyncThread(object):
         while not self._stop:
             self.logger.debug("StoreSyncThread run")
             self._heartbeat = time.time()
-            time.sleep( 60 )
+            time.sleep( 15 )
             self._reconnect()
             self.tidy_up()
             if self.skip_starting_new_writers_for_next_x_cycles > 0:
