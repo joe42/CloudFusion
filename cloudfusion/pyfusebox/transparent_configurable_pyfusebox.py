@@ -80,6 +80,8 @@ class TransparentConfigurablePyFuseBox(ConfigurablePyFuseBox):
                 self.virtual_files[path].text += "%s cache misses\n" % self.store.get_cache_misses()
                 self.virtual_files[path].text += "%s cache hits\n\n" % self.store.get_cache_hits()
                 self.virtual_files[path].text += "%s MB of cached data\n\n" % self.store.get_cachesize()
+                if self.store.get_status_information() != '':
+                    self.virtual_files[path].text += "Status:\n%s" % self.store.get_status_information()
                 
     def _initialize_store(self):
         try:

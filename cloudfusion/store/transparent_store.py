@@ -47,3 +47,7 @@ class TransparentStore(object):
     def get_exception_stats(self):
         """Get dict of exception statistics with exception names mapping to :class:`ExceptionStats`"""
         return {}
+    
+    def get_status_information(self):
+        '''Get arbitrary string describing status of the store'''
+        return ''

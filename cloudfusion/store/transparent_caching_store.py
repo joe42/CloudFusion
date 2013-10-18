@@ -78,6 +78,14 @@ class TransparentMultiprocessingCachingStore(MultiprocessingCachingStore, Transp
     def get_cache_misses(self):
         return self.cache_misses
     
+    def get_status_information(self):
+        ret = "Last heartbeat was %s s ago."  % self.sync_thread.last_heartbeat()
+        if self.sync_thread.last_heartbeat() > 60*15:
+            ret += "Store died, trying to revive it..." 
+            self.sync_thread.start()
+            ret += "Store revived successfully." 
+        return ret
+    
     def get_exception_stats(self):
         ret = self.sync_thread.get_exception_stats()
         ret.update(self.exceptions_log)
