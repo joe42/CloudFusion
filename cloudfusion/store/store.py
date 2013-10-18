@@ -58,7 +58,7 @@ class Store(object):
         fileobject = open(path_to_file)
         if not remote_file_name:
             remote_file_name = os.path.basename(path_to_file)
-        self.store_fileobject(fileobject, dest_dir + "/" + remote_file_name)
+        return self.store_fileobject(fileobject, dest_dir + "/" + remote_file_name)
         
     def store_fileobject(self, fileobject, path, interrupt_event=None):
         """Store the contents of *fileobject* to *path* on the store.
