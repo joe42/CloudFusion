@@ -110,7 +110,7 @@ class WriteWorker(object):
     def _check_result(self):
         if not self._result_queue.empty():
             result = self._result_queue.get()
-            if isinstance( result, ( int, long ) ):
+            if isinstance( result, ( int, long, float ) ):
                 self._update_time = result
                 self._is_successful = True
             else:
