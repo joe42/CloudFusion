@@ -40,14 +40,16 @@ class StoreStats(object):
             if worker.get_error():
                 self._log_exception(worker.get_error())
                 return
-            self.write_workers.append(worker)
-            self.uploaded += worker.get_filesize()
+            if worker.is_successful():
+                self.write_workers.append(worker)
+                self.uploaded += worker.get_filesize()
         if isinstance(worker, ReadWorker):
             if worker.get_error():
                 self._log_exception(worker.get_error())
                 return
-            self.read_workers.append(worker)
-            self.downloaded += worker.get_filesize()
+            if worker.is_successful():
+                self.read_workers.append(worker)
+                self.downloaded += worker.get_filesize()
             
     def get_download_time(self):
         '''Get download time considering parallel downloads.'''
