@@ -115,6 +115,7 @@ class StoreSyncThread(object):
         self._stop = False
         self.thread = None
         self.last_reconnect = time.time()
+        self._heartbeat = time.time()
         #used for waiting when quota errors occur
         self.skip_starting_new_writers_for_next_x_cycles = 0
         self.logger.debug("initialized StoreSyncThread")
@@ -165,6 +166,7 @@ class StoreSyncThread(object):
                     writer_run_too_long = writer.get_starttime() < time.time() - self.WRITE_TIMELIMIT
                     if writer_run_too_long:
                         writer.stop()
+                        self._heartbeat = time.time()
                         self.logger.exception('Terminated slow writer after 2h.')
                 except RuntimeError, writer_has_not_yet_started:
                     self.logger.exception('Trying to remove slow writer trying to write %s failed.'%writer.path)
@@ -216,12 +218,17 @@ class StoreSyncThread(object):
             if path == reader.path:
                 return reader
         return None
+    
+    def last_heartbeat(self):
+        ''''Get time since last heartbeat in seconds.'''
+        return time.time()-self._heartbeat
 
     def run(self): 
         #TODO: check if the cached entries have changed remotely (delta request) and update asynchronously
         #TODO: check if entries being transferred have changed and stop transfer
         while not self._stop:
             self.logger.debug("StoreSyncThread run")
+            self._heartbeat = time.time()
             time.sleep( 60 )
             self._reconnect()
             self.tidy_up()
