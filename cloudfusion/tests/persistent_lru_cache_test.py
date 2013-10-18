@@ -10,12 +10,13 @@ import shutil
     
 directory="/tmp/testpersistentcache"
 
-def setUp():
+def set_up():
     os.mkdir(directory)
         
-def tearDown():
+def tear_down():
     shutil.rmtree(directory)
-    
+
+@with_setup(set_up, tear_down)    
 def test_refresh():
     test_obj = PersistentLRUCache(directory=directory)
     test_obj.refresh("some_key", "43", time.time())
@@ -25,12 +26,14 @@ def test_refresh():
     assert test_obj.get_value("some_key") == "42", "Refresh should not have worked since the modified time of the 'disk' entry is older than the cache entry."
     assert not test_obj.is_dirty("some_key")
 
+@with_setup(set_up, tear_down)   
 def test_is_expired():
     test_obj = PersistentLRUCache(directory,1)
     test_obj.write("some_key", "42")
     time.sleep(2)
     assert test_obj.is_expired("some_key")
        
+@with_setup(set_up, tear_down)   
 def test_update():
     test_obj = PersistentLRUCache(directory,1)
     test_obj.write("some_key", "42")
@@ -39,6 +42,7 @@ def test_update():
     test_obj.update("some_key")
     assert not test_obj.is_expired("some_key")
     
+@with_setup(set_up, tear_down)   
 def test_write():
     test_obj = PersistentLRUCache(directory=directory)
     test_obj.write("some_key", "42")
@@ -47,6 +51,7 @@ def test_write():
     assert test_obj.get_value("42") == "some_key"
     assert test_obj.is_dirty("some_key")
     
+@with_setup(set_up, tear_down)   
 def test_get_keys():
     test_obj = PersistentLRUCache(directory=directory)
     test_obj.refresh("some_key", "43", time.time())
@@ -55,6 +60,7 @@ def test_get_keys():
     assert "some_other_key" in test_obj.get_keys()
     assert not "some_keyXYZ" in test_obj.get_keys()
     
+@with_setup(set_up, tear_down)   
 def test_get_value():
     test_obj = PersistentLRUCache(directory=directory)
     test_obj.refresh("some_key", "43", time.time())
@@ -62,6 +68,7 @@ def test_get_value():
     test_obj.write("some_key", "42")
     assert test_obj.get_value("some_key") == "42"
     
+@with_setup(set_up, tear_down)   
 def test_get_modified():
     test_obj = PersistentLRUCache(directory=directory)
     modified_time = time.time()
@@ -70,6 +77,7 @@ def test_get_modified():
     test_obj.write("some_key", "42")
     assert test_obj.get_modified("some_key") < time.time()
     
+@with_setup(set_up, tear_down)   
 def test_get_size_of_dirty_data():
     test_obj = PersistentLRUCache(directory=directory)
     assert test_obj.get_size_of_dirty_data() == 0
@@ -84,6 +92,7 @@ def test_get_size_of_dirty_data():
     test_obj.refresh("some_other_key", "42", time.time())
     assert test_obj.get_size_of_dirty_data() == 4
     
+@with_setup(set_up, tear_down)   
 def test_get_size_of_cached_data():
     test_obj = PersistentLRUCache(directory=directory)
     modified_time = time.time()
@@ -97,6 +106,7 @@ def test_get_size_of_cached_data():
     test_obj.refresh("some_key", "abcd", modified_time)
     assert test_obj.get_size_of_cached_data() == 6
     
+@with_setup(set_up, tear_down)   
 def test_is_dirty():
     test_obj = PersistentLRUCache(directory=directory)
     test_obj.refresh("some_key", "43", time.time())
@@ -104,6 +114,7 @@ def test_is_dirty():
     test_obj.write("some_key", "42")
     assert test_obj.is_dirty("some_key")
 
+@with_setup(set_up, tear_down)   
 def test_exists():
     test_obj = PersistentLRUCache(directory=directory)
     assert not test_obj.exists("some_key")
@@ -111,6 +122,7 @@ def test_exists():
     assert test_obj.exists("some_key")
     assert not test_obj.exists("some_other_key")
     
+@with_setup(set_up, tear_down)   
 def test_delete():
     test_obj = PersistentLRUCache(directory=directory)
     test_obj.write("some_key", "42")
@@ -123,6 +135,7 @@ def test_delete():
     assert not test_obj.exists("42")
     assert not test_obj.exists("some_key")
 
+@with_setup(set_up, tear_down)   
 def test_reorder():
     test_obj = PersistentLRUCache(directory=directory)
     test_obj.write("/xxx", "")
@@ -131,6 +144,7 @@ def test_reorder():
     test_obj.delete("/xxx")
     test_obj.delete("/yyy")
         
+@with_setup(set_up, tear_down)   
 def test_persistence():
     test_obj = PersistentLRUCache(directory=directory, maxsize_in_MB=0)
     test_obj.write("keyX", "42")
@@ -139,6 +153,7 @@ def test_persistence():
     test_obj = PersistentLRUCache(directory=directory)
     assert test_obj.get_value("keyX") == "42"
     
+@with_setup(set_up, tear_down)   
 def test_resize_zerosize():
     test_obj = PersistentLRUCache(directory=directory, maxsize_in_MB=0)
     test_obj.refresh("some_key", "43", time.time())
@@ -148,6 +163,7 @@ def test_resize_zerosize():
     assert not "some_key" in test_obj.get_keys() #deleted due to internal resize
     assert test_obj.get_value("some_other_key") == "42"
     
+@with_setup(set_up, tear_down)   
 def test_resize():
     test_obj = PersistentLRUCache(directory=directory, maxsize_in_MB=30)
     for i in range(10,62):
@@ -158,6 +174,7 @@ def test_resize():
         for j in range(10,i+1)[-14:]:
             assert test_obj.get_value(str(j)) == "a"*2000000
             
+@with_setup(set_up, tear_down)   
 def test_resize_dirty():
     test_obj = PersistentLRUCache(directory=directory, maxsize_in_MB=0)
     for i in range(10,62):
