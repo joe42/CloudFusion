@@ -105,6 +105,7 @@ class StoreSyncThread(object):
         self.cache = cache
         self.store = store
         self.max_writer_threads = max_writer_threads
+        self.WRITE_TIMELIMIT = 60*60*2 #2h
         self.lock = RLock()
         self.removers = []
         self.writers = []
@@ -154,6 +155,17 @@ class StoreSyncThread(object):
                 self.cache.set_dirty(writer.path, False) # set_dirty might delete item, if cache limit is reached
                 if self.cache.exists(writer.path) and self.cache.get_modified(writer.path) < writer.get_updatetime(): 
                     self.cache.set_modified(writer.path, writer.get_updatetime())
+        
+    def _remove_slow_writers(self):
+        for writer in self.writers:
+            if not writer.is_finished(): 
+                try:
+                    writer_run_too_long = writer.get_starttime() < time.time() - self.WRITE_TIMELIMIT
+                    if writer_run_too_long:
+                        writer.stop()
+                        self.logger.exception('Terminated slow writer after 2h.')
+                except RuntimeError, writer_has_not_yet_started:
+                    self.logger.exception('Trying to remove slow writer trying to write %s failed.'%writer.path)
                 
     def _check_for_failed_writers(self):
         for writer in self.writers:
@@ -226,6 +238,7 @@ class StoreSyncThread(object):
         with self.lock:
             self._check_for_failed_writers()
             self._remove_finished_writers()
+            self._remove_slow_writers()
             self._remove_finished_readers()
             self._remove_successful_removers()
             self._restart_unsuccessful_removers()
