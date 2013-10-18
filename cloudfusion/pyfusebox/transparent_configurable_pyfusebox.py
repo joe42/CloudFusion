@@ -44,6 +44,7 @@ class TransparentConfigurablePyFuseBox(ConfigurablePyFuseBox):
         if self.STATS_DIR == path:
             return self._getattr_for_folder_with_full_access()
         if path in self.virtual_files.keys():
+            self._update_vtf(path)
             return self.virtual_files[path].getattr()
         return super( TransparentConfigurablePyFuseBox, self ).getattr(path, fh)
     
@@ -54,7 +55,6 @@ class TransparentConfigurablePyFuseBox(ConfigurablePyFuseBox):
 
     def read(self, path, size, offset, fh):
         if path in self.virtual_files.keys():
-            self._update_vtf(path)
             return self.virtual_files[path].read(size, offset)
         return super( TransparentConfigurablePyFuseBox, self ).read(path, size, offset, fh)
 
