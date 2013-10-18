@@ -37,6 +37,7 @@ class PersistentLRUCache(LRUCache):
             self.entries[LISTTAIL] = None
             self.entries[CACHESIZE] = 0
             self.entries[LASTFILEID] = 0
+            self.entries.sync()
     
     def _close(self):
         try:
@@ -62,6 +63,7 @@ class PersistentLRUCache(LRUCache):
         super( PersistentLRUCache, self ).refresh(key, filename, modified)
         self._write_to_file(filename, key, disk_value)
         self._resize()
+        self.entries.sync()
         
     def _write_to_file(self, filename, key, value):
         if key in self.entries: # check if file exists
@@ -90,6 +92,7 @@ class PersistentLRUCache(LRUCache):
             filename = self.directory+"/"+str(self.entries[LASTFILEID])
         super( PersistentLRUCache, self ).write(key, filename)
         self._write_to_file(filename, key, value)
+        self.entries.sync()
 
     def get_size_of_dirty_data(self):
         ret = 0
@@ -99,7 +102,9 @@ class PersistentLRUCache(LRUCache):
         return ret
     
     def get_value(self, key):
-        return self._get_file_content(super( PersistentLRUCache, self ).get_value(key))
+        filename = super( PersistentLRUCache, self ).get_value(key)
+        self.entries.sync()
+        return self._get_file_content(filename)
     
     def peek_file(self, key):
         """Like peek, but memory efficient
@@ -131,3 +136,4 @@ class PersistentLRUCache(LRUCache):
         super( PersistentLRUCache, self ).delete(key)
         if file_to_delete:
             os.remove(file_to_delete)
+        self.entries.sync()
