@@ -87,7 +87,9 @@ class TransparentConfigurablePyFuseBox(ConfigurablePyFuseBox):
         try:
             super( TransparentConfigurablePyFuseBox, self )._initialize_store()
         except Exception, e:
-            self._log_exception(e)
+            err_msg = "Could not initialize connection to store. Maybe username or password are incorrect or the internet connection to the server is kaputt.\
+                The original error message is: %s" % str(e)
+            self._log_exception(StoreAccessError(err_msg, 0))
             raise e
     
     def _get_exception_stats(self):

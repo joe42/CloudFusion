@@ -116,8 +116,12 @@ class SugarsyncStore(Store):
         self._logging_handler = 'sugarsync'
         self.logger = logging.getLogger(self._logging_handler)
         self.path_cache = {}
+        #error handling for authorization error
         self.root = config["root"]
-        self.client = SugarsyncClient(config)
+        try:
+            self.client = SugarsyncClient(config)
+        except Exception, e:
+            raise StoreAutorizationError(repr(e), 0)
         self.time_difference = self._get_time_difference()
         self.logger.debug("sugarsync store initialized")
         super(SugarsyncStore, self).__init__() 
