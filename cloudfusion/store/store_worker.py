@@ -7,6 +7,12 @@ import pickle
 import os
 from cloudfusion.store.store import NoSuchFilesytemObjectError
 
+
+class LeightWeightValue(object):
+    '''To replace multiprocessing.Value.'''
+    def __init__(self, val):
+        self.value = val
+
 class GetFreeSpaceWorker(object):
     """Worker to cyclically poll for free space on store."""
     def __init__(self, store, logger, poll_wait_time_in_s=60*10):
@@ -71,6 +77,8 @@ class WriteWorker(object):
         self.end_time = multiprocessing.Value('d', 0.0)
         self._update_time = None
         self.process = multiprocessing.Process(target=self._run, args=(self._result_queue, self.interrupt_event, self.end_time))
+        self._finished = False
+        self._pid = 0
         self._is_successful = False
         self._error = None 
         
@@ -103,16 +111,18 @@ class WriteWorker(object):
         return self._filesize
     
     def is_finished(self):
-        return not self.process.is_alive() 
+        return (self._finished or not self.process.is_alive()) #after successful operation, process is deleted
     
     def get_error(self):
         self._check_result()
         return self._error
     
     def _check_result(self):
-        if not self._result_queue.empty():
-            self._remove_tmpfile()
+        if self._finished:
+            return
+        if not self._result_queue.empty(): 
             result = self._result_queue.get()
+            self._clean_up()
             if isinstance( result, ( int, long, float ) ):
                 self._update_time = result
                 self._is_successful = True
@@ -125,33 +135,44 @@ class WriteWorker(object):
         return self._is_successful
     
     def stop(self):
+        if self._finished:
+            return
         self.interrupt_event.set()
         self.process.join(60)
         if not self.process.is_alive():
             print "stop joined"
-            self._error = Exception("Stopped WriteWorker process %s to write %s", self.process.pid, self.path)
+            self._error = Exception("Stopped WriteWorker process %s to write %s", self._pid, self.path)
         else:
             import os
-            print "forceful terminateion1"
+            print "forceful terminateion1 %s" % self._pid
             self.process.terminate()
             print "forceful terminateion2 %s" % self.process.pid
             os.system('kill -9 {0}'.format(self.process.pid)) 
 
             self._error = Exception("Forcefully terminated WriteWorker process %s to write %s", self.process.pid, self.path) 
         self.process.terminate()
-        print "forceful terminateion3"
+        print "forceful terminateion3 %s" % self._pid
         self.end_time.value = time.time()
-        self._remove_tmpfile()
-        self.logger.debug("Stopped WriteWorker process %s to write %s", self.process.pid, self.path)
+        self._clean_up()
+        self.logger.debug("Stopped WriteWorker process %s to write %s", self._pid, self.path)
         
-    def _remove_tmpfile(self):
+    def _clean_up(self):
         if os.path.exists(self._filename):
             os.remove(self._filename)
+        self.store = None
+        self.interrupt_event = None
+        self._result_queue = None
+        self.end_time = LeightWeightValue(self.end_time.value) 
+        self.process = None
+        self._finished = True
     
     def start(self):
+        if self._finished:
+            return
         self.start_time = time.time()
         self.logger.debug("Create WriteWorker process to write %s", self.path)
         self.process.start()
+        self._pid = self.process.pid
         
     def _run(self, result_queue, interrupt_event, end_time):
         self.logger.debug("Start WriteWorker process %s to write %s", os.getpid(), self.path)
@@ -217,7 +238,15 @@ class ReadWorker(object):
         self.start_time = 0
         self.end_time = multiprocessing.Value('d', 0.0)
         self.process = multiprocessing.Process(target=self._run, args=(self._result_queue, self.end_time))
+        self._finished = False
 
+    def _clean_up(self):
+        self.store = None
+        self._result_queue = None
+        self.end_time = LeightWeightValue(self.end_time.value) 
+        self.process = None
+        self._finished = True
+        
     def get_duration(self):
         """Get duration of download in seconds"""
         if self.start_time == 0 or self.end_time.value == 0:
@@ -243,7 +272,7 @@ class ReadWorker(object):
         return self._filesize
     
     def is_finished(self):
-        return not self.process.is_alive() 
+        return (self._finished or not self.process.is_alive()) #after successful operation, process is deleted
     
     def is_successful(self):
         self._check_result()
@@ -268,15 +297,22 @@ class ReadWorker(object):
         pass #Remove terminate to allow for logging with multiprocessing
     
     def start(self):
+        if self._finished:
+            return
         self.start_time = time.time()
         self.process.start()
 
     def _check_result(self):
-        if not self._result_queue.empty():
+        if self._finished:
+            return
+        if not self._result_queue.empty(): # self._result_queue is empty after cleanup
             self._get_result()
     
     def _get_result(self):
+        if self._finished:
+            return
         result = self._result_queue.get()
+        self._clean_up()
         if isinstance(result, str) or isinstance(result, unicode):
             self._is_successful = True
             self._temp_result = result
