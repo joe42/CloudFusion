@@ -101,7 +101,9 @@ class TransparentConfigurablePyFuseBox(ConfigurablePyFuseBox):
         return ret
     
     def _log_exception(self, exception):
-        name = repr(exception)
+        name = type(exception)
+        if name == 'Exception':
+            name = repr(exception)
         if self.exceptions_log.has_key(name):
             e_stat = self.exceptions_log[name]
             e_stat.exception_list.append(exception)
