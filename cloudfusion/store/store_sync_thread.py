@@ -120,8 +120,17 @@ class StoreSyncThread(object):
         #used for waiting when quota errors occur
         self.skip_starting_new_writers_for_next_x_cycles = 0
         self.logger.debug("initialized StoreSyncThread")
-        
     
+    def restart(self):
+        self.stop()
+        self.thread.join(60*5)
+        #stop write- and readworkers
+        for reader in self.readers:
+            reader.stop()
+        for remover in self.removers:
+            remover.stop()
+        self.start()
+        
     def get_downloaded(self):
         """Get amount of data downloaded from a store in MB"""
         return self.stats.downloaded / 1000.0 / 1000

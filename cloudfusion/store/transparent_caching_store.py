@@ -82,7 +82,7 @@ class TransparentMultiprocessingCachingStore(MultiprocessingCachingStore, Transp
         ret = "Last heartbeat was %s s ago."  % self.sync_thread.last_heartbeat()
         if self.sync_thread.last_heartbeat() > 60*15:
             ret += "Store died, trying to revive it..." 
-            self.sync_thread.start()
+            self.sync_thread.restart()
             ret += "Store revived successfully." 
         return ret
     
