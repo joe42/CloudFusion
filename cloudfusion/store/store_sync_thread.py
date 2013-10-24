@@ -252,7 +252,8 @@ class StoreSyncThread(object):
     
     def _reconnect(self):
         if time.time() > self.last_reconnect + 60*60: #reconnect after 1h
-            self.store.reconnect()
+            with self.lock:
+                self.store.reconnect()
             self.last_reconnect = time.time()
     
     def tidy_up(self):
