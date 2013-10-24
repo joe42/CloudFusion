@@ -283,7 +283,7 @@ class DropboxStore(Store):
         size = self.__get_size(fileobject)
         self.logger.debug("Storing file object of size %s to %s", size, path)
         remote_file_name = os.path.basename(path)
-        if size < 1000000:
+        if size < 5000000:
             return self.store_small_fileobject(fileobject, path)
         nameable_file = NameableFile( fileobject, remote_file_name )
         uploader = self.client.get_chunked_uploader(nameable_file, size)
@@ -293,7 +293,7 @@ class DropboxStore(Store):
                 if interrupt_event and interrupt_event.is_set():
                     self.logger.debug("terminating stale upload of %s", path)
                     raise InterruptedException("Stale upload has been interrupted.")
-                resp = uploader.upload_chunked(1 * 1000 * 1000)
+                resp = uploader.upload_chunked(5 * 1000 * 1000)
             except rest.ErrorResponse, e:
                 retry -= 1
                 if retry == 0:
