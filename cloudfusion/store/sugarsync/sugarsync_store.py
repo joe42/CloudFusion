@@ -398,13 +398,15 @@ class SugarsyncStore(Store):
                 self.logger.warning("could not duplicate %s to %s\nstatus: %s reason: %s", path_to_src, path_to_dest, resp.status, resp.reason)
                 HTTP_STATUS.generate_exception(resp.status, str(resp))
     
-    def _handle_error(self, error, method_name, *args, **kwargs):
+    def _handle_error(self, error, method_name, remaining_tries, *args, **kwargs):
         if isinstance(error, AttributeError):
             self.logger.debug("Retrying on funny socket error: %s", error)
             #funny socket error in httplib2: AttributeError 'NoneType' object has no attribute 'makefile'
         elif isinstance(error, StoreAutorizationError):
             self.logger.debug("Trying to handle authorization error by reconnecting: %s", error)
             self.reconnect()
+            if remaining_tries == 0: # throw error after last try
+                raise error
         elif isinstance(error, StoreAccessError):
             if error.status == HTTP_STATUS.OVER_STORAGE_LIMIT or \
                 error.status == HTTP_STATUS.BAD_REQUEST or \
@@ -415,6 +417,8 @@ class SugarsyncStore(Store):
                 raise error # do not retry (error cannot be handled)
         else:
             self.logger.debug("Error is not covered by _handle_error: %s", error)
+        if remaining_tries == 0: # throw error after last try 
+            raise StoreAccessError(str(error), 0) 
         return False
         
 

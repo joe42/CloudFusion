@@ -155,7 +155,7 @@ class DropboxStore(Store):
         requests.post('https://www.dropbox.com/1/oauth/authorize', attr, headers=headers,cookies=cookies)
 
     
-    def _handle_error(self, error, method_name, *args, **kwargs):
+    def _handle_error(self, error, method_name, remaining_tries, *args, **kwargs):
         """Used by retry decorator to react to errors."""
         if isinstance(error, AttributeError):
             self.logger.debug("Retrying on funny socket error: %s", error)
@@ -163,6 +163,8 @@ class DropboxStore(Store):
         elif isinstance(error, StoreAutorizationError):
             self.logger.debug("Trying to handle authorization error by reconnecting: %s", error)
             self.reconnect()
+            if remaining_tries == 0: # throw error after last try
+                raise error 
         elif isinstance(error, StoreAccessError):
             if error.status == HTTP_STATUS.OVER_STORAGE_LIMIT or \
                 error.status == HTTP_STATUS.TOO_MANY_ITEMS or \
@@ -174,6 +176,8 @@ class DropboxStore(Store):
                 raise error
         else:
             self.logger.debug("Error is not covered by _handle_error: %s", error)
+        if remaining_tries == 0: # throw error after last try
+            raise StoreAccessError(str(error), 0) 
         return False
         
     def reconnect(self, tries = 20):
