@@ -24,17 +24,20 @@ def retry(ExceptionToCheck, tries=20, delay=0.1, backoff=2):
         @wraps(f) #preserve original function name, docstring, arguments 
         def f_retry(self, *args, **kwargs):
             mdelay = delay; mbackoff = backoff
-            for i in range(1, tries):
+            for i in range(1, tries+1):
+                remaining_tries = tries-i
                 try:
                     return f(self, *args, **kwargs)
                 except ExceptionToCheck, e:
                     if hasattr(self, '_handle_error'):
                         if self._handle_error(e, f.__name__, *args, **kwargs): #if error is handled, break
-                            break
+                            return f(self, *args, **kwargs)
                     time.sleep(mdelay)
                     mdelay *= mbackoff
-            return f(self, *args, **kwargs)
-
+                    if remaining_tries == 0:
+                        raise e
+            #end for
+            
         return f_retry  # true decorator
 
     return deco_retry
