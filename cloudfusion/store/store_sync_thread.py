@@ -16,17 +16,7 @@ class StoreStats(object):
         self.read_workers = []
         
     def _log_exception(self, exception):
-        name = type(exception)
-        if name == 'Exception':
-            name = repr(Exception)
-        if self.exceptions_log.has_key(name):
-            e_stat = self.exceptions_log[name]
-            e_stat.exception_list.append(exception)
-            e_stat.lasttime = time.time()
-            e_stat.count += 1
-        else:
-            e_stat = ExceptionStats(name, [exception], str(exception))
-            self.exceptions_log[name] = e_stat
+        self.exceptions_log = ExceptionStats.add_exception(Exception("Cache_exceeds_hardlimit"), self.exceptions_log)
     
     def reset(self):
         '''Resets all statistics.'''
