@@ -6,12 +6,99 @@ import copy
 import pickle
 import os
 from cloudfusion.store.store import NoSuchFilesytemObjectError
+from cloudfusion.store.transparent_store import ExceptionStats
 
 
 class LeightWeightValue(object):
     '''To replace multiprocessing.Value.'''
     def __init__(self, val):
         self.value = val
+        
+class WorkerStats(object):
+    '''Statistics about workers. Resets statistics automatically after 100*1000 workers.'''
+    def __init__(self):
+        self.uploaded = 0
+        self.downloaded = 0
+        self.exceptions_log = {}
+        self.write_workers = []
+        self.read_workers = []
+        
+    def _log_exception(self, exception):
+        self.exceptions_log = ExceptionStats.add_exception(Exception("Cache_exceeds_hardlimit"), self.exceptions_log)
+    
+    def reset(self):
+        '''Resets all statistics.'''
+        self.uploaded = 0
+        self.downloaded = 0
+        self.exceptions_log = {}
+        self.write_workers = []
+        self.read_workers = []
+    
+    def add_finished_worker(self, worker):
+        if len(self.write_workers) > 100*1000 or len(self.read_workers) > 100*1000:
+            return self.reset()
+        if isinstance(worker, WriteWorker):
+            if worker.get_error():
+                self._log_exception(worker.get_error())
+                return
+            if worker.is_successful():
+                self.write_workers.append(worker)
+                self.uploaded += worker.get_filesize()
+        if isinstance(worker, ReadWorker):
+            if worker.get_error():
+                self._log_exception(worker.get_error())
+                return
+            if worker.is_successful():
+                self.read_workers.append(worker)
+                self.downloaded += worker.get_filesize()
+            
+    def get_download_time(self):
+        '''Get download time considering parallel downloads.'''
+        START=0; END=1
+        if len(self.read_workers) == 0:
+            return 0
+        ret = 0
+        self.read_workers = sorted(self.read_workers, key=lambda w: w.get_starttime())
+        worker1 = self.read_workers[0]
+        longest_connection = [worker1.get_starttime(), worker1.get_endtime()]
+        for worker2 in self.read_workers[1:]:
+            if longest_connection[START] <= worker2.get_starttime() <= longest_connection[END]:
+                if longest_connection[END] <= worker2.get_endtime():
+                    longest_connection[END] = worker2.get_endtime()
+            else:
+                ret += longest_connection[END] - longest_connection[START]
+                longest_connection = [worker2.get_starttime(), worker2.get_endtime()]
+        ret += longest_connection[END] - longest_connection[START]
+        return ret
+            
+    def get_upload_time(self):
+        '''Get download time considering parallel uploads.'''
+        START=0; END=1
+        if len(self.write_workers) == 0:
+            return 0
+        ret = 0
+        self.write_workers = sorted(self.write_workers, key=lambda w: w.get_starttime())
+        worker1 = self.write_workers[0]
+        longest_connection = [worker1.get_starttime(), worker1.get_endtime()]
+        for worker2 in self.write_workers[1:]:
+            if longest_connection[START] <= worker2.get_starttime() <= longest_connection[END]:
+                if longest_connection[END] <= worker2.get_endtime():
+                    longest_connection[END] = worker2.get_endtime()
+            else:
+                ret += longest_connection[END] - longest_connection[START]
+                longest_connection = [worker2.get_starttime(), worker2.get_endtime()]
+        ret += longest_connection[END] - longest_connection[START]
+        return ret
+            
+    def get_download_rate(self):
+        if self.get_download_time() == 0:
+            return 0
+        return float(self.downloaded) / self.get_download_time()
+    
+    def get_upload_rate(self):
+        if self.get_upload_time() == 0:
+            return 0
+        return float(self.uploaded) / self.get_upload_time()
 
 class GetFreeSpaceWorker(object):
     """Worker to cyclically poll for free space on store."""
