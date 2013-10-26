@@ -2,7 +2,8 @@ from __future__ import division
 from cloudfusion.store.store_worker import WriteWorker, ReadWorker, RemoveWorker
 from threading import Thread, RLock
 import time
-from cloudfusion.store.store import StoreSpaceLimitError
+from cloudfusion.store.store import StoreSpaceLimitError, StoreAccessError, NoSuchFilesytemObjectError,\
+    StoreAutorizationError
 from cloudfusion.store.transparent_store import ExceptionStats
 
 class StoreStats(object):
@@ -325,7 +326,10 @@ class StoreSyncThread(object):
             content = reader.get_result() # block until read is done
             self.stats.add_finished_worker(reader)
             if reader.get_error():
-                raise reader.get_error()
+                err = reader.get_error()
+                if not err in [StoreAccessError, NoSuchFilesytemObjectError, StoreAutorizationError]:
+                    err = StoreAccessError(str(err),0)
+                raise err
             self.cache.refresh(path, content, self.store._get_metadata(path)['modified'])
             self.readers.remove(reader)
             
