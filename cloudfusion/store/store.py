@@ -5,7 +5,9 @@ import os.path
 
 class StoreAccessError(Exception):
     def __init__(self, msg, status=0):
-        super(StoreAccessError, self).__init__(msg+"\nStatus: %s" %status)
+        if status != 0:
+            msg =msg+"\nStatus: %s" %status
+        super(StoreAccessError, self).__init__(msg)
         self.status = status
 class DateParseError(Exception):
     def __init__(self, msg):
