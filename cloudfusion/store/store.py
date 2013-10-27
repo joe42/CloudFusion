@@ -4,26 +4,26 @@ Created on 08.04.2011
 import os.path
 
 class StoreAccessError(Exception):
-    def __init__(self, msg, status):
+    def __init__(self, msg, status=0):
         super(StoreAccessError, self).__init__(msg+"\nStatus: %s" %status)
         self.status = status
 class DateParseError(Exception):
     def __init__(self, msg):
         super(DateParseError, self).__init__(msg)
 class RetrieveMetadataError(StoreAccessError): 
-    def __init__(self, path, msg, status):
+    def __init__(self, path, msg="", status=0):
         super(RetrieveMetadataError, self).__init__("Could not retrieve metadata for "+path+"\nDescription: "+msg, status)
 class StoreSpaceLimitError(StoreAccessError):
-    def __init__(self, msg, status):
+    def __init__(self, msg="", status=0):
         super(StoreSpaceLimitError, self).__init__(msg, status)
 class NoSuchFilesytemObjectError(StoreAccessError):
-    def __init__(self, path, status):
+    def __init__(self, path, status=0):
         super(NoSuchFilesytemObjectError, self).__init__("%s does not exist." % path, status)
 class StoreAutorizationError(StoreAccessError):
-    def __init__(self, msg, status):
+    def __init__(self, msg, status=0):
         super(StoreAutorizationError, self).__init__(msg, status)
 class AlreadyExistsError(StoreAccessError):
-    def __init__(self, msg, status):
+    def __init__(self, msg, status=0):
         super(AlreadyExistsError, self).__init__(msg, status)
 class InvalidPathValueError(ValueError):
     def __init__(self, path):
