@@ -7,7 +7,7 @@ Created on Jul 29, 2013
 import tempfile
 import sqlite3
 from time import sleep
-from threading import Thread
+import multiprocessing
 import pickle
 import logging
 from cloudfusion.mylogging.db_handler import DBHandler
@@ -18,16 +18,16 @@ DBHandler instances can send log records from multiple processes, simultaneously
 '''
 _logging_db_filename = None
 _logging_db_file = None
-abort = False
+abort = multiprocessing.Value('i', 0)
 
 def start():
     """Start processing records in a background thread."""
     global _logging_db_filename, _logging_db_file
     _logging_db_file = tempfile.NamedTemporaryFile()
     _logging_db_filename = _logging_db_file.name
-    thread = Thread(target=_serve_until_stopped)
-    thread.setDaemon(True)
-    thread.start()
+    process = multiprocessing.Process(target=_serve_until_stopped)
+    process.daemon = True
+    process.start()
     
 def create_dbhandler():
     return DBHandler(_logging_db_filename)
@@ -54,8 +54,8 @@ def _serve_until_stopped():
     conn = sqlite3.connect(_logging_db_filename, 60) 
     cursor = conn.cursor()
     cursor.execute("CREATE TABLE IF NOT EXISTS logging (record BLOB);")
-    abort = False
-    while not abort:
+    abort.value = 0
+    while not abort.value:
         try:
             record = __get_next_record(cursor, conn)
             if not record: 
@@ -68,7 +68,7 @@ def _serve_until_stopped():
             
 def stop():
     global abort 
-    abort = True
+    abort.value = 1
 
 
 def _handleRecord(record):
