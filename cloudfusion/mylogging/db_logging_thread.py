@@ -18,6 +18,7 @@ DBHandler instances can send log records from multiple processes, simultaneously
 '''
 _logging_db_filename = None
 _logging_db_file = None
+_last_rowid = 0
 abort = multiprocessing.Value('i', 0)
 
 def start():
@@ -27,44 +28,72 @@ def start():
     _logging_db_filename = _logging_db_file.name
     process = multiprocessing.Process(target=_serve_until_stopped)
     process.daemon = True
+    conn = sqlite3.connect(_logging_db_filename, 60, isolation_level=None) # isolation_level=None -> commit immediately
+    cursor = conn.cursor()
+    cursor.execute("CREATE TABLE IF NOT EXISTS logging (Id INTEGER PRIMARY KEY, record BLOB);") # 
+    cursor.execute("PRAGMA journal_mode=WAL;") # slight optimization for concurrent access
+    conn.close()
     process.start()
     
 def create_dbhandler():
+    '''Get a database logging handler to log to the database logging thread. 
+    Only call this method after calling :func:`start` once.
+    '''
     return DBHandler(_logging_db_filename)
     
 def get_logging_db_identifier():
     """:returns: identifier of the database in use for :class:`cloudfusion.mylogging.db_handler.DBHandler`"""
     return _logging_db_filename  
 
-def __get_next_record(cursor, conn):
+def __get_records(cursor, conn):
     """ Get and delete next record from database.
     :returns: next record from database or None"""
-    cursor.execute("SELECT * FROM logging ORDER BY ROWID ASC LIMIT 1 ;")
-    row = cursor.fetchone()
-    cursor.execute("DELETE FROM logging WHERE ROWID = (SELECT MIN(ROWID) FROM logging) ;")
-    conn.commit()
-    if row == None:
-        return None
-    record_blob = row[0]
-    record = pickle.loads(str(record_blob))
-    return record
+    global _last_rowid
+    INDEX = 0; VALUE = 1
+    ret = []
+    cursor.execute("SELECT * FROM logging WHERE ROWID > %s ORDER BY ROWID ASC;" % _last_rowid)
+    rows = cursor.fetchall()
+    if len(rows) == 0:
+        return ret
+    _last_rowid = rows[-1][INDEX]
+    for row in rows:
+        record_blob = row[VALUE]
+        try:
+            ret.append(pickle.loads(str(record_blob)))
+        except:
+            import sys, traceback
+            sys.stderr.write("Failing to unpickle %s\n" % str(record_blob))
+            traceback.print_exc(file=sys.stderr)
+    return ret
     
 def _serve_until_stopped():
     global abort
-    conn = sqlite3.connect(_logging_db_filename, 60) 
+    conn = sqlite3.connect(_logging_db_filename, 60, isolation_level=None) 
     cursor = conn.cursor()
-    cursor.execute("CREATE TABLE IF NOT EXISTS logging (record BLOB);")
     abort.value = 0
+    try_cnt = 0
     while not abort.value:
         try:
-            record = __get_next_record(cursor, conn)
-            if not record: 
-                sleep(0.5)
+            sleep(1)
+            try_cnt += 1
+            records = __get_records(cursor, conn)
+            if not records: 
                 continue
-            _handleRecord(record)
-        except Exception:
-            import sys, traceback
-            traceback.print_exc(file=sys.stderr)
+            for record in records:
+                _handleRecord(record)
+            _clean_db(cursor, conn)
+            try_cnt = 0
+        except sqlite3.OperationalError:
+            if try_cnt > 2:
+                import sys, traceback
+                sys.stderr.write("Retrying to get logging records or delete them the %s time\n" % try_cnt)
+                traceback.print_exc(file=sys.stderr)
+
+def _clean_db(cursor, conn):
+    global _last_rowid
+    if _last_rowid > 1000:
+        cursor.execute("DELETE FROM logging WHERE ROWID <= %s ;" % _last_rowid)
+        _last_rowid = 0
             
 def stop():
     global abort 
