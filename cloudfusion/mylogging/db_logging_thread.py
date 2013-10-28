@@ -40,6 +40,12 @@ def create_dbhandler():
     Only call this method after calling :func:`start` once.
     '''
     return DBHandler(_logging_db_filename)
+
+def make_logger_multiprocessingsave(logger):
+    logger.handlers = []
+    db_handler = create_dbhandler()
+    logger.addHandler(db_handler)
+    return logger
     
 def get_logging_db_identifier():
     """:returns: identifier of the database in use for :class:`cloudfusion.mylogging.db_handler.DBHandler`"""
