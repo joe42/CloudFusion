@@ -3,6 +3,7 @@ CloudFusion
 
 CloudFusion lets you access your Dropbox or Sugarsync files from Linux like any file on your desktop.
 
+
 Install
 -------
 
@@ -82,6 +83,13 @@ Sugarsync has a maximum file upload size of 100MB. It does not allow Outlook .ps
 
 Notes
 -----
+
+Cloudfusion is continually tested with cloudbees' Jenkins. So you can easily see if the current version works:
+
+.. image:: https://joe42.ci.cloudbees.com/buildStatus/icon?job=Cloudfusion
+
+Or which tests failed: https://joe42.ci.cloudbees.com/job/Cloudfusion/lastCompletedBuild/testReport
+
 
 I am not affiliated with Dropbox nor with Sugarsync.
 
