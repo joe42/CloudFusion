@@ -1,0 +1,56 @@
+The :mod:`cache_test` Module
+----------------------------
+
+.. automodule:: cloudfusion.tests.cache_test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`persistent_lru_cache_test` Module
+-------------------------------------------
+
+.. automodule:: cloudfusion.tests.persistent_lru_cache_test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`store_test` Module
+----------------------------
+
+.. automodule:: cloudfusion.tests.store_test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`synchronize_proxy_test` Module
+----------------------------------------
+
+.. automodule:: cloudfusion.tests.synchronize_proxy_test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`db_logging_thread_test` Module
+----------------------------------------
+
+.. automodule:: cloudfusion.tests.db_logging_thread_test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`xmlparser_test` Module
+--------------------------------
+
+.. automodule:: cloudfusion.tests.xmlparser_test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`lru_cache_test` Module
+--------------------------------
+
+.. automodule:: cloudfusion.tests.lru_cache_test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

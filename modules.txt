@@ -4,6 +4,7 @@ Modules:
 .. toctree::
    :maxdepth: 5
 
+   mylogging
    pyfusebox
    store
    tests
