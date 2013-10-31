@@ -1,0 +1,19 @@
+language: python
+python:
+- '2.6'
+install: true
+script:
+- sh buildscripts/run_tests.sh
+after_success:
+- sh buildscripts/generate_documentation.sh
+- sh buildscripts/publish_developer_branch.sh
+branches:
+  only:
+  - development
+env:
+  global: 
+  #usr,pw,gh_token
+  - secure: KlCTerTwn7SZnW8z7wcv0NW2LbVt63HqPddnt6NJEqI0G2VzZbk3HNeWehcll3yPkavE2rQfa58TIN4Tkn03lbDWeTqtPdHD+VR3xkrGhrC672n9YEoM1rgaY5dAmhqbuSXB6EjNwXr/Ry91HtFwC+m0gcvZ1lnnDLoaosV6SYU=
+  - secure: cyBcqoKCisTGGsgPp1F04VYdJTu7d3U5ma4ieP2yfFwIlKLSNg2qtZNf7tMAHYm4cz+dpnksVd54LWjA7XHODmMrBRhp4RwhKDo8835hx2q/KAKCkLD79gXwUVE42QqfyLEYAxBpRe3+ASKtJRDOhdVF6f/hK6XSSo5YcEaWQ4w=
+  - secure: SQQVDBOVZ1Slwnj1yaEh6gpIM+Pdi03b81k+fl+AWwhmVDB1lTXBb3PPI+V8lvLSN3eia9xUIaVOF5B+/wOWbxwR17plD1mD/sVaZn/GkSJtiKLTr+h7goVcFff2toahtuPYg8IhLnaWgUpB7Xqvr739peloCKBRT1HmNuNf2mg=
+cache: apt
