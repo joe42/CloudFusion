@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The db_handler Module &mdash; CloudFusion 0.01 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
+    <link rel="up" title="Developers documentation" href="develop.html" />
+    <link rel="next" title="The virtualfile Module" href="pyfusebox.html" />
+    <link rel="prev" title="Developers documentation" href="develop.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pyfusebox.html" title="The virtualfile Module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="develop.html" title="Developers documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
+          <li><a href="develop.html" accesskey="U">Developers documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-cloudfusion.mylogging.db_handler">
+<span id="the-db-handler-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">db_handler</span></tt> Module<a class="headerlink" href="#module-cloudfusion.mylogging.db_handler" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="cloudfusion.mylogging.db_handler.DBHandler">
+<em class="property">class </em><tt class="descclassname">cloudfusion.mylogging.db_handler.</tt><tt class="descname">DBHandler</tt><big>(</big><em>db_identifier</em><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.db_handler.DBHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">logging.Handler</span></tt></p>
+<p>This logging handler sends events to <tt class="xref py py-mod docutils literal"><span class="pre">cloudfusion.mylogging.db_logging_thread</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>db_identifier</strong> &#8211; identifier from <tt class="xref py py-func docutils literal"><span class="pre">cloudfusion.mylogging.db_logging_thread.get_logging_db_identifier()</span></tt></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cloudfusion.mylogging.db_handler.DBHandler.emit">
+<tt class="descname">emit</tt><big>(</big><em>record</em><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.db_handler.DBHandler.emit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Emit a record.</p>
+<p>Writes the LogRecord to the database.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.mylogging.db_handler.DBHandler.reconnect">
+<tt class="descname">reconnect</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.db_handler.DBHandler.reconnect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.mylogging.nullhandler">
+<span id="the-nullhandler-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">nullhandler</span></tt> Module<a class="headerlink" href="#module-cloudfusion.mylogging.nullhandler" title="Permalink to this headline">¶</a></h1>
+<p>Created on May 7, 2013</p>
+<p>&#64;author: joe</p>
+<dl class="class">
+<dt id="cloudfusion.mylogging.nullhandler.NullHandler">
+<em class="property">class </em><tt class="descclassname">cloudfusion.mylogging.nullhandler.</tt><tt class="descname">NullHandler</tt><big>(</big><em>level=0</em><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.nullhandler.NullHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">logging.Handler</span></tt></p>
+<p>Logging handler doing nothing (if python 2.6 is used this handler is not available by default).</p>
+<p>Initializes the instance - basically setting the formatter to None
+and the filter list to empty.</p>
+<dl class="method">
+<dt id="cloudfusion.mylogging.nullhandler.NullHandler.createLock">
+<tt class="descname">createLock</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.nullhandler.NullHandler.createLock" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.mylogging.nullhandler.NullHandler.emit">
+<tt class="descname">emit</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.nullhandler.NullHandler.emit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.mylogging.nullhandler.NullHandler.handle">
+<tt class="descname">handle</tt><big>(</big><em>record</em><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.nullhandler.NullHandler.handle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="the-db-logging-thread-module">
+<h1>The <tt class="xref py py-mod docutils literal"><span class="pre">db_logging_thread</span></tt> Module<a class="headerlink" href="#the-db-logging-thread-module" title="Permalink to this headline">¶</a></h1>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">db_handler</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.mylogging.nullhandler">The <tt class="docutils literal"><span class="pre">nullhandler</span></tt> Module</a></li>
+<li><a class="reference internal" href="#the-db-logging-thread-module">The <tt class="docutils literal"><span class="pre">db_logging_thread</span></tt> Module</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="develop.html"
+                        title="previous chapter">Developers documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pyfusebox.html"
+                        title="next chapter">The <tt class="docutils literal"><span class="pre">virtualfile</span></tt> Module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/mylogging.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pyfusebox.html" title="The virtualfile Module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="develop.html" title="Developers documentation"
+             >previous</a> |</li>
+        <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
+          <li><a href="develop.html" >Developers documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Johannes Müller.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
+    </div>
+  </body>
+</html>

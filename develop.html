@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Developers documentation &mdash; CloudFusion 0.01 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
+    <link rel="next" title="The db_handler Module" href="mylogging.html" />
+    <link rel="prev" title="Setup documentation" href="setup.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mylogging.html" title="The db_handler Module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="setup.html" title="Setup documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="developers-documentation">
+<h1>Developers documentation<a class="headerlink" href="#developers-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="extensions">
+<h2>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="requirements">
+<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>python-sphinx</li>
+<li>texlive-full for latex documentation</li>
+</ul>
+<p>To generate this documentation first call:</p>
+<div class="highlight-python"><pre>mkdir -p .cloudfusion/logs # work around for now
+    cloudfusion/doc/generate_modules.py -d cloudfusion/doc -f -m 5 cloudfusion main.py dropbox cloudfusion/fuse.py cloudfusion/conf cloudfusion/doc</pre>
+</div>
+<ul class="simple">
+<li>-d defines the destination directory for the documentation to generate</li>
+<li>-f means to override existing files</li>
+<li>-m determines the maximal depth of the directory structure to search for modules to document</li>
+<li>afterwards there comes the directory name which is the starting point for documentation</li>
+<li>followed by a list of paths to exclude from documentation</li>
+</ul>
+<p>Then call:</p>
+<div class="highlight-python"><pre>make -f cloudfusion/doc/Makefile html</pre>
+</div>
+<ul class="simple">
+<li>-f means to override existing files</li>
+</ul>
+</div>
+</div>
+<div class="section" id="tests">
+<h2>Tests<a class="headerlink" href="#tests" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>Requirements<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>nosy</li>
+<li>nosetests</li>
+</ul>
+<p>First create configuration files for all services in &#8220;cloudfusion/config&#8221;. For the Dropbox service, the configuration file needs to be called
+<em>dropbox_testing.ini</em>. For sugarsync the name is <em>sugarsync_testing.ini</em>.</p>
+<p>To run all tests call:</p>
+<div class="highlight-python"><pre>nosetests -v -s cloudfusion.tests.store_test</pre>
+</div>
+<p>-v and -s are optional flags for verbose output and output of anything printed to stdout.</p>
+<p>To run tests automagically during development, as soon as you change something call:</p>
+<div class="highlight-python"><pre>nosy -c cloudfusion/config/nosy.cfg</pre>
+</div>
+</div>
+</div>
+<div class="section" id="modules">
+<h2>Modules:<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="mylogging.html">The <tt class="docutils literal"><span class="pre">db_handler</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mylogging.html#module-cloudfusion.mylogging.nullhandler">The <tt class="docutils literal"><span class="pre">nullhandler</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mylogging.html#the-db-logging-thread-module">The <tt class="docutils literal"><span class="pre">db_logging_thread</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyfusebox.html">The <tt class="docutils literal"><span class="pre">virtualfile</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyfusebox.html#the-configurable-pyfusebox-module">The <tt class="docutils literal"><span class="pre">configurable_pyfusebox</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyfusebox.html#module-cloudfusion.pyfusebox.pyfusebox">The <tt class="docutils literal"><span class="pre">pyfusebox</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyfusebox.html#the-transparent-configurable-pyfusebox-module">The <tt class="docutils literal"><span class="pre">transparent_configurable_pyfusebox</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyfusebox.html#module-cloudfusion.pyfusebox.virtualconfigfile">The <tt class="docutils literal"><span class="pre">virtualconfigfile</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html">Subpackages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="store.dropbox.html">The <tt class="docutils literal"><span class="pre">dropbox_store</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.dropbox.html#module-cloudfusion.store.dropbox.file_decorator">The <tt class="docutils literal"><span class="pre">file_decorator</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.sugarsync.html">The <tt class="docutils literal"><span class="pre">sugarsync_store</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.sugarsync.html#module-cloudfusion.store.sugarsync.client">The <tt class="docutils literal"><span class="pre">client</span></tt> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#the-store-sync-thread-module">The <tt class="docutils literal"><span class="pre">store_sync_thread</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#the-transparent-caching-store-module">The <tt class="docutils literal"><span class="pre">transparent_caching_store</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#the-caching-store-module">The <tt class="docutils literal"><span class="pre">caching_store</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.store">The <tt class="docutils literal"><span class="pre">store</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.transparent_store">The <tt class="docutils literal"><span class="pre">transparent_store</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#the-store-worker-module">The <tt class="docutils literal"><span class="pre">store_worker</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#the-metadata-caching-store-module">The <tt class="docutils literal"><span class="pre">metadata_caching_store</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">The <tt class="docutils literal"><span class="pre">store_test</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.lru_cache_test">The <tt class="docutils literal"><span class="pre">lru_cache_test</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.cache_test">The <tt class="docutils literal"><span class="pre">cache_test</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.xmlparser_test">The <tt class="docutils literal"><span class="pre">xmlparser_test</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.persistent_lru_cache_test">The <tt class="docutils literal"><span class="pre">persistent_lru_cache_test</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.synchronize_proxy_test">The <tt class="docutils literal"><span class="pre">synchronize_proxy_test</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#the-db-logging-thread-test-module">The <tt class="docutils literal"><span class="pre">db_logging_thread_test</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">The <tt class="docutils literal"><span class="pre">exponential_retry</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.pickle_methods">The <tt class="docutils literal"><span class="pre">pickle_methods</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.xmlparser">The <tt class="docutils literal"><span class="pre">xmlparser</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.synchronize_proxy">The <tt class="docutils literal"><span class="pre">synchronize_proxy</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.httplib_patch">The <tt class="docutils literal"><span class="pre">httplib_patch</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.persistent_lru_cache">The <tt class="docutils literal"><span class="pre">persistent_lru_cache</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.string">The <tt class="docutils literal"><span class="pre">string</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.cache">The <tt class="docutils literal"><span class="pre">cache</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.lru_cache">The <tt class="docutils literal"><span class="pre">lru_cache</span></tt> Module</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Developers documentation</a><ul>
+<li><a class="reference internal" href="#extensions">Extensions</a></li>
+<li><a class="reference internal" href="#documentation">Documentation</a><ul>
+<li><a class="reference internal" href="#requirements">Requirements</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tests">Tests</a><ul>
+<li><a class="reference internal" href="#id1">Requirements</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#modules">Modules:</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="setup.html"
+                        title="previous chapter">Setup documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="mylogging.html"
+                        title="next chapter">The <tt class="docutils literal"><span class="pre">db_handler</span></tt> Module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/develop.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mylogging.html" title="The db_handler Module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="setup.html" title="Setup documentation"
+             >previous</a> |</li>
+        <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Johannes Müller.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
+    </div>
+  </body>
+</html>

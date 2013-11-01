@@ -1,0 +1,508 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Subpackages &mdash; CloudFusion 0.01 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
+    <link rel="up" title="Developers documentation" href="develop.html" />
+    <link rel="next" title="The dropbox_store Module" href="store.dropbox.html" />
+    <link rel="prev" title="The virtualfile Module" href="pyfusebox.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="store.dropbox.html" title="The dropbox_store Module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pyfusebox.html" title="The virtualfile Module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
+          <li><a href="develop.html" accesskey="U">Developers documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="subpackages">
+<h1>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="store.dropbox.html">The <tt class="docutils literal"><span class="pre">dropbox_store</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.dropbox.html#module-cloudfusion.store.dropbox.file_decorator">The <tt class="docutils literal"><span class="pre">file_decorator</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.sugarsync.html">The <tt class="docutils literal"><span class="pre">sugarsync_store</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.sugarsync.html#module-cloudfusion.store.sugarsync.client">The <tt class="docutils literal"><span class="pre">client</span></tt> Module</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="the-store-sync-thread-module">
+<h1>The <tt class="xref py py-mod docutils literal"><span class="pre">store_sync_thread</span></tt> Module<a class="headerlink" href="#the-store-sync-thread-module" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="the-transparent-caching-store-module">
+<h1>The <tt class="xref py py-mod docutils literal"><span class="pre">transparent_caching_store</span></tt> Module<a class="headerlink" href="#the-transparent-caching-store-module" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="the-caching-store-module">
+<h1>The <tt class="xref py py-mod docutils literal"><span class="pre">caching_store</span></tt> Module<a class="headerlink" href="#the-caching-store-module" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="module-cloudfusion.store.store">
+<span id="the-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.store" title="Permalink to this headline">¶</a></h1>
+<p>Created on 08.04.2011</p>
+<dl class="exception">
+<dt id="cloudfusion.store.store.AlreadyExistsError">
+<em class="property">exception </em><tt class="descclassname">cloudfusion.store.store.</tt><tt class="descname">AlreadyExistsError</tt><big>(</big><em>msg</em>, <em>status=0</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.AlreadyExistsError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.store.store.StoreAccessError" title="cloudfusion.store.store.StoreAccessError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.store.StoreAccessError</span></tt></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cloudfusion.store.store.DateParseError">
+<em class="property">exception </em><tt class="descclassname">cloudfusion.store.store.</tt><tt class="descname">DateParseError</tt><big>(</big><em>msg</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.DateParseError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cloudfusion.store.store.InterruptedException">
+<em class="property">exception </em><tt class="descclassname">cloudfusion.store.store.</tt><tt class="descname">InterruptedException</tt><big>(</big><em>msg</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.InterruptedException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cloudfusion.store.store.InvalidPathValueError">
+<em class="property">exception </em><tt class="descclassname">cloudfusion.store.store.</tt><tt class="descname">InvalidPathValueError</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.InvalidPathValueError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.ValueError</span></tt></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cloudfusion.store.store.NoSuchFilesytemObjectError">
+<em class="property">exception </em><tt class="descclassname">cloudfusion.store.store.</tt><tt class="descname">NoSuchFilesytemObjectError</tt><big>(</big><em>path</em>, <em>status=0</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.NoSuchFilesytemObjectError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.store.store.StoreAccessError" title="cloudfusion.store.store.StoreAccessError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.store.StoreAccessError</span></tt></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cloudfusion.store.store.RetrieveMetadataError">
+<em class="property">exception </em><tt class="descclassname">cloudfusion.store.store.</tt><tt class="descname">RetrieveMetadataError</tt><big>(</big><em>path</em>, <em>msg=''</em>, <em>status=0</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.RetrieveMetadataError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.store.store.StoreAccessError" title="cloudfusion.store.store.StoreAccessError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.store.StoreAccessError</span></tt></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.store.store.Store">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.store.</tt><tt class="descname">Store</tt><a class="headerlink" href="#cloudfusion.store.store.Store" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="cloudfusion.store.store.Store._get_metadata">
+<tt class="descname">_get_metadata</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store._get_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is a hook that can be implemented by subclasses. 
+If it is implemented, the methods <a class="reference internal" href="#cloudfusion.store.store.Store.exists" title="cloudfusion.store.store.Store.exists"><tt class="xref py py-meth docutils literal"><span class="pre">exists()</span></tt></a>, <a class="reference internal" href="#cloudfusion.store.store.Store.get_bytes" title="cloudfusion.store.store.Store.get_bytes"><tt class="xref py py-meth docutils literal"><span class="pre">get_bytes()</span></tt></a>, <a class="reference internal" href="#cloudfusion.store.store.Store.is_dir" title="cloudfusion.store.store.Store.is_dir"><tt class="xref py py-meth docutils literal"><span class="pre">is_dir()</span></tt></a> work out of the box.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictionary with the keys &#8216;modified&#8217;, &#8216;bytes&#8217; and &#8216;is_dir&#8217; containing the corresponding metadata for <em>path</em></td>
+</tr>
+</tbody>
+</table>
+<p>The value for &#8216;modified&#8217; is a date in seconds, stating when the object corresponding to <em>path</em> was last modified.  
+The value for &#8216;bytes&#8217; is the number of bytes of the object corresponding to <em>path</em>. It is 0 if the object is a directory.
+The value for &#8216;is_dir&#8217; is True if the object is a directory and False otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">NoSuchFilesytemObjectError if the object does not exist</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body">NotImplementedError if the method is not implemented</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store._is_valid_path">
+<tt class="descname">_is_valid_path</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store._is_valid_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store._raise_error_if_invalid_path">
+<tt class="descname">_raise_error_if_invalid_path</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store._raise_error_if_invalid_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store.account_info">
+<tt class="descname">account_info</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store.account_info" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a human readable string describing account info like provider, name, statistics</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store.create_directory">
+<tt class="descname">create_directory</tt><big>(</big><em>directory</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store.create_directory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store.delete">
+<tt class="descname">delete</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store.duplicate">
+<tt class="descname">duplicate</tt><big>(</big><em>path_to_src</em>, <em>path_to_dest</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store.duplicate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Duplicate file or directory from <em>path_to_src</em> to <em>directory path_to_dest</em>.
+If <em>path_to_dest</em> exists, it is overwritten by the file or directory specified by <em>path_to_src</em>
+If <em>path_to_src</em> is a directory, the directory is duplicated with all its files and directories.
+Either this method or <a class="reference internal" href="#cloudfusion.store.store.Store.move" title="cloudfusion.store.store.Store.move"><tt class="xref py py-meth docutils literal"><span class="pre">move()</span></tt></a> needs to be implemented in a subclass to work with <a class="reference internal" href="pyfusebox.html#cloudfusion.pyfusebox.pyfusebox.PyFuseBox" title="cloudfusion.pyfusebox.pyfusebox.PyFuseBox"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.pyfusebox.pyfusebox.PyFuseBox</span></tt></a>.
+:param path_to_src: must never be the same as <em>path_to_dest</em>
+:param path_to_dest: must end in the name of the child directory or the file specified by <em>path_to_src</em></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store.exists">
+<tt class="descname">exists</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store.exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store.flush">
+<tt class="descname">flush</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store.flush" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store.get_bytes">
+<tt class="descname">get_bytes</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store.get_bytes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store.get_directory_listing">
+<tt class="descname">get_directory_listing</tt><big>(</big><em>directory</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store.get_directory_listing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store.get_file">
+<tt class="descname">get_file</tt><big>(</big><em>path_to_file</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store.get_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store.get_free_space">
+<tt class="descname">get_free_space</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store.get_free_space" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">free space in bytes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store.get_logging_handler">
+<tt class="descname">get_logging_handler</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store.get_logging_handler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store.get_max_filesize">
+<tt class="descname">get_max_filesize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store.get_max_filesize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return maximum number of bytes per file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store.get_modified">
+<tt class="descname">get_modified</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store.get_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store.get_name">
+<tt class="descname">get_name</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store.get_overall_space">
+<tt class="descname">get_overall_space</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store.get_overall_space" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">overal space in bytes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store.get_used_space">
+<tt class="descname">get_used_space</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store.get_used_space" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">space used by files in bytes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store.is_dir">
+<tt class="descname">is_dir</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store.is_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store.move">
+<tt class="descname">move</tt><big>(</big><em>path_to_src</em>, <em>path_to_dest</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store.move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move file or directory from <em>path_to_src</em> to <em>directory path_to_dest</em>.
+If <em>path_to_dest</em> exists, it is overwritten by the file or directory specified by <em>path_to_src</em>
+If <em>path_to_src</em> is a directory, the directory is moved with all its files and directories.
+Default implementation relies on an implementation of <a class="reference internal" href="#cloudfusion.store.store.Store.duplicate" title="cloudfusion.store.store.Store.duplicate"><tt class="xref py py-meth docutils literal"><span class="pre">duplicate()</span></tt></a> in a subclass, but it should be overwritten.
+Either this method or <a class="reference internal" href="#cloudfusion.store.store.Store.duplicate" title="cloudfusion.store.store.Store.duplicate"><tt class="xref py py-meth docutils literal"><span class="pre">duplicate()</span></tt></a> needs to be implemented in a subclass to work with <a class="reference internal" href="pyfusebox.html#cloudfusion.pyfusebox.pyfusebox.PyFuseBox" title="cloudfusion.pyfusebox.pyfusebox.PyFuseBox"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.pyfusebox.pyfusebox.PyFuseBox</span></tt></a>.
+:param path_to_src: must never be the same as <em>path_to_dest</em>
+:param path_to_dest: must end in the name of the child directory or the file specified by <em>path_to_src</em></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store.reconnect">
+<tt class="descname">reconnect</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store.reconnect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store.store_file">
+<tt class="descname">store_file</tt><big>(</big><em>path_to_file</em>, <em>dest_dir='/'</em>, <em>remote_file_name=None</em>, <em>interrupt_event=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store.store_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store the local file <em>path_to_file</em> to directory <em>dest_dir</em> on the store.
+:param remote_file_name: the file name on the store or the original file name if this parameter is None.
+:param interrupt_event: (optional) If the value is not None, listen for an interrupt event with with interrupt_event.wait()         until the file has been stored. Abort the upload if interrupt_event.wait() returns.
+:returns: (optional) the date in seconds, when the file was updated</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store.Store.store_fileobject">
+<tt class="descname">store_fileobject</tt><big>(</big><em>fileobject</em>, <em>path</em>, <em>interrupt_event=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.Store.store_fileobject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store the contents of <em>fileobject</em> to <em>path</em> on the store.
+:param remote_file_name: the file name on the store or the original file name if this parameter is None.
+:param interrupt_event: (optional) If the value is not None, listen for an interrupt event with with interrupt_event.wait()         until the file has been stored. Abort the upload if interrupt_event.wait() returns.
+:returns: (optional) the date in seconds, when the file was updated</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="cloudfusion.store.store.StoreAccessError">
+<em class="property">exception </em><tt class="descclassname">cloudfusion.store.store.</tt><tt class="descname">StoreAccessError</tt><big>(</big><em>msg</em>, <em>status=0</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.StoreAccessError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cloudfusion.store.store.StoreAutorizationError">
+<em class="property">exception </em><tt class="descclassname">cloudfusion.store.store.</tt><tt class="descname">StoreAutorizationError</tt><big>(</big><em>msg</em>, <em>status=0</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.StoreAutorizationError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.store.store.StoreAccessError" title="cloudfusion.store.store.StoreAccessError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.store.StoreAccessError</span></tt></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cloudfusion.store.store.StoreSpaceLimitError">
+<em class="property">exception </em><tt class="descclassname">cloudfusion.store.store.</tt><tt class="descname">StoreSpaceLimitError</tt><big>(</big><em>msg=''</em>, <em>status=0</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store.StoreSpaceLimitError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.store.store.StoreAccessError" title="cloudfusion.store.store.StoreAccessError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.store.StoreAccessError</span></tt></a></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.store.transparent_store">
+<span id="the-transparent-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">transparent_store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.transparent_store" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="cloudfusion.store.transparent_store.ExceptionStats">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.transparent_store.</tt><tt class="descname">ExceptionStats</tt><big>(</big><em>name=''</em>, <em>exception_list=None</em>, <em>desc=''</em>, <em>count=1</em>, <em>lasttime=1383264921.4764609</em><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.ExceptionStats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Statistics of a certain exception.
+:param name: the identifier of the exception 
+:param exception_list: the list of the actual exception instances
+:param desc: the description of the exception (defaults to str(exception) )
+:param count: number of occurences of the exception (defaults to 1)
+:param lasttime: the last time the exception occured in seconds from the epoche (defaults to current time)</p>
+<dl class="staticmethod">
+<dt id="cloudfusion.store.transparent_store.ExceptionStats.add_exception">
+<em class="property">static </em><tt class="descname">add_exception</tt><big>(</big><em>exception</em>, <em>exceptions_log</em>, <em>name=None</em>, <em>desc=None</em>, <em>count=-1</em>, <em>lasttime=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.ExceptionStats.add_exception" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an ExceptionStats object to the list <em>exception_log</em> or update time of occurence, exception_list, 
+and count if there is a similar exception in the log.
+:param exception: the exception to add to the log
+:param exceptions_log: an existing dictionary of exceptions mapping their name to an ExceptionStats instance (might be empty)
+:param name: the identifier of the exception (defaults to type(exception) or repr(exception) )
+:param desc: the description of the exception (defaults to str(exception) )
+:param count: number of occurences of the exception (defaults to last count plus 1 or to 1 if if no exception with the same identifier exists)
+:param lasttime: the last time the exception occured in seconds from the epoche (defaults to current time)
+:returns: the updated exception log</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.store.transparent_store.TransparentStore">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.transparent_store.</tt><tt class="descname">TransparentStore</tt><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Interface to get statistics about a store.
+The unit MB is 1000000 Bytes.</p>
+<dl class="method">
+<dt id="cloudfusion.store.transparent_store.TransparentStore.get_cache_hits">
+<tt class="descname">get_cache_hits</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_cache_hits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get number of files that were accessed while they were cached</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_store.TransparentStore.get_cache_misses">
+<tt class="descname">get_cache_misses</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_cache_misses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get number of files that were accessed while they were not in cache</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_store.TransparentStore.get_dirty_files">
+<tt class="descname">get_dirty_files</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_dirty_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of file paths to files that are not already synchronized with the store</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_store.TransparentStore.get_download_rate">
+<tt class="descname">get_download_rate</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_download_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get download rate in MB/s</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_store.TransparentStore.get_downloaded">
+<tt class="descname">get_downloaded</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_downloaded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get amount of data downloaded from a store in MB</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_store.TransparentStore.get_exception_stats">
+<tt class="descname">get_exception_stats</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_exception_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get dict of exception statistics with exception names mapping to <a class="reference internal" href="#cloudfusion.store.transparent_store.ExceptionStats" title="cloudfusion.store.transparent_store.ExceptionStats"><tt class="xref py py-class docutils literal"><span class="pre">ExceptionStats</span></tt></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_store.TransparentStore.get_status_information">
+<tt class="descname">get_status_information</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_status_information" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get arbitrary string describing status of the store</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_store.TransparentStore.get_upload_rate">
+<tt class="descname">get_upload_rate</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_upload_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get upload rate in MB/s</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_store.TransparentStore.get_uploaded">
+<tt class="descname">get_uploaded</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_uploaded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get amount of data uploaded to a store in MB</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="the-store-worker-module">
+<h1>The <tt class="xref py py-mod docutils literal"><span class="pre">store_worker</span></tt> Module<a class="headerlink" href="#the-store-worker-module" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="the-metadata-caching-store-module">
+<h1>The <tt class="xref py py-mod docutils literal"><span class="pre">metadata_caching_store</span></tt> Module<a class="headerlink" href="#the-metadata-caching-store-module" title="Permalink to this headline">¶</a></h1>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Subpackages</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-store-sync-thread-module">The <tt class="docutils literal"><span class="pre">store_sync_thread</span></tt> Module</a></li>
+<li><a class="reference internal" href="#the-transparent-caching-store-module">The <tt class="docutils literal"><span class="pre">transparent_caching_store</span></tt> Module</a></li>
+<li><a class="reference internal" href="#the-caching-store-module">The <tt class="docutils literal"><span class="pre">caching_store</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.store.store">The <tt class="docutils literal"><span class="pre">store</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.store.transparent_store">The <tt class="docutils literal"><span class="pre">transparent_store</span></tt> Module</a></li>
+<li><a class="reference internal" href="#the-store-worker-module">The <tt class="docutils literal"><span class="pre">store_worker</span></tt> Module</a></li>
+<li><a class="reference internal" href="#the-metadata-caching-store-module">The <tt class="docutils literal"><span class="pre">metadata_caching_store</span></tt> Module</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pyfusebox.html"
+                        title="previous chapter">The <tt class="docutils literal"><span class="pre">virtualfile</span></tt> Module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="store.dropbox.html"
+                        title="next chapter">The <tt class="docutils literal"><span class="pre">dropbox_store</span></tt> Module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/store.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="store.dropbox.html" title="The dropbox_store Module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pyfusebox.html" title="The virtualfile Module"
+             >previous</a> |</li>
+        <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
+          <li><a href="develop.html" >Developers documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Johannes Müller.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
+    </div>
+  </body>
+</html>
