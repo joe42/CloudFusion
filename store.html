@@ -25,8 +25,8 @@
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
     <link rel="up" title="Developers documentation" href="develop.html" />
-    <link rel="next" title="The dropbox_store Module" href="store.dropbox.html" />
-    <link rel="prev" title="The virtualfile Module" href="pyfusebox.html" /> 
+    <link rel="next" title="The sugarsync_store Module" href="store.sugarsync.html" />
+    <link rel="prev" title="The pyfusebox Module" href="pyfusebox.html" /> 
   </head>
   <body>
     <div class="related">
@@ -39,10 +39,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="store.dropbox.html" title="The dropbox_store Module"
+          <a href="store.sugarsync.html" title="The sugarsync_store Module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pyfusebox.html" title="The virtualfile Module"
+          <a href="pyfusebox.html" title="The pyfusebox Module"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" accesskey="U">Developers documentation</a> &raquo;</li> 
@@ -58,21 +58,27 @@
 <h1>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="store.dropbox.html">The <tt class="docutils literal"><span class="pre">dropbox_store</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="store.dropbox.html#module-cloudfusion.store.dropbox.file_decorator">The <tt class="docutils literal"><span class="pre">file_decorator</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="store.sugarsync.html">The <tt class="docutils literal"><span class="pre">sugarsync_store</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="store.sugarsync.html#module-cloudfusion.store.sugarsync.client">The <tt class="docutils literal"><span class="pre">client</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.dropbox.html">The <tt class="docutils literal"><span class="pre">file_decorator</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.dropbox.html#the-dropbox-store-module">The <tt class="docutils literal"><span class="pre">dropbox_store</span></tt> Module</a></li>
 </ul>
 </div>
+</div>
+<div class="section" id="the-caching-store-module">
+<h1>The <tt class="xref py py-mod docutils literal"><span class="pre">caching_store</span></tt> Module<a class="headerlink" href="#the-caching-store-module" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="the-store-worker-module">
+<h1>The <tt class="xref py py-mod docutils literal"><span class="pre">store_worker</span></tt> Module<a class="headerlink" href="#the-store-worker-module" title="Permalink to this headline">¶</a></h1>
 </div>
 <div class="section" id="the-store-sync-thread-module">
 <h1>The <tt class="xref py py-mod docutils literal"><span class="pre">store_sync_thread</span></tt> Module<a class="headerlink" href="#the-store-sync-thread-module" title="Permalink to this headline">¶</a></h1>
 </div>
+<div class="section" id="the-metadata-caching-store-module">
+<h1>The <tt class="xref py py-mod docutils literal"><span class="pre">metadata_caching_store</span></tt> Module<a class="headerlink" href="#the-metadata-caching-store-module" title="Permalink to this headline">¶</a></h1>
+</div>
 <div class="section" id="the-transparent-caching-store-module">
 <h1>The <tt class="xref py py-mod docutils literal"><span class="pre">transparent_caching_store</span></tt> Module<a class="headerlink" href="#the-transparent-caching-store-module" title="Permalink to this headline">¶</a></h1>
-</div>
-<div class="section" id="the-caching-store-module">
-<h1>The <tt class="xref py py-mod docutils literal"><span class="pre">caching_store</span></tt> Module<a class="headerlink" href="#the-caching-store-module" title="Permalink to this headline">¶</a></h1>
 </div>
 <div class="section" id="module-cloudfusion.store.store">
 <span id="the-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.store" title="Permalink to this headline">¶</a></h1>
@@ -339,7 +345,7 @@ Either this method or <a class="reference internal" href="#cloudfusion.store.sto
 <span id="the-transparent-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">transparent_store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.transparent_store" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="cloudfusion.store.transparent_store.ExceptionStats">
-<em class="property">class </em><tt class="descclassname">cloudfusion.store.transparent_store.</tt><tt class="descname">ExceptionStats</tt><big>(</big><em>name=''</em>, <em>exception_list=None</em>, <em>desc=''</em>, <em>count=1</em>, <em>lasttime=1383264921.4764609</em><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.ExceptionStats" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.transparent_store.</tt><tt class="descname">ExceptionStats</tt><big>(</big><em>name=''</em>, <em>exception_list=None</em>, <em>desc=''</em>, <em>count=1</em>, <em>lasttime=1383267214.236151</em><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.ExceptionStats" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>Statistics of a certain exception.
 :param name: the identifier of the exception 
@@ -426,12 +432,6 @@ The unit MB is 1000000 Bytes.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="the-store-worker-module">
-<h1>The <tt class="xref py py-mod docutils literal"><span class="pre">store_worker</span></tt> Module<a class="headerlink" href="#the-store-worker-module" title="Permalink to this headline">¶</a></h1>
-</div>
-<div class="section" id="the-metadata-caching-store-module">
-<h1>The <tt class="xref py py-mod docutils literal"><span class="pre">metadata_caching_store</span></tt> Module<a class="headerlink" href="#the-metadata-caching-store-module" title="Permalink to this headline">¶</a></h1>
-</div>
 
 
           </div>
@@ -444,21 +444,21 @@ The unit MB is 1000000 Bytes.</p>
 <li><a class="reference internal" href="#">Subpackages</a><ul>
 </ul>
 </li>
-<li><a class="reference internal" href="#the-store-sync-thread-module">The <tt class="docutils literal"><span class="pre">store_sync_thread</span></tt> Module</a></li>
-<li><a class="reference internal" href="#the-transparent-caching-store-module">The <tt class="docutils literal"><span class="pre">transparent_caching_store</span></tt> Module</a></li>
 <li><a class="reference internal" href="#the-caching-store-module">The <tt class="docutils literal"><span class="pre">caching_store</span></tt> Module</a></li>
+<li><a class="reference internal" href="#the-store-worker-module">The <tt class="docutils literal"><span class="pre">store_worker</span></tt> Module</a></li>
+<li><a class="reference internal" href="#the-store-sync-thread-module">The <tt class="docutils literal"><span class="pre">store_sync_thread</span></tt> Module</a></li>
+<li><a class="reference internal" href="#the-metadata-caching-store-module">The <tt class="docutils literal"><span class="pre">metadata_caching_store</span></tt> Module</a></li>
+<li><a class="reference internal" href="#the-transparent-caching-store-module">The <tt class="docutils literal"><span class="pre">transparent_caching_store</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-cloudfusion.store.store">The <tt class="docutils literal"><span class="pre">store</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-cloudfusion.store.transparent_store">The <tt class="docutils literal"><span class="pre">transparent_store</span></tt> Module</a></li>
-<li><a class="reference internal" href="#the-store-worker-module">The <tt class="docutils literal"><span class="pre">store_worker</span></tt> Module</a></li>
-<li><a class="reference internal" href="#the-metadata-caching-store-module">The <tt class="docutils literal"><span class="pre">metadata_caching_store</span></tt> Module</a></li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="pyfusebox.html"
-                        title="previous chapter">The <tt class="docutils literal"><span class="pre">virtualfile</span></tt> Module</a></p>
+                        title="previous chapter">The <tt class="docutils literal"><span class="pre">pyfusebox</span></tt> Module</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="store.dropbox.html"
-                        title="next chapter">The <tt class="docutils literal"><span class="pre">dropbox_store</span></tt> Module</a></p>
+  <p class="topless"><a href="store.sugarsync.html"
+                        title="next chapter">The <tt class="docutils literal"><span class="pre">sugarsync_store</span></tt> Module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/store.txt"
@@ -491,10 +491,10 @@ The unit MB is 1000000 Bytes.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="store.dropbox.html" title="The dropbox_store Module"
+          <a href="store.sugarsync.html" title="The sugarsync_store Module"
              >next</a> |</li>
         <li class="right" >
-          <a href="pyfusebox.html" title="The virtualfile Module"
+          <a href="pyfusebox.html" title="The pyfusebox Module"
              >previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li> 
