@@ -1,15 +1,15 @@
-The :mod:`client` Module
-------------------------
-
-.. automodule:: cloudfusion.store.sugarsync.client
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 The :mod:`sugarsync_store` Module
 ---------------------------------
 
 .. automodule:: cloudfusion.store.sugarsync.sugarsync_store
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`client` Module
+------------------------
+
+.. automodule:: cloudfusion.store.sugarsync.client
     :members:
     :undoc-members:
     :show-inheritance:

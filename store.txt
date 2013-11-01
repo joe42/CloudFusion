@@ -3,29 +3,21 @@ Subpackages
 
 .. toctree::
 
-    store.sugarsync
     store.dropbox
+    store.sugarsync
+
+The :mod:`store_worker` Module
+------------------------------
+
+.. automodule:: cloudfusion.store.store_worker
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 The :mod:`store` Module
 -----------------------
 
 .. automodule:: cloudfusion.store.store
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-The :mod:`store_sync_thread` Module
------------------------------------
-
-.. automodule:: cloudfusion.store.store_sync_thread
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-The :mod:`transparent_caching_store` Module
--------------------------------------------
-
-.. automodule:: cloudfusion.store.transparent_caching_store
     :members:
     :undoc-members:
     :show-inheritance:
@@ -38,6 +30,14 @@ The :mod:`caching_store` Module
     :undoc-members:
     :show-inheritance:
 
+The :mod:`store_sync_thread` Module
+-----------------------------------
+
+.. automodule:: cloudfusion.store.store_sync_thread
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 The :mod:`metadata_caching_store` Module
 ----------------------------------------
 
@@ -46,18 +46,18 @@ The :mod:`metadata_caching_store` Module
     :undoc-members:
     :show-inheritance:
 
-The :mod:`transparent_store` Module
------------------------------------
+The :mod:`transparent_caching_store` Module
+-------------------------------------------
 
-.. automodule:: cloudfusion.store.transparent_store
+.. automodule:: cloudfusion.store.transparent_caching_store
     :members:
     :undoc-members:
     :show-inheritance:
 
-The :mod:`store_worker` Module
-------------------------------
+The :mod:`transparent_store` Module
+-----------------------------------
 
-.. automodule:: cloudfusion.store.store_worker
+.. automodule:: cloudfusion.store.transparent_store
     :members:
     :undoc-members:
     :show-inheritance:

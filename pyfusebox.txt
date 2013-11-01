@@ -1,7 +1,7 @@
-The :mod:`configurable_pyfusebox` Module
-----------------------------------------
+The :mod:`virtualconfigfile` Module
+-----------------------------------
 
-.. automodule:: cloudfusion.pyfusebox.configurable_pyfusebox
+.. automodule:: cloudfusion.pyfusebox.virtualconfigfile
     :members:
     :undoc-members:
     :show-inheritance:
@@ -14,18 +14,18 @@ The :mod:`pyfusebox` Module
     :undoc-members:
     :show-inheritance:
 
-The :mod:`transparent_configurable_pyfusebox` Module
-----------------------------------------------------
+The :mod:`configurable_pyfusebox` Module
+----------------------------------------
 
-.. automodule:: cloudfusion.pyfusebox.transparent_configurable_pyfusebox
+.. automodule:: cloudfusion.pyfusebox.configurable_pyfusebox
     :members:
     :undoc-members:
     :show-inheritance:
 
-The :mod:`virtualconfigfile` Module
------------------------------------
+The :mod:`transparent_configurable_pyfusebox` Module
+----------------------------------------------------
 
-.. automodule:: cloudfusion.pyfusebox.virtualconfigfile
+.. automodule:: cloudfusion.pyfusebox.transparent_configurable_pyfusebox
     :members:
     :undoc-members:
     :show-inheritance:

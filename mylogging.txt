@@ -1,7 +1,7 @@
-The :mod:`nullhandler` Module
------------------------------
+The :mod:`db_handler` Module
+----------------------------
 
-.. automodule:: cloudfusion.mylogging.nullhandler
+.. automodule:: cloudfusion.mylogging.db_handler
     :members:
     :undoc-members:
     :show-inheritance:
@@ -14,10 +14,10 @@ The :mod:`db_logging_thread` Module
     :undoc-members:
     :show-inheritance:
 
-The :mod:`db_handler` Module
-----------------------------
+The :mod:`nullhandler` Module
+-----------------------------
 
-.. automodule:: cloudfusion.mylogging.db_handler
+.. automodule:: cloudfusion.mylogging.nullhandler
     :members:
     :undoc-members:
     :show-inheritance:
