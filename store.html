@@ -25,7 +25,7 @@
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
     <link rel="up" title="Developers documentation" href="develop.html" />
-    <link rel="next" title="The sugarsync_store Module" href="store.sugarsync.html" />
+    <link rel="next" title="The dropbox_store Module" href="store.dropbox.html" />
     <link rel="prev" title="The pyfusebox Module" href="pyfusebox.html" /> 
   </head>
   <body>
@@ -39,7 +39,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="store.sugarsync.html" title="The sugarsync_store Module"
+          <a href="store.dropbox.html" title="The dropbox_store Module"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pyfusebox.html" title="The pyfusebox Module"
@@ -58,27 +58,928 @@
 <h1>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="store.sugarsync.html">The <tt class="docutils literal"><span class="pre">sugarsync_store</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="store.sugarsync.html#module-cloudfusion.store.sugarsync.client">The <tt class="docutils literal"><span class="pre">client</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="store.dropbox.html">The <tt class="docutils literal"><span class="pre">file_decorator</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="store.dropbox.html#the-dropbox-store-module">The <tt class="docutils literal"><span class="pre">dropbox_store</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.dropbox.html">The <tt class="docutils literal"><span class="pre">dropbox_store</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.dropbox.html#module-cloudfusion.store.dropbox.file_decorator">The <tt class="docutils literal"><span class="pre">file_decorator</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.sugarsync.html">The <tt class="docutils literal"><span class="pre">client</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.sugarsync.html#module-cloudfusion.store.sugarsync.sugarsync_store">The <tt class="docutils literal"><span class="pre">sugarsync_store</span></tt> Module</a></li>
 </ul>
 </div>
 </div>
-<div class="section" id="the-caching-store-module">
-<h1>The <tt class="xref py py-mod docutils literal"><span class="pre">caching_store</span></tt> Module<a class="headerlink" href="#the-caching-store-module" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-cloudfusion.store.store_sync_thread">
+<span id="the-store-sync-thread-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">store_sync_thread</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.store_sync_thread" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.store_sync_thread.</tt><tt class="descname">StoreSyncThread</tt><big>(</big><em>cache</em>, <em>store</em>, <em>logger</em>, <em>max_writer_threads=3</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Synchronizes between cache and store</p>
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread._check_for_failed_writers">
+<tt class="descname">_check_for_failed_writers</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread._check_for_failed_writers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread._get_reader">
+<tt class="descname">_get_reader</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread._get_reader" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread._get_writer">
+<tt class="descname">_get_writer</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread._get_writer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread._is_in_progress">
+<tt class="descname">_is_in_progress</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread._is_in_progress" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread._reconnect">
+<tt class="descname">_reconnect</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread._reconnect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread._remove_finished_readers">
+<tt class="descname">_remove_finished_readers</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread._remove_finished_readers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread._remove_finished_writers">
+<tt class="descname">_remove_finished_writers</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread._remove_finished_writers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread._remove_slow_writers">
+<tt class="descname">_remove_slow_writers</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread._remove_slow_writers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread._remove_successful_removers">
+<tt class="descname">_remove_successful_removers</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread._remove_successful_removers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread._restart_unsuccessful_removers">
+<tt class="descname">_restart_unsuccessful_removers</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread._restart_unsuccessful_removers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread.blocking_read">
+<tt class="descname">blocking_read</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread.blocking_read" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread.delete">
+<tt class="descname">delete</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread.enqueue_dirty_entries">
+<tt class="descname">enqueue_dirty_entries</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread.enqueue_dirty_entries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start new writer jobs with dirty cache entries.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread.enqueue_lru_entries">
+<tt class="descname">enqueue_lru_entries</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread.enqueue_lru_entries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start new writer jobs with expired least recently used cache entries.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread.get_download_rate">
+<tt class="descname">get_download_rate</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread.get_download_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get download rate in MB/s</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread.get_downloaded">
+<tt class="descname">get_downloaded</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread.get_downloaded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get amount of data downloaded from a store in MB</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread.get_exception_stats">
+<tt class="descname">get_exception_stats</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread.get_exception_stats" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread.get_upload_rate">
+<tt class="descname">get_upload_rate</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread.get_upload_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get upload rate in MB/s</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread.get_uploaded">
+<tt class="descname">get_uploaded</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread.get_uploaded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get amount of data uploaded to a store in MB</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread.last_heartbeat">
+<tt class="descname">last_heartbeat</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread.last_heartbeat" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#8216;Get time since last heartbeat in seconds.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread.read">
+<tt class="descname">read</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread.read" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread.restart">
+<tt class="descname">restart</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread.restart" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread.start">
+<tt class="descname">start</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread.stop">
+<tt class="descname">stop</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread.sync">
+<tt class="descname">sync</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread.sync" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_sync_thread.StoreSyncThread.tidy_up">
+<tt class="descname">tidy_up</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_sync_thread.StoreSyncThread.tidy_up" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove finished workers and restart unsuccessful delete jobs.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="the-store-worker-module">
-<h1>The <tt class="xref py py-mod docutils literal"><span class="pre">store_worker</span></tt> Module<a class="headerlink" href="#the-store-worker-module" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-cloudfusion.store.store_worker">
+<span id="the-store-worker-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">store_worker</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.store_worker" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="cloudfusion.store.store_worker.GetFreeSpaceWorker">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.store_worker.</tt><tt class="descname">GetFreeSpaceWorker</tt><big>(</big><em>store</em>, <em>logger</em>, <em>poll_wait_time_in_s=600</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.GetFreeSpaceWorker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Worker to cyclically poll for free space on store.</p>
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.GetFreeSpaceWorker._run">
+<tt class="descname">_run</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.GetFreeSpaceWorker._run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.GetFreeSpaceWorker.get_free_bytes_in_remote_store">
+<tt class="descname">get_free_bytes_in_remote_store</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.GetFreeSpaceWorker.get_free_bytes_in_remote_store" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.GetFreeSpaceWorker.is_alive">
+<tt class="descname">is_alive</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.GetFreeSpaceWorker.is_alive" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.GetFreeSpaceWorker.start">
+<tt class="descname">start</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.GetFreeSpaceWorker.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.GetFreeSpaceWorker.stop">
+<tt class="descname">stop</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.GetFreeSpaceWorker.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.store.store_worker.LeightWeightValue">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.store_worker.</tt><tt class="descname">LeightWeightValue</tt><big>(</big><em>val</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.LeightWeightValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>To replace multiprocessing.Value.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.store.store_worker.ReadWorker">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.store_worker.</tt><tt class="descname">ReadWorker</tt><big>(</big><em>store</em>, <em>path</em>, <em>logger</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.ReadWorker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.ReadWorker._check_result">
+<tt class="descname">_check_result</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.ReadWorker._check_result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.ReadWorker._clean_up">
+<tt class="descname">_clean_up</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.ReadWorker._clean_up" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.ReadWorker._get_result">
+<tt class="descname">_get_result</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.ReadWorker._get_result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.ReadWorker._run">
+<tt class="descname">_run</tt><big>(</big><em>result_queue</em>, <em>end_time</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.ReadWorker._run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.ReadWorker.get_duration">
+<tt class="descname">get_duration</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.ReadWorker.get_duration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get duration of download in seconds</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.ReadWorker.get_endtime">
+<tt class="descname">get_endtime</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.ReadWorker.get_endtime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the end time of the download in seconds from the epoche</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.ReadWorker.get_error">
+<tt class="descname">get_error</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.ReadWorker.get_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.ReadWorker.get_filesize">
+<tt class="descname">get_filesize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.ReadWorker.get_filesize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get size of the file to write in bytes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.ReadWorker.get_result">
+<tt class="descname">get_result</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.ReadWorker.get_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the data of the read file.
+This only works once after a successful read and is a blocking call.
+Use is_successful to check if the read has been successful without blocking.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.ReadWorker.get_starttime">
+<tt class="descname">get_starttime</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.ReadWorker.get_starttime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the start time of the download in seconds from the epoche</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.ReadWorker.is_finished">
+<tt class="descname">is_finished</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.ReadWorker.is_finished" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.ReadWorker.is_successful">
+<tt class="descname">is_successful</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.ReadWorker.is_successful" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.ReadWorker.start">
+<tt class="descname">start</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.ReadWorker.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.ReadWorker.stop">
+<tt class="descname">stop</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.ReadWorker.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.store.store_worker.RemoveWorker">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.store_worker.</tt><tt class="descname">RemoveWorker</tt><big>(</big><em>store</em>, <em>path</em>, <em>logger</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.RemoveWorker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.RemoveWorker._run">
+<tt class="descname">_run</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.RemoveWorker._run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.RemoveWorker.is_finished">
+<tt class="descname">is_finished</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.RemoveWorker.is_finished" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.RemoveWorker.is_successful">
+<tt class="descname">is_successful</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.RemoveWorker.is_successful" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.RemoveWorker.start">
+<tt class="descname">start</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.RemoveWorker.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.RemoveWorker.stop">
+<tt class="descname">stop</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.RemoveWorker.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.store.store_worker.WorkerStats">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.store_worker.</tt><tt class="descname">WorkerStats</tt><a class="headerlink" href="#cloudfusion.store.store_worker.WorkerStats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Statistics about workers. Resets statistics automatically after 100*1000 workers.</p>
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.WorkerStats._log_exception">
+<tt class="descname">_log_exception</tt><big>(</big><em>exception</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.WorkerStats._log_exception" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.WorkerStats.add_finished_worker">
+<tt class="descname">add_finished_worker</tt><big>(</big><em>worker</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.WorkerStats.add_finished_worker" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.WorkerStats.get_download_rate">
+<tt class="descname">get_download_rate</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.WorkerStats.get_download_rate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.WorkerStats.get_download_time">
+<tt class="descname">get_download_time</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.WorkerStats.get_download_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get download time considering parallel downloads.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.WorkerStats.get_upload_rate">
+<tt class="descname">get_upload_rate</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.WorkerStats.get_upload_rate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.WorkerStats.get_upload_time">
+<tt class="descname">get_upload_time</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.WorkerStats.get_upload_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get download time considering parallel uploads.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.WorkerStats.reset">
+<tt class="descname">reset</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.WorkerStats.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets all statistics.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.store.store_worker.WriteWorker">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.store_worker.</tt><tt class="descname">WriteWorker</tt><big>(</big><em>store</em>, <em>path</em>, <em>file</em>, <em>logger</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.WriteWorker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.WriteWorker._check_result">
+<tt class="descname">_check_result</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.WriteWorker._check_result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.WriteWorker._clean_up">
+<tt class="descname">_clean_up</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.WriteWorker._clean_up" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.WriteWorker._run">
+<tt class="descname">_run</tt><big>(</big><em>result_queue</em>, <em>interrupt_event</em>, <em>end_time</em><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.WriteWorker._run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.WriteWorker.get_duration">
+<tt class="descname">get_duration</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.WriteWorker.get_duration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get duration of upload in seconds</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.WriteWorker.get_endtime">
+<tt class="descname">get_endtime</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.WriteWorker.get_endtime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the end time of the upload in seconds from the epoche</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.WriteWorker.get_error">
+<tt class="descname">get_error</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.WriteWorker.get_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.WriteWorker.get_filesize">
+<tt class="descname">get_filesize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.WriteWorker.get_filesize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get size of the file to write in bytes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.WriteWorker.get_starttime">
+<tt class="descname">get_starttime</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.WriteWorker.get_starttime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the start time of the upload in seconds from the epoche</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.WriteWorker.get_updatetime">
+<tt class="descname">get_updatetime</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.WriteWorker.get_updatetime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the point of time the file has been updated in the store in seconds from the epoche</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.WriteWorker.is_finished">
+<tt class="descname">is_finished</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.WriteWorker.is_finished" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.WriteWorker.is_successful">
+<tt class="descname">is_successful</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.WriteWorker.is_successful" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.WriteWorker.start">
+<tt class="descname">start</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.WriteWorker.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.store_worker.WriteWorker.stop">
+<tt class="descname">stop</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.store_worker.WriteWorker.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="the-store-sync-thread-module">
-<h1>The <tt class="xref py py-mod docutils literal"><span class="pre">store_sync_thread</span></tt> Module<a class="headerlink" href="#the-store-sync-thread-module" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-cloudfusion.store.metadata_caching_store">
+<span id="the-metadata-caching-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">metadata_caching_store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.metadata_caching_store" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="cloudfusion.store.metadata_caching_store.Entry">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.metadata_caching_store.</tt><tt class="descname">Entry</tt><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.Entry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.Entry.add_to_listing">
+<tt class="descname">add_to_listing</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.Entry.add_to_listing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.Entry.remove_from_listing">
+<tt class="descname">remove_from_listing</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.Entry.remove_from_listing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.Entry.set_is_dir">
+<tt class="descname">set_is_dir</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.Entry.set_is_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.Entry.set_is_file">
+<tt class="descname">set_is_file</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.Entry.set_is_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.Entry.set_modified">
+<tt class="descname">set_modified</tt><big>(</big><em>modified=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.Entry.set_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.metadata_caching_store.</tt><tt class="descname">MetadataCachingStore</tt><big>(</big><em>store</em>, <em>cache_expiration_time=60</em><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.store.store.Store" title="cloudfusion.store.store.Store"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.store.Store</span></tt></a></p>
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore._add_to_parent_dir_listing">
+<tt class="descname">_add_to_parent_dir_listing</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore._add_to_parent_dir_listing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore._get_metadata">
+<tt class="descname">_get_metadata</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore._get_metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore._is_valid_path">
+<tt class="descname">_is_valid_path</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore._is_valid_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore._raise_error_if_invalid_path">
+<tt class="descname">_raise_error_if_invalid_path</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore._raise_error_if_invalid_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore._remove_from_parent_dir_listing">
+<tt class="descname">_remove_from_parent_dir_listing</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore._remove_from_parent_dir_listing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore.account_info">
+<tt class="descname">account_info</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore.account_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore.create_directory">
+<tt class="descname">create_directory</tt><big>(</big><em>directory</em><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore.create_directory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore.delete">
+<tt class="descname">delete</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore.duplicate">
+<tt class="descname">duplicate</tt><big>(</big><em>path_to_src</em>, <em>path_to_dest</em><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore.duplicate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore.exists">
+<tt class="descname">exists</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore.exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore.flush">
+<tt class="descname">flush</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore.flush" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore.get_bytes">
+<tt class="descname">get_bytes</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore.get_bytes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore.get_directory_listing">
+<tt class="descname">get_directory_listing</tt><big>(</big><em>directory</em><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore.get_directory_listing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore.get_file">
+<tt class="descname">get_file</tt><big>(</big><em>path_to_file</em><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore.get_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore.get_free_space">
+<tt class="descname">get_free_space</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore.get_free_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore.get_logging_handler">
+<tt class="descname">get_logging_handler</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore.get_logging_handler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore.get_max_filesize">
+<tt class="descname">get_max_filesize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore.get_max_filesize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return maximum number of bytes per file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore.get_modified">
+<tt class="descname">get_modified</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore.get_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore.get_name">
+<tt class="descname">get_name</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore.get_overall_space">
+<tt class="descname">get_overall_space</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore.get_overall_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore.get_used_space">
+<tt class="descname">get_used_space</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore.get_used_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore.is_dir">
+<tt class="descname">is_dir</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore.is_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore.move">
+<tt class="descname">move</tt><big>(</big><em>path_to_src</em>, <em>path_to_dest</em><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore.move" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore.store_file">
+<tt class="descname">store_file</tt><big>(</big><em>path_to_file</em>, <em>dest_dir='/'</em>, <em>remote_file_name=None</em>, <em>interrupt_event=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore.store_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.metadata_caching_store.MetadataCachingStore.store_fileobject">
+<tt class="descname">store_fileobject</tt><big>(</big><em>fileobject</em>, <em>path</em>, <em>interrupt_event=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.metadata_caching_store.MetadataCachingStore.store_fileobject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="the-metadata-caching-store-module">
-<h1>The <tt class="xref py py-mod docutils literal"><span class="pre">metadata_caching_store</span></tt> Module<a class="headerlink" href="#the-metadata-caching-store-module" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-cloudfusion.store.caching_store">
+<span id="the-caching-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">caching_store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.caching_store" title="Permalink to this headline">¶</a></h1>
+<p>Created on Jun 10, 2013</p>
+<p>&#64;author: joe</p>
+<dl class="class">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.caching_store.</tt><tt class="descname">MultiprocessingCachingStore</tt><big>(</big><em>store</em>, <em>cache_expiration_time=60</em>, <em>cache_size_in_mb=2000</em>, <em>cache_id='0.458551647968'</em><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.store.store.Store" title="cloudfusion.store.store.Store"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.store.Store</span></tt></a></p>
+<p>Like CachingStore, but does not make guarantees as to the consistency of the wrapped store.
+Use of best effort strategy to synchronize the store.
+Employs multiple threads for increased throughput. Therefore, it can only use stores with a thread-safe put_file method.
+Unlike CachingStore, guarantees that write operations do not block for transfer, until the cache size limit is reached.
+Unlike CachingStore, guarantees that write operations on the wrapped store are invoked until a cached item expires.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>store</strong> &#8211; the store whose access should be cached</li>
+<li><strong>cache_expiration_time</strong> &#8211; the time in seconds until any cache entry is expired</li>
+<li><strong>cache_size_in_mb</strong> &#8211; Approximate limit of the cache in MB.</li>
+<li><strong>cache_id</strong> &#8211; Serves as identifier for a persistent cache instance.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore._get_actual_modified_date">
+<tt class="descname">_get_actual_modified_date</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore._get_actual_modified_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore._get_metadata">
+<tt class="descname">_get_metadata</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore._get_metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore._is_valid_path">
+<tt class="descname">_is_valid_path</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore._is_valid_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore._raise_error_if_invalid_path">
+<tt class="descname">_raise_error_if_invalid_path</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore._raise_error_if_invalid_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore._refresh_cache">
+<tt class="descname">_refresh_cache</tt><big>(</big><em>path_to_file</em><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore._refresh_cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reloads the locally cached file <em>path_to_file</em> from the wrapped store, if the wrapped store version is newer.
+The cached file&#8217;s last updated time is set to the current point of time.
+Makes a new cache entry if it does not exist yet.
+If the file was changed in the wrapped store after the cached file&#8217;s modified time, the cached file...</p>
+<ul class="simple">
+<li>is updated with the contents of the file in the wrapped store</li>
+<li>is set to not dirty</li>
+<li>gets the modified time stamp of the file of the wrapped stores</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">NoSuchFilesytemObjectError if file does not exist in wrapped store.</td>
+</tr>
+</tbody>
+</table>
+<p>TODO: exception raising does not work and needs to be implemented</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.account_info">
+<tt class="descname">account_info</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.account_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.create_directory">
+<tt class="descname">create_directory</tt><big>(</big><em>directory</em><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.create_directory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.delete">
+<tt class="descname">delete</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.duplicate">
+<tt class="descname">duplicate</tt><big>(</big><em>path_to_src</em>, <em>path_to_dest</em><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.duplicate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.exists">
+<tt class="descname">exists</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.flush">
+<tt class="descname">flush</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.flush" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.get_bytes">
+<tt class="descname">get_bytes</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.get_bytes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.get_cache_expiration_time">
+<tt class="descname">get_cache_expiration_time</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.get_cache_expiration_time" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the time in seconds until any cache entry is expired</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.get_directory_listing">
+<tt class="descname">get_directory_listing</tt><big>(</big><em>directory</em><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.get_directory_listing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.get_file">
+<tt class="descname">get_file</tt><big>(</big><em>path_to_file</em><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.get_file" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">string &#8211; the data of the file with the path <em>path_to_file</em></td>
+</tr>
+</tbody>
+</table>
+<p>If the file was updated in the wrapped store, then its content in the cache will be updated if its entry is expired but not dirty.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.get_free_space">
+<tt class="descname">get_free_space</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.get_free_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.get_logging_handler">
+<tt class="descname">get_logging_handler</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.get_logging_handler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.get_max_filesize">
+<tt class="descname">get_max_filesize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.get_max_filesize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return maximum number of bytes per file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.get_modified">
+<tt class="descname">get_modified</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.get_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.get_name">
+<tt class="descname">get_name</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.get_overall_space">
+<tt class="descname">get_overall_space</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.get_overall_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.get_used_space">
+<tt class="descname">get_used_space</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.get_used_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.is_cached_version_invalid">
+<tt class="descname">is_cached_version_invalid</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.is_cached_version_invalid" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the stores version is newer than the cached entry or does not exist and False otherwise.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.is_dir">
+<tt class="descname">is_dir</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.is_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.move">
+<tt class="descname">move</tt><big>(</big><em>path_to_src</em>, <em>path_to_dest</em><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.move" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.reconnect">
+<tt class="descname">reconnect</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.reconnect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.store_file">
+<tt class="descname">store_file</tt><big>(</big><em>path_to_file</em>, <em>dest_dir='/'</em>, <em>remote_file_name=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.store_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.caching_store.MultiprocessingCachingStore.store_fileobject">
+<tt class="descname">store_fileobject</tt><big>(</big><em>fileobject</em>, <em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore.store_fileobject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores a fileobject to the <a class="reference internal" href="util.html#cloudfusion.util.cache.Cache" title="cloudfusion.util.cache.Cache"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.util.cache.Cache</span></tt></a> and if the existing fileobject has expired it is also written to the wrapped store.
+The cached file&#8217;s updated and modified attributes will be reset to the current point of time.
+The cached file&#8217;s dirty flag is set to False if the entry has expired and was hence written to the store. Otherwise it is set to True.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fileobject</strong> &#8211; The file object with the method read() returning data as a string</li>
+<li><strong>path</strong> &#8211; The path where the file object&#8217;s data should be stored, including the filename</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="the-transparent-caching-store-module">
-<h1>The <tt class="xref py py-mod docutils literal"><span class="pre">transparent_caching_store</span></tt> Module<a class="headerlink" href="#the-transparent-caching-store-module" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-cloudfusion.store.transparent_store">
+<span id="the-transparent-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">transparent_store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.transparent_store" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="cloudfusion.store.transparent_store.ExceptionStats">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.transparent_store.</tt><tt class="descname">ExceptionStats</tt><big>(</big><em>name=''</em>, <em>exception_list=None</em>, <em>desc=''</em>, <em>count=1</em>, <em>lasttime=1383268299.852036</em><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.ExceptionStats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Statistics of a certain exception.
+:param name: the identifier of the exception 
+:param exception_list: the list of the actual exception instances
+:param desc: the description of the exception (defaults to str(exception) )
+:param count: number of occurences of the exception (defaults to 1)
+:param lasttime: the last time the exception occured in seconds from the epoche (defaults to current time)</p>
+<dl class="staticmethod">
+<dt id="cloudfusion.store.transparent_store.ExceptionStats.add_exception">
+<em class="property">static </em><tt class="descname">add_exception</tt><big>(</big><em>exception</em>, <em>exceptions_log</em>, <em>name=None</em>, <em>desc=None</em>, <em>count=-1</em>, <em>lasttime=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.ExceptionStats.add_exception" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an ExceptionStats object to the list <em>exception_log</em> or update time of occurence, exception_list, 
+and count if there is a similar exception in the log.
+:param exception: the exception to add to the log
+:param exceptions_log: an existing dictionary of exceptions mapping their name to an ExceptionStats instance (might be empty)
+:param name: the identifier of the exception (defaults to type(exception) or repr(exception) )
+:param desc: the description of the exception (defaults to str(exception) )
+:param count: number of occurences of the exception (defaults to last count plus 1 or to 1 if if no exception with the same identifier exists)
+:param lasttime: the last time the exception occured in seconds from the epoche (defaults to current time)
+:returns: the updated exception log</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.store.transparent_store.TransparentStore">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.transparent_store.</tt><tt class="descname">TransparentStore</tt><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Interface to get statistics about a store.
+The unit MB is 1000000 Bytes.</p>
+<dl class="method">
+<dt id="cloudfusion.store.transparent_store.TransparentStore.get_cache_hits">
+<tt class="descname">get_cache_hits</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_cache_hits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get number of files that were accessed while they were cached</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_store.TransparentStore.get_cache_misses">
+<tt class="descname">get_cache_misses</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_cache_misses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get number of files that were accessed while they were not in cache</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_store.TransparentStore.get_dirty_files">
+<tt class="descname">get_dirty_files</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_dirty_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of file paths to files that are not already synchronized with the store</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_store.TransparentStore.get_download_rate">
+<tt class="descname">get_download_rate</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_download_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get download rate in MB/s</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_store.TransparentStore.get_downloaded">
+<tt class="descname">get_downloaded</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_downloaded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get amount of data downloaded from a store in MB</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_store.TransparentStore.get_exception_stats">
+<tt class="descname">get_exception_stats</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_exception_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get dict of exception statistics with exception names mapping to <a class="reference internal" href="#cloudfusion.store.transparent_store.ExceptionStats" title="cloudfusion.store.transparent_store.ExceptionStats"><tt class="xref py py-class docutils literal"><span class="pre">ExceptionStats</span></tt></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_store.TransparentStore.get_status_information">
+<tt class="descname">get_status_information</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_status_information" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get arbitrary string describing status of the store</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_store.TransparentStore.get_upload_rate">
+<tt class="descname">get_upload_rate</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_upload_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get upload rate in MB/s</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_store.TransparentStore.get_uploaded">
+<tt class="descname">get_uploaded</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_uploaded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get amount of data uploaded to a store in MB</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-cloudfusion.store.store">
 <span id="the-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.store" title="Permalink to this headline">¶</a></h1>
@@ -341,93 +1242,121 @@ Either this method or <a class="reference internal" href="#cloudfusion.store.sto
 </dd></dl>
 
 </div>
-<div class="section" id="module-cloudfusion.store.transparent_store">
-<span id="the-transparent-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">transparent_store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.transparent_store" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-cloudfusion.store.transparent_caching_store">
+<span id="the-transparent-caching-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">transparent_caching_store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.transparent_caching_store" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="cloudfusion.store.transparent_store.ExceptionStats">
-<em class="property">class </em><tt class="descclassname">cloudfusion.store.transparent_store.</tt><tt class="descname">ExceptionStats</tt><big>(</big><em>name=''</em>, <em>exception_list=None</em>, <em>desc=''</em>, <em>count=1</em>, <em>lasttime=1383267214.236151</em><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.ExceptionStats" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Statistics of a certain exception.
-:param name: the identifier of the exception 
-:param exception_list: the list of the actual exception instances
-:param desc: the description of the exception (defaults to str(exception) )
-:param count: number of occurences of the exception (defaults to 1)
-:param lasttime: the last time the exception occured in seconds from the epoche (defaults to current time)</p>
-<dl class="staticmethod">
-<dt id="cloudfusion.store.transparent_store.ExceptionStats.add_exception">
-<em class="property">static </em><tt class="descname">add_exception</tt><big>(</big><em>exception</em>, <em>exceptions_log</em>, <em>name=None</em>, <em>desc=None</em>, <em>count=-1</em>, <em>lasttime=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.ExceptionStats.add_exception" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add an ExceptionStats object to the list <em>exception_log</em> or update time of occurence, exception_list, 
-and count if there is a similar exception in the log.
-:param exception: the exception to add to the log
-:param exceptions_log: an existing dictionary of exceptions mapping their name to an ExceptionStats instance (might be empty)
-:param name: the identifier of the exception (defaults to type(exception) or repr(exception) )
-:param desc: the description of the exception (defaults to str(exception) )
-:param count: number of occurences of the exception (defaults to last count plus 1 or to 1 if if no exception with the same identifier exists)
-:param lasttime: the last time the exception occured in seconds from the epoche (defaults to current time)
-:returns: the updated exception log</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="cloudfusion.store.transparent_store.TransparentStore">
-<em class="property">class </em><tt class="descclassname">cloudfusion.store.transparent_store.</tt><tt class="descname">TransparentStore</tt><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Interface to get statistics about a store.
-The unit MB is 1000000 Bytes.</p>
+<dt id="cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.transparent_caching_store.</tt><tt class="descname">TransparentMultiprocessingCachingStore</tt><big>(</big><em>store</em>, <em>cache_expiration_time=60</em>, <em>cache_size_in_mb=2000</em>, <em>hard_cache_size_limit_in_mb=10000</em>, <em>cache_id='0.44385239754'</em><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.store.caching_store.MultiprocessingCachingStore" title="cloudfusion.store.caching_store.MultiprocessingCachingStore"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.caching_store.MultiprocessingCachingStore</span></tt></a>, <a class="reference internal" href="#cloudfusion.store.transparent_store.TransparentStore" title="cloudfusion.store.transparent_store.TransparentStore"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.transparent_store.TransparentStore</span></tt></a></p>
+<p>Implements the <tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.cache_stats.TransparentStore</span></tt> interface to get statistics about a cache wrapping a store.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>store</strong> &#8211; the store whose access should be cached</li>
+<li><strong>cache_expiration_time</strong> &#8211; the time in seconds until any cache entry is expired</li>
+<li><strong>cache_size_in_mb</strong> &#8211; Approximate (soft) limit of the cache in MB.</li>
+<li><strong>hard_cache_size_limit_in_mb</strong> &#8211; Hard limit of the cache in MB, exceeding this limit should slow down write operations.</li>
+<li><strong>cache_id</strong> &#8211; Serves as identifier for a persistent cache instance.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
-<dt id="cloudfusion.store.transparent_store.TransparentStore.get_cache_hits">
-<tt class="descname">get_cache_hits</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_cache_hits" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get number of files that were accessed while they were cached</p>
+<dt id="cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.exceeds_hard_limit">
+<tt class="descname">exceeds_hard_limit</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.exceeds_hard_limit" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">true if the hard limit of the cache is exceeded, which should should slow down write operations</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
-<dt id="cloudfusion.store.transparent_store.TransparentStore.get_cache_misses">
-<tt class="descname">get_cache_misses</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_cache_misses" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get number of files that were accessed while they were not in cache</p>
+<dt id="cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_cache_hits">
+<tt class="descname">get_cache_hits</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_cache_hits" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_cache_misses">
+<tt class="descname">get_cache_misses</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_cache_misses" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_cachesize">
+<tt class="descname">get_cachesize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_cachesize" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the size of the cache in MB</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
-<dt id="cloudfusion.store.transparent_store.TransparentStore.get_dirty_files">
-<tt class="descname">get_dirty_files</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_dirty_files" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a list of file paths to files that are not already synchronized with the store</p>
+<dt id="cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_dirty_files">
+<tt class="descname">get_dirty_files</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_dirty_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_download_rate">
+<tt class="descname">get_download_rate</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_download_rate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_downloaded">
+<tt class="descname">get_downloaded</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_downloaded" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_exception_stats">
+<tt class="descname">get_exception_stats</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_exception_stats" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_file">
+<tt class="descname">get_file</tt><big>(</big><em>path_to_file</em><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_hard_limit">
+<tt class="descname">get_hard_limit</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_hard_limit" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the hard limit of the cache in MB, exceeding this limit should slow down write operations</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
-<dt id="cloudfusion.store.transparent_store.TransparentStore.get_download_rate">
-<tt class="descname">get_download_rate</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_download_rate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get download rate in MB/s</p>
-</dd></dl>
+<dt id="cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_status_information">
+<tt class="descname">get_status_information</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_status_information" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
-<dt id="cloudfusion.store.transparent_store.TransparentStore.get_downloaded">
-<tt class="descname">get_downloaded</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_downloaded" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get amount of data downloaded from a store in MB</p>
-</dd></dl>
+<dt id="cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_upload_rate">
+<tt class="descname">get_upload_rate</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_upload_rate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
-<dt id="cloudfusion.store.transparent_store.TransparentStore.get_exception_stats">
-<tt class="descname">get_exception_stats</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_exception_stats" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get dict of exception statistics with exception names mapping to <a class="reference internal" href="#cloudfusion.store.transparent_store.ExceptionStats" title="cloudfusion.store.transparent_store.ExceptionStats"><tt class="xref py py-class docutils literal"><span class="pre">ExceptionStats</span></tt></a></p>
-</dd></dl>
+<dt id="cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_uploaded">
+<tt class="descname">get_uploaded</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.get_uploaded" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
-<dt id="cloudfusion.store.transparent_store.TransparentStore.get_status_information">
-<tt class="descname">get_status_information</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_status_information" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get arbitrary string describing status of the store</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.transparent_store.TransparentStore.get_upload_rate">
-<tt class="descname">get_upload_rate</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_upload_rate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get upload rate in MB/s</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.transparent_store.TransparentStore.get_uploaded">
-<tt class="descname">get_uploaded</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_store.TransparentStore.get_uploaded" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get amount of data uploaded to a store in MB</p>
-</dd></dl>
+<dt id="cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.store_fileobject">
+<tt class="descname">store_fileobject</tt><big>(</big><em>fileobject</em>, <em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore.store_fileobject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -444,21 +1373,21 @@ The unit MB is 1000000 Bytes.</p>
 <li><a class="reference internal" href="#">Subpackages</a><ul>
 </ul>
 </li>
-<li><a class="reference internal" href="#the-caching-store-module">The <tt class="docutils literal"><span class="pre">caching_store</span></tt> Module</a></li>
-<li><a class="reference internal" href="#the-store-worker-module">The <tt class="docutils literal"><span class="pre">store_worker</span></tt> Module</a></li>
-<li><a class="reference internal" href="#the-store-sync-thread-module">The <tt class="docutils literal"><span class="pre">store_sync_thread</span></tt> Module</a></li>
-<li><a class="reference internal" href="#the-metadata-caching-store-module">The <tt class="docutils literal"><span class="pre">metadata_caching_store</span></tt> Module</a></li>
-<li><a class="reference internal" href="#the-transparent-caching-store-module">The <tt class="docutils literal"><span class="pre">transparent_caching_store</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.store.store">The <tt class="docutils literal"><span class="pre">store</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.store.store_sync_thread">The <tt class="docutils literal"><span class="pre">store_sync_thread</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.store.store_worker">The <tt class="docutils literal"><span class="pre">store_worker</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.store.metadata_caching_store">The <tt class="docutils literal"><span class="pre">metadata_caching_store</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.store.caching_store">The <tt class="docutils literal"><span class="pre">caching_store</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-cloudfusion.store.transparent_store">The <tt class="docutils literal"><span class="pre">transparent_store</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.store.store">The <tt class="docutils literal"><span class="pre">store</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.store.transparent_caching_store">The <tt class="docutils literal"><span class="pre">transparent_caching_store</span></tt> Module</a></li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="pyfusebox.html"
                         title="previous chapter">The <tt class="docutils literal"><span class="pre">pyfusebox</span></tt> Module</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="store.sugarsync.html"
-                        title="next chapter">The <tt class="docutils literal"><span class="pre">sugarsync_store</span></tt> Module</a></p>
+  <p class="topless"><a href="store.dropbox.html"
+                        title="next chapter">The <tt class="docutils literal"><span class="pre">dropbox_store</span></tt> Module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/store.txt"
@@ -491,7 +1420,7 @@ The unit MB is 1000000 Bytes.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="store.sugarsync.html" title="The sugarsync_store Module"
+          <a href="store.dropbox.html" title="The dropbox_store Module"
              >next</a> |</li>
         <li class="right" >
           <a href="pyfusebox.html" title="The pyfusebox Module"

@@ -83,21 +83,18 @@ and the filter list to empty.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="the-db-logging-thread-module">
-<h1>The <tt class="xref py py-mod docutils literal"><span class="pre">db_logging_thread</span></tt> Module<a class="headerlink" href="#the-db-logging-thread-module" title="Permalink to this headline">¶</a></h1>
-</div>
 <div class="section" id="module-cloudfusion.mylogging.db_handler">
 <span id="the-db-handler-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">db_handler</span></tt> Module<a class="headerlink" href="#module-cloudfusion.mylogging.db_handler" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="cloudfusion.mylogging.db_handler.DBHandler">
 <em class="property">class </em><tt class="descclassname">cloudfusion.mylogging.db_handler.</tt><tt class="descname">DBHandler</tt><big>(</big><em>db_identifier</em><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.db_handler.DBHandler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">logging.Handler</span></tt></p>
-<p>This logging handler sends events to <tt class="xref py py-mod docutils literal"><span class="pre">cloudfusion.mylogging.db_logging_thread</span></tt>.</p>
+<p>This logging handler sends events to <a class="reference internal" href="#module-cloudfusion.mylogging.db_logging_thread" title="cloudfusion.mylogging.db_logging_thread"><tt class="xref py py-mod docutils literal"><span class="pre">cloudfusion.mylogging.db_logging_thread</span></tt></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>db_identifier</strong> &#8211; identifier from <tt class="xref py py-func docutils literal"><span class="pre">cloudfusion.mylogging.db_logging_thread.get_logging_db_identifier()</span></tt></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>db_identifier</strong> &#8211; identifier from <a class="reference internal" href="#cloudfusion.mylogging.db_logging_thread.get_logging_db_identifier" title="cloudfusion.mylogging.db_logging_thread.get_logging_db_identifier"><tt class="xref py py-func docutils literal"><span class="pre">cloudfusion.mylogging.db_logging_thread.get_logging_db_identifier()</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -116,6 +113,69 @@ and the filter list to empty.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-cloudfusion.mylogging.db_logging_thread">
+<span id="the-db-logging-thread-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">db_logging_thread</span></tt> Module<a class="headerlink" href="#module-cloudfusion.mylogging.db_logging_thread" title="Permalink to this headline">¶</a></h1>
+<p>Created on Jul 29, 2013</p>
+<p>&#64;author: joe</p>
+<dl class="function">
+<dt id="cloudfusion.mylogging.db_logging_thread.__get_records">
+<tt class="descclassname">cloudfusion.mylogging.db_logging_thread.</tt><tt class="descname">__get_records</tt><big>(</big><em>cursor</em>, <em>conn</em><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.db_logging_thread.__get_records" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get and delete next record from database.
+:returns: next record from database or None</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.mylogging.db_logging_thread._clean_db">
+<tt class="descclassname">cloudfusion.mylogging.db_logging_thread.</tt><tt class="descname">_clean_db</tt><big>(</big><em>cursor</em>, <em>conn</em><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.db_logging_thread._clean_db" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.mylogging.db_logging_thread._handleRecord">
+<tt class="descclassname">cloudfusion.mylogging.db_logging_thread.</tt><tt class="descname">_handleRecord</tt><big>(</big><em>record</em><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.db_logging_thread._handleRecord" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.mylogging.db_logging_thread._serve_until_stopped">
+<tt class="descclassname">cloudfusion.mylogging.db_logging_thread.</tt><tt class="descname">_serve_until_stopped</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.db_logging_thread._serve_until_stopped" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.mylogging.db_logging_thread.create_dbhandler">
+<tt class="descclassname">cloudfusion.mylogging.db_logging_thread.</tt><tt class="descname">create_dbhandler</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.db_logging_thread.create_dbhandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a database logging handler to log to the database logging thread. 
+Only call this method after calling <a class="reference internal" href="#cloudfusion.mylogging.db_logging_thread.start" title="cloudfusion.mylogging.db_logging_thread.start"><tt class="xref py py-func docutils literal"><span class="pre">start()</span></tt></a> once.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.mylogging.db_logging_thread.get_logging_db_identifier">
+<tt class="descclassname">cloudfusion.mylogging.db_logging_thread.</tt><tt class="descname">get_logging_db_identifier</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.db_logging_thread.get_logging_db_identifier" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">identifier of the database in use for <a class="reference internal" href="#cloudfusion.mylogging.db_handler.DBHandler" title="cloudfusion.mylogging.db_handler.DBHandler"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.mylogging.db_handler.DBHandler</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.mylogging.db_logging_thread.make_logger_multiprocessingsave">
+<tt class="descclassname">cloudfusion.mylogging.db_logging_thread.</tt><tt class="descname">make_logger_multiprocessingsave</tt><big>(</big><em>logger</em><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.db_logging_thread.make_logger_multiprocessingsave" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.mylogging.db_logging_thread.start">
+<tt class="descclassname">cloudfusion.mylogging.db_logging_thread.</tt><tt class="descname">start</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.db_logging_thread.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start processing records in a background thread.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.mylogging.db_logging_thread.stop">
+<tt class="descclassname">cloudfusion.mylogging.db_logging_thread.</tt><tt class="descname">stop</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.db_logging_thread.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
 
 
           </div>
@@ -126,8 +186,8 @@ and the filter list to empty.</p>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">nullhandler</span></tt> Module</a></li>
-<li><a class="reference internal" href="#the-db-logging-thread-module">The <tt class="docutils literal"><span class="pre">db_logging_thread</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-cloudfusion.mylogging.db_handler">The <tt class="docutils literal"><span class="pre">db_handler</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.mylogging.db_logging_thread">The <tt class="docutils literal"><span class="pre">db_logging_thread</span></tt> Module</a></li>
 </ul>
 
   <h4>Previous topic</h4>
