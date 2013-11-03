@@ -61,7 +61,7 @@ class PyFuseBox(Operations):
             self.logger.debug(" isFile")
             st['st_mode'] = 0777 | stat.S_IFREG
             st['st_size'] = metadata['bytes']
-        st['st_blocks'] = (int) ((st['st_size'] + 4095L) / 4096L);
+        st['st_blocks'] = (int) ((st['st_size'] + 511) / 512)
         return st
     
     def open(self, path, flags):
