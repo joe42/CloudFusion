@@ -7,6 +7,7 @@ from cloudfusion.util.synchronize_proxy import SynchronizeProxy
 from nose.tools import *
 import threading
 from random import random
+import time
 
 class TestSubject(object):
     def __init__(self):
@@ -37,7 +38,7 @@ class TestingThread(threading.Thread):
 def test():
     threads = []
     test_obj = SynchronizeProxy(TestSubject())
-    for i in range(0,1000):
+    for i in range(0,500):
         t = TestingThread(test_obj)
         threads.append(t)
     for t in threads:
@@ -51,7 +52,7 @@ def test():
     assert value_sum == 0, "Value of test subject has changed to one at least once, which can only be observed with an asynchronous access."
     threads = []
     test_obj = TestSubject()
-    for i in range(0,1000):
+    for i in range(0,500):
         t = TestingThread(test_obj)
         threads.append(t)
     for t in threads:
