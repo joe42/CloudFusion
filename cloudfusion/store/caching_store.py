@@ -33,7 +33,7 @@ class MultiprocessingCachingStore(Store):
 #        self.temp_file = tempfile.SpooledTemporaryFile()
         self.cache_expiration_time = cache_expiration_time
         self.time_of_last_flush = time.time()
-        self.entries = SynchronizeProxy( PersistentLRUCache("/tmp/cloudfusion/cachingstore_"+cache_id, cache_expiration_time, cache_size_in_mb) )
+        self.entries = SynchronizeProxy( PersistentLRUCache("/tmp/cloudfusion/cachingstore_"+cache_id, cache_expiration_time, cache_size_in_mb) ) #[shares_resource: write self.entries]
         self.sync_thread = StoreSyncThread(self.entries, self.store, self.logger)
         self.sync_thread.start()
     
@@ -82,15 +82,16 @@ class MultiprocessingCachingStore(Store):
         """ :returns: string -- the data of the file with the path *path_to_file*
         If the file was updated in the wrapped store, then its content in the cache will be updated if its entry is expired but not dirty. 
         """
-        self.logger.debug("cached get_file %s", path_to_file)
-        if not self.entries.exists(path_to_file):
-            self.logger.debug("cached get_file from new entry")
-            self._refresh_cache(path_to_file)
-            return self.entries.get_value(path_to_file)
-        if self.entries.is_expired(path_to_file) and not self.entries.is_dirty(path_to_file):
-            self.logger.debug("cached get_file update from store if newer")
-            self._refresh_cache(path_to_file)
-        return self.entries.get_value(path_to_file) #not expired->from entries
+        with self.sync_thread.protect_cache_from_write_access:
+            self.logger.debug("cached get_file %s", path_to_file)
+            if not self.entries.exists(path_to_file):
+                self.logger.debug("cached get_file from new entry")
+                self._refresh_cache(path_to_file)
+                return self.entries.get_value(path_to_file)
+            if self.entries.is_expired(path_to_file) and not self.entries.is_dirty(path_to_file):
+                self.logger.debug("cached get_file update from store if newer")
+                self._refresh_cache(path_to_file)
+            return self.entries.get_value(path_to_file) #not expired->from entries
     
     def store_file(self, path_to_file, dest_dir="/", remote_file_name = None):
         if dest_dir == "/":
@@ -115,14 +116,14 @@ class MultiprocessingCachingStore(Store):
         :param path: The path where the file object's data should be stored, including the filename
         """
         self.logger.debug("cached storing %s", path)
-        self.entries.write(path, fileobject.read())
+        self.sync_thread.write_cache_entry(path, fileobject.read()) #[shares_resource: write self.entries]
         self.logger.debug("cached storing value %s...", self.entries.get_value(path)[:10]) 
 
     def delete(self, path):#should be atomic
         self.logger.debug("delete %s", path)
         if self.store.exists(path):  
             self.sync_thread.delete(path)
-        self.entries.delete(path)
+        self.sync_thread.delete_cache_entry(path) #[shares_resource: write self.entries]
           
     def account_info(self):
         return self.store.account_info()
@@ -143,24 +144,26 @@ class MultiprocessingCachingStore(Store):
         return self.store.create_directory(directory)
     
     def duplicate(self, path_to_src, path_to_dest): # TODO only for files? # handle similarly to move
-        self.entries.delete(path_to_dest) # delete possible locally cached entry at destination 
-        local_dirty_entry_to_src_exists = self.entries.exists(path_to_src) and self.entries.is_dirty(path_to_src)
-        source_is_in_store = not local_dirty_entry_to_src_exists
-        if self.entries.exists(path_to_src):  
-            self.logger.debug("cached storing duplicate %s to %s", path_to_src, path_to_dest)
-            self.entries.write(path_to_dest, self.entries.get_value(path_to_src))
-        if source_is_in_store: 
-            self.store.duplicate(path_to_src, path_to_dest)
+        with self.sync_thread.protect_cache_from_write_access:
+            self.sync_thread.delete_cache_entry(path_to_dest) # delete possible locally cached entry at destination  #[shares_resource: write self.entries]
+            local_dirty_entry_to_src_exists = self.entries.exists(path_to_src) and self.entries.is_dirty(path_to_src)
+            source_is_in_store = not local_dirty_entry_to_src_exists
+            if self.entries.exists(path_to_src):  
+                self.logger.debug("cached storing duplicate %s to %s", path_to_src, path_to_dest)
+                self.sync_thread.write_cache_entry(path_to_dest, self.entries.get_value(path_to_src)) #[shares_resource: write self.entries]
+            if source_is_in_store: 
+                self.store.duplicate(path_to_src, path_to_dest)
         
     def move(self, path_to_src, path_to_dest):
-        self.entries.delete(path_to_dest) # delete possible locally cached entry at destination 
-        local_dirty_entry_to_src_exists = self.entries.exists(path_to_src) and self.entries.is_dirty(path_to_src)
-        source_is_in_store = not local_dirty_entry_to_src_exists 
-        if self.entries.exists(path_to_src):  
-            self.entries.write(path_to_dest, self.entries.get_value(path_to_src))
-            self.entries.delete(path_to_src)
-        if source_is_in_store: 
-            self.store.move(path_to_src, path_to_dest)
+        with self.sync_thread.protect_cache_from_write_access:
+            self.sync_thread.delete_cache_entry(path_to_dest) # delete possible locally cached entry at destination  #[shares_resource: write self.entries]
+            local_dirty_entry_to_src_exists = self.entries.exists(path_to_src) and self.entries.is_dirty(path_to_src)
+            source_is_in_store = not local_dirty_entry_to_src_exists 
+            if self.entries.exists(path_to_src):  
+                self.sync_thread.write_cache_entry(path_to_dest, self.entries.get_value(path_to_src)) #[shares_resource: write self.entries]
+                self.sync_thread.delete_cache_entry(path_to_src) #[shares_resource: write self.entries]
+            if source_is_in_store: 
+                self.store.move(path_to_src, path_to_dest)
  
     def get_modified(self, path):
         if self.entries.exists(path):
@@ -192,14 +195,15 @@ class MultiprocessingCachingStore(Store):
             return False
     
     def _get_metadata(self, path):
-        metadata = {}
-        if self.entries.exists(path):
-            metadata['modified'] = self.entries.get_modified(path)
-            metadata['bytes'] = len(self.entries.peek(path))
-            metadata['is_dir'] = False
-        else:
-            metadata = self.store._get_metadata(path)
-        return metadata
+        with self.sync_thread.protect_cache_from_write_access: # think about performance issues here, since this is called all the time
+            metadata = {}
+            if self.entries.exists(path):
+                metadata['modified'] = self.entries.get_modified(path)
+                metadata['bytes'] = len(self.entries.peek(path))
+                metadata['is_dir'] = False
+            else:
+                metadata = self.store._get_metadata(path)
+            return metadata
 
     def is_dir(self, path):
         if self.entries.exists(path):

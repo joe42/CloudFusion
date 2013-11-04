@@ -15,6 +15,7 @@ class StoreSyncThread(object):
         self.max_writer_threads = max_writer_threads
         self.WRITE_TIMELIMIT = 60*60*2 #2h
         self.lock = RLock()
+        self.protect_cache_from_write_access = RLock() #could also be normal lock
         self.removers = []
         self.writers = []
         self.readers = []
@@ -70,9 +71,9 @@ class StoreSyncThread(object):
                 self.writers.remove(writer)
                 self.stats.add_finished_worker(writer)
             if writer.is_successful() and self.cache.exists(writer.path): #stop() call in delete method might not have prevented successful write 
-                self.cache.set_dirty(writer.path, False) # set_dirty might delete item, if cache limit is reached
+                self.set_dirty_cache_entry(writer.path, False) # set_dirty might delete item, if cache limit is reached #[shares_resource: write self.entries]
                 if self.cache.exists(writer.path) and self.cache.get_modified(writer.path) < writer.get_updatetime(): 
-                    self.cache.set_modified(writer.path, writer.get_updatetime())
+                    self.set_modified_cache_entry(writer.path, writer.get_updatetime()) #[shares_resource: write self.entries]
         
     def _remove_slow_writers(self):
         for writer in self.writers:
@@ -98,9 +99,9 @@ class StoreSyncThread(object):
             if reader.is_finished():
                 self.readers.remove(reader)
             if reader.is_successful():
-                self.cache.set_dirty(reader.path, False)
+                self.set_dirty_cache_entry(reader.path, False) #[shares_resource: write self.entries]
                 content = reader.get_result() # block until read is done
-                self.cache.refresh(reader.path, content, self.store._get_metadata(reader.path)['modified'])
+                self.refresh_cache_entry(reader.path, content, self.store._get_metadata(reader.path)['modified']) #[shares_resource: write self.entries]
                 self.stats.add_finished_worker(reader)
                 
     def _remove_successful_removers(self):
@@ -174,11 +175,11 @@ class StoreSyncThread(object):
         #TODO: check for user quota error and pause or do exponential backoff
         #TODO: check for internet connection availability and pause or do exponential backoff
         with self.lock:
-            dirty_entry_keys = self.cache.get_dirty_lru_entries(self.max_writer_threads)
+            dirty_entry_keys = self.cache.get_dirty_lru_entries(self.max_writer_threads)##KeyError: '########################## ######## list_tail ###### #############################' lru_cache.py return self.entries[self.entries[LISTTAIL]] if self.entries[LISTTAIL] else None
             for path in dirty_entry_keys:
                 if len(self.writers) >= self.max_writer_threads:
                     break
-                if not self.cache.is_expired(path): 
+                if not self.cache.is_expired(path): ##KeyError: '/fstest.7548/d010/66334873' cache.py return time.time() > self.entries[key].updated + self.expire
                     break
                 if self._is_in_progress(path):
                     continue
@@ -245,6 +246,29 @@ class StoreSyncThread(object):
                 if not err in [StoreAccessError, NoSuchFilesytemObjectError, StoreAutorizationError]:
                     err = StoreAccessError(str(err),0)
                 raise err
-            self.cache.refresh(path, content, self.store._get_metadata(path)['modified'])
+            self.refresh_cache_entry(path, content, self.store._get_metadata(path)['modified']) #[shares_resource: write self.entries]
             self.readers.remove(reader)
+            
+    def delete_cache_entry(self, path):
+        with self.protect_cache_from_write_access:
+            self.cache.delete(path)
+    
+    #these are called from this thread while multiprocessingstore instance operates.., but should only be called in between its methods
+    #how can we accomplish this? -> second lock
+    
+    def write_cache_entry(self, path, contents):
+        with self.protect_cache_from_write_access:
+            self.cache.write(path, contents)
+        
+    def refresh_cache_entry(self, path, contents, modified):
+        with self.protect_cache_from_write_access:
+            self.cache.refresh(path, contents, modified)
+            
+    def set_dirty_cache_entry(self, path, is_dirty): #may be called by this class
+        with self.protect_cache_from_write_access:
+            self.cache.set_dirty(path, is_dirty)
+    
+    def set_modified_cache_entry(self, path, updatetime): #may be called by this class 
+        with self.protect_cache_from_write_access:
+            self.cache.set_modified(path, updatetime)
             
