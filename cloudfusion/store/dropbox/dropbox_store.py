@@ -151,7 +151,8 @@ class DropboxStore(Store):
         soup = BeautifulSoup(login_req.text)
         for input_tag in soup.form.find_all("input"):
             if input_tag['name'] != 'deny_access':
-                attr[input_tag['name']] = input_tag['value']
+                if input_tag.has_attr('value'):
+                    attr[input_tag['name']] = input_tag['value']
         cookies.update(login_req.cookies)
         # acknowledge application access authorization
         requests.post('https://www.dropbox.com/1/oauth/authorize', attr, headers=headers,cookies=cookies)
