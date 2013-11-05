@@ -16,6 +16,7 @@ class StoreSyncThread(object):
         self.WRITE_TIMELIMIT = 60*60*2 #2h
         self.lock = RLock()
         self.protect_cache_from_write_access = RLock() #could also be normal lock
+        self.oldest_modified_date = {} #keep track of modified date of a cache entry when it is first enqueued for upload. Their contents might change during upload.
         self.removers = []
         self.writers = []
         self.readers = []
@@ -70,10 +71,13 @@ class StoreSyncThread(object):
             if writer.is_finished():
                 self.writers.remove(writer)
                 self.stats.add_finished_worker(writer)
-            if writer.is_successful() and self.cache.exists(writer.path): #stop() call in delete method might not have prevented successful write 
-                self.set_dirty_cache_entry(writer.path, False) # set_dirty might delete item, if cache limit is reached #[shares_resource: write self.entries]
-                if self.cache.exists(writer.path) and self.cache.get_modified(writer.path) < writer.get_updatetime(): 
-                    self.set_modified_cache_entry(writer.path, writer.get_updatetime()) #[shares_resource: write self.entries]
+                if writer.is_successful() and self.cache.exists(writer.path): #stop() call in delete method might not have prevented successful write
+                    modified_during_upload =  self.cache.get_modified(writer.path) > self.oldest_modified_date[writer.path] #two writers with the same path?
+                    if not modified_during_upload: #actual modified date is >= oldest modified date
+                        self.set_dirty_cache_entry(writer.path, False) # set_dirty might delete item, if cache limit is reached #[shares_resource: write self.entries]
+                        if self.cache.exists(writer.path) and self.cache.get_modified(writer.path) < writer.get_updatetime(): 
+                            self.set_modified_cache_entry(writer.path, writer.get_updatetime()) #[shares_resource: write self.entries]
+                del self.oldest_modified_date[writer.path]
         
     def _remove_slow_writers(self):
         for writer in self.writers:
@@ -174,6 +178,8 @@ class StoreSyncThread(object):
         """Start new writer jobs with expired least recently used cache entries."""
         #TODO: check for user quota error and pause or do exponential backoff
         #TODO: check for internet connection availability and pause or do exponential backoff
+        #Entries can be deleted during this method!!!
+        #TODO: only access entries through store_sync_thread methods synchronized with self.lock
         with self.lock:
             dirty_entry_keys = self.cache.get_dirty_lru_entries(self.max_writer_threads)##KeyError: '########################## ######## list_tail ###### #############################' lru_cache.py return self.entries[self.entries[LISTTAIL]] if self.entries[LISTTAIL] else None
             for path in dirty_entry_keys:
@@ -183,6 +189,7 @@ class StoreSyncThread(object):
                     break
                 if self._is_in_progress(path):
                     continue
+                self.oldest_modified_date[path] = self.cache.get_modified(path) #might change during upload, if new file contents is written to the cache entry
                 file = self.cache.peek_file(path)
                 new_worker = WriteWorker(self.store, path, file, self.logger)
                 new_worker.start()
@@ -198,6 +205,7 @@ class StoreSyncThread(object):
                     break
                 if self._is_in_progress(path):
                     continue
+                self.oldest_modified_date[path] = self.cache.get_modified(path) #might change during upload, if new file contents is written to the cache entry
                 file = self.cache.peek_file(path)
                 new_worker = WriteWorker(self.store, path, file, self.logger)
                 new_worker.start()
