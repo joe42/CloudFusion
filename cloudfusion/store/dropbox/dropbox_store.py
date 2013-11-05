@@ -17,7 +17,12 @@ import shelve
 from multiprocessing import Manager
 import atexit
 from cloudfusion.util.exponential_retry import retry
-import requests
+'''  requests bug with requests 2.0.1, so use local requests version 1.2.3:
+#    File "/usr/local/lib/python2.7/dist-packages/requests/cookies.py", line 311, in _find_no_duplicates
+#    raise KeyError('name=%r, domain=%r, path=%r' % (name, domain, path))
+#    KeyError: "name=Cookie(version=0, name='bang', value='QUFCQmh5c3FET1RnMUZkcXlrMXNBNXV4eFhaU080NWtzYndmUDlDa0p1SEFHZw%3D%3D', port=None, port_specified=False, domain='.dropbox.com', domain_specified=True, domain_initial_dot=False, path='/', path_specified=True, secure=False, expires=1383395405, discard=False, comment=None, comment_url=None, rest={'httponly': None}, rfc2109=False), domain=None, path=None"
+'''
+import cloudfusion.third_party.requests_1_2_3.requests as requests
 from bs4 import BeautifulSoup
 from cloudfusion.mylogging import db_logging_thread
 
