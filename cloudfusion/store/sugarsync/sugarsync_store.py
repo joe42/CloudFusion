@@ -410,7 +410,11 @@ class SugarsyncStore(Store):
             if remaining_tries == 0: # throw error after last try
                 raise error
         elif isinstance(error, StoreAccessError):
-            if error.status == HTTP_STATUS.OVER_STORAGE_LIMIT or \
+            #On store_getfile, there seems to occur a StoreAccessError Message: Response: 400 Bad Request invalid XML - retry once
+            if error.status == HTTP_STATUS.BAD_REQUEST and method_name == 'get_file':
+                self.logger.debug("Retrying on BAD REQUEST error in get_file: %s", error) 
+                pass 
+            elif error.status == HTTP_STATUS.OVER_STORAGE_LIMIT or \
                 error.status == HTTP_STATUS.BAD_REQUEST or \
                 error.status == HTTP_STATUS.FORBIDDEN or \
                 isinstance(error, AlreadyExistsError) or \
