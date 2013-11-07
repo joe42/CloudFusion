@@ -20,6 +20,8 @@ class DBHandler(logging.Handler):
         self.conn = None
         self.cursor = None
         self.pid = -1
+        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        self.setFormatter(formatter)
         
     def reconnect(self):
         self.conn = sqlite3.connect(self.db_identifier, check_same_thread = False, isolation_level=None) 
