@@ -118,13 +118,15 @@ class StoreSyncThread(object):
             if remover.is_finished() and not remover.is_successful():
                 remover.start()
                 
-    def _is_in_progress(self, path):
-        for writer in self.writers:
-            if path == writer.path:
-                return True
-        for remover in self.removers:
-            if path == remover.path:
-                return True
+    def is_in_progress(self, path):
+        ''':returns: True iff *path* is currently uploaded or being removed'''
+        with self.lock:
+            for writer in self.writers:
+                if path == writer.path:
+                    return True
+            for remover in self.removers:
+                if path == remover.path:
+                    return True
         return False
     
     def _get_writer(self, path):
@@ -187,7 +189,7 @@ class StoreSyncThread(object):
                     break
                 if not self.cache.is_expired(path): ##KeyError: '/fstest.7548/d010/66334873' cache.py return time.time() > self.entries[key].updated + self.expire
                     break
-                if self._is_in_progress(path):
+                if self.is_in_progress(path):
                     continue
                 self.oldest_modified_date[path] = self.cache.get_modified(path) #might change during upload, if new file contents is written to the cache entry
                 file = self.cache.peek_file(path)
@@ -203,7 +205,7 @@ class StoreSyncThread(object):
             for path in dirty_entry_keys:
                 if len(self.writers) >= self.max_writer_threads:
                     break
-                if self._is_in_progress(path):
+                if self.is_in_progress(path):
                     continue
                 self.oldest_modified_date[path] = self.cache.get_modified(path) #might change during upload, if new file contents is written to the cache entry
                 file = self.cache.peek_file(path)
