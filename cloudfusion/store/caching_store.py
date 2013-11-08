@@ -91,8 +91,8 @@ class MultiprocessingCachingStore(Store):
                 self._refresh_cache(path_to_file)
                 return self.entries.get_value(path_to_file)
             if self.entries.is_expired(path_to_file) and not self.entries.is_dirty(path_to_file):
-                self.logger.debug("cached get_file update from store if newer")
-                self._refresh_cache(path_to_file)
+                if not self.sync_thread.is_in_progress(path_to_file):
+                    self._refresh_cache(path_to_file)
             return self.entries.get_value(path_to_file) #not expired->from entries
     
     def store_file(self, path_to_file, dest_dir="/", remote_file_name = None):
