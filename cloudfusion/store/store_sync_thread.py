@@ -67,9 +67,10 @@ class StoreSyncThread(object):
         self._stop = True
         
     def _remove_finished_writers(self):
+        writers_to_be_removed = []
         for writer in self.writers:
             if writer.is_finished():
-                self.writers.remove(writer)
+                writers_to_be_removed.append(writer)
                 self.stats.add_finished_worker(writer)
                 if writer.is_successful() and self.cache.exists(writer.path): #stop() call in delete method might not have prevented successful write
                     modified_during_upload =  self.cache.get_modified(writer.path) > self.oldest_modified_date[writer.path] #two writers with the same path?
@@ -78,7 +79,9 @@ class StoreSyncThread(object):
                         if self.cache.exists(writer.path) and self.cache.get_modified(writer.path) < writer.get_updatetime(): 
                             self.set_modified_cache_entry(writer.path, writer.get_updatetime()) #[shares_resource: write self.entries]
                 del self.oldest_modified_date[writer.path]
-        
+        for writer in writers_to_be_removed:
+            self.writers.remove(writer)
+            
     def _remove_slow_writers(self):
         for writer in self.writers:
             if not writer.is_finished(): 
@@ -99,19 +102,25 @@ class StoreSyncThread(object):
                         self.skip_starting_new_writers_for_next_x_cycles = 4*30 #4 means one minute
                     
     def _remove_finished_readers(self):
+        readers_to_be_removed = []
         for reader in self.readers:
             if reader.is_finished():
-                self.readers.remove(reader)
+                readers_to_be_removed.append(reader)
             if reader.is_successful():
                 self.set_dirty_cache_entry(reader.path, False) #[shares_resource: write self.entries]
                 content = reader.get_result() # block until read is done
                 self.refresh_cache_entry(reader.path, content, self.store._get_metadata(reader.path)['modified']) #[shares_resource: write self.entries]
                 self.stats.add_finished_worker(reader)
+        for reader in readers_to_be_removed:
+            self.readers.remove(reader)
                 
     def _remove_successful_removers(self):
+        removers_to_be_removed = []
         for remover in self.removers:
             if remover.is_finished() and remover.is_successful():
-                self.removers.remove(remover)
+                removers_to_be_removed.append(remover)
+        for remover in removers_to_be_removed:
+            self.removers.remove(remover)
                     
     def _restart_unsuccessful_removers(self):
         for remover in self.removers:
