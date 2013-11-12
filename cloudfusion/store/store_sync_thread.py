@@ -72,12 +72,13 @@ class StoreSyncThread(object):
             if writer.is_finished():
                 writers_to_be_removed.append(writer)
                 self.stats.add_finished_worker(writer)
-                if writer.is_successful() and self.cache.exists(writer.path): #stop() call in delete method might not have prevented successful write
-                    modified_during_upload =  self.cache.get_modified(writer.path) > self.oldest_modified_date[writer.path] #two writers with the same path?
-                    if not modified_during_upload: #actual modified date is >= oldest modified date
-                        self.set_dirty_cache_entry(writer.path, False) # set_dirty might delete item, if cache limit is reached #[shares_resource: write self.entries]
-                        if self.cache.exists(writer.path) and self.cache.get_modified(writer.path) < writer.get_updatetime(): 
-                            self.set_modified_cache_entry(writer.path, writer.get_updatetime()) #[shares_resource: write self.entries]
+                with self.protect_cache_from_write_access: #otherwise, fuse thread could delete current cache entry
+                    if writer.is_successful() and self.cache.exists(writer.path): #stop() call in delete method might not have prevented successful write
+                        modified_during_upload =  self.cache.get_modified(writer.path) > self.oldest_modified_date[writer.path] #two writers with the same path?
+                        if not modified_during_upload: #actual modified date is >= oldest modified date
+                            self.set_dirty_cache_entry(writer.path, False) # set_dirty might delete item, if cache limit is reached #[shares_resource: write self.entries]
+                            if self.cache.exists(writer.path) and self.cache.get_modified(writer.path) < writer.get_updatetime(): 
+                                self.set_modified_cache_entry(writer.path, writer.get_updatetime()) #[shares_resource: write self.entries] #FIXME: stops here
                 del self.oldest_modified_date[writer.path]
         for writer in writers_to_be_removed:
             self.writers.remove(writer)
@@ -107,7 +108,6 @@ class StoreSyncThread(object):
             if reader.is_finished():
                 readers_to_be_removed.append(reader)
             if reader.is_successful():
-                self.set_dirty_cache_entry(reader.path, False) #[shares_resource: write self.entries]
                 content = reader.get_result() # block until read is done
                 self.refresh_cache_entry(reader.path, content, self.store._get_metadata(reader.path)['modified']) #[shares_resource: write self.entries]
                 self.stats.add_finished_worker(reader)
@@ -191,45 +191,47 @@ class StoreSyncThread(object):
         #TODO: check for internet connection availability and pause or do exponential backoff
         #Entries can be deleted during this method!!!
         #TODO: only access entries through store_sync_thread methods synchronized with self.lock
-        with self.lock:
-            dirty_entry_keys = self.cache.get_dirty_lru_entries(self.max_writer_threads)##KeyError: '########################## ######## list_tail ###### #############################' lru_cache.py return self.entries[self.entries[LISTTAIL]] if self.entries[LISTTAIL] else None
-            for path in dirty_entry_keys:
-                if len(self.writers) >= self.max_writer_threads:
-                    break
-                if not self.cache.is_expired(path): ##KeyError: '/fstest.7548/d010/66334873' cache.py return time.time() > self.entries[key].updated + self.expire
-                    break
-                if self.is_in_progress(path):
-                    continue
-                self.oldest_modified_date[path] = self.cache.get_modified(path) #might change during upload, if new file contents is written to the cache entry
-                file = self.cache.peek_file(path)
-                new_worker = WriteWorker(self.store, path, file, self.logger)
-                new_worker.start()
-                self.writers.append(new_worker)
+        self._acquire_two_locks() #otherwise, fuse thread could delete current cache entry
+        dirty_entry_keys = self.cache.get_dirty_lru_entries(self.max_writer_threads)##KeyError: '########################## ######## list_tail ###### #############################' lru_cache.py return self.entries[self.entries[LISTTAIL]] if self.entries[LISTTAIL] else None
+        for path in dirty_entry_keys:
+            if len(self.writers) >= self.max_writer_threads:
+                break
+            if not self.cache.is_expired(path): ##KeyError: '/fstest.7548/d010/66334873' cache.py return time.time() > self.entries[key].updated + self.expire
+                break
+            if self.is_in_progress(path):
+                continue
+            self.oldest_modified_date[path] = self.cache.get_modified(path) #might change during upload, if new file contents is written to the cache entry
+            file = self.cache.peek_file(path)
+            new_worker = WriteWorker(self.store, path, file, self.logger)
+            new_worker.start()
+            self.writers.append(new_worker)
+        self._release_two_locks()
     
     
     def enqueue_dirty_entries(self): 
         """Start new writer jobs with dirty cache entries."""
-        with self.lock:
-            dirty_entry_keys = self.cache.get_dirty_lru_entries(self.max_writer_threads)
-            for path in dirty_entry_keys:
-                if len(self.writers) >= self.max_writer_threads:
-                    break
-                if self.is_in_progress(path):
-                    continue
-                self.oldest_modified_date[path] = self.cache.get_modified(path) #might change during upload, if new file contents is written to the cache entry
-                file = self.cache.peek_file(path)
-                new_worker = WriteWorker(self.store, path, file, self.logger)
-                new_worker.start()
-                self.writers.append(new_worker)
+        self._acquire_two_locks() #otherwise, fuse thread could delete current cache entry
+        dirty_entry_keys = self.cache.get_dirty_lru_entries(self.max_writer_threads)
+        for path in dirty_entry_keys:
+            if len(self.writers) >= self.max_writer_threads:
+                break
+            if self.is_in_progress(path):
+                continue
+            self.oldest_modified_date[path] = self.cache.get_modified(path) #might change during upload, if new file contents is written to the cache entry
+            file = self.cache.peek_file(path)
+            new_worker = WriteWorker(self.store, path, file, self.logger)
+            new_worker.start()
+            self.writers.append(new_worker)
+        self._release_two_locks()
     
     def sync(self):
-        with self.lock:
+        with self.lock: # does not block writing..
             self.logger.debug("StoreSyncThread sync")
             while True:
                 time.sleep(3)
                 self.tidy_up()
                 self.enqueue_dirty_entries()
-                if not self.cache.get_dirty_lru_entries(1):
+                if not self.cache.get_dirty_lru_entries(1):  
                     return
             self.logger.debug("StoreSyncThread endsync")
         
@@ -271,6 +273,15 @@ class StoreSyncThread(object):
     def delete_cache_entry(self, path):
         with self.protect_cache_from_write_access:
             self.cache.delete(path)
+            
+    def _acquire_two_locks(self):
+        while self.protect_cache_from_write_access.acquire(True) and not self.lock.acquire(False): #acquire(False) returns False if it cannot acquire the lock
+            self.protect_cache_from_write_access.release()
+            time.sleep(0.0001) #give other threads a chance to get both locks
+
+    def _release_two_locks(self):
+        self.lock.release()
+        self.protect_cache_from_write_access.release()
     
     #these are called from this thread while multiprocessingstore instance operates.., but should only be called in between its methods
     #how can we accomplish this? -> second lock
