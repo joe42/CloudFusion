@@ -88,14 +88,16 @@ class MultiprocessingCachingStore(Store):
         #i could sleep here for one second for instance
         #or i calculate, how often read has run, and run tidy accordingly
         time.sleep(0.0001)
-        with self.sync_thread.protect_cache_from_write_access:
+        is_in_progress = self.sync_thread.is_in_progress(path_to_file) #cannot obtain self.lock in is_in_progress if tidy runs, while tidy cannot proceed because of protect_cache lock
+        with self.sync_thread.protect_cache_from_write_access: #do we really need this for storesync.get_file? yes, it could delete a cache entry while writing one while synchronizing with async read
             self.logger.debug("cached get_file %s", path_to_file)
             if not self.entries.exists(path_to_file):
                 self.logger.debug("cached get_file from new entry")
                 self._refresh_cache(path_to_file)
                 return self.entries.get_value(path_to_file)
             if self.entries.is_expired(path_to_file) and not self.entries.is_dirty(path_to_file):
-                if not self.sync_thread.is_in_progress(path_to_file):
+                if not is_in_progress: 
+                    self.logger.debug("cached get_file update from store if newer")
                     self._refresh_cache(path_to_file)
             return self.entries.get_value(path_to_file) #not expired->from entries
     
