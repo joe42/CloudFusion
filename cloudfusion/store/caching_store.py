@@ -84,6 +84,10 @@ class MultiprocessingCachingStore(Store):
         """ :returns: string -- the data of the file with the path *path_to_file*
         If the file was updated in the wrapped store, then its content in the cache will be updated if its entry is expired but not dirty. 
         """
+        #wait a little, so that storesyncthread gets lock as well
+        #i could sleep here for one second for instance
+        #or i calculate, how often read has run, and run tidy accordingly
+        time.sleep(0.0001)
         with self.sync_thread.protect_cache_from_write_access:
             self.logger.debug("cached get_file %s", path_to_file)
             if not self.entries.exists(path_to_file):
