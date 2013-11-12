@@ -61,6 +61,16 @@ def test_get_modified():
     test_obj.write("some_key", 42)
     assert test_obj.get_modified("some_key") < time.time()
     
+def test_set_modified():
+    test_obj = Cache(1)
+    modified_time = 42
+    before_modification = time.time()
+    test_obj.write("some_key", 101)
+    assert test_obj.get_modified("some_key") < time.time()
+    assert test_obj.get_modified("some_key") > before_modification
+    test_obj.set_modified("some_key", modified_time)
+    assert test_obj.get_modified("some_key") == modified_time
+    
 def test_get_size_of_dirty_data():
     test_obj = Cache(1)
     assert test_obj.get_size_of_dirty_data() == 0

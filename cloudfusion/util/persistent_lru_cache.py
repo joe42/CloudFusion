@@ -93,6 +93,10 @@ class PersistentLRUCache(LRUCache):
         super( PersistentLRUCache, self ).write(key, filename)
         self._write_to_file(filename, key, value)
         self.entries.sync()
+    
+    def set_modified(self, key, modified):
+        super( PersistentLRUCache, self ).set_modified( key, modified)
+        self.entries.sync()
 
     def get_size_of_dirty_data(self):
         ret = 0
