@@ -75,6 +75,7 @@ class MultiprocessingCachingStore(Store):
             actual_modified_date = self._get_actual_modified_date(path)
             cached_modified_date = self.entries.get_modified(path)
             if actual_modified_date > cached_modified_date:
+                self.logger.debug("invalid cache entry: actual_modified_date > cached_modified_date of %s: %s > %s" % (path, actual_modified_date, cached_modified_date))
                 return True
         else:
             return True
