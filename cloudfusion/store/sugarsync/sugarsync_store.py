@@ -16,6 +16,7 @@ import cloudfusion.util.pickle_methods
 import signal
 import sys
 from cloudfusion.mylogging import db_logging_thread
+import httplib
 
 signal.signal(signal.SIGTERM, lambda signum, stack_frame: sys.exit(1))
 
@@ -404,6 +405,8 @@ class SugarsyncStore(Store):
         if isinstance(error, AttributeError):
             self.logger.debug("Retrying on funny socket error: %s", error)
             #funny socket error in httplib2: AttributeError 'NoneType' object has no attribute 'makefile'
+        elif isinstance(error, httplib.IncompleteRead):
+            self.logger.error("Retrying on incomplete read error: %s", error)
         elif isinstance(error, StoreAutorizationError):
             self.logger.debug("Trying to handle authorization error by reconnecting: %s", error)
             self.reconnect()
