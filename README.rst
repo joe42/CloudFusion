@@ -7,13 +7,27 @@ CloudFusion lets you access your Dropbox or Sugarsync files from Linux like any 
 Install
 -------
 
-To install CloudFusion on Ubuntu do the following::
+To install CloudFusion do the following::
 
     sudo apt-get install git
     git clone git://github.com/joe42/CloudFusion.git
     sudo apt-get install python-setuptools
     cd CloudFusion
     sudo python setup.py install
+
+On Ubuntu, you just need to add yourself to the fuse group (replace joe with your own username)::
+
+    sudo usermod -a -G fuse joe
+    newgrp fuse
+
+On Debian though, you also need to install fuse, and set permissions to use it as normal user (replace joe with your own username)::
+
+    sudo apt-get install fuse-utils
+    sudo usermod -a -G fuse joe
+    newgrp fuse
+    sudo chgrp fuse /dev/fuse 
+    sudo chmod g+wr /dev/fuse
+
 
 Get started
 -----------
