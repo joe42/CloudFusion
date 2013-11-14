@@ -403,29 +403,29 @@ class SugarsyncStore(Store):
     
     def _handle_error(self, error, method_name, remaining_tries, *args, **kwargs):
         if isinstance(error, AttributeError):
-            self.logger.debug("Retrying on funny socket error: %s", error)
+            self.logger.error("Retrying on funny socket error: %s", error)
             #funny socket error in httplib2: AttributeError 'NoneType' object has no attribute 'makefile'
         elif isinstance(error, httplib.IncompleteRead):
             self.logger.error("Retrying on incomplete read error: %s", error)
         elif isinstance(error, StoreAutorizationError):
-            self.logger.debug("Trying to handle authorization error by reconnecting: %s", error)
+            self.logger.error("Trying to handle authorization error by reconnecting: %s", error)
             self.reconnect()
             if remaining_tries == 0: # throw error after last try
                 raise error
         elif isinstance(error, StoreAccessError):
             #On store_getfile, there seems to occur a StoreAccessError Message: Response: 400 Bad Request invalid XML - retry once
             if error.status == HTTP_STATUS.BAD_REQUEST and method_name == 'get_file':
-                self.logger.debug("Retrying on BAD REQUEST error in get_file: %s", error) 
+                self.logger.error("Retrying on BAD REQUEST error in get_file: %s", error) 
                 pass 
             elif error.status == HTTP_STATUS.OVER_STORAGE_LIMIT or \
                 error.status == HTTP_STATUS.BAD_REQUEST or \
                 error.status == HTTP_STATUS.FORBIDDEN or \
                 isinstance(error, AlreadyExistsError) or \
                 isinstance(error, NoSuchFilesytemObjectError):
-                self.logger.debug("Error could not be handled: %s", error)
+                self.logger.error("Error could not be handled: %s", error)
                 raise error # do not retry (error cannot be handled)
         else:
-            self.logger.debug("Error is not covered by _handle_error: %s", error)
+            self.logger.error("Error is not covered by _handle_error: %s", error)
         if remaining_tries == 0: # throw error after last try 
             raise StoreAccessError(str(error), 0) 
         return False
