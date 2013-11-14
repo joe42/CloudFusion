@@ -4,6 +4,7 @@ import sqlite3
 import pickle
 import os
 from time import sleep
+import sys
 
 class DBHandler(logging.Handler):
     """
@@ -15,7 +16,6 @@ class DBHandler(logging.Handler):
         logging.Handler.__init__(self)
         self.db_identifier = db_identifier
         if not db_identifier:
-            import sys 
             sys.stderr.write("Logging handler DBHandler was initialized before calling cloudfusion.mylogging.db_logging_thread.start(). Nothing will be logged.\n")
         self.conn = None
         self.cursor = None
@@ -33,30 +33,35 @@ class DBHandler(logging.Handler):
 
         Writes the LogRecord to the database.
         """
-        if not self.db_identifier:
-            return
-        if self.pid != os.getpid(): #reconnect if dbhandler is in new process fork or if it is not yet connected
-            self.reconnect()
-            self.pid = os.getpid()
-        ei = record.exc_info
-        if ei:
-            self.format(record) 
-            record.exc_text
-            record.exc_info = None # to avoid Unpickleable error
-        s = pickle.dumps(record)
-        if ei:
-            record.exc_info = ei # for next handler
-        retry = True
-        try_cnt = 0
-        while retry:
-            try:
-                try_cnt += 1
-                self.cursor.execute("INSERT INTO logging (record) VALUES (?);", (sqlite3.Binary(s),))
-                retry = False
-            except sqlite3.OperationalError, e:
-                if try_cnt > 4:
-                    import sys
-                    sys.stderr.write("Lost logging message: %s\n" % self.format(record))
-                    break
+        try:
+            if not self.db_identifier:
+                return
+            if self.pid != os.getpid(): #reconnect if dbhandler is in new process fork or if it is not yet connected
+                self.reconnect()
+                self.pid = os.getpid()
+            ei = record.exc_info
+            if ei:
+                self.format(record) 
+                record.exc_text
+                record.exc_info = None # to avoid Unpickleable error
+            s = pickle.dumps(record)
+            if ei:
+                record.exc_info = ei # for next handler
+            retry = True
+            try_cnt = 0
+            while retry:
+                try:
+                    try_cnt += 1
+                    self.cursor.execute("INSERT INTO logging (record) VALUES (?);", (sqlite3.Binary(s),))
+                    retry = False
+                    return
+                except sqlite3.OperationalError, e:
+                    if try_cnt > 2:
+                        sys.stderr.write("Lost logging message: %s\n" % self.format(record))
+                        return
+        except:
+            import traceback
+            traceback.print_exc()
+            sys.stderr.write("Lost logging message: %s\n" % self.format(record))
         
     

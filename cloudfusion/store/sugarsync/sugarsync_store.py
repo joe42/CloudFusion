@@ -15,6 +15,7 @@ import multiprocessing
 import cloudfusion.util.pickle_methods
 import signal
 import sys
+from cloudfusion.mylogging import db_logging_thread
 
 signal.signal(signal.SIGTERM, lambda signum, stack_frame: sys.exit(1))
 
@@ -115,6 +116,7 @@ class SugarsyncStore(Store):
         #self.dir_listing_cache = {}
         self._logging_handler = 'sugarsync'
         self.logger = logging.getLogger(self._logging_handler)
+        self.logger = db_logging_thread.make_logger_multiprocessingsave(self.logger)
         self.path_cache = {}
         #error handling for authorization error
         self.root = config["root"]

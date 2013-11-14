@@ -19,6 +19,7 @@ import atexit
 from cloudfusion.util.exponential_retry import retry
 import requests
 from bs4 import BeautifulSoup
+from cloudfusion.mylogging import db_logging_thread
 
 DATABASE_DIR = '/tmp/cloudfusion'
 
@@ -88,6 +89,7 @@ class DropboxStore(Store):
         self._logging_handler = 'dropbox'
                 #TODO: check if is filehandler
         self.logger = logging.getLogger(self._logging_handler)
+        self.logger = db_logging_thread.make_logger_multiprocessingsave(self.logger)
         self.dir_listing_cache = {}
         self.logger.debug("get Dropbox session")
         if not config['root'] in ['dropbox', 'app_folder']:

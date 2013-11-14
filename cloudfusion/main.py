@@ -30,8 +30,6 @@ def main():
             os.makedirs(".cloudfusion/logs")
         logging.config.fileConfig(os.path.dirname(cloudfusion.__file__)+'/config/logging.conf')
         db_logging_thread.start()
-        db_handler = db_logging_thread.create_dbhandler()
-        logging.getLogger().addHandler(db_handler)
 
     if not os.path.exists(sys.argv[1]):
         os.makedirs(sys.argv[1])

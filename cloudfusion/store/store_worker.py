@@ -7,6 +7,7 @@ import pickle
 import os
 from cloudfusion.store.store import NoSuchFilesytemObjectError
 from cloudfusion.store.transparent_store import ExceptionStats
+from cloudfusion.mylogging import db_logging_thread
 
 
 class LeightWeightValue(object):
@@ -168,7 +169,7 @@ class WriteWorker(object):
         self._pid = 0
         self._is_successful = False
         self._error = None 
-        
+
     def get_duration(self):
         """Get duration of upload in seconds"""
         if self.start_time == 0 or self.end_time.value == 0:
@@ -262,6 +263,7 @@ class WriteWorker(object):
         self._pid = self.process.pid
         
     def _run(self, result_queue, interrupt_event, end_time):
+        self.logger = db_logging_thread.make_logger_multiprocessingsave(self.logger)
         self.logger.debug("Start WriteWorker process %s to write %s", os.getpid(), self.path)
         try:
             update_time = self.store.store_file(self._filename, os.path.dirname(self.path), os.path.basename(self.path), interrupt_event)
@@ -409,6 +411,7 @@ class ReadWorker(object):
             self._error = result
 
     def _run(self, result_queue, end_time):
+        self.logger = db_logging_thread.make_logger_multiprocessingsave(self.logger)
         self.logger.debug("Starting ReadWorker process %s to read %s", os.getpid(), self.path)
         try:
             content = self.store.get_file(self.path)
