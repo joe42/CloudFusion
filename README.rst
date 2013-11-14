@@ -29,17 +29,6 @@ On Debian though, you also need to install fuse, and set permissions to use it a
     sudo chmod g+wr /dev/fuse
 
 
-Get started
------------
-
-Start CloudFusion::
-
-    cloudfusion mnt
-
-If the directory **mnt** does not yet exist, it will b created. (If you want to find an error, write the word **log**
-at the end of the command, which will create the directory **.cloudfusion/logs** with log files.) 
-After configuring CloudFusion, you can access the files from your cloud provider in **mnt/data**.
-
 Create a Configuration File
 ...........................
 
@@ -54,24 +43,22 @@ Dropbox
 Simply copy the Dropbox configuration file located at **cloudfusion/cloudfusion/config/Dropbox.ini** to your home directory.
 If you do not have a Dropbox account already, you can create a new one at https://www.dropbox.com.
 No further steps are required. You can however add your username (e-mail) and password to the configuration file. Then, 
-you do not need to acknowledge that cloudfusion can access your data via your browser, when configuring CloudFusion.  
+you do not need to acknowledge that Cloudfusion can access your data via your browser, when starting it.  
 
-Configuring CloudFusion
-.......................
 
-Now copy the configuration file you edited to your mountpoint::
+Get started
+-----------
 
-    cp ~/db.ini mnt/config/config
+Start CloudFusion::
+
+    cloudfusion --config ~/db.ini mnt
 
 This assumes that you saved the configuration file as **db.ini** to your home directory. 
 If you simply copied the configuration file as suggested, replace **db.ini** with **Sugarsync.ini** or **Dropbox.ini** respectively.
-If you use Dropbox, your webbrowser will prompt you to login into Dropbox and grant access rights to CloudFusion. Except, 
-if you entered your username and password in the configuration file, then this will be automatized.  
-The current time limit for this is one minute. If you did not make it in time, copying the configuration file fails.
-But you can simply retry by copying the configuration again
+If you use Dropbox, your webbrowser will prompt you to login into Dropbox and grant access rights to CloudFusion. 
+But when you entered your username and password in the configuration file, then this will be automatized.  
 
 Enjoy accessing your files in the directory **mnt/data**.
-
 
 
 Shut Down
