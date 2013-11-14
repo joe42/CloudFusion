@@ -25,7 +25,7 @@ class WorkerStats(object):
         self.read_workers = []
         
     def _log_exception(self, exception):
-        self.exceptions_log = ExceptionStats.add_exception(Exception("Cache_exceeds_hardlimit"), self.exceptions_log)
+        self.exceptions_log = ExceptionStats.add_exception(exception, self.exceptions_log)
     
     def reset(self):
         '''Resets all statistics.'''
