@@ -4,6 +4,19 @@ B: Added Features
 C: Bugfixes
 _stable means that the changes were successfully tested with all tests in the test suite, and a stress test for at least 24h
 
+v.4.3.14_stable:
+    * Bugfix Issue #9 Automatic Login to Dropbox
+    * Close Issue #11 Closing cloudfusion destroys config file... -> add --config parameter for more user friendly configuration
+    * /stats/stats shows last heartbeat (upload synchronization cycle)
+    * /stats/errors shows more convenient error messages
+    * More robust upload workers (they are simply terminated if they are inactive for too long)
+    * Continuous integration with Travis for quality assurance
+    * Better synchronization to avoid multiprocessing/threading conflicts
+    * Bugfix wrong size displayed with linux du command
+    * Critical bugfix: When modifying a file that is currently uploaded, the modifications are not uploaded (except you modify the file again after the upload)
+    * Bugfix multiprocess logging  
+    * Bugfix in caching layer, to avoid unnecessary downloads (modified times were not saved due to a bug in the cache)
+    * Clean up asynchronous workers to avoid allocating too many pipes
 v.3.7.6_stable:
     * Close Issue #9 Automatic Login to Dropbox
     * Close Issue #8 Set Hard Limit for Cache Size
