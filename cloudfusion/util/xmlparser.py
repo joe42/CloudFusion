@@ -2,7 +2,7 @@
 Parses an XML file or string, populating a dictionary containing the keys with the desired values. 
 
 The keys of the dictionary are either the names of Tags contained in the XML data or again dictionaries.
-The values can either be dictionaries again or simple strings, but ultimately the leaf values will be  
+The values can either be dictionaries again or simple strings, but ultimately the leaf values will be strings.
 
 """
 
