@@ -90,6 +90,17 @@ class ConfigurablePyFuseBox(PyFuseBox):
     
     def rename(self, old, new):
         self.logger.debug("rename %s to %s", old, new)
+        if old == self.virtual_file.get_path() and os.path.basename(new).startswith('.fuse_hidden'): #rename to .fuse_hidden is like a remove (see: hard remove option in fuse manpage for details)
+            print "shutdown"
+            if sys.platform == "darwin":
+                args = ["diskutil", "umount", self.root]
+            elif "freebsd" in sys.platform:
+                args = ["umount", "-l", self.root]
+            else:
+                args = ["fusermount", "-zu", self.root]
+            import subprocess
+            subprocess.Popen(args)
+            os.kill(os.getpid(), signal.SIGINT)
         """if new == self.virtual_file.get_path():
             buf = 
             written_bytes =  self.virtual_file.write(buf, offset)
