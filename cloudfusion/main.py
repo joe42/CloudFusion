@@ -11,8 +11,8 @@ import cloudfusion
 from cloudfusion.pyfusebox.transparent_configurable_pyfusebox import TransparentConfigurablePyFuseBox
 import shutil
 import argparse
-from threading import Thread
 import time
+import multiprocessing
 
 def check_arguments(args):
     if not len(args) in [2,3,4,5,6]:
@@ -29,16 +29,16 @@ def set_configuration(mountpoint, config_file):
     This will configure Cloudfusion so that it can be used.'''
     virtual_configuration_file = mountpoint+'/config/config'
     while not os.path.exists(virtual_configuration_file):
-        time.sleep(1) 
-    shutil.copyfile(config_file, virtual_configuration_file) 
+        time.sleep(1)
+    shutil.copyfile(config_file, virtual_configuration_file)
         
     
 def start_configuration_thread(mountpoint, config_file):
     '''Start a thread to write the configuration file 
     to config/config, after the file system has been mounted.'''
-    config_thread = Thread(target=set_configuration, args=(mountpoint, config_file))
-    config_thread.setDaemon(True)
-    config_thread.start()
+    process = multiprocessing.Process(target=set_configuration, args=(mountpoint, config_file))
+    process.daemon = True
+    process.start()
             
 
 def main():
