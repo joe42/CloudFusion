@@ -52,7 +52,7 @@ rm -rf cloudfusion/                              #remove files in root that have
 
 #push changes
 { git describe --contains HEAD; has_tag=$? || true; } # || true prevents returning non-zero status if the last commit does not have a tag assigned to it, and hence stop script execution
-if [ $has_tag == 0 ] ; then   #return value of git describe is zero if current commit has a tag
+if [ $has_tag -eq 0 ] ; then   #return value of git describe is zero if current commit has a tag
     git add -A
     git commit -am "Auto update documentation from travis-ci.org"
     git push -q origin gh-pages >/dev/null
