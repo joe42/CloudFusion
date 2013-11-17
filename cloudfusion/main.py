@@ -46,6 +46,19 @@ def set_configuration(mountpoint, config_file):
     while not os.path.exists(virtual_configuration_file):
         time.sleep(1)
     shutil.copyfile(config_file, virtual_configuration_file)
+    
+def remove_configuration(mountpoint):
+    '''Delete the configuration virtual file, wich will automatically stop Cloudfusion.'''
+    virtual_configuration_file = mountpoint+'/config/config'
+    if not os.path.exists(virtual_configuration_file):
+        print "The mountpoint you specified is not correct, or Cloudfusion has been stopped, already."
+    print "Trying to stop Cloudfusion. This may take a while. \n    If it does not work try fusermount -zu mountpoint; pkill -9 -f \".*cloudfusion.*\"\n\
+But take care, that no other process with a name including cloudfusion does run at the moment before executing pkill. Otherwise this process will die as well."
+    try:
+        os.remove(virtual_configuration_file)
+    except OSError:
+        pass
+    print "Successfully stopped Cloudfusion!"
         
     
 def start_configuration_thread(mountpoint, config_file):
@@ -56,6 +69,15 @@ def start_configuration_thread(mountpoint, config_file):
     process.start()
             
 
+def start_stopping_thread(mountpoint):
+    '''Start a thread to delete the configuration file 
+    config/config, which automatically stops Cloudfusion.'''
+    process = multiprocessing.Process(target=remove_configuration, args=(mountpoint,))
+    process.daemon = True
+    process.start()
+    process.join()
+            
+
 def main():
     check_arguments(sys.argv)
     parser = MyParser()
@@ -64,6 +86,10 @@ def main():
     parser.add_argument('args', nargs=argparse.REMAINDER) #collect all arguments positioned after positional and optional parameters 
     args = parser.parse_args()
     foreground  = 'foreground' in args.args 
+    mountpoint = args.mountpoint
+    if "stop" in args.args:
+        start_stopping_thread(mountpoint)
+        exit(0)
     if not "log" in args.args:
         logging.getLogger().addHandler(NullHandler())
     else:
@@ -71,7 +97,6 @@ def main():
             os.makedirs(".cloudfusion/logs")
         logging.config.fileConfig(os.path.dirname(cloudfusion.__file__)+'/config/logging.conf')
         db_logging_thread.start()    
-    mountpoint = args.mountpoint
     if args.config: #evaluates to false
         if not os.path.exists(args.config):
             exit(1)
