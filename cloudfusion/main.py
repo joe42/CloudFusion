@@ -14,14 +14,23 @@ import argparse
 import time
 import multiprocessing
 
+def print_help(args):
+    print ''
+    print '  usage1: %s [--config path/to/config.ini] mountpoint [foreground] [log]' % args[0]
+    print '      This command will start Cloudfusion.'
+    print '          --config configfile.ini: initialization file to automatically start Cloudfusion with a storage provider like Dropbox or Sugarsync'
+    print '          mountpoint: empty folder in which the virtual file system is created'
+    print '          foreground: run program in foreground'
+    print '          log: write logs to the directory .cloudfusion/logs'
+    print '          big_write option of fuse is used automatically to optimize throughput if the system supports it (requires fuse 2.8 or higher)\n'
+    print '  usage2: %s mountpoint stop' % args[0]
+    print '      This command will stop Cloudfusion.'
+    print '          mountpoint: The same folder in which the virtual file system has been created with usage1'
+    print ''
+
 def check_arguments(args):
     if not len(args) in [2,3,4,5,6]:
-        print 'usage: %s [--config path/to/config.ini] mountpoint [foreground] [log]' % args[0]
-        print '--config configfile.ini: initialization file to automatically start Cloudfusion with a storage provider like Dropbox or Sugarsync'
-        print 'mountpoint: empty folder in which the virtual file system is created'
-        print 'foreground: run program in foreground'
-        print 'log: write logs to the directory .cloudfusion/logs'
-        print 'big_write option of fuse is used automatically to optimize throughput if the system supports it (requires fuse 2.8 or higher)'
+        print_help(args)
         exit(1)
 
 def set_configuration(mountpoint, config_file):
