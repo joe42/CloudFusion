@@ -228,18 +228,14 @@ class WriteWorker(object):
         self.interrupt_event.set()
         self.process.join(60)
         if not self.process.is_alive():
-            print "stop joined"
             self._error = Exception("Stopped WriteWorker process %s to write %s", self._pid, self.path)
         else:
             import os
-            print "forceful terminateion1 %s" % self._pid
             self.process.terminate()
-            print "forceful terminateion2 %s" % self.process.pid
             os.system('kill -9 {0}'.format(self.process.pid)) 
 
             self._error = Exception("Forcefully terminated WriteWorker process %s to write %s", self.process.pid, self.path) 
         self.process.terminate()
-        print "forceful terminateion3 %s" % self._pid
         self.end_time.value = time.time()
         self._clean_up()
         self.logger.debug("Stopped WriteWorker process %s to write %s", self._pid, self.path)
