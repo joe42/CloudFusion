@@ -14,6 +14,12 @@ import argparse
 import time
 import multiprocessing
 
+class MyParser(argparse.ArgumentParser):
+    def error(self, message):
+        args= sys.argv
+        print_help(args)
+        sys.exit(1)
+
 def print_help(args):
     print ''
     print '  usage1: %s [--config path/to/config.ini] mountpoint [foreground] [log]' % args[0]
@@ -52,7 +58,7 @@ def start_configuration_thread(mountpoint, config_file):
 
 def main():
     check_arguments(sys.argv)
-    parser = argparse.ArgumentParser()
+    parser = MyParser()
     parser.add_argument('mountpoint')
     parser.add_argument('--config', help='Configuration file.')
     parser.add_argument('args', nargs=argparse.REMAINDER) #collect all arguments positioned after positional and optional parameters 
