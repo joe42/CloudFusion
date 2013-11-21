@@ -5,6 +5,7 @@ import httplib2, requests
 from cloudfusion.util.xmlparser import DictXMLParser
 from cloudfusion.util.string import *
 import base64
+import xml.dom.minidom 
 
 #make thread safe by adding connection creation to every method call
 
@@ -42,6 +43,24 @@ class SugarsyncClient(object):
         response, content = conn.request("https://"+self.host+ "/authorization","POST",params,headers)
         ret = HTTPResponse( response, content )
         return ret
+    
+    def get_syncfolders(self):
+        headers = {"Host": self.host, "Authorization: ": self.token}
+        conn = httplib2.Http(timeout=30)
+        response, content = conn.request("https://"+self.host+"/user/%s/folders/contents" % self.uid,"GET",None,headers)
+        http_response = HTTPResponse( response, content )
+        dom_response = xml.dom.minidom.parseString(http_response.data)
+        dom_collections = dom_response.getElementsByTagName('collection')
+        ret = {}
+        for dom_collection in dom_collections:
+            partial_tree = {"collection": {"displayName": "", "contents": ""}}
+            DictXMLParser().populate_dict_with_XML_leaf_textnodes(str(dom_collection.toxml()), partial_tree)
+            #https://api.sugarsync.com/folder/:sc:7585140:36733670_13234/contents
+            user_id = regSearchString(".*:sc:"+self.uid+":(.*)/.*", partial_tree['collection']['contents'])
+            displayname =  partial_tree['collection']['displayName']
+            ret[displayname] = user_id
+        return ret
+
     
     def user_info(self):
         headers = {"Host": self.host, "Authorization: ": self.token}

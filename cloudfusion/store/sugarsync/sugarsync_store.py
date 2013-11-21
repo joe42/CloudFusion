@@ -127,6 +127,10 @@ class SugarsyncStore(Store):
             raise StoreAutorizationError(repr(e), 0)
         self.time_difference = self._get_time_difference()
         self.logger.debug("sugarsync store initialized")
+        self.root_folders = {}
+        syncfolders = self.client.get_syncfolders()
+        for folder in syncfolders.keys():
+            self.root_folders['/'+folder] = syncfolders[folder]
         super(SugarsyncStore, self).__init__() 
         
     def get_name(self):
@@ -154,7 +158,9 @@ class SugarsyncStore(Store):
         path = to_unicode( path, "utf8")
         if path in self.path_cache:
             return self.path_cache[path]
-        if path == "/":
+        if path in self.root_folders.keys():
+            return self.root_folders[path]
+        elif path == "/":
             return self.root
         else:
             parent_dir = to_unicode( os.path.dirname(path), "utf8")
@@ -356,6 +362,8 @@ class SugarsyncStore(Store):
     def get_directory_listing(self, directory):
         self.logger.debug("getting directory listing for %s", directory)
         ret = []
+        if directory == "/":
+            return self.root_folders.keys()
         translated_dir = self._translate_path(directory)
         collection = self._parse_collection(translated_dir)
         if directory[-1] != "/":
@@ -475,7 +483,14 @@ class SugarsyncStore(Store):
             ret["modified"] = time.time()
             ret["path"] = "/"
             ret["is_dir"] = True
-            return ret;
+            return ret
+        if path in self.root_folders.keys():
+            ret = {}
+            ret["bytes"] = 0
+            ret["modified"] = time.time()
+            ret["path"] = self.root_folders[path]
+            ret["is_dir"] = True
+            return ret
         if path[-1] == "/":
             path = path[0:-1]
         is_file = True
