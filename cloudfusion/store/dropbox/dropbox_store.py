@@ -160,7 +160,7 @@ class DropboxStore(Store):
                     attr[input_tag['name']] = input_tag['value']
         cookies.update(login_req.cookies)
         # acknowledge application access authorization
-        requests.post('https://www.dropbox.com/1/oauth/authorize', attr, headers=headers,cookies=cookies)
+        requests.post('https://www.dropbox.com/1/oauth/authorize_submit', attr, headers=headers,cookies=cookies)
 
     
     def _handle_error(self, error, method_name, remaining_tries, *args, **kwargs):
