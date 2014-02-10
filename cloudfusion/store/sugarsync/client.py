@@ -91,7 +91,7 @@ class SugarsyncClient(object):
     def get_dir_listing(self, path):
         headers = {"Host": self.host, "Authorization: ": self.token}
         conn = httplib2.Http(timeout=30)
-        response, content = conn.request("https://"+self.host+ "/folder/:sc:%s:%s/contents" % (self.uid, path),"GET",None,headers)
+        response, content = conn.request("https://"+self.host+ "/folder/:sc:%s:%s/contents?max=100000" % (self.uid, path),"GET",None,headers)
         ret = HTTPResponse( response, content )
         return ret
     
