@@ -13,7 +13,9 @@ import cloudfusion
 
 LOCAL_TESTFILE_PATH = "cloudfusion/tests/testfile"
 LOCAL_BIGTESTFILE_PATH = "cloudfusion/tests/bigtestfile"
-REMOTE_TESTDIR = "/testdir"
+REMOTE_TESTDIR_PART1 = "/My SugarSync" #Sugarsync does not allow writing into Cloud Folder through API
+REMOTE_TESTDIR_PART2 = "testdir"
+REMOTE_TESTDIR = REMOTE_TESTDIR_PART1+"/"+REMOTE_TESTDIR_PART2
 REMOTE_MODIFIED_TESTDIR = REMOTE_TESTDIR+"/"+"testdir"
 REMOTE_METADATA_TESTDIR = REMOTE_TESTDIR+"/"+"testdir"
 LOCAL_TESTFILE_NAME = "testfile"
@@ -58,6 +60,7 @@ def setUp():
     time.sleep(10)
     for io_api in io_apis:
         try:
+            io_api.create_directory(REMOTE_TESTDIR_PART1)
             io_api.create_directory(REMOTE_TESTDIR)
         except AlreadyExistsError:
             pass
