@@ -591,6 +591,8 @@ class ChunkStoreSyncThread(object):
         for path in dirty_entry_keys:
             if len(self.writers) >= self.max_writer_threads:
                 break
+            if not self.cache.is_expired(path): ##KeyError: '/fstest.7548/d010/66334873' cache.py return time.time() > self.entries[key].updated + self.expire
+                break
             if self.is_in_progress(path):
                 continue
             expired_file_entry = self.cache.peek_file(path)
