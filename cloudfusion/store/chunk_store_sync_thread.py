@@ -120,10 +120,12 @@ class ChunkFactory(object):
         :returns: fileobject with path of the tar archive in the file system in the name property'''
         ret = tempfile.NamedTemporaryFile(delete=False)
         tempname = ret.name
+        ret.close()
         with tarfile.open(tempname, "w") as tar:
             for fname, filepath in archive.files.iteritems():
                 tar.add(filepath,fname)
                 os.remove(filepath)
+        ret = open(tempname)
         return ret
         
 
