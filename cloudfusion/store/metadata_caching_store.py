@@ -2,7 +2,7 @@ from cloudfusion.store.store import Store, NoSuchFilesytemObjectError
 from cloudfusion.util import *
 import time
 from cloudfusion.util.cache import Cache
-from cloudfusion.util.lru_cache import LRUCache
+from cloudfusion.util.mp_lru_cache import MPLRUCache
 import os.path
 import logging
 from copy import deepcopy
@@ -44,7 +44,7 @@ class MetadataCachingStore(Store):
         self.store = store
         self.logger = logging.getLogger(self.get_logging_handler())
         self.logger.debug("creating MetadataCachingStore object")
-        self.entries = LRUCache(cache_expiration_time,2)
+        self.entries = MPLRUCache(cache_expiration_time,2)
         self.store_metadata = Cache(cache_expiration_time)
         self.free_space_worker = GetFreeSpaceWorker(deepcopy(store), self.logger)
         self.free_space_worker.start()
@@ -71,6 +71,7 @@ class MetadataCachingStore(Store):
         entry.set_is_file()
         try:
             entry.size = len(ret)
+            self.entries.write(path_to_file, entry)
         except:
             self.entries.delete(path_to_file)
         self.logger.debug("meta cache returning %s", repr(ret)[:10])
@@ -83,6 +84,7 @@ class MetadataCachingStore(Store):
             self._add_parent_dir_listing(path)
             entry = self.entries.get_value(parent_dir)
             entry.add_to_listing(path)
+            self.entries.write(parent_dir, entry)
     
     
     def _add_parent_dir_listing(self, path):
@@ -95,6 +97,7 @@ class MetadataCachingStore(Store):
             if entry.listing == None:
                 entry.listing = self.store.get_directory_listing(parent_dir)
             entry.set_is_dir()
+            self.entries.write(parent_dir, entry)
         
     def _does_not_exist_in_parent_dir_listing(self, path):
         '''':returns: True if path does not exist in the cached directory listing'''
@@ -113,6 +116,7 @@ class MetadataCachingStore(Store):
         if self.entries.exists(parent_dir):
             entry = self.entries.get_value(parent_dir)
             entry.remove_from_listing(path)
+            self.entries.write(path, entry)
         
     def store_file(self, path_to_file, dest_dir="/", remote_file_name = None, interrupt_event=None):
         if dest_dir == "/":
@@ -134,6 +138,7 @@ class MetadataCachingStore(Store):
         entry.set_is_file()
         entry.size = data_len
         entry.set_modified()
+        self.entries.write(path, entry)
         self._add_to_parent_dir_listing(path)
         return ret
         
@@ -155,6 +160,7 @@ class MetadataCachingStore(Store):
         entry.size = data_len
         entry.set_modified()
         self._add_to_parent_dir_listing(path)
+        self.entries.write(path, entry)
         return ret
             
     def delete(self, path, is_dir): 
@@ -192,6 +198,7 @@ class MetadataCachingStore(Store):
         entry.set_is_dir()
         entry.listing = []
         entry.set_modified()
+        self.entries.write(directory, entry)
         self._add_to_parent_dir_listing(directory)
         return ret
         
@@ -207,6 +214,7 @@ class MetadataCachingStore(Store):
             self.entries.write(path_to_dest, Entry())
         entry = self.entries.get_value(path_to_dest)
         entry.set_modified()
+        self.entries.write(path_to_dest, entry)
         self._add_to_parent_dir_listing(path_to_dest)
         self.logger.debug("duplicated %s to %s", path_to_src, path_to_dest)
         return ret
@@ -223,6 +231,7 @@ class MetadataCachingStore(Store):
             self.entries.write(path_to_dest, Entry())
         entry = self.entries.get_value(path_to_src)
         entry.set_modified()
+        self.entries.write(path_to_dest, entry)
         self.entries.delete(path_to_src)
         self._remove_from_parent_dir_listing(path_to_src)
         self._add_to_parent_dir_listing(path_to_dest)
@@ -240,6 +249,7 @@ class MetadataCachingStore(Store):
             self.entries.write(path, Entry())
             entry = self.entries.get_value(path)
         entry.set_modified(modified)
+        self.entries.write(path, entry)
         return entry.modified
     
     def get_directory_listing(self, directory):
@@ -257,8 +267,9 @@ class MetadataCachingStore(Store):
             self.entries.write(directory, Entry())
             entry = self.entries.get_value(directory)
         entry.listing =  listing
-        assert self.entries.get_value(directory).listing == entry.listing
+        self.entries.write(directory, entry)
         self.logger.debug("asserted %s", repr(self.entries.get_value(directory).listing))
+        assert self.entries.get_value(directory).listing == entry.listing
         return list(entry.listing)
     
     def get_bytes(self, path):
@@ -274,6 +285,7 @@ class MetadataCachingStore(Store):
             self.entries.write(path, Entry())
             entry = self.entries.get_value(path)
         entry.size =  size
+        self.entries.write(path, entry)
         return entry.size
     
     def exists(self, path):
@@ -309,6 +321,7 @@ class MetadataCachingStore(Store):
             entry.set_is_file()
         entry.modified = metadata['modified']
         entry.size = metadata['bytes']
+        self.entries.write(path, entry)
         return {'is_dir': entry.is_dir, 'modified': entry.modified, 'bytes': entry.size}
 
     def is_dir(self, path):
@@ -325,6 +338,7 @@ class MetadataCachingStore(Store):
             entry = self.entries.get_value(path)
         if is_dir:
             entry.set_is_dir()
+        self.entries.write(path, entry)
         return entry.is_dir
     
     def get_logging_handler(self):
@@ -342,6 +356,8 @@ class MetadataCachingStore(Store):
                 setattr(result, k, self.logger)
             elif k == '_logging_handler':
                 setattr(result, k, self._logging_handler)
+            elif k == 'entries':
+                setattr(result, k, self.entries)
             else:
                 setattr(result, k, deepcopy(v, memo))
         return result
