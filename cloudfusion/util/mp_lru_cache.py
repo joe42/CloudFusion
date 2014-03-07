@@ -127,7 +127,7 @@ class MPLRUCache(Cache):
         """Resize cache to maxsize."""
         entry = self._get_listtail_entry()
         while self.entries[CACHESIZE]/1000000 >= self.maxsize and entry.next:
-            if entry.dirty == False:
+            if entry.dirty == False and self.is_expired(entry.key):
                 self.delete(entry.key)
             entry = self.entries[entry.next]
 

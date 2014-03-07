@@ -167,8 +167,9 @@ def test_persistence():
     
 @with_setup(set_up, tear_down)   
 def test_resize_zerosize():
-    test_obj = PersistentLRUCache(directory=directory, maxsize_in_MB=0)
+    test_obj = PersistentLRUCache(directory=directory, expiration_time=0.00001, maxsize_in_MB=0)
     test_obj.refresh("some_key", "43", time.time())
+    time.sleep(0.001)
     assert "some_key" in test_obj.get_keys()
     test_obj.refresh("some_other_key", "42", time.time())
     assert "some_other_key" in test_obj.get_keys()
@@ -177,9 +178,10 @@ def test_resize_zerosize():
     
 @with_setup(set_up, tear_down)   
 def test_resize():
-    test_obj = PersistentLRUCache(directory=directory, maxsize_in_MB=30)
+    test_obj = PersistentLRUCache(directory=directory, expiration_time=0.00001,maxsize_in_MB=30)
     for i in range(10,62):
         test_obj.refresh(str(i), "a"*2000000, time.time())
+        time.sleep(0.001)
         assert test_obj.get_size_of_cached_data() < 30000003
         for j in range(10,i-14+1):
             assert not str(j) in test_obj.get_keys()

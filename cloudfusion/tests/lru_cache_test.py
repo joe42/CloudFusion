@@ -125,18 +125,20 @@ def test_delete():
     assert not test_obj.exists("some_key")
 
 def test_resize_zerosize():
-    test_obj = LRUCache(1,0)
+    test_obj = LRUCache(0.001,0)
     test_obj.refresh("some_key", 43, time.time())
+    time.sleep(0.001)
     assert "some_key" in test_obj.get_keys()
     test_obj.refresh("some_other_key", 42, time.time())
-    assert "some_other_key" in test_obj.get_keys()
+    assert "some_other_key" in test_obj.get_keys()    
     assert not "some_key" in test_obj.get_keys() #deleted due to internal resize
     assert test_obj.get_value("some_other_key") == 42
     
 def test_resize():
-    test_obj = LRUCache(1,30)
+    test_obj = LRUCache(0.00001,30)
     for i in range(10,62):
         test_obj.refresh(str(i), "a"*2000000, time.time())
+        time.sleep(0.001)
         assert test_obj.get_size_of_cached_data() < 50000000
         for j in range(10,i-15+1):
             assert not str(j) in test_obj.get_keys()
