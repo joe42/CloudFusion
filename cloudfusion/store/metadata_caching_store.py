@@ -7,6 +7,7 @@ import os.path
 import logging
 from copy import deepcopy
 from cloudfusion.store.store_worker import GetFreeSpaceWorker
+from cloudfusion.util.mp_synchronize_proxy import MPSynchronizeProxy
 
 class Entry(object):
     def __init__(self):
@@ -44,7 +45,7 @@ class MetadataCachingStore(Store):
         self.store = store
         self.logger = logging.getLogger(self.get_logging_handler())
         self.logger.debug("creating MetadataCachingStore object")
-        self.entries = MPLRUCache(cache_expiration_time,2)
+        self.entries = MPSynchronizeProxy( MPLRUCache(cache_expiration_time,2) )
         self.store_metadata = Cache(cache_expiration_time)
         self.free_space_worker = GetFreeSpaceWorker(deepcopy(store), self.logger)
         self.free_space_worker.start()
