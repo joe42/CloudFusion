@@ -5,6 +5,7 @@ Created on 08.04.2011
 '''
 
 import time
+import random
 from cloudfusion.dropbox import client, session
 from cloudfusion.dropbox import rest
 from cloudfusion.dropbox.rest import RESTSocketError
@@ -123,7 +124,10 @@ class DropboxStore(Store):
         self.logger.info("api initialized")
         manager = Manager()
         self._revisions = manager.dict()
-        cache_id = "" # add actual cache_id
+        if 'cache_id' in config:
+            cache_id = config['cache_id'] # add actual cache_id
+        else:
+            cache_id = str(random.random())
         self._revision_db_dir = "/tmp/cloudfusion/cachingstore_"+cache_id
         self._revision_db_path = self._revision_db_dir + "/Dropbox_revisions.db"
         try:

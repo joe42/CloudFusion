@@ -165,6 +165,7 @@ class ConfigurablePyFuseBox(PyFuseBox):
         cache_id = str(conf.get('cache_id', random.random()))
         self.logger.debug("got cache parameter")
         auth = self.virtual_file.get_service_auth_data()
+        auth['cache_id'] = cache_id # workaround; Dropbox needs access to cache_id to create a temporary directory with its name, to distinguish sessions
         self.logger.debug("got auth data: %s", auth)
         store = self.__get_new_store(service, auth) #catch error?
         self.logger.debug("initialized store")
