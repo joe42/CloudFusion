@@ -16,6 +16,7 @@ import sys
 from cloudfusion.store.chunk_caching_store import ChunkMultiprocessingCachingStore
 from cloudfusion.store.transparent_chunk_caching_store import TransparentChunkMultiprocessingCachingStore
 from cloudfusion.store.gs.google_store import GoogleStore
+from cloudfusion.store.s3.amazon_store import AmazonStore
 
 
 class ConfigurablePyFuseBox(PyFuseBox):
@@ -191,6 +192,8 @@ class ConfigurablePyFuseBox(PyFuseBox):
                 store = SugarsyncStore(auth)
             elif service.lower() == "gs" or service.find('oogle') >= 0:
                 store = GoogleStore(auth)
+            elif service.lower() == "s3" or service.find('mazon') >= 0:
+                store = AmazonStore(auth)
             else: # default
                 store = DropboxStore(auth)
             self.logger.debug("got store")
