@@ -17,6 +17,7 @@ from cloudfusion.store.chunk_caching_store import ChunkMultiprocessingCachingSto
 from cloudfusion.store.transparent_chunk_caching_store import TransparentChunkMultiprocessingCachingStore
 from cloudfusion.store.gs.google_store import GoogleStore
 from cloudfusion.store.s3.amazon_store import AmazonStore
+from cloudfusion.store.webdav.webdav_store import WebdavStore
 
 
 class ConfigurablePyFuseBox(PyFuseBox):
@@ -194,6 +195,8 @@ class ConfigurablePyFuseBox(PyFuseBox):
                 store = GoogleStore(auth)
             elif service.lower() == "s3" or service.find('mazon') >= 0:
                 store = AmazonStore(auth)
+            elif service.lower() == "webdav" or service.find('dav') >= 0:
+                store = WebdavStore(auth)
             else: # default
                 store = DropboxStore(auth)
             self.logger.debug("got store")
