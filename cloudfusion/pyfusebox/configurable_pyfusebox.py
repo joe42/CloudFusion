@@ -15,6 +15,7 @@ import os, signal
 import sys
 from cloudfusion.store.chunk_caching_store import ChunkMultiprocessingCachingStore
 from cloudfusion.store.transparent_chunk_caching_store import TransparentChunkMultiprocessingCachingStore
+from cloudfusion.store.gs.google_store import GoogleStore
 
 
 class ConfigurablePyFuseBox(PyFuseBox):
@@ -167,6 +168,8 @@ class ConfigurablePyFuseBox(PyFuseBox):
         auth = self.virtual_file.get_service_auth_data()
         auth['cache_id'] = cache_id # workaround; Dropbox needs access to cache_id to create a temporary directory with its name, to distinguish sessions
         self.logger.debug("got auth data: %s", auth)
+        bucket_name = auth.get('bucket_name', 'cloudfusion') 
+        auth['bucket_name'] = bucket_name 
         store = self.__get_new_store(service, auth) #catch error?
         self.logger.debug("initialized store")
         if type != '':                                                      
@@ -186,6 +189,8 @@ class ConfigurablePyFuseBox(PyFuseBox):
         try:
             if service.lower() == "sugarsync":
                 store = SugarsyncStore(auth)
+            elif service.lower() == "gs" or service.find('oogle') >= 0:
+                store = GoogleStore(auth)
             else: # default
                 store = DropboxStore(auth)
             self.logger.debug("got store")
