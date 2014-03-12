@@ -142,12 +142,17 @@ class MetadataCachingStore(Store):
         self.entries.write(path, entry)
         self._add_to_parent_dir_listing(path)
         return ret
+    
+    def __get_size(self, fileobject):
+        pos = fileobject.tell()
+        fileobject.seek(0,2)
+        size = fileobject.tell()
+        fileobject.seek(pos, 0)
+        return size
         
     def store_fileobject(self, fileobject, path, interrupt_event=None):
         self.logger.debug("meta cache store_fileobject %s", path)
-        fileobject.seek(0,2)
-        data_len = len(fileobject.tell())
-        fileobject.seek(0)
+        data_len = self.__get_size(fileobject)
         try:
             ret = self.store.store_fileobject(fileobject, path, interrupt_event)
         finally:
