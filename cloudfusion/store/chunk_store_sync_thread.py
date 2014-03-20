@@ -216,7 +216,7 @@ class PersistentChunkMapper(object):
         num = hex(num)[2:].rstrip("L")
         if len(num) % 2:
             num = "0" + num
-        ret = base64.b64encode(num.decode('hex'),"-_")
+        ret = base64.b32encode(num.decode('hex'))
         return ret
 
     def get_next_chunk_uuid(self):
