@@ -289,7 +289,7 @@ class DropboxStore(Store):
         If a new file is stored to path, the response from dropbox may say it was stored in to resp_path, instead.
         This means there has already been a file stored to path and instead of overwriting it, the new file was stored to resp_path, instead.
         """
-        while resp_path != path:
+        if resp_path != path:
             if not self.exists('/overwritten'):
                 self.create_directory('/overwritten')
             self.move(path, '/overwritten' + path)
