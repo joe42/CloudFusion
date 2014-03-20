@@ -367,7 +367,8 @@ class ChunkStoreSyncThread(object):
         self.thread.join(60*5)
         #stop write- and readworkers
         for reader in self.readers:
-            reader.stop()
+            if not reader.is_finished():
+                reader.stop() #causes error: AttributeError: 'NoneType' object has no attribute 'join'
         for remover in self.removers:
             remover.stop()
         self.start()
