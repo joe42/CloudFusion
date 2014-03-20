@@ -262,7 +262,7 @@ class DropboxStore(Store):
             del self._revisions[path]
     
     def store_small_fileobject(self, fileobject, path):
-        self.logger.debug("storing file object size< 100000 to %s", path)
+        self.logger.debug("storing file object size< 6MB to %s", path)
         remote_file_name = os.path.basename(path)
         namable_file = NameableFile( fileobject, remote_file_name )
         try:
@@ -301,7 +301,7 @@ class DropboxStore(Store):
         size = self.__get_size(fileobject)
         self.logger.debug("Storing file object of size %s to %s", size, path)
         remote_file_name = os.path.basename(path)
-        if size < 5000000:
+        if size < 6000000:
             return self.store_small_fileobject(fileobject, path)
         nameable_file = NameableFile( fileobject, remote_file_name )
         uploader = self.client.get_chunked_uploader(nameable_file, size)
