@@ -18,6 +18,7 @@ import shelve
 from multiprocessing import Manager
 import atexit
 from cloudfusion.util.exponential_retry import retry
+import re
 '''  requests bug with requests 2.0.1, so use local requests version 1.2.3:
 #    File "/usr/local/lib/python2.7/dist-packages/requests/cookies.py", line 311, in _find_no_duplicates
 #    raise KeyError('name=%r, domain=%r, path=%r' % (name, domain, path))
@@ -143,8 +144,9 @@ class DropboxStore(Store):
         headers = {'Host' : 'www.dropbox.com', 'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0', 'Accept' :  'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'Accept-Language' : 'en-gb,en;q=0.5', 'Accept-Encoding' : 'gzip, deflate', 'DNT' : '1', 'Connection' : 'keep-alive'}
         auth_page_req = requests.get(authorize_url, headers=headers, allow_redirects=False)
         cookies = auth_page_req.cookies
-        redirect_path = auth_page_req.headers['location']
-        auth_page_req = requests.get('https://www.dropbox.com'+redirect_path, headers=headers, allow_redirects=False, cookies=cookies)
+        if 'location' in auth_page_req.headers:
+            redirect_path = auth_page_req.headers['location']
+            auth_page_req = requests.get('https://www.dropbox.com'+redirect_path, headers=headers, allow_redirects=False, cookies=cookies)
         attr={} # collect input for login form
         soup = BeautifulSoup(auth_page_req.text) #authorization page
         for input_tag in soup.form.find_all("input"):
@@ -152,19 +154,29 @@ class DropboxStore(Store):
                 attr[input_tag['name']] = input_tag['value']
         attr['login_email'] = user
         attr['login_password'] = password
-        login_req = requests.post('https://www.dropbox.com/login',attr, headers=headers,cookies=cookies, allow_redirects=False)
+        token = re.search(r'"TOKEN": "(.*?)"', auth_page_req.text).group(1)
+        attr['t'] = token
+        attr['is_xhr'] = "true"
+        attr['cont'] = ""
+        login_req = requests.post('https://www.dropbox.com/ajax_login',attr, headers=headers,cookies=cookies, allow_redirects=False)
         cookies.update(login_req.cookies)
-        redirect_path = login_req.headers['location']
-        login_req = requests.get(redirect_path, headers=headers, allow_redirects=False, cookies=cookies)
-        attr={} # collect input for acknowledging app access form
-        soup = BeautifulSoup(login_req.text)
+        if 'location' in login_req.headers:
+            redirect_path = login_req.headers['location']
+            login_req = requests.get(redirect_path, headers=headers, allow_redirects=False, cookies=cookies)
+        cookies.update(login_req.cookies)
+        login_req = requests.get(authorize_url, headers=headers,cookies=cookies, allow_redirects=False)
+        attr = {}
+        soup  = BeautifulSoup(login_req.text)
         for input_tag in soup.form.find_all("input"):
             if input_tag['name'] != 'deny_access':
                 if input_tag.has_attr('value'):
                     attr[input_tag['name']] = input_tag['value']
+                else:
+                    attr[input_tag['name']] = ''
+        attr['allow_access'] = '1'
         cookies.update(login_req.cookies)
         # acknowledge application access authorization
-        requests.post('https://www.dropbox.com/1/oauth/authorize_submit', attr, headers=headers,cookies=cookies)
+        res = requests.post('https://www.dropbox.com/1/oauth/authorize_submit', attr, headers=headers,cookies=cookies)
 
     
     def _handle_error(self, error, method_name, remaining_tries, *args, **kwargs):
