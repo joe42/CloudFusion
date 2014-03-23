@@ -2,6 +2,7 @@
 Created on 03.06.2011
 '''
 import time
+import sys
 
 class Entry(object):
     '''
@@ -42,13 +43,7 @@ class Cache(object):
         self.entries[key] = entry
     
     def _get_size_of_entry(self, entry):
-        try:
-            return entry.value.get_size()
-        except:
-            try:
-                return entry.value.size
-            except:
-                return len(str(entry.value))
+        return sys.getsizeof(entry.value)
     
     def get_size_of_dirty_data(self):
         ret = 0

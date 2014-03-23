@@ -6,6 +6,8 @@ Created on 04.06.2011
 from cloudfusion.util.cache import Cache
 import time
 from nose.tools import *
+import math
+import sys
     
 def test_refresh():
     test_obj = Cache(1)
@@ -77,26 +79,26 @@ def test_get_size_of_dirty_data():
     test_obj.refresh("some_key", "abcd",  time.time())
     assert test_obj.get_size_of_dirty_data() == 0
     test_obj.write("some_other_key", 42)
-    assert test_obj.get_size_of_dirty_data() == 2
+    assert test_obj.get_size_of_dirty_data() == sys.getsizeof(42)
     test_obj.write("some_other_key", 52)
-    assert test_obj.get_size_of_dirty_data() == 2
+    assert test_obj.get_size_of_dirty_data() == sys.getsizeof(52)
     test_obj.write("some_key", "abcd")
-    assert test_obj.get_size_of_dirty_data() == 6
+    assert test_obj.get_size_of_dirty_data() == sys.getsizeof(52)+sys.getsizeof("abcd")
     test_obj.refresh("some_other_key", 42, time.time())
-    assert test_obj.get_size_of_dirty_data() == 4
+    assert test_obj.get_size_of_dirty_data() == sys.getsizeof("abcd")
     
 def test_get_size_of_cached_data():
     test_obj = Cache(1)
     modified_time = time.time()
     assert test_obj.get_size_of_cached_data() == 0
     test_obj.refresh("some_key", "abcd", modified_time)
-    assert test_obj.get_size_of_cached_data() == 4
+    assert test_obj.get_size_of_cached_data() == sys.getsizeof("abcd")
     test_obj.write("some_other_key", 42)
-    assert test_obj.get_size_of_cached_data() == 6
+    assert test_obj.get_size_of_cached_data() == sys.getsizeof(42)+sys.getsizeof("abcd")
     test_obj.write("some_other_key", 52)
-    assert test_obj.get_size_of_cached_data() == 6
+    assert test_obj.get_size_of_cached_data() == sys.getsizeof(52)+sys.getsizeof("abcd")
     test_obj.refresh("some_key", "abcd", modified_time)
-    assert test_obj.get_size_of_cached_data() == 6
+    assert test_obj.get_size_of_cached_data() == sys.getsizeof(52)+sys.getsizeof("abcd")
     
 def test_is_dirty():
     test_obj = Cache(1)
