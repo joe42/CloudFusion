@@ -169,9 +169,12 @@ class ConfigurablePyFuseBox(PyFuseBox):
         self.logger.debug("got cache parameter")
         auth = self.virtual_file.get_service_auth_data()
         auth['cache_id'] = cache_id # workaround; Dropbox needs access to cache_id to create a temporary directory with its name, to distinguish sessions
-        self.logger.debug("got auth data: %s", auth)
+        if 'access_key_id' in auth:
+            auth['consumer_key'] = auth['access_key_id']
+            auth['consumer_secret'] = auth['secret_access_key']
         bucket_name = auth.get('bucket_name', 'cloudfusion') 
         auth['bucket_name'] = bucket_name 
+        self.logger.debug("got auth data: %s", auth)
         store = self.__get_new_store(service, auth) #catch error?
         self.logger.debug("initialized store")
         if type != '':                                                      
