@@ -18,7 +18,7 @@ class MultiprocessingCachingStore(Store):
     Use of best effort strategy to synchronize the store.
     Employs multiple threads for increased throughput. Therefore, it can only use stores with a thread-safe put_file method.
     Unlike CachingStore, guarantees that write operations do not block for transfer, until the cache size limit is reached.
-    Unlike CachingStore, guarantees that write operations on the wrapped store are invoked until a cached item expires.
+    Unlike CachingStore, guarantees that no write operations on the wrapped store are invoked until a cached item expires.
     """
     def __init__(self, store, cache_expiration_time=60, cache_size_in_mb=2000, cache_id=None):
         """
@@ -152,7 +152,7 @@ class MultiprocessingCachingStore(Store):
     def create_directory(self, directory):
         return self.store.create_directory(directory)
     
-    def duplicate(self, path_to_src, path_to_dest): # TODO only for files? # handle similarly to move
+    def duplicate(self, path_to_src, path_to_dest):  #TODO: move all cached entries
         with self.sync_thread.protect_cache_from_write_access:
             self.sync_thread.delete_cache_entry(path_to_dest) # delete possible locally cached entry at destination  #[shares_resource: write self.entries]
             local_dirty_entry_to_src_exists = self.entries.exists(path_to_src) and self.entries.is_dirty(path_to_src)
@@ -160,10 +160,12 @@ class MultiprocessingCachingStore(Store):
             if self.entries.exists(path_to_src):  
                 self.logger.debug("cached storing duplicate %s to %s", path_to_src, path_to_dest)
                 self.sync_thread.write_cache_entry(path_to_dest, self.entries.get_value(path_to_src)) #[shares_resource: write self.entries]
+            else: #might be a directory
+                self.sync_thread.sync()
             if source_is_in_store: 
                 self.store.duplicate(path_to_src, path_to_dest)
         
-    def move(self, path_to_src, path_to_dest):
+    def move(self, path_to_src, path_to_dest): #TODO: move all cached entries
         with self.sync_thread.protect_cache_from_write_access:
             self.sync_thread.delete_cache_entry(path_to_dest) # delete possible locally cached entry at destination  #[shares_resource: write self.entries]
             local_dirty_entry_to_src_exists = self.entries.exists(path_to_src) and self.entries.is_dirty(path_to_src)
@@ -171,6 +173,8 @@ class MultiprocessingCachingStore(Store):
             if self.entries.exists(path_to_src):  
                 self.sync_thread.write_cache_entry(path_to_dest, self.entries.get_value(path_to_src)) #[shares_resource: write self.entries]
                 self.sync_thread.delete_cache_entry(path_to_src) #[shares_resource: write self.entries]
+            else: #might be a directory
+                self.sync_thread.sync()                
             if source_is_in_store: 
                 self.store.move(path_to_src, path_to_dest)
  
