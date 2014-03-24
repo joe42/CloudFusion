@@ -18,6 +18,8 @@ from cloudfusion.store.transparent_chunk_caching_store import TransparentChunkMu
 from cloudfusion.store.gs.google_store import GoogleStore
 from cloudfusion.store.s3.amazon_store import AmazonStore
 from cloudfusion.store.webdav.webdav_store import WebdavStore
+from cloudfusion.store.s3.bulk_get_metadata_amazon_store import BulkGetMetadataAmazonStore
+from cloudfusion.store.gs.bulk_get_metadata_google_store import BulkGetMetadataGoogleStore
 
 
 class ConfigurablePyFuseBox(PyFuseBox):
@@ -195,9 +197,9 @@ class ConfigurablePyFuseBox(PyFuseBox):
             if service.lower() == "sugarsync":
                 store = SugarsyncStore(auth)
             elif service.lower() == "gs" or service.find('oogle') >= 0:
-                store = GoogleStore(auth)
+                store = BulkGetMetadataGoogleStore(auth)
             elif service.lower() == "s3" or service.find('mazon') >= 0:
-                store = AmazonStore(auth)
+                store = BulkGetMetadataAmazonStore(auth)
             elif service.lower() == "webdav" or service.find('dav') >= 0:
                 store = WebdavStore(auth)
             else: # default

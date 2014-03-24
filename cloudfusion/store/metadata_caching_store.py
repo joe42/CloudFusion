@@ -8,6 +8,7 @@ import logging
 from copy import deepcopy
 from cloudfusion.store.store_worker import GetFreeSpaceWorker
 from cloudfusion.util.mp_synchronize_proxy import MPSynchronizeProxy
+from cloudfusion.store.bulk_get_metadata import BulkGetMetadata
 
 class Entry(object):
     def __init__(self):
@@ -318,17 +319,39 @@ class MetadataCachingStore(Store):
                 return {'is_dir': entry.is_dir, 'modified': entry.modified, 'bytes': entry.size}
         self.logger.debug("meta cache _get_metadata entry does not exist or is expired")
         metadata = self.store._get_metadata(path)
-        if not self.entries.exists(path):
-            self.entries.write(path, Entry())  
-            entry = self.entries.get_value(path)
+        entry = self._prepare_entry(path, metadata)
+        self.entries.write(path, Entry())
+        if not entry.is_dir and isinstance(self.store, BulkGetMetadata):
+            self._prefetch_directory(os.path.dirname(path))
+        return {'is_dir': entry.is_dir, 'modified': entry.modified, 'bytes': entry.size}
+    
+    def _prepare_entry(self, path, metadata):
+        if self.entries.exists(path):
+            entry = self.entries.get_value(path) #preserve listings
+        else:
+            entry = Entry()
         if metadata['is_dir']:
             entry.set_is_dir()
         else:
             entry.set_is_file()
         entry.modified = metadata['modified']
         entry.size = metadata['bytes']
-        self.entries.write(path, entry)
-        return {'is_dir': entry.is_dir, 'modified': entry.modified, 'bytes': entry.size}
+        return entry
+    
+    def _prefetch_directory(self, path):
+        self.logger.debug("prefetch %s", path)
+        bulk = self.store.get_bulk_metadata(path)
+        bulk.items()
+        dict = {}
+        for path, metadata in bulk.items():
+            e = Entry()
+            dict[path] = self._prepare_entry(path,metadata)
+        try:
+            self.entries.bulk_write(dict)
+        except Exception,e:
+            import traceback
+            traceback.print_exc()
+        self.logger.debug("prefetch succeeded %s", path)
 
     def is_dir(self, path):
         self.logger.debug("meta cache is_dir %s", path)
