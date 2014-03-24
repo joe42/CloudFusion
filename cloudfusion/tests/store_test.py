@@ -67,7 +67,7 @@ def setUp():
         
 def tearDown():
     for io_api in io_apis:
-        io_api.delete(REMOTE_TESTDIR)
+        io_api.delete(REMOTE_TESTDIR, True)
  
 def test_io_apis():
     for io_api in io_apis:
@@ -158,9 +158,9 @@ def _test_fail_on_is_dir(io_api):
     assert_raises(NoSuchFilesytemObjectError, io_api.is_dir, REMOTE_NON_EXISTANT_FILE)
     assert_raises(NoSuchFilesytemObjectError, io_api.is_dir, REMOTE_NON_EXISTANT_DIR)
     io_api.store_file(LOCAL_TESTFILE_PATH, REMOTE_TESTDIR)
-    io_api.delete(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME)
+    io_api.delete(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME, False)
     io_api.create_directory(REMOTE_DELETED_DIR)
-    io_api.delete(REMOTE_DELETED_DIR)
+    io_api.delete(REMOTE_DELETED_DIR, True)
     assert_raises(NoSuchFilesytemObjectError, io_api.is_dir, REMOTE_DELETED_FILE)
     assert_raises(NoSuchFilesytemObjectError, io_api.is_dir, REMOTE_DELETED_DIR)
         
@@ -168,9 +168,9 @@ def _test_fail_on_get_bytes(io_api):
     assert_raises(NoSuchFilesytemObjectError, io_api.get_bytes, REMOTE_NON_EXISTANT_FILE)
     assert_raises(NoSuchFilesytemObjectError, io_api.get_bytes, REMOTE_NON_EXISTANT_DIR)
     io_api.store_file(LOCAL_TESTFILE_PATH, REMOTE_TESTDIR)
-    io_api.delete(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME)
+    io_api.delete(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME, False)
     io_api.create_directory(REMOTE_DELETED_DIR)
-    io_api.delete(REMOTE_DELETED_DIR)
+    io_api.delete(REMOTE_DELETED_DIR, True)
     assert_raises(NoSuchFilesytemObjectError, io_api.get_bytes, REMOTE_DELETED_FILE)
     assert_raises(NoSuchFilesytemObjectError, io_api.get_bytes, REMOTE_DELETED_DIR)
     
@@ -178,23 +178,23 @@ def _test_fail_on_get_modified(io_api):
     assert_raises(NoSuchFilesytemObjectError, io_api.get_modified, REMOTE_NON_EXISTANT_FILE)
     assert_raises(NoSuchFilesytemObjectError, io_api.get_modified, REMOTE_NON_EXISTANT_DIR)
     io_api.store_file(LOCAL_TESTFILE_PATH, REMOTE_TESTDIR)
-    io_api.delete(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME)
+    io_api.delete(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME, False)
     io_api.create_directory(REMOTE_DELETED_DIR)
-    io_api.delete(REMOTE_DELETED_DIR)
+    io_api.delete(REMOTE_DELETED_DIR, True)
     assert_raises(NoSuchFilesytemObjectError, io_api.get_modified, REMOTE_DELETED_FILE)
     assert_raises(NoSuchFilesytemObjectError, io_api.get_modified, REMOTE_DELETED_DIR)
 
 def _test_get_bytes(io_api):
     io_api.store_file(LOCAL_TESTFILE_PATH, REMOTE_TESTDIR) 
     res = io_api.get_bytes(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME)
-    io_api.delete(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME)
+    io_api.delete(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME, False)
     assert res == 4, "stored file should be 4 bytes big, but has a size of %s bytes" % res
 
 def _test_is_dir(io_api):
     assert io_api.is_dir(REMOTE_TESTDIR) == True
     io_api.store_file(LOCAL_TESTFILE_PATH, REMOTE_TESTDIR)
     assert io_api.is_dir(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME) == False 
-    io_api.delete(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME)
+    io_api.delete(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME, False)
         
 def _test_account_info(io_api):
     assert type(io_api.account_info()) == str
@@ -203,12 +203,12 @@ def _test_get_modified(io_api):
     io_api.store_file(LOCAL_TESTFILE_PATH, REMOTE_TESTDIR)
     file_modified_time = int(io_api.get_modified(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME))
     now_time = time.time()
-    io_api.delete(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME)
+    io_api.delete(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME, False)
     assert _assert_equal_with_variance( file_modified_time, now_time, 15, "modified time stamp of copied file is off by %s seconds" %  abs(file_modified_time-now_time) )
     io_api.create_directory(REMOTE_MODIFIED_TESTDIR)
     dir_modified_time = io_api.get_modified(REMOTE_MODIFIED_TESTDIR)
     now_time = time.time()
-    io_api.delete(REMOTE_MODIFIED_TESTDIR)
+    io_api.delete(REMOTE_MODIFIED_TESTDIR, True)
     assert _assert_equal_with_variance( dir_modified_time, now_time, 15, "modified time stamp of copied file is off by %s seconds" %  abs(dir_modified_time-now_time) )
     #assert not io_api.is_dir(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_PATH) 
 
@@ -253,14 +253,14 @@ def _test_move_directory(io_api):
     io_api.create_directory(REMOTE_MOVE_TESTDIR_ORIGIN)
     io_api.move(REMOTE_MOVE_TESTDIR_ORIGIN, REMOTE_MOVE_TESTDIR_RENAMED)
     assert _dir_exists(io_api, REMOTE_MOVE_TESTDIR_RENAMED)
-    io_api.delete(REMOTE_MOVE_TESTDIR_RENAMED)
+    io_api.delete(REMOTE_MOVE_TESTDIR_RENAMED, True)
             
 def _test_move_file(io_api):
     io_api.store_file(LOCAL_TESTFILE_PATH, REMOTE_TESTDIR)
     assert io_api.exists(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME) 
     io_api.move(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME, REMOTE_TESTDIR+"/"+REMOTE_MOVE_TESTFILE_RENAMED)
     assert io_api.exists(REMOTE_TESTDIR+"/"+REMOTE_MOVE_TESTFILE_RENAMED) 
-    io_api.delete(REMOTE_TESTDIR+"/"+REMOTE_MOVE_TESTFILE_RENAMED)
+    io_api.delete(REMOTE_TESTDIR+"/"+REMOTE_MOVE_TESTFILE_RENAMED, False)
 
 def _test_create_delete_directory(io_api):
     _create_directories(io_api, REMOTE_TESTDIR)
@@ -296,13 +296,13 @@ def _create_directories(io_api, root_dir="/"):
 def _delete_directories(io_api, root_dir="/"):
     if root_dir[-1] != "/":
         root_dir+="/"
-    io_api.delete(root_dir+"Test1")
+    io_api.delete(root_dir+"Test1", True)
     assert not io_api.exists(root_dir+"Test1")
-    io_api.delete(root_dir+"tesT2")
+    io_api.delete(root_dir+"tesT2", True)
     assert not io_api.exists(root_dir+"tesT2")
-    io_api.delete(root_dir+"testdub")
+    io_api.delete(root_dir+"testdub", True)
     assert not io_api.exists(root_dir+"testdub")
-    io_api.delete(root_dir+"testcasesensitivity")
+    io_api.delete(root_dir+"testcasesensitivity", True)
     assert not io_api.exists(root_dir+"testcasesensitivity")
     
 def _test_store_delete_file(io_api):
@@ -337,7 +337,7 @@ def _test_exists(io_api):
 def _delete_file(io_api, filename, root_dir="/"):
     if root_dir[-1] != "/":
         root_dir += "/"
-    io_api.delete(root_dir+filename)
+    io_api.delete(root_dir+filename, False)
     
 def _test_duplicate(io_api):
     io_api.create_directory(REMOTE_DUPLICATE_TESTDIR_ORIGIN)
@@ -348,10 +348,10 @@ def _test_duplicate(io_api):
     assert _dir_exists(io_api, REMOTE_DUPLICATE_TESTDIR_COPY)
     io_api.duplicate(REMOTE_DUPLICATE_TESTFILE_ORIGIN, REMOTE_DUPLICATE_TESTFILE_COPY)
     assert io_api.exists(REMOTE_DUPLICATE_TESTFILE_COPY)
-    io_api.delete(REMOTE_DUPLICATE_TESTDIR_ORIGIN)
-    io_api.delete(REMOTE_DUPLICATE_TESTDIR_COPY)
-    io_api.delete(REMOTE_DUPLICATE_TESTFILE_ORIGIN)
-    io_api.delete(REMOTE_DUPLICATE_TESTFILE_COPY)
+    io_api.delete(REMOTE_DUPLICATE_TESTDIR_ORIGIN, True)
+    io_api.delete(REMOTE_DUPLICATE_TESTDIR_COPY, True)
+    io_api.delete(REMOTE_DUPLICATE_TESTFILE_ORIGIN, False)
+    io_api.delete(REMOTE_DUPLICATE_TESTFILE_COPY, False)
     
 #assert_all_in(resp.data.keys(), [u'is_deleted', u'thumb_exists',u'bytes', u'modified', u'path', u'is_dir',u'size', u'root', u'hash', u'contents', u'icon'])
        

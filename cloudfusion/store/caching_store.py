@@ -128,10 +128,10 @@ class MultiprocessingCachingStore(Store):
         self.sync_thread.write_cache_entry(path, fileobject.read()) #[shares_resource: write self.entries]
         self.logger.debug("cached storing value %s...", self.entries.get_value(path)[:10]) 
 
-    def delete(self, path):#should be atomic
+    def delete(self, path, is_dir):#should be atomic
         self.logger.debug("delete %s", path)
         if self.store.exists(path):  
-            self.sync_thread.delete(path)
+            self.sync_thread.delete(path, is_dir)
         self.sync_thread.delete_cache_entry(path) #[shares_resource: write self.entries]
           
     def account_info(self):

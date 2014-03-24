@@ -109,7 +109,7 @@ class PyFuseBox(Operations):
         #raise FuseOSError(EPERM)#nicht gefunden
         self.logger.debug("rmdir %s", path)
         try:
-            self.store.delete(path)
+            self.store.delete(path, True)
         except NoSuchFilesytemObjectError:
             raise FuseOSError(ENOENT)
         except StoreAccessError:
@@ -195,7 +195,7 @@ class PyFuseBox(Operations):
     def unlink(self, path):
         self.logger.debug("unlink %s", path)
         try:
-            self.store.delete(path)
+            self.store.delete(path, False)
         except NoSuchFilesytemObjectError:
             raise FuseOSError(ENOENT)
         except StoreAccessError:

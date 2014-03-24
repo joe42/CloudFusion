@@ -236,7 +236,7 @@ class StoreSyncThread(object):
             self.logger.debug("StoreSyncThread endsync")
         
     
-    def delete(self, path):
+    def delete(self, path, is_dir):
         with self.lock:
             if self._get_writer(path):
                 writer = self._get_writer(path)
@@ -244,7 +244,7 @@ class StoreSyncThread(object):
             if self._get_reader(path):
                 reader = self._get_reader(path)
                 reader.stop()
-            remover = RemoveWorker(self.store, path, self.logger)
+            remover = RemoveWorker(self.store, path, is_dir, self.logger)
             remover.start()
             
     def read(self, path):

@@ -125,7 +125,7 @@ class DropboxStore(Store):
         self._revisions = manager.dict()
         cache_id = "" # add actual cache_id
         self._revision_db_dir = "/tmp/cloudfusion/cachingstore_"+cache_id
-        self._revision_db_path = self._revision_db_dir + "Dropbox_revisions.db"
+        self._revision_db_path = self._revision_db_dir + "/Dropbox_revisions.db"
         try:
             last_session_revisions = shelve.open(self._revision_db_path)
             self._revisions.update(last_session_revisions)
@@ -331,7 +331,7 @@ class DropboxStore(Store):
     # worst case: object still exists and takes up space or is appended to, by mistake
     # with caching_store, the entry in cache is deleted anyways 
     @retry((Exception,RESTSocketError), tries=5, delay=0) 
-    def delete(self, path):
+    def delete(self, path, is_dir=False): #is_dir parameter does not matter to dropbox
         self.logger.debug("deleting %s", path)
         self._raise_error_if_invalid_path(path)
         try:

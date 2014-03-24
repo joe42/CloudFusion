@@ -70,7 +70,11 @@ class Store(object):
         :returns: (optional) the date in seconds, when the file was updated"""
         raise NotImplementedError()
             
-    def delete(self, path):
+    def delete(self, path, is_dir):
+        '''Delete file or directory tree at path.
+        :param path: path to the file or directory to delete
+        :param is_dir: True iff path points to a directory
+        :raises:[Errno 39] Directory not empty:'''
         raise NotImplementedError()
           
     def account_info(self):
@@ -110,13 +114,20 @@ class Store(object):
         :param path_to_src: must never be the same as *path_to_dest*
         :param path_to_dest: must end in the name of the child directory or the file specified by *path_to_src*"""
         self.duplicate(path_to_src, path_to_dest)
-        self.delete(path_to_src)
+        try:
+            self.delete(path_to_src, is_dir=True)
+        except:
+            try:
+                self.delete(path_to_src, is_dir=False)
+            except:
+                pass
  
     def get_modified(self, path):
         resp = self._get_metadata(path)
         return resp['modified']  
     
     def get_directory_listing(self, directory):
+        ''':returns: list of absolute file paths of files in *directory*'''
         raise NotImplementedError()
     
     def get_bytes(self, path):

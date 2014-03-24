@@ -134,9 +134,9 @@ class MetadataCachingStore(Store):
         self._add_to_parent_dir_listing(path)
         return ret
             
-    def delete(self, path): 
+    def delete(self, path, is_dir): 
         self.logger.debug("meta cache delete %s", path)
-        self.store.delete(path)
+        self.store.delete(path, is_dir)
         self.entries.delete(path)
         self._remove_from_parent_dir_listing(path)
           

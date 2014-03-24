@@ -264,7 +264,7 @@ class SugarsyncStore(Store):
         self.logger.debug("storing file to %s", remote_path)
         if not self.exists(remote_path):
             self._create_file(remote_path)
-            
+            # file does not exist here
         result_queue = multiprocessing.Queue()
         write_process = multiprocessing.Process(target=self.client.put_file_async, args=(path_to_file, self._translate_path(remote_path), result_queue))
         write_process.daemon = True
@@ -321,16 +321,17 @@ class SugarsyncStore(Store):
     # worst case: object still exists and takes up space or is appended to, by mistake
     # with caching_store, the entry in cache is deleted anyways 
     @retry((Exception,socket.error), tries=5, delay=0) 
-    def delete(self, path):
+    def delete(self, path, is_dir):
         self.logger.debug("deleting %s", path)
         if path == "/":
             return
         if path[-1] == "/":
             path = path[0:-1]
         self._raise_error_if_invalid_path(path)
-        resp = self.client.delete_file( self._translate_path(path) )
-        if not resp.status in HTTP_STATUS.OK:
+        if is_dir:
             resp = self.client.delete_folder( self._translate_path(path) )
+        else:
+            resp = self.client.delete_file( self._translate_path(path) )
         if not resp.status in HTTP_STATUS.OK and not resp.status == HTTP_STATUS.NOT_FOUND:
             self.logger.warning("could not delete %s\nstatus: %s reason: %s", path, resp.status, resp.reason)
             HTTP_STATUS.generate_exception(resp.status, str(resp))
@@ -402,8 +403,12 @@ class SugarsyncStore(Store):
                         HTTP_STATUS.generate_exception(resp.status, str(resp))
         else:
             #if dest exists remove
-            if self.exists(path_to_dest):
-                self.delete(path_to_dest)
+            try:
+                meta = self._get_metadata(path_to_dest)
+            except:
+                meta = None
+            if meta: #object exists
+                resp = self.delete(path_to_dest, meta["is_dir"])
             resp = self.client.duplicate_file(translated_src, translated_dest_dir, dest_name)
             if not resp.status in HTTP_STATUS.OK:
                 self.logger.warning("could not duplicate %s to %s\nstatus: %s reason: %s", path_to_src, path_to_dest, resp.status, resp.reason)

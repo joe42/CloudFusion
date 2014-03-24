@@ -1,5 +1,5 @@
 from copy import deepcopy
-from threading import Thread
+from threading import Thread, Lock
 import time
 import multiprocessing 
 import copy
@@ -276,11 +276,15 @@ class WriteWorker(object):
                 self.logger.error("Error on serializing exception in WriteWorker: %s", repr(e))
                 result_queue.put(Exception(repr(e)))
         self.logger.debug("Finish WriteWorker process %s to write %s", os.getpid(), self.path)
-            
+
+
+
+                    
 class RemoveWorker(object):
-    def __init__(self, store, path, logger):
-        store.delete(path)
+    def __init__(self, store, path, is_dir, logger):
+        store.delete(path, is_dir)
         self.store = copy.deepcopy(store)
+        self._is_dir = is_dir
         self.path = path
         self.thread = None
         self.logger = logger
@@ -303,7 +307,7 @@ class RemoveWorker(object):
     
     def _run(self):
         try:
-            self.store.delete(self.path)
+            self.store.delete(self.path, self._is_dir)
             self.successful = True
         except NoSuchFilesytemObjectError, e: #file does not exist anyway
             self.successful = True
