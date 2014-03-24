@@ -123,7 +123,35 @@ class MPLRUCache(Cache):
             self.entries[LISTTAIL] = entry.key
         self.entries[key] = entry
         self.entries[CACHESIZE] += self._get_size_of_entry(entry)
-        self._resize()
+        self._resize() 
+        
+    def bulk_write(self, dict): 
+        ''':param dict: dictionary with key value mapping'''
+        first_iteration = True
+        for k,v in dict.iteritems():
+            self.delete(k)
+            entry = LinkedEntry(value=v, dirty=True, key=k)
+            if first_iteration:
+                first_iteration = False
+                previous_listhead = self._get_listhead_entry()
+                entry.prev = previous_listhead.key if previous_listhead else None
+                if previous_listhead:
+                    previous_listhead.next = entry.key
+                    self._store_to_dict(previous_listhead)
+                else: #if list_head is empty, this is the first element in the list -> set tail to first element
+                    self.entries[LISTTAIL] = entry.key
+                self.entries[k] = entry
+                self.entries[CACHESIZE] += self._get_size_of_entry(entry)
+                previous_listhead = entry
+                continue
+            entry.prev = previous_listhead.key
+            previous_listhead.next = entry.key
+            self._store_to_dict(previous_listhead)
+            self.entries[k] = entry
+            previous_listhead = entry
+        self.entries[LISTHEAD] = entry.key
+        self.entries[CACHESIZE] += sys.getsizeof(dict.values())
+        self._resize() 
 
     def get_size_of_dirty_data(self):
         ret = 0
