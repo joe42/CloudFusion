@@ -35,11 +35,25 @@ class MPLRUCache(Cache):
         #self.list_head = self.entries[LISTHEAD] if LISTHEAD in self.entries else None
         #self.entries[LISTTAIL] = self.entries[LISTTAIL] if LISTTAIL in self.entries else None
         self.maxsize = maxsize_in_MB
+        self.resize_interval = 1
         manager = Manager()
         self.entries = manager.dict()
         self.entries[LISTHEAD] = None
         self.entries[LISTTAIL] = None
         self.entries[CACHESIZE] = 0
+        self._last_resize = 0
+    
+    def set_resize_intervall(self, seconds):
+        '''Do not try to reduce the cache size again before *seconds* have passed.
+        Resize operations are slow, especially when the cache has many elements.
+        It can be set to *0*, if you want to make sure that clean entries are removed as fast as possible.
+        :param seconds: float stating how much time in seconds must pass before a cache size reduction is tried again'''
+        self.resize_interval = seconds
+        
+    def get_resize_intervall(self):
+        ''':returns: The minimal interval between consecutive calls to reduce cache size as a float in seconds.
+        The default is one second.'''
+        return self.resize_interval
         
     
     def get_keys(self):
@@ -123,13 +137,16 @@ class MPLRUCache(Cache):
         self._move_used_entry_to_head(key)
         return self.entries[key].value
     
-    def _resize(self):
+    def _resize(self): 
         """Resize cache to maxsize."""
+        if self.entries[CACHESIZE]/1000000 < self.maxsize or self._last_resize+self.resize_interval>time.time():
+            return
         entry = self._get_listtail_entry()
         while self.entries[CACHESIZE]/1000000 >= self.maxsize and entry.next:
             if entry.dirty == False and self.is_expired(entry.key):
                 self.delete(entry.key)
             entry = self.entries[entry.next]
+        self._last_resize = time.time()
 
             
     def peek(self, key):

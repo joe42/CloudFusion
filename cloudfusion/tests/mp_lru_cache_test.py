@@ -127,6 +127,7 @@ def test_delete():
 
 def test_resize_zerosize():
     test_obj = MPLRUCache(0.001,0)
+    test_obj.set_resize_intervall(0)
     test_obj.refresh("some_key", 43, time.time())
     time.sleep(0.001)
     assert "some_key" in test_obj.get_keys()
@@ -137,6 +138,7 @@ def test_resize_zerosize():
     
 def test_resize():
     test_obj = MPLRUCache(0.00001,30)
+    test_obj.set_resize_intervall(0)
     for i in range(10,62):
         test_obj.refresh(str(i), "a"*2000000, time.time())
         time.sleep(0.001)
@@ -148,6 +150,7 @@ def test_resize():
             
 def test_resize_dirty():
     test_obj = MPLRUCache(1,0)
+    test_obj.set_resize_intervall(0)
     for i in range(10,62):
         test_obj.write(str(i), "a"*2000000)
     assert test_obj.get_size_of_cached_data() > 50000000
