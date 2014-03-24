@@ -199,6 +199,8 @@ class DropboxStore(Store):
                 self.logger.debug("Error could not be handled: %s", error)
                 raise error
         else:
+            if isinstance(error, RESTSocketError):
+                error = Exception(str(error)) #wrap exception, as logger cannot handle socket.error exceptions
             self.logger.debug("Error is not covered by _handle_error: %s", error)
         if remaining_tries == 0: # throw error after last try
             raise StoreAccessError(str(error), 0) 
