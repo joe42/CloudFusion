@@ -82,10 +82,12 @@ class MPLRUCache(Cache):
         self._store_to_dict(used_entry)
         
     def _get_listtail_entry(self):
-        return self.entries[self.entries[LISTTAIL]] if self.entries[LISTTAIL] else None
+        tail = self.entries[LISTTAIL]
+        return self.entries[tail] if tail else None
     
     def _get_listhead_entry(self):
-        return self.entries[self.entries[LISTHEAD]] if self.entries[LISTHEAD] else None
+        head = self.entries[LISTHEAD]
+        return self.entries[head] if head else None
 
     def refresh(self, key, disk_value, modified):
         """ Refreshes an entry with *disk_value*, if *modified* is bigger than the entry's modified date. """
@@ -171,14 +173,16 @@ class MPLRUCache(Cache):
     
     def delete(self, key):
         """Remove current entry associated with key from the LRU queue."""
-        if key in self.entries:
+        try:
             entry = self.entries[key]
             self.entries[CACHESIZE] -= self._get_size_of_entry(entry)
             self._unlink(key)
             del self.entries[key]
+        except KeyError:
+            pass
 
     def _unlink(self, key):
-        if key in self.entries:
+        try:
             entry = self.entries[key]
             if not entry.prev: #entry is list tail 
                 self.entries[LISTTAIL] = entry.next
@@ -192,6 +196,8 @@ class MPLRUCache(Cache):
                 next_entry =  self.entries[entry.next]
                 next_entry.prev = entry.prev
                 self._store_to_dict(next_entry)
+        except KeyError:
+            pass
                 
     def __repr__(self):
         ret = 'LRU key chain: '
