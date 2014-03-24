@@ -40,19 +40,31 @@ cd development
 
 cp cloudfusion/config/Sugarsync.ini cloudfusion/config/sugarsync_testing.ini
 cp cloudfusion/config/Dropbox.ini cloudfusion/config/Dropbox.ini.bck #backup config file
+cp cloudfusion/config/Google.ini cloudfusion/config/Google_testing.ini
+cp cloudfusion/config/AmazonS3.ini cloudfusion/config/AmazonS3_testing.ini
+cp cloudfusion/config/Webdav.ini cloudfusion/config/Webdav_testing.ini
 
 perl -pi -e "s/user = /user = ${USR}/g" cloudfusion/config/Dropbox.ini
 perl -pi -e "s/password = /password = ${PW}/g" cloudfusion/config/Dropbox.ini
 perl -pi -e "s/user = /user = ${USR}/g" cloudfusion/config/sugarsync_testing.ini
 perl -pi -e "s/password = /password = ${PW}/g" cloudfusion/config/sugarsync_testing.ini
+perl -pi -e "s/access_key_id = /access_key_id = ${GS_ID}/g" cloudfusion/config/Google_testing.ini
+perl -pi -e "s/secret_access_key = /secret_access_key = ${GS_KEY}/g" cloudfusion/config/Google_testing.ini
+perl -pi -e "s/access_key_id = /access_key_id = ${S3_ID}/g" cloudfusion/config/AmazonS3_testing.ini
+perl -pi -e "s/secret_access_key = /secret_access_key = ${S3_KEY}/g" cloudfusion/config/AmazonS3_testing.ini
+perl -pi -e "s/user = /user = ${WEBDAV_USR}/g" cloudfusion/config/Webdav_testing.ini
+perl -pi -e "s/password = /password = ${WEBDAV_PWD}/g" cloudfusion/config/Webdav_testing.ini
 
 #options: -x stop on first error, -v verbose, -s output stdout messgages immediately, --with-coverage produce coverage results
+(for i in {1..10} ; do sleep 120; echo $(date);    echo "Tests are still running..."; done) &
 bash -c "nosetests -v -s -x cloudfusion/tests/db_logging_thread_test.py --with-coverage &>test1_log; mv .coverage .coverage.1; " & #about 18 Min runtime
 pid1=$!
 bash -c " nosetests -v -s -x cloudfusion/tests/synchronize_proxy_test.py --with-coverage &>test2_log; mv .coverage .coverage.2; " & #about 17 Min runtime
-pid2=$!
-nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py --with-coverage                             #about 20 Min runtime
-mv .coverage .coverage.3
+pid2=$!                          
+bash -c "nosetests -v -s -x cloudfusion/tests/store_test2.py --with-coverage  &>test3_log; mv .coverage .coverage.3; " &    #about 20 Min runtime                  
+pid3=$!
+nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py -I store_test2.py --with-coverage   
+mv .coverage .coverage.4
 
 wait $pid1    #wait for test process to end
 cat test1_log #and print output
@@ -60,9 +72,15 @@ cat test1_log #and print output
 wait $pid2
 cat test2_log
 (exit $?)
+wait $pid3
+cat test3_log
+(exit $?)
 
 mv cloudfusion/config/Dropbox.ini.bck cloudfusion/config/Dropbox.ini
 rm cloudfusion/config/sugarsync_testing.ini
+rm cloudfusion/config/Google_testing.ini
+rm cloudfusion/config/AmazonS3_testing.ini
+rm cloudfusion/config/Webdav_testing.ini
 
 coverage combine #combine coverage report
 coverage html
