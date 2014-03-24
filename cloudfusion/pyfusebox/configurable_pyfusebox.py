@@ -13,6 +13,8 @@ from cloudfusion.store.metadata_caching_store import MetadataCachingStore
 import random
 import os, signal
 import sys
+from cloudfusion.store.chunk_caching_store import ChunkMultiprocessingCachingStore
+from cloudfusion.store.transparent_chunk_caching_store import TransparentChunkMultiprocessingCachingStore
 
 
 class ConfigurablePyFuseBox(PyFuseBox):
@@ -167,7 +169,7 @@ class ConfigurablePyFuseBox(PyFuseBox):
         store = self.__get_new_store(service, auth) #catch error?
         self.logger.debug("initialized store")
         if type != '':                                                      
-            store = TransparentChunkMultiprocessingCachingStore( MetadataCachingStore( store, 600000 ), cache_time, cache_size, hard_cache_size_limit, cache_id, max_chunk_size )
+            store = TransparentChunkMultiprocessingCachingStore( MetadataCachingStore( store,  24*60*60*365), cache_time, cache_size, hard_cache_size_limit, cache_id, max_chunk_size )
         elif cache_time > 0 and metadata_cache_time > 0:
             store = TransparentMultiprocessingCachingStore( MetadataCachingStore( store, metadata_cache_time ), cache_time, cache_size, hard_cache_size_limit, cache_id )
         elif cache_time > 0:
