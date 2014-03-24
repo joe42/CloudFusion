@@ -163,13 +163,15 @@ class PyFuseBox(Operations):
             if old in self.temp_file: 
                 self.logger.debug("flushing before renaming %s", old)
                 self.store.store_fileobject(self.temp_file[old], old)
+            if os.path.basename(old) == os.path.basename(new) and self.store._get_metadata(new)['is_dir'] and self.store._get_metadata(old)['is_dir']:
+                raise FuseOSError(ENOTEMPTY) # directory not empty
             self.store.move(old, new)
         except NoSuchFilesytemObjectError:
             raise FuseOSError(ENOENT)
         except StoreAccessError:
             raise FuseOSError(EIO)
         except StoreAutorizationError:
-            raise FuseOSError(EACCES) #keine Berechtigung
+            raise FuseOSError(EACCES)
         return 0
 
     def create(self, path, mode):
