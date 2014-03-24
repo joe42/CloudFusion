@@ -109,6 +109,8 @@ class PyFuseBox(Operations):
         #raise FuseOSError(EPERM)#nicht gefunden
         self.logger.debug("rmdir %s", path)
         try:
+            if len(self.store.get_directory_listing(path)) > 0:
+                raise FuseOSError(ENOTEMPTY) # directory not empty
             self.store.delete(path, True)
         except NoSuchFilesytemObjectError:
             raise FuseOSError(ENOENT)
