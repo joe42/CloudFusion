@@ -10,6 +10,7 @@ import os.path, time
 import tempfile
 from ConfigParser import SafeConfigParser
 import cloudfusion
+from cloudfusion.store.chunk_caching_store import ChunkMultiprocessingCachingStore
 
 LOCAL_TESTFILE_PATH = "cloudfusion/tests/testfile"
 LOCAL_BIGTESTFILE_PATH = "cloudfusion/tests/bigtestfile"
@@ -51,20 +52,18 @@ io_apis = []
 def setUp():
     dropbox_config = get_dropbox_config() 
     sugarsync_config = get_sugarsync_config()
-    dropbox_store = DropboxStore(dropbox_config)
-    io_apis.append( dropbox_store )
-    io_apis.append( SugarsyncStore(sugarsync_config) ) 
-    io_apis.append( MultiprocessingCachingStore( dropbox_store ) ) 
-    io_apis.append( MultiprocessingCachingStore( SugarsyncStore(sugarsync_config) ) )
-    io_apis.append( MultiprocessingCachingStore( MetadataCachingStore( dropbox_store ) ) )
+    dropbox_store = DropboxStore(dropbox_config) 
+    io_apis.append( ChunkMultiprocessingCachingStore( ( SugarsyncStore(sugarsync_config) ) ) )
     time.sleep(10)
     for io_api in io_apis:
         try:
             io_api.create_directory(REMOTE_TESTDIR_PART1)
+        except AlreadyExistsError:
+            pass
+        try:
             io_api.create_directory(REMOTE_TESTDIR)
         except AlreadyExistsError:
             pass
-        
 def tearDown():
     for io_api in io_apis:
         io_api.delete(REMOTE_TESTDIR, True)
