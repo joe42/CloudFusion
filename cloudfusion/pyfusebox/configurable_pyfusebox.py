@@ -155,6 +155,8 @@ class ConfigurablePyFuseBox(PyFuseBox):
         service = conf['name']
         self.logger.debug("got service name")
         cache_time = int(conf.get('cache', 0))
+        type = conf.get('type', '') #chunk
+        max_chunk_size = conf.get(('max_chunk_size', 4)) 
         metadata_cache_time = int(conf.get('metadata_cache', 0))
         cache_size = int(conf.get('cache_size', 2000))
         hard_cache_size_limit = int(conf.get('hard_cache_size_limit', 10000))
@@ -164,7 +166,9 @@ class ConfigurablePyFuseBox(PyFuseBox):
         self.logger.debug("got auth data: %s", auth)
         store = self.__get_new_store(service, auth) #catch error?
         self.logger.debug("initialized store")
-        if cache_time > 0 and metadata_cache_time > 0:
+        if type != '':                                                      
+            store = TransparentChunkMultiprocessingCachingStore( MetadataCachingStore( store, 600000 ), cache_time, cache_size, hard_cache_size_limit, cache_id, max_chunk_size )
+        elif cache_time > 0 and metadata_cache_time > 0:
             store = TransparentMultiprocessingCachingStore( MetadataCachingStore( store, metadata_cache_time ), cache_time, cache_size, hard_cache_size_limit, cache_id )
         elif cache_time > 0:
             store = TransparentMultiprocessingCachingStore(store, cache_time, cache_size, hard_cache_size_limit, cache_id)
