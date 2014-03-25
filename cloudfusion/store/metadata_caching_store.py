@@ -1,4 +1,4 @@
-from cloudfusion.store.store import Store
+from cloudfusion.store.store import Store, NoSuchFilesytemObjectError
 from cloudfusion.util import *
 import time
 from cloudfusion.util.cache import Cache
@@ -78,13 +78,36 @@ class MetadataCachingStore(Store):
         return ret
     
     def _add_to_parent_dir_listing(self, path):
-        parent_dir = os.path.dirname(path)
-        if not self.entries.exists(parent_dir):
-            self.entries.write(parent_dir, Entry())
-        entry = self.entries.get_value(parent_dir)
-        entry.set_is_dir()
-        entry.add_to_listing(path)
+        if path != '/':   
+            parent_dir = os.path.dirname(path)
+            self._add_parent_dir_listing(path)
+            entry = self.entries.get_value(parent_dir)
+            entry.add_to_listing(path)
+    
+    
+    def _add_parent_dir_listing(self, path):
+        '''Add listing for parent directory of path to cache if it does not yet exist'''
+        if path != '/':   
+            parent_dir = os.path.dirname(path)
+            if not self.entries.exists(parent_dir):
+                self.entries.write(parent_dir, Entry())
+            entry = self.entries.get_value(parent_dir) 
+            if entry.listing == None:
+                entry.listing = self.store.get_directory_listing(parent_dir)
+            entry.set_is_dir()
         
+    def _does_not_exist_in_parent_dir_listing(self, path):
+        '''':returns: True if path does not exist in the cached directory listing'''
+        parent_dir = os.path.dirname(path)
+        if path == '/':
+            return False
+        if self.entries.exists(parent_dir):
+            entry = self.entries.get_value(parent_dir)
+            if entry.listing != None and (not unicode(path) in entry.listing and not path in entry.listing):
+                self.logger.debug("%s does not exist in parent directory: %s..."%(path, repr(entry.listing[0:5])))
+                return True
+        return False
+    
     def _remove_from_parent_dir_listing(self, path):
         parent_dir = os.path.dirname(path)
         if self.entries.exists(parent_dir):
@@ -265,7 +288,11 @@ class MetadataCachingStore(Store):
     def _get_metadata(self, path):
         self.logger.debug("meta cache _get_metadata %s", path)
         if self.entries.exists(path) and self.entries.is_expired(path):
+            self.logger.debug("1.1")
             self.entries.delete(path)
+        self._add_parent_dir_listing(path)
+        if self._does_not_exist_in_parent_dir_listing(path):
+            raise NoSuchFilesytemObjectError(path,0)
         if self.entries.exists(path):
             entry = self.entries.get_value(path)
             self.logger.debug("entry exists")
@@ -274,7 +301,7 @@ class MetadataCachingStore(Store):
         self.logger.debug("meta cache _get_metadata entry does not exist or is expired")
         metadata = self.store._get_metadata(path)
         if not self.entries.exists(path):
-            self.entries.write(path, Entry())
+            self.entries.write(path, Entry())  
             entry = self.entries.get_value(path)
         if metadata['is_dir']:
             entry.set_is_dir()
