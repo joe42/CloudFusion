@@ -152,12 +152,21 @@ class GetFreeSpaceWorker(object):
         return result
 
 class WriteWorker(object):
+    '''Uploads a single file in a separate process. 
+    The start method is used to begin the upload. The method is_finished can be used to check
+    if the worker is done. is_successful shows if it has been successful after it is done. If not successful, an error message can be retrieved with get_error.
+    Other methods can be used to get upload statistics.'''
     def __init__(self, store, path, file, logger):
+        ''':param store: Store instance that will be deepcopied and used in a newly created process to upload file
+        :param path: path that is used in the store as a reference to the uploaded file
+        :param file: fileobject with a name attribute; file.name needs to be a file on the local harddrive; the file is removed after the worker is finished
+        :param logger: a multiprocessing logger 
+        '''
         self.store = copy.deepcopy(store)
         self.path = path
         self._filename = file.name
-        self._filesize = os.path.getsize(file.name)
         file.close()
+        self._filesize = os.path.getsize(file.name)
         self.logger = logger
         self.interrupt_event = multiprocessing.Event()
         self._result_queue = multiprocessing.Queue()
