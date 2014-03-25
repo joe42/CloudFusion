@@ -4,6 +4,26 @@ B: Added Features
 C: Bugfixes
 _stable means that the changes were successfully tested with all tests in the test suite, and a stress test for at least 24h
 
+v.5.10.15_stable:
+    * Modify method delete of interface Store, adding is_dir parameter which is True iff the path to delete is a directory
+    * Use parameter stop to stop cloudfusion
+    * Add Feature Issue #10, make syncfolders available in root directory
+    * Allow up to 100.000 files in a request to sugarsync
+    * Add Feature Fast Transfer of Small Files by Archiving using type=chunk parameter in [store] section of configuration file
+    * Add Feature Reduce File_Exists? Requests to Provider When Creating new File
+    * Add Feature Directory Metadata Prefetching for fast directory listing
+    * Add Feature Support for Amazon S3 
+    * Add Feature Support for Google Storage
+    * Add Feature Minimal Support for webdav (use command line only on root directory, only files no directories)
+    * Update Issue #9 Automatic Login to Dropbox, adapt to changes in dropbox's interface (twice)
+    * Bugfix rmdir to return an error when trying to delete non-empty directory
+    * Bugfix mv to return an error when trying move a directory so that it would overwrite an existing directory
+    * Use multiprocessing safe meta data cache
+    * Fix LRU cache, only remove expired entries
+    * Bugfix set correct size when storing fileobjects in metadata cache
+    * Fix dropbox to prevent infinite loop of fruitless move requests if a file is overwritten
+    * Fix cache, now uses sys.getsizeof to determine corrent in memory size
+    * Modify class LRUCache, to prevent consecutive cache size reduction, as this is slow
 v.4.3.14_stable:
     * Bugfix Issue #9 Automatic Login to Dropbox
     * Close Issue #11 Closing cloudfusion destroys config file... -> add --config parameter for more user friendly configuration
