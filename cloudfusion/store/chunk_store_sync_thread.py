@@ -13,6 +13,7 @@ import ntplib
 import base64
 import types
 from cloudfusion.store.dropbox.file_decorator import DataFileWrapper
+from contextlib import closing
 import atexit
 
 def get_parent_dir(path): # helper function to get parent directory ending with '/'
@@ -121,7 +122,7 @@ class ChunkFactory(object):
         ret = tempfile.NamedTemporaryFile(delete=False)
         tempname = ret.name
         ret.close()
-        with tarfile.open(tempname, "w") as tar:
+        with closing(tarfile.open(tempname, "w")) as tar: #backwards compatibility; tarfile does not support with statement until python 2.7
             for fname, filepath in archive.files.iteritems():
                 tar.add(filepath,fname)
                 os.remove(filepath)
