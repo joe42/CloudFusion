@@ -69,14 +69,14 @@ mv .coverage .coverage.4
 (for i in {1..10} ; do sleep 120; echo $(date);    echo "Tests are still running..."; done) &
 
 #wait $pid1    #wait for test process to end
-#cat test1_log #and print output
 #(exit $?)     #set exit code to stop the script in case the test failed
+#cat test1_log #and print output
 #wait $pid2
-#cat test2_log
 #(exit $?)
+#cat test2_log
 wait $pid3
-cat test3_log
 (exit $?)
+cat test3_log
 
 mv cloudfusion/config/Dropbox.ini.bck cloudfusion/config/Dropbox.ini
 rm cloudfusion/config/sugarsync_testing.ini
