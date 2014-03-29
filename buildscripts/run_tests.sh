@@ -48,12 +48,12 @@ perl -pi -e "s/user = /user = ${USR}/g" cloudfusion/config/Dropbox.ini
 perl -pi -e "s/password = /password = ${PW}/g" cloudfusion/config/Dropbox.ini
 perl -pi -e "s/user = /user = ${USR}/g" cloudfusion/config/sugarsync_testing.ini
 perl -pi -e "s/password = /password = ${PW}/g" cloudfusion/config/sugarsync_testing.ini
-perl -pi -e "s/access_key_id = /access_key_id = ${GS_ID}/g" cloudfusion/config/Google_testing.ini
-perl -pi -e "s/secret_access_key = /secret_access_key = ${GS_KEY}/g" cloudfusion/config/Google_testing.ini
-perl -pi -e "s/access_key_id = /access_key_id = ${S3_ID}/g" cloudfusion/config/AmazonS3_testing.ini
-perl -pi -e "s/secret_access_key = /secret_access_key = ${S3_KEY}/g" cloudfusion/config/AmazonS3_testing.ini
-perl -pi -e "s/user = /user = ${WEBDAV_USR}/g" cloudfusion/config/Webdav_testing.ini
-perl -pi -e "s/password = /password = ${WEBDAV_PWD}/g" cloudfusion/config/Webdav_testing.ini
+perl -pi -e "s/access_key_id =.*/access_key_id =${GS_ID}/g" cloudfusion/config/Google_testing.ini
+perl -pi -e "s/secret_access_key =.*/secret_access_key =${GS_KEY}/g" cloudfusion/config/Google_testing.ini
+perl -pi -e "s/access_key_id =.*/access_key_id =${S3_ID}/g" cloudfusion/config/AmazonS3_testing.ini
+perl -pi -e "s/secret_access_key =.*/secret_access_key =${S3_KEY}/g" cloudfusion/config/AmazonS3_testing.ini
+perl -pi -e "s/user =.*/user =${WEBDAV_USR}/g" cloudfusion/config/Webdav_testing.ini
+perl -pi -e "s/password =.*/password =${WEBDAV_PWD}/g" cloudfusion/config/Webdav_testing.ini
 
 #options: -x stop on first error, -v verbose, -s output stdout messgages immediately, --with-coverage produce coverage results
 #
