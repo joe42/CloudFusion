@@ -56,17 +56,16 @@ perl -pi -e "s/user =.*/user =${WEBDAV_USR}/g" cloudfusion/config/Webdav_testing
 perl -pi -e "s/password =.*/password =${WEBDAV_PWD}/g" cloudfusion/config/Webdav_testing.ini
 
 #options: -x stop on first error, -v verbose, -s output stdout messgages immediately, --with-coverage produce coverage results
-#
-#bash -c "nosetests -v -s -x cloudfusion/tests/db_logging_thread_test.py --with-coverage &>test1_log; mv .coverage .coverage.1; " & #about 18 Min runtime
+#bash -c "nosetests -v -s -x cloudfusion/tests/db_logging_thread_test.py --with-coverage &>test1_log; status=$?; mv .coverage .coverage.3; exit $status" & #about 18 Min runtime
 #pid1=$!
-#bash -c " nosetests -v -s -x cloudfusion/tests/synchronize_proxy_test.py --with-coverage &>test2_log; mv .coverage .coverage.2; " & #about 17 Min runtime
+#bash -c "nosetests -v -s -x cloudfusion/tests/synchronize_proxy_test.py --with-coverage &>test2_log; status=$?; mv .coverage .coverage.2; exit $status" & #about 17 Min runtime
 #pid2=$!                          
-bash -c "nosetests -v -s -x cloudfusion/tests/store_test2.py --with-coverage  &>test3_log; mv .coverage .coverage.3; " &    #about 20 Min runtime                  
+bash -c "nosetests -v -s -x cloudfusion/tests/store_test2.py --with-coverage  &>test3_log; status=$?; mv .coverage .coverage.3; exit $status" &    #about 20 Min runtime                  
 pid3=$!
 nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py -I store_test2.py --with-coverage   
 mv .coverage .coverage.4
 
-(for i in {1..10} ; do sleep 120; echo $(date);    echo "Tests are still running..."; done) &
+
 
 #wait $pid1    #wait for test process to end
 #(exit $?)     #set exit code to stop the script in case the test failed
