@@ -38,9 +38,22 @@ class GoogleStore(Store):
         self.bucket_name = config['bucket_name']
         self.access_key_id = config['consumer_key']
         self.secret_access_key = config['consumer_secret']
+        self.write_gsutil_config()
         self.reconnect()
         self.logger.info("api initialized")
 
+    def write_gsutil_config(self):
+        '''Write credentials to .boto configuration file, for gsutil to use.'''
+        from os.path import expanduser
+        boto_config_file = expanduser('~/.boto')
+        with file(boto_config_file, 'a'): #create file if it does not exist
+            pass
+        os.chmod(expanduser('~/.boto'),0o600) #set strict permissions
+        with file(boto_config_file, 'a') as config: 
+            config.write('\n## Added by Cloudfusion;\n')
+            config.write('[Credentials]\n')
+            config.write('gs_access_key_id = %s\n'%self.access_key_id)
+            config.write('gs_secret_access_key = %s\n'%self.secret_access_key)
     
     def reconnect(self):
         self.conn = boto.connect_gs(self.access_key_id,self.secret_access_key)
