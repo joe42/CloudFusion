@@ -53,7 +53,10 @@ def setUp():
     dropbox_config = get_dropbox_config() 
     sugarsync_config = get_sugarsync_config()
     dropbox_store = DropboxStore(dropbox_config) 
+    io_apis.append( dropbox_store )
+    io_apis.append(SugarsyncStore(sugarsync_config))
     io_apis.append( ChunkMultiprocessingCachingStore( ( SugarsyncStore(sugarsync_config) ) ) )
+    io_apis.append( MetadataCachingStore( dropbox_store ) )
     time.sleep(10)
     for io_api in io_apis:
         try:
@@ -73,6 +76,15 @@ def test_io_apis():
 #        test = partial(_test_with_root_filepath, io_api)
 #        test.description = io_api.get_name()+":"+" "+"fail on determining if file system object is a file or a directory"
 #        yield (test, ) 
+        test = partial(_test_get_free_space, io_api)
+        test.description = io_api.get_name()+":"+" "+"getting free space"
+        yield (test, )
+        test = partial(_test_get_overall_space, io_api)
+        test.description = io_api.get_name()+":"+" "+"getting overall space"
+        yield (test, )
+        test = partial(_test_get_used_space, io_api)
+        test.description = io_api.get_name()+":"+" "+"getting used space"
+        yield (test, )
         test = partial(_test_fail_on_is_dir, io_api)
         test.description = io_api.get_name()+":"+" "+"fail on determining if file system object is a file or a directory"
         yield (test, ) 
@@ -111,15 +123,6 @@ def test_io_apis():
         yield (test, )
         test = partial(_test_get_modified, io_api)
         test.description = io_api.get_name()+":"+" "+"getting modified time"
-        yield (test, )
-        test = partial(_test_get_free_space, io_api)
-        test.description = io_api.get_name()+":"+" "+"getting free space"
-        yield (test, )
-        test = partial(_test_get_overall_space, io_api)
-        test.description = io_api.get_name()+":"+" "+"getting overall space"
-        yield (test, )
-        test = partial(_test_get_used_space, io_api)
-        test.description = io_api.get_name()+":"+" "+"getting used space"
         yield (test, )
         test = partial(_test_get_directory_listing, io_api)
         test.description = io_api.get_name()+":"+" "+"getting directory listing"
