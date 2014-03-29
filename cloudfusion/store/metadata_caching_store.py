@@ -118,7 +118,7 @@ class MetadataCachingStore(Store):
         if self.entries.exists(parent_dir):
             entry = self.entries.get_value(parent_dir)
             entry.remove_from_listing(path)
-            self.entries.write(path, entry)
+            self.entries.write(parent_dir, entry)
         
     def store_file(self, path_to_file, dest_dir="/", remote_file_name = None, interrupt_event=None):
         if dest_dir == "/":
