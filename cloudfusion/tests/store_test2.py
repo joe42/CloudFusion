@@ -256,7 +256,8 @@ def _test_get_used_space(io_api):
 
 def _test_get_directory_listing(io_api): 
     _create_directories(io_api, REMOTE_TESTDIR)
-    io_api.store_file(LOCAL_TESTFILE_PATH, REMOTE_TESTDIR)
+    io_api.store_file(LOCAL_TESTFILE_PATH, REMOTE_TESTDIR) #testfile
+    time.sleep(5) #wait for file to be stored (eventual consistency)
     listing = io_api.get_directory_listing(REMOTE_TESTDIR)
     cached_listing1 = io_api.get_directory_listing(REMOTE_TESTDIR)
     cached_listing2 = io_api.get_directory_listing(REMOTE_TESTDIR)
