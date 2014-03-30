@@ -8,7 +8,7 @@ setuptools.setup(
     name = "CloudFusion",
     packages = setuptools.find_packages(),
     include_package_data = True,
-    install_requires = ['mechanize', 'requests', 'nose', 'oauth', 'poster', 'simplejson', 'httplib2', 'beautifulsoup4', 'argparse', 'ntplib', 'gsutil', 'sh', 'pexpect'],
+    install_requires = ['mechanize', 'requests', 'nose', 'oauth', 'poster', 'simplejson', 'httplib2>=0.8', 'beautifulsoup4', 'argparse', 'ntplib', 'gsutil', 'sh', 'pexpect', 'boto==2.22.1',],
     version = "5.10.15",
     description = "Filesystem interface to cloud storage services",
     author = "Johannes Mueller",
