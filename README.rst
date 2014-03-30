@@ -1,4 +1,3 @@
-
 CloudFusion
 ===========
 
@@ -16,10 +15,11 @@ To install CloudFusion do the following::
 
     sudo apt-get install git
     git clone git://github.com/joe42/CloudFusion.git
-    sudo apt-get install python-setuptools gcc openssl-devel python-devel cadaver
+    sudo apt-get install python-setuptools gcc libssl-dev python-dev cadaver                 #On Ubuntu
+    sudo apt-get install python-setuptools gcc openssl-devel python-devel fuse-utils cadaver #On Debian
     cd CloudFusion
     sudo python setup.py install
-
+    
 On Ubuntu, you just need to add yourself to the fuse group (replace joe with your own username)::
 
     sudo usermod -a -G fuse joe
@@ -27,7 +27,6 @@ On Ubuntu, you just need to add yourself to the fuse group (replace joe with you
 
 On Debian though, you also need to install fuse, and set permissions to use it as normal user (replace joe with your own username)::
 
-    sudo apt-get install fuse-utils
     sudo usermod -a -G fuse joe
     newgrp fuse
     sudo chgrp fuse /dev/fuse 
