@@ -19,6 +19,7 @@ from multiprocessing import Manager
 import atexit
 from cloudfusion.util.exponential_retry import retry
 import re
+import hashlib
 '''  requests bug with requests 2.0.1, so use local requests version 1.2.3:
 #    File "/usr/local/lib/python2.7/dist-packages/requests/cookies.py", line 311, in _find_no_duplicates
 #    raise KeyError('name=%r, domain=%r, path=%r' % (name, domain, path))
@@ -101,11 +102,48 @@ class DropboxStore(Store):
         self.logger.debug("get Dropbox session")
         if not config['root'] in ['dropbox', 'app_folder']:
             raise StoreAccessError("Configuration error: root must be one of dropbox or app_folder, check your configuration file", 0)
-        self.sess = session.DropboxSession(base64.b64decode(config['consumer_key']),base64.b64decode(config['consumer_secret']), config['root'])
+        self._cache_dir = self._get_cachedir_name(config)
+        self.create_session(config, self._cache_dir)
+        self.logger.debug("get DropboxClient")
+        self.client = client.DropboxClient(self.sess)
+        self.root = config['root']
+        self.time_difference = self._get_time_difference()
+        self.logger.info("api initialized")
+        manager = Manager()
+        self._revisions = manager.dict()
+        self._revision_db_path = self._cache_dir + "/Dropbox_revisions.db"
+        try:
+            last_session_revisions = shelve.open(self._revision_db_path)
+            self._revisions.update(last_session_revisions)
+        except:
+            self.logger.debug("Revision database from last session could not be loaded.")
+        self._is_copy = False
+        atexit.register( lambda : self._close() )
+        super(DropboxStore, self).__init__()
+
+    def _get_cachedir_name(self, config):
+        if 'cache_id' in config:
+            cache_id = config['cache_id'] # add actual cache_id
+        else:
+            cache_id = str(random.random())
+        cache_dir = "/tmp/cloudfusion/cachingstore_" + cache_id
+        return cache_dir
+        
+    def create_session(self, config, cache_dir):
+        key = hashlib.sha224(config['user']+config['password']).hexdigest() #key for token from last session
+        try:
+            credentials_db = shelve.open(cache_dir+'/credentials')
+        except:
+            self.logger.debug("Credentials database could not be loaded.")
+            credentials_db = {}
+        self.sess = session.DropboxSession(base64.b64decode(config['consumer_key']), base64.b64decode(config['consumer_secret']), config['root'])
+        if key in credentials_db:
+            self.sess.token = credentials_db[key]
+            return self.sess
         self.request_token = self.sess.obtain_request_token()
         url = self.sess.build_authorize_url(self.request_token)
         try:
-            self._auto_connect(url, config['user'] ,config['password'])
+            self._auto_connect(url, config['user'], config['password'])
         except:
             self.logger.exception("Automatic login failed, falling back to manual login")
         access_token = self.reconnect(1)
@@ -118,27 +156,11 @@ class DropboxStore(Store):
             if not access_token:
                 print "Sorry, please try copying the config file again."
                 raise StoreAccessError("Authorization error", 0)
-        self.logger.debug("get DropboxClient")
-        self.client = client.DropboxClient(self.sess)
-        self.root = config['root']
-        self.time_difference = self._get_time_difference()
-        self.logger.info("api initialized")
-        manager = Manager()
-        self._revisions = manager.dict()
-        if 'cache_id' in config:
-            cache_id = config['cache_id'] # add actual cache_id
-        else:
-            cache_id = str(random.random())
-        self._revision_db_dir = "/tmp/cloudfusion/cachingstore_"+cache_id
-        self._revision_db_path = self._revision_db_dir + "/Dropbox_revisions.db"
+        credentials_db[key] = self.sess.token #store token for further sessions  
         try:
-            last_session_revisions = shelve.open(self._revision_db_path)
-            self._revisions.update(last_session_revisions)
+            credentials_db.close()
         except:
-            self.logger.debug("Revision database from last session could not be loaded.")
-        self._is_copy = False
-        atexit.register( lambda : self._close() )
-        super(DropboxStore, self).__init__()
+            pass     
         
     def _auto_connect(self, authorize_url, user, password):
         headers = {'Host' : 'www.dropbox.com', 'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0', 'Accept' :  'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'Accept-Language' : 'en-gb,en;q=0.5', 'Accept-Encoding' : 'gzip, deflate', 'DNT' : '1', 'Connection' : 'keep-alive'}
