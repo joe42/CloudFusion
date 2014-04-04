@@ -176,7 +176,7 @@ class ConfigurablePyFuseBox(PyFuseBox):
             auth['consumer_secret'] = auth['secret_access_key']
         bucket_name = auth.get('bucket_name', 'cloudfusion') 
         auth['bucket_name'] = bucket_name 
-        self.logger.debug("got auth data: %s", auth)
+        self.logger.debug("got auth data: %s" % auth)
         store = self.__get_new_store(service, auth) #catch error?
         self.logger.debug("initialized store")
         if type != '':                                                      
