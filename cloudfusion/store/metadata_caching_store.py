@@ -320,7 +320,7 @@ class MetadataCachingStore(Store):
         self.logger.debug("meta cache _get_metadata entry does not exist or is expired")
         metadata = self.store._get_metadata(path)
         entry = self._prepare_entry(path, metadata)
-        self.entries.write(path, Entry())
+        self.entries.write(path, entry)
         if not entry.is_dir and isinstance(self.store, BulkGetMetadata):
             self._prefetch_directory(os.path.dirname(path))
         return {'is_dir': entry.is_dir, 'modified': entry.modified, 'bytes': entry.size}
