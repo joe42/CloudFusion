@@ -169,6 +169,7 @@ class WebdavStore(Store):
                 if line.startswith('Coll:'):
                     line = line[5:]
                 line = '/'+line.strip()
+                line = unicode(line, 'unicode-escape')
                 ret.append(line)
         return ret
         
