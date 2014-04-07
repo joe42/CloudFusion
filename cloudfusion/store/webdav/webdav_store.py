@@ -110,20 +110,20 @@ class WebdavStore(Store):
             sub_cmd = cmd
         red_cmd = "%s '%s/'" % (cmd, arg1) #directory requests are redirected to directory_name/
         child = pexpect.spawn('cadaver -t '+self.url, timeout=timeout)
-        i = child.expect (['.*name.*', 'dav:.*/>']) #somehow webdav can sometimes remember the connection and does not need authentication
+        i = child.expect (['Username:', 'dav:.*/>']) #somehow webdav can sometimes remember the connection and does not need authentication
         if i==0:
             child.sendline(self.user)
-            child.expect ('.*assword.*')
+            child.expect ('Password:')
             child.sendline(self.pwd)
             child.expect("dav:.*/>")
         
         child.sendline(sub_cmd) #send actual command
         
         if cmd != 'ls':
-            i = child.expect (['.*name.*', 'dav:.*/>']) #handle reauthentication
+            i = child.expect (['Username:', 'dav:.*/>']) #handle reauthentication
             if i==0:
                 child.sendline(self.user)
-                child.expect ('.*assword.*')
+                child.expect ('Password:')
                 child.sendline(self.pwd)
                 child.expect("dav:.*/>")
         else: 
