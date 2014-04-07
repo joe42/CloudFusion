@@ -149,6 +149,8 @@ class WebdavStore(Store):
         ret = 0
         for line in res.splitlines():
             match = re.search(".* (\d+)\s+[A-Z][a-z]+\s+[0-9]+\s+[0-9:]+", line) #...  2738  Feb 13 03:24
+            if not match:
+                continue
             if match:
                 ret += int(match.group(1))
         return ret
