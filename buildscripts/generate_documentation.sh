@@ -24,6 +24,7 @@ sudo rm -rf /dev/shm && sudo ln -s /run/shm /dev/shm
 
 #install python dependencies needed to generate documentation
 git checkout origin/development
+{ git describe --contains HEAD; has_tag=$? || true; } # || true prevents returning non-zero status if the last commit does not have a tag assigned to it, and hence stop script execution
 python setup.py install #install cloudfusion
 pip install sphinx      #install sphinx
 
@@ -50,8 +51,7 @@ cp -r cloudfusion/doc/_build/html/_static static #copy documentation to root
 cp cloudfusion/doc/_build/html/*.html .          #copy documentation to root
 rm -rf cloudfusion/                              #remove files in root that have nothing to do with documentation
 
-#push changes
-{ git describe --contains HEAD; has_tag=$? || true; } # || true prevents returning non-zero status if the last commit does not have a tag assigned to it, and hence stop script execution
+#push changes if last commit of development branch contains a tag
 if [ $has_tag -eq 0 ] ; then   #return value of git describe is zero if current commit has a tag
     git add -A
     git commit -am "Auto update documentation from travis-ci.org"
