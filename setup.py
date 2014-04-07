@@ -9,7 +9,7 @@ setuptools.setup(
     packages = setuptools.find_packages(),
     include_package_data = True,
     install_requires = ['mechanize', 'requests', 'nose', 'oauth', 'poster', 'simplejson', 'httplib2>=0.8', 'beautifulsoup4', 'argparse', 'ntplib', 'gsutil', 'sh', 'pexpect', 'boto==2.22.1',],
-    version = "5.10.15",
+    version = "5.10.16",
     description = "Filesystem interface to cloud storage services",
     author = "Johannes Mueller",
     author_email = "johannes.mueller1@mail.inf.tu-dresden.de",
