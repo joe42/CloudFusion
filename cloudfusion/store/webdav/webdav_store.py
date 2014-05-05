@@ -145,6 +145,9 @@ class WebdavStore(Store):
         if re.search('.*redirect to .*', child.before): #handle redirect
             child.sendline(red_cmd) 
             child.expect("dav:.*/>")
+        if child.before.find("404 Not Found") != -1:
+            if arg1:
+                raise NoSuchFilesytemObjectError(sub_cmd,404)
         return child.before
     
     def get_overall_space(self):
@@ -189,6 +192,14 @@ class WebdavStore(Store):
                 line = unicode(line, 'unicode-escape')
                 ret.append(directory+line)
         return ret
+    
+    def _handle_error(self, error, method_name, remaining_tries, *args, **kwargs):
+        if isinstance(error, NoSuchFilesytemObjectError):
+            self.logger.error("Error could not be handled: %s", error)
+            raise error # do not retry (error cannot be handled)
+        if remaining_tries == 0: # throw error after last try 
+            raise StoreAccessError(str(error), 0) 
+        return False
         
     #@retry((Exception))
     def _get_metadata(self, path):
