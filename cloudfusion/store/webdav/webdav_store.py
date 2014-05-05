@@ -54,7 +54,7 @@ class WebdavStore(Store):
         self._raise_error_if_invalid_path(path_to_file)
         with tempfile.NamedTemporaryFile(delete=False) as f:
             tempfile_path = f.name
-        self._webdav_cmd('get', os.path.basename(path_to_file), tempfile_path)
+        self._webdav_cmd('get', path_to_file[1:], tempfile_path) # cut first / from path
         with open(tempfile_path) as f:
             ret = f.read()
         os.remove(tempfile_path)
@@ -71,7 +71,15 @@ class WebdavStore(Store):
     def store_fileobject(self, fileobject, path, interrupt_event=None):
         size = self.__get_size(fileobject)
         self.logger.debug("Storing file object of size %s to %s", size, path)
-        self._webdav_cmd('put', fileobject.name, os.path.basename(path))
+        if hasattr(fileobject, 'name'):
+            file_name = fileobject.name
+        else:
+            with tempfile.NamedTemporaryFile(delete=False) as fh:
+                for line in fileobject:
+                    fh.write(line)
+                fh.flush()
+                file_name = fh.name
+        self._webdav_cmd('put', file_name, path[1:]) # cut first / from path
         return int(time.time())
     
     
@@ -81,7 +89,10 @@ class WebdavStore(Store):
     def delete(self, path, is_dir=False): #is_dir parameter does not matter to dropbox
         self.logger.debug("deleting %s", path)
         self._raise_error_if_invalid_path(path)
-        self._webdav_cmd('delete', os.path.basename(path))
+        if is_dir:
+            self._webdav_cmd('rmcol', path[1:]) 
+        else:
+            self._webdav_cmd('delete', path[1:])
         
     @retry((Exception))
     def account_info(self):
@@ -91,12 +102,15 @@ class WebdavStore(Store):
     @retry((Exception))
     def create_directory(self, directory):
         self.logger.debug("creating directory %s", directory)
+        self._webdav_cmd('mkdir', directory[1:])
         
     def duplicate(self, path_to_src, path_to_dest):
         self.logger.debug("duplicating %s to %s", path_to_src, path_to_dest)
+        self._webdav_cmd('cp', path_to_src[1:], path_to_dest[1:])
     
     def move(self, path_to_src, path_to_dest):
         self.logger.debug("moving %s to %s", path_to_src, path_to_dest)
+        self._webdav_cmd('mv', path_to_src[1:], path_to_dest[1:])
         
     def _webdav_cmd(self, cmd, arg1=None, arg2=None):
         timeout = 30
@@ -158,7 +172,7 @@ class WebdavStore(Store):
     #@retry((Exception))
     def get_directory_listing(self, directory):
         self.logger.debug("getting directory listing for %s", directory)
-        res = self._webdav_cmd('ls')
+        res = self._webdav_cmd('ls', directory[1:])
         ret = []
         for line in res.splitlines():
             if line.endswith('failed:'):
@@ -173,7 +187,7 @@ class WebdavStore(Store):
                     line = line[1:]
                 line = '/'+line
                 line = unicode(line, 'unicode-escape')
-                ret.append(line)
+                ret.append(directory+line)
         return ret
         
     #@retry((Exception))
@@ -187,7 +201,7 @@ class WebdavStore(Store):
             ret["path"] = "/"
             ret["is_dir"] = True
             return ret
-        res = self._webdav_cmd('propget', os.path.basename(path))
+        res = self._webdav_cmd('propget', path[1:])
         ret = {}
         ret["is_dir"] = False
         for line in res.splitlines():
