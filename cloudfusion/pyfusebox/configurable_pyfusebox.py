@@ -6,20 +6,12 @@ This FUSE module initializes the store at runtime when the user accesses the vir
 
 from cloudfusion.pyfusebox.pyfusebox import *
 from cloudfusion.pyfusebox.virtualconfigfile import VirtualConfigFile
-from cloudfusion.store.dropbox.dropbox_store import DropboxStore
-from cloudfusion.store.sugarsync.sugarsync_store import SugarsyncStore
 from cloudfusion.store.transparent_caching_store import TransparentMultiprocessingCachingStore
 from cloudfusion.store.metadata_caching_store import MetadataCachingStore
 import random
 import os, signal
 import sys
-from cloudfusion.store.chunk_caching_store import ChunkMultiprocessingCachingStore
 from cloudfusion.store.transparent_chunk_caching_store import TransparentChunkMultiprocessingCachingStore
-from cloudfusion.store.gs.google_store import GoogleStore
-from cloudfusion.store.s3.amazon_store import AmazonStore
-from cloudfusion.store.webdav.webdav_store import WebdavStore
-from cloudfusion.store.s3.bulk_get_metadata_amazon_store import BulkGetMetadataAmazonStore
-from cloudfusion.store.gs.bulk_get_metadata_google_store import BulkGetMetadataGoogleStore
 
 
 class ConfigurablePyFuseBox(PyFuseBox):
@@ -195,14 +187,19 @@ class ConfigurablePyFuseBox(PyFuseBox):
         self.logger.debug("__get_new_store:")
         try:
             if service.lower() == "sugarsync":
+                from cloudfusion.store.sugarsync.sugarsync_store import SugarsyncStore
                 store = SugarsyncStore(auth)
             elif service.lower() == "gs" or service.find('oogle') >= 0:
+                from cloudfusion.store.gs.bulk_get_metadata_google_store import BulkGetMetadataGoogleStore
                 store = BulkGetMetadataGoogleStore(auth)
             elif service.lower() == "s3" or service.find('mazon') >= 0:
+                from cloudfusion.store.s3.bulk_get_metadata_amazon_store import BulkGetMetadataAmazonStore
                 store = BulkGetMetadataAmazonStore(auth)
             elif service.lower() == "webdav" or service.find('dav') >= 0:
+                from cloudfusion.store.webdav.webdav_store import WebdavStore
                 store = WebdavStore(auth)
             else: # default
+                from cloudfusion.store.dropbox.dropbox_store import DropboxStore
                 store = DropboxStore(auth)
             self.logger.debug("got store")
         except Exception as e:
