@@ -4,18 +4,13 @@ Created on 08.04.2011
 @author: joe
 '''
 
-import os
 import time
 from cloudfusion.store.store import *
-import pexpect
-import time
-import cloudfusion.third_party.parsedatetime.parsedatetime as pdt
-import re
 import logging
 from cloudfusion.util.exponential_retry import retry
 from cloudfusion.mylogging import db_logging_thread
-import sys
 import tempfile
+from cloudfusion.store.webdav.cadaver_client import CadaverWebDAVClient
 
 class WebdavStore(Store):
     def __init__(self, config):
@@ -25,9 +20,7 @@ class WebdavStore(Store):
         self.logger = logging.getLogger(self._logging_handler)
         self.logger = db_logging_thread.make_logger_multiprocessingsave(self.logger)
         self.logger.info("creating %s store", self.name)
-        self.url = config['url'] 
-        self.user = config['user'] 
-        self.pwd = config['password'] 
+        self.client = CadaverWebDAVClient(config['url'], config['user'], config['password'] )
         self.logger.info("api initialized")
         
     def __deepcopy__(self, memo):
@@ -79,7 +72,7 @@ class WebdavStore(Store):
                     fh.write(line)
                 fh.flush()
                 file_name = fh.name
-        self._webdav_cmd('put', file_name, path[1:]) # cut first / from path
+        self.client.upload(file_name, path)
         return int(time.time())
     
     
@@ -90,9 +83,9 @@ class WebdavStore(Store):
         self.logger.debug("deleting %s", path)
         self._raise_error_if_invalid_path(path)
         if is_dir:
-            self._webdav_cmd('rmcol', path[1:]) 
+            self.client.rmdir(path)
         else:
-            self._webdav_cmd('delete', path[1:])
+            self.client.rm(path)
         
     @retry((Exception))
     def account_info(self):
@@ -102,96 +95,28 @@ class WebdavStore(Store):
     @retry((Exception))
     def create_directory(self, directory):
         self.logger.debug("creating directory %s", directory)
-        self._webdav_cmd('mkdir', directory[1:])
+        self.client.mkdir(directory)
         
     def duplicate(self, path_to_src, path_to_dest):
         self.logger.debug("duplicating %s to %s", path_to_src, path_to_dest)
-        self._webdav_cmd('cp', path_to_src[1:], path_to_dest[1:])
+        self.client.move(path_to_src, path_to_dest)
     
     def move(self, path_to_src, path_to_dest):
         self.logger.debug("moving %s to %s", path_to_src, path_to_dest)
-        self._webdav_cmd('mv', path_to_src[1:], path_to_dest[1:])
-        
-    def _webdav_cmd(self, cmd, arg1=None, arg2=None):
-        timeout = 30
-        if cmd == 'get' or cmd == 'put':
-            timeout = 60 * 30 # 1 hour
-        if arg2:
-            sub_cmd = "%s '%s' '%s'" % (cmd, arg1, arg2)
-        elif arg1:
-            sub_cmd = "%s '%s'" % (cmd, arg1)
-        else:
-            sub_cmd = cmd
-        red_cmd = "%s '%s/'" % (cmd, arg1) #directory requests are redirected to directory_name/
-        child = pexpect.spawn('cadaver -t '+self.url, timeout=timeout)
-        i = child.expect (['Username:', 'dav:.*/>']) #somehow webdav can sometimes remember the connection and does not need authentication
-        if i==0:
-            child.sendline(self.user)
-            child.expect ('Password:')
-            child.sendline(self.pwd)
-            child.expect("dav:.*/>")
-        
-        child.sendline(sub_cmd) #send actual command
-        
-        if cmd != 'ls':
-            i = child.expect (['Username:', 'dav:.*/>']) #handle reauthentication
-            if i==0:
-                child.sendline(self.user)
-                child.expect ('Password:')
-                child.sendline(self.pwd)
-                child.expect("dav:.*/>")
-        else: 
-                child.expect("dav:.*/>")
-        if re.search('.*redirect to .*', child.before): #handle redirect
-            child.sendline(red_cmd) 
-            child.expect("dav:.*/>")
-        if child.before.find("404 Not Found") != -1:
-            if arg1:
-                raise NoSuchFilesytemObjectError(sub_cmd,404)
-        return child.before
+        self.client.move(path_to_src, path_to_dest)
     
     def get_overall_space(self):
         self.logger.debug("retrieving all space") 
-        res = self._webdav_cmd('propget', '.')
-        for line in res.splitlines():
-            if line.startswith('DAV: quota-available-bytes'):
-                match = re.search(".*(\d+).*", line)
-                if match:
-                    return int(match.group(1))
-        return 1000000000
+        return self.client.get_overall_space()
 
     def get_used_space(self):
         self.logger.debug("retrieving used space")
-        res = self._webdav_cmd('ls')
-        ret = 0
-        for line in res.splitlines():
-            match = re.search(".* (\d+)\s+[A-Z][a-z]+\s+[0-9]+\s+[0-9:]+", line) #...  2738  Feb 13 03:24
-            if not match:
-                continue
-            if match:
-                ret += int(match.group(1))
-        return ret
+        return self.client.get_used_space()
         
     #@retry((Exception))
     def get_directory_listing(self, directory):
         self.logger.debug("getting directory listing for %s", directory)
-        res = self._webdav_cmd('ls', directory[1:])
-        ret = []
-        for line in res.splitlines():
-            if line.endswith('failed:'):
-                raise StoreAccessError("Error in get_directory_listing(%s): %s"%(directory, res))
-            match = re.search("(.*) \d+\s+[A-Z][a-z]+\s+[0-9]+\s+[0-9:]+", line) #...  2738  Feb 13 03:24
-            if match:
-                line = match.group(1)
-                if line.startswith('Coll:'):
-                    line = line[5:]
-                line = line.strip()
-                if line.startswith('*'): #GMX Mediacenter appends asterisk before file objects
-                    line = line[1:]
-                line = '/'+line
-                line = unicode(line, 'unicode-escape')
-                ret.append(directory+line)
-        return ret
+        return self.client.get_directory_listing(directory)
     
     def _handle_error(self, error, method_name, remaining_tries, *args, **kwargs):
         if isinstance(error, NoSuchFilesytemObjectError):
@@ -212,23 +137,7 @@ class WebdavStore(Store):
             ret["path"] = "/"
             ret["is_dir"] = True
             return ret
-        res = self._webdav_cmd('propget', path[1:])
-        ret = {}
-        ret["is_dir"] = False
-        for line in res.splitlines():
-            if line.startswith('DAV: iscollection = TRUE') or line.startswith('DAV: resourcetype = <DAV:collection>'):
-                ret["is_dir"] = True
-            if line.startswith('DAV: getcontentlength = '):
-                ret["bytes"] = int(line[24:])
-            if line.startswith('DAV: getlastmodified = '):
-                mod_date = line[23:]
-                cal = pdt.Calendar()
-                mod_date =  int(time.mktime(cal.parse(mod_date)[0]))
-                ret["modified"] = mod_date
-        if not ( 'is_dir' in ret and 'bytes' in ret and 'modified' in ret):
-            raise StoreAccessError("Error in _get_metadata(%s): \n no getcontentlength or getlastmodified property in %s" % (path, res))
-        ret["path"] = path
-        return ret
+        return self.client._get_metadata(path)
         
     def _get_time_difference(self):
         self.logger.debug("getting time difference")
