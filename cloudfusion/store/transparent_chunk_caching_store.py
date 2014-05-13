@@ -75,7 +75,7 @@ class TransparentChunkMultiprocessingCachingStore(ChunkMultiprocessingCachingSto
         return self.cache_misses
     
     def get_status_information(self):
-        ret = "Last heartbeat was %s s ago."  % self.sync_thread.last_heartbeat()
+        ret = "Last heartbeat was %d s ago."  % self.sync_thread.last_heartbeat()
         if self.sync_thread.last_heartbeat() > 60*15:
             ret += "Store died, trying to revive it..." 
             self.sync_thread.restart()
