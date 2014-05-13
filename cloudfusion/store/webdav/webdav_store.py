@@ -10,7 +10,7 @@ import logging
 from cloudfusion.util.exponential_retry import retry
 from cloudfusion.mylogging import db_logging_thread
 import tempfile
-from cloudfusion.store.webdav.cadaver_client import CadaverWebDAVClient
+from cloudfusion.store.webdav.tinydav_client import TinyDAVClient
 
 class WebdavStore(Store):
     def __init__(self, config):
@@ -20,7 +20,7 @@ class WebdavStore(Store):
         self.logger = logging.getLogger(self._logging_handler)
         self.logger = db_logging_thread.make_logger_multiprocessingsave(self.logger)
         self.logger.info("creating %s store", self.name)
-        self.client = CadaverWebDAVClient(config['url'], config['user'], config['password'] )
+        self.tinyclient = TinyDAVClient(config['url'], config['user'], config['password'] )
         self.logger.info("api initialized")
         
     def __deepcopy__(self, memo):
@@ -45,13 +45,7 @@ class WebdavStore(Store):
     def get_file(self, path_to_file): 
         self.logger.debug("getting file: %s", path_to_file)
         self._raise_error_if_invalid_path(path_to_file)
-        with tempfile.NamedTemporaryFile(delete=False) as f:
-            tempfile_path = f.name
-        self._webdav_cmd('get', path_to_file[1:], tempfile_path) # cut first / from path
-        with open(tempfile_path) as f:
-            ret = f.read()
-        os.remove(tempfile_path)
-        return ret 
+        return self.tinyclient.get_file(path_to_file) 
         
     def __get_size(self, fileobject):
         pos = fileobject.tell()
@@ -72,7 +66,7 @@ class WebdavStore(Store):
                     fh.write(line)
                 fh.flush()
                 file_name = fh.name
-        self.client.upload(file_name, path)
+        self.tinyclient.upload(file_name, path)
         return int(time.time())
     
     
@@ -83,9 +77,9 @@ class WebdavStore(Store):
         self.logger.debug("deleting %s", path)
         self._raise_error_if_invalid_path(path)
         if is_dir:
-            self.client.rmdir(path)
+            self.tinyclient.rmdir(path)
         else:
-            self.client.rm(path)
+            self.tinyclient.rm(path)
         
     @retry((Exception))
     def account_info(self):
@@ -95,28 +89,28 @@ class WebdavStore(Store):
     @retry((Exception))
     def create_directory(self, directory):
         self.logger.debug("creating directory %s", directory)
-        self.client.mkdir(directory)
+        self.tinyclient.mkdir(directory)
         
     def duplicate(self, path_to_src, path_to_dest):
         self.logger.debug("duplicating %s to %s", path_to_src, path_to_dest)
-        self.client.move(path_to_src, path_to_dest)
+        self.tinyclient.copy(path_to_src, path_to_dest)
     
     def move(self, path_to_src, path_to_dest):
         self.logger.debug("moving %s to %s", path_to_src, path_to_dest)
-        self.client.move(path_to_src, path_to_dest)
+        self.tinyclient.move(path_to_src, path_to_dest)
     
     def get_overall_space(self):
         self.logger.debug("retrieving all space") 
-        return self.client.get_overall_space()
+        return self.tinyclient.get_overall_space()
 
     def get_used_space(self):
         self.logger.debug("retrieving used space")
-        return self.client.get_used_space()
+        return self.tinyclient.get_used_space()
         
     #@retry((Exception))
     def get_directory_listing(self, directory):
         self.logger.debug("getting directory listing for %s", directory)
-        return self.client.get_directory_listing(directory)
+        return self.tinyclient.get_directory_listing(directory)
     
     def _handle_error(self, error, method_name, remaining_tries, *args, **kwargs):
         if isinstance(error, NoSuchFilesytemObjectError):
@@ -129,15 +123,7 @@ class WebdavStore(Store):
     #@retry((Exception))
     def _get_metadata(self, path):
         self.logger.debug("getting metadata for %s", path)
-        self._raise_error_if_invalid_path(path)
-        if path == "/": # workaraund for root metadata
-            ret = {}
-            ret["bytes"] = 0
-            ret["modified"] = time.time()
-            ret["path"] = "/"
-            ret["is_dir"] = True
-            return ret
-        return self.client._get_metadata(path)
+        return self.tinyclient.get_metadata(path)
         
     def _get_time_difference(self):
         self.logger.debug("getting time difference")
