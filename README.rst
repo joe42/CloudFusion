@@ -1,8 +1,8 @@
 CloudFusion
 ===========
 
-CloudFusion lets you access your Dropbox, Sugarsync, Amazon S3, and Google Storage files from Linux like any file on your desktop.
-WebDAV support is experimental (Only from command line; nested directories are not supported).
+CloudFusion lets you access your Dropbox, Sugarsync, Amazon S3, Google Storage, and WebDAV storages from Linux like any file on your desktop.
+
 
 .. contents:: Table of Contents:
 
@@ -15,8 +15,8 @@ To install CloudFusion do the following::
 
     sudo apt-get install git
     git clone git://github.com/joe42/CloudFusion.git
-    sudo apt-get install python-setuptools gcc libssl-dev python-dev cadaver                 #On Ubuntu
-    sudo apt-get install python-setuptools gcc openssl-devel python-devel fuse-utils cadaver #On Debian
+    sudo apt-get install python-setuptools gcc libssl-dev python-dev                 #On Ubuntu
+    sudo apt-get install python-setuptools gcc openssl-devel python-devel fuse-utils #On Debian
     cd CloudFusion
     sudo python setup.py install
     
@@ -63,8 +63,24 @@ WebDAV
 ++++++++++++++
 Copy the WebDAV configuration file located at **cloudfusion/cloudfusion/config/Webdav.ini** to your home directory.
 Add the URL of the server, your username, and your  password to the configuration file. 
-There are some free WebDAV providers (i.e. https://webdav.mediencenter.t-online.de offers 25 GB of storage).
-WebDAV support is experimental.
+Here some information about WebDAV providers:
+
+==============  ============================================ ============  ======================================================
+Name            WebDAV URL                                   Free Storage  Further Details                  
+==============  ============================================ ============  ======================================================
+T-Online_       https://webdav.mediencenter.t-online.de      25 GB         German Provider                           
+4shared_        https://webdav.4shared.com                   15 GB         3 GB daily traffic, 30 GB monthly, cannot delete directories                            
+GMX_            https://webdav.mc.gmx.net                    2  GB         German Provider     
+Box.com_        https://dav.box.com/dav                      None          WebDAV access only with paid account
+OneDrive_       see: blog.lazut.in_                          7  GB         Does not seem to work anymore
+==============  ============================================ ============  ======================================================
+
+.. _T-Online : https://mediencenter.t-online.de 
+.. _GMX : http://www.gmx.net/produkte/mediacenter/
+.. _4shared : http://4shared.com/
+.. _Box.com : https://www.box.com/
+.. _OneDrive : https://www.box.com/
+.. _blog.lazut.in : http://blog.lazut.in/2012/12/skydrive-webdav-access.html
 
 
 Get started
