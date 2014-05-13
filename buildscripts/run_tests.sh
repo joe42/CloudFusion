@@ -52,8 +52,10 @@ perl -pi -e "s/access_key_id =.*/access_key_id =${GS_ID}/g" cloudfusion/config/G
 perl -pi -e "s/secret_access_key =.*/secret_access_key =${GS_KEY}/g" cloudfusion/config/Google_testing.ini
 perl -pi -e "s/access_key_id =.*/access_key_id =${S3_ID}/g" cloudfusion/config/AmazonS3_testing.ini
 perl -pi -e "s/secret_access_key =.*/secret_access_key =${S3_KEY}/g" cloudfusion/config/AmazonS3_testing.ini
-perl -pi -e "s/user =.*/user =${WEBDAV_USR}/g" cloudfusion/config/Webdav_testing.ini
-perl -pi -e "s/password =.*/password =${WEBDAV_PWD}/g" cloudfusion/config/Webdav_testing.ini
+perl -pi -e "s/user =.*/user =${WEBDAV_USR}/g" cloudfusion/config/Webdav_tonline_testing.ini
+perl -pi -e "s/password =.*/password =${WEBDAV_PWD}/g" cloudfusion/config/Webdav_tonline_testing.ini
+perl -pi -e "s/user =.*/user =${WEBDAV2_USR}/g" cloudfusion/config/Webdav_gmx_testing.ini
+perl -pi -e "s/password =.*/password =${WEBDAV2_PWD}/g" cloudfusion/config/Webdav_gmx_testing.ini
 
 #options: -x stop on first error, -v verbose, -s output stdout messgages immediately, --with-coverage produce coverage results
 #bash -c "nosetests -v -s -x cloudfusion/tests/db_logging_thread_test.py --with-coverage &>test1_log; status=$?; mv .coverage .coverage.3; exit $status" & #about 18 Min runtime
@@ -62,6 +64,8 @@ perl -pi -e "s/password =.*/password =${WEBDAV_PWD}/g" cloudfusion/config/Webdav
 #pid2=$!                          
 bash -c "nosetests -v -s -x cloudfusion/tests/store_test2.py --with-coverage  &>test3_log; status=$?; mv .coverage .coverage.3; exit $status" &    #about 20 Min runtime                  
 pid3=$!
+bash -c "nosetests -v -s -x cloudfusion/tests/store_test_webdav.py --with-coverage  &>test4_log; status=$?; mv .coverage .coverage.4; exit $status" &                  
+pid4=$!
 nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py -I store_test2.py --with-coverage   
 mv .coverage .coverage.4
 
@@ -76,12 +80,16 @@ mv .coverage .coverage.4
 wait $pid3
 (exit $?)
 cat test3_log
+wait $pid4
+(exit $?)
+cat test4_log
 
 mv cloudfusion/config/Dropbox.ini.bck cloudfusion/config/Dropbox.ini
 rm cloudfusion/config/sugarsync_testing.ini
 rm cloudfusion/config/Google_testing.ini
 rm cloudfusion/config/AmazonS3_testing.ini
-rm cloudfusion/config/Webdav_testing.ini
+rm cloudfusion/config/Webdav_gmx_testing.ini
+rm cloudfusion/config/Webdav_tonline_testing.ini
 
 coverage combine #combine coverage report
 coverage html
