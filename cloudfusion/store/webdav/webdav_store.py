@@ -73,7 +73,7 @@ class WebdavStore(Store):
     # worst case: object still exists and takes up space or is appended to, by mistake
     # with caching_store, the entry in cache is deleted anyways 
     @retry((Exception), tries=5, delay=0) 
-    def delete(self, path, is_dir=False): #is_dir parameter does not matter to dropbox
+    def delete(self, path, is_dir=False):
         self.logger.debug("deleting %s", path)
         self._raise_error_if_invalid_path(path)
         if is_dir:
@@ -83,7 +83,7 @@ class WebdavStore(Store):
         
     def account_info(self):
         self.logger.debug("retrieving account info")
-        return "Webdav "
+        return "Webdav"
 
     @retry((Exception), tries=14, delay=0.1, backoff=2)
     def create_directory(self, directory):
