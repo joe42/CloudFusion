@@ -81,12 +81,11 @@ class WebdavStore(Store):
         else:
             self.tinyclient.rm(path)
         
-    @retry((Exception))
     def account_info(self):
         self.logger.debug("retrieving account info")
         return "Webdav "
 
-    @retry((Exception))
+    @retry((Exception), tries=14, delay=0.1, backoff=2)
     def create_directory(self, directory):
         self.logger.debug("creating directory %s", directory)
         self.tinyclient.mkdir(directory)
@@ -107,7 +106,7 @@ class WebdavStore(Store):
         self.logger.debug("retrieving used space")
         return self.tinyclient.get_used_space()
         
-    #@retry((Exception))
+    @retry((Exception), tries=14, delay=0.1, backoff=2)
     def get_directory_listing(self, directory):
         self.logger.debug("getting directory listing for %s", directory)
         return self.tinyclient.get_directory_listing(directory)
@@ -120,7 +119,7 @@ class WebdavStore(Store):
             raise StoreAccessError(str(error), 0) 
         return False
         
-    #@retry((Exception))
+    @retry((Exception), tries=14, delay=0.1, backoff=2)
     def _get_metadata(self, path):
         self.logger.debug("getting metadata for %s", path)
         return self.tinyclient.get_metadata(path)
