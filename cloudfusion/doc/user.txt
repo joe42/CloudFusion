@@ -1,55 +1,156 @@
 Users documentation
 ======================================
 
-Start CloudFusion
----------------------
+Introduction
+-------------
 
-To run the application make a directory mnt and from your home directory call::
-
-	python -m cloudfusion.main mnt 
-
+After installing CloudFusion, you need to create a configuration file for the storage provider you want to use as described below.
 
 Create a Configuration File
-------------------------------------
+...........................
 
 Sugarsync
-++++++++++
-Copy the Sugarsync configuration file located at **cloudfusion/config/Sugarsync.ini** to your home directory.
-Edit the configuration file by adding your e-mail address as your username and a password. 
-
++++++++++
+Copy the Sugarsync configuration file located at **cloudfusion/cloudfusion/config/Sugarsync.ini** to your home directory.
+Edit the configuration file by adding your e-mail address as your username and a password.
+Your account will expire after a month, except if you change to a payed account.
 
 Dropbox
-++++++++++
-Simply copy the Dropbox configuration file located at **cloudfusion/config/Dropbox.ini** to your home directory.
++++++++
+Simply copy the Dropbox configuration file located at **cloudfusion/cloudfusion/config/Dropbox.ini** to your home directory.
 If you do not have a Dropbox account already, you can create a new one at https://www.dropbox.com.
-No further steps are required. 
+Edit the configuration file by adding your username and a password.
+
+Google Storage
+++++++++++++++
+Copy the Google Storage configuration file located at **cloudfusion/cloudfusion/config/Google.ini** to your home directory.
+Add your access_key_id, and secret_access_key to the configuration file. Details on obtaining these are inside the configuration file.
+
+Amazon S3
++++++++++
+Copy the Amazon S3 configuration file located at **cloudfusion/cloudfusion/config/AmazonS3.ini** to your home directory.
+Add your access_key_id, and secret_access_key to the configuration file. Details on obtaining these are inside the configuration file.
+
+WebDAV
+++++++
+Copy the WebDAV configuration file located at **cloudfusion/cloudfusion/config/Webdav.ini** to your home directory.
+Add the URL of the server, your username, and your  password to the configuration file. 
+Here some information about WebDAV providers:
+
+==============  ============================================ ============  ======================================================
+Name            WebDAV URL                                   Free Storage  Further Details                  
+==============  ============================================ ============  ======================================================
+T-Online_       https://webdav.mediencenter.t-online.de      25 GB         German Provider                           
+4shared_        https://webdav.4shared.com                   15 GB         3 GB daily traffic, 30 GB monthly, cannot delete directories                            
+GMX_            https://webdav.mc.gmx.net                    2  GB         German Provider     
+Box.com_        https://dav.box.com/dav                      None          WebDAV access only with paid account
+OneDrive_       see: blog.lazut.in_                          7  GB         Does not seem to work anymore
+==============  ============================================ ============  ======================================================
+
+.. _T-Online : https://mediencenter.t-online.de 
+.. _GMX : http://www.gmx.net/produkte/mediacenter/
+.. _4shared : http://4shared.com/
+.. _Box.com : https://www.box.com/
+.. _OneDrive : https://www.box.com/
+.. _blog.lazut.in : http://blog.lazut.in/2012/12/skydrive-webdav-access.html
 
 
-Configuring CloudFusion
-------------------------------------
+Get started
+-----------
 
-Now copy the configuration file you edited to your mountpoint::
+Start CloudFusion::
 
-    cp ~/db.ini mnt/config/config
+    cloudfusion --config ~/db.ini mnt
 
 This assumes that you saved the configuration file as **db.ini** to your home directory. 
-If you simply copied the configuration file as suggested, replace **db.ini** with **Sugarsync.ini** or **Dropbox.ini** respectively.
-If you use Dropbox, your webbrowser will prompt you to login into Dropbox and grant access rights to CloudFusion. 
-The current time limit for this is one minute. If you did not make it in time, copying the configuration file fails.
-But you can simply retry by copying the configuration again
+If you simply copied the configuration file as suggested, replace **db.ini** with the respective file; i.e. **Sugarsync.ini** or **Dropbox.ini**.
 
 Enjoy accessing your files in the directory **mnt/data**.
 
- 
 
-Advanced Usage:
--------------------------------
+Shut Down
+---------
 
-Advanced options can be set dynamically by changing parameters in the file *mnt/config/config*::
+To shut down CloudFusion, you can delete the file **mnt/config/config**, or use the following command::
 
-	#Approximate cache size limit in MB; default 2000:
-	cache_size = 5000
-	#Identifier for persistent database. Use one id per cloud account to keep the cache after application shutdown.
-	#Default value is a random number.
-	cache_id = dropboxacc1
+    cloudfusion ~/mnt stop
 
+
+Restrictions
+------------
+
+Cloudfusion does not set the correct permissions or time stamps. See the following projects if this is a requirement:
+
+:s3fs_: Amazon S3
+:s3fuse_: Google Storage
+:davfs2_: WebDAV (included in Linux standard distributions)
+
+.. _s3fs : https://github.com/s3fs-fuse/s3fs-fuse 
+.. _s3fuse : https://code.google.com/p/s3fuse
+.. _davfs2 : http://savannah.nongnu.org/projects/davfs2
+
+
+There is no automatic sync from the online store to local disk. But 
+
+ * you can manually refresh the directory to see changes
+ * with Dropbox, files are moved to /overwritten directory (online) instead of being overwritten accidentially
+There is no differential update, which means files are uploaded or downloaded as a whole.
+
+Dropbox has a maximum file upload size of 150MB and operations can at most work on 10.000 files and folders.
+It does not allow thumbs.db or .ds_store files.
+
+Sugarsync has a maximum file upload size of 100MB. It does not allow Outlook .pst, Quicken, and Quickbooks.
+
+
+Advanced Features
+-----------------
+
+Archiving Store
++++++++++++++++
+
+Uploading a large amount of small files is quite slow. Instead, try putting the line::
+
+    type = chunk
+
+into the [store] section of your configuration file. With this, CloudFusion will transparently store multiple small files 
+inside the same directory into single archives.
+Using this parameter with Dropbox also solves the problem, that Dropbox does not distinguish file names by case.
+I.e. Dropbox ignores the difference between "file", and "FILE", in contrast to Linux file systems, where these would be different files.
+This feature is still experimental, but increases upload rate for small files a lot. 
+A database is created in the temporary directory, which is necessary to access the files.
+This means, that you will only be able to see the files from this one CloudFusion installation.
+
+Caching
++++++++
+
+Statistics can be read from the files in *mnt/stats*. The file *stats* contains general performance statistics, 
+*errors* contains a summary of recently occured exceptions, and *notuploaded* contains files that are not yet completely uploaded to the remote storage provider.
+
+Caching
++++++++
+
+Advanced options can be set in the configuration file in order to set limits to how much or how long data is cached::
+
+   #Approximate cache size limit in MB;
+   cache_size = 5000
+   
+   # Hard cache size limit in MB. If this is exceeded, write operations are slowed down significantly,
+   # until enough space is free again. 
+   hard_cache_size_limit = 10000
+   
+   #How many seconds it may take until a file you just wrote is beginning to be uploaded, always counting from the time 
+   #you last modified the file.
+   #During this time you can delete the file again, without ever uploading the file.
+   #If your files change a lot, and you are in no hurry to upload them, set this to about 10 minutes or more (600).
+   cache = 60
+   
+   #How many seconds it may take for you to see changes made to your Dropbox account by another application.
+   #During this time you do not need to communicate with the store to see a directory listing, for instance.
+   #So listing directories is very fast. 
+   #Set this to 15, if you quickly want to see files uploaded by your mobile computer or handheld, when you refresh the directory.
+   #If you upload file through CloudFusion only, this can be set to ten minutes (600).
+   metadata_cache = 120
+   
+   #Identifier for persistent database. Use one id per cloud account to keep the cache after application shutdown.
+   #Default value is a random number.
+   cache_id = dropboxacc1
