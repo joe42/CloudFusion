@@ -44,14 +44,17 @@ class Store(object):
             raise InvalidPathValueError(path)
         
     def get_name(self):
+        ''':returns: the name of the service; i.e. Amazon S3, or Dropbox'''
         raise NotImplementedError()
     
     def get_file(self, path_to_file):
+        ''':returns: the data of the remote file at *path_to_file* as a string
+        :raises: NoSuchFilesytemObjectError if the object does not exist'''
         raise NotImplementedError()
     
     def store_file(self, path_to_file, dest_dir="/", remote_file_name = None, interrupt_event=None):
         """Store the local file *path_to_file* to directory *dest_dir* on the store.
-        :param remote_file_name: the file name on the store or the original file name if this parameter is None.
+        :param remote_file_name: the file name on the store; by default this is the original file name if this parameter is None.
         :param interrupt_event: (optional) If the value is not None, listen for an interrupt event with with interrupt_event.wait() \
         until the file has been stored. Abort the upload if interrupt_event.wait() returns.
         :returns: (optional) the date in seconds, when the file was updated"""
@@ -86,7 +89,7 @@ class Store(object):
         return self.get_overall_space()-self.get_used_space()
     
     def get_overall_space(self):
-        """:returns: overal space in bytes"""
+        """:returns: overall space in bytes"""
         raise NotImplementedError()
     
     def get_used_space(self):
@@ -94,6 +97,10 @@ class Store(object):
         raise NotImplementedError()
 
     def create_directory(self, directory):
+        '''Create the remote directory *directory*
+        :param directory: the absolute path name of the directory to create
+        :raises: AlreadyExistsError if the directory does already exist:
+        '''
         raise NotImplementedError()
         
     def duplicate(self, path_to_src, path_to_dest):
@@ -123,6 +130,7 @@ class Store(object):
                 pass
  
     def get_modified(self, path):
+        ''':returns: the time *path* was modified in seconds from the epoche'''
         resp = self.get_metadata(path)
         return resp['modified']  
     
@@ -131,10 +139,12 @@ class Store(object):
         raise NotImplementedError()
     
     def get_bytes(self, path):
+        ''':returns: the number of bytes of the file at *path*, or 0 if *path* is a directory'''
         resp = self.get_metadata(path)
         return resp['bytes']
     
     def exists(self, path):
+        ''':returns: True if a remote file or directory exists at *path*, and False otherwise'''
         try:
             self.get_metadata(path)
             return True
@@ -142,20 +152,22 @@ class Store(object):
             return False;
     
     def get_metadata(self, path):
-        """ This method is a hook that can be implemented by subclasses. 
+        """ This method is a hook that must be implemented by subclasses. 
         If it is implemented, the methods :meth:`~.exists`, :meth:`~.get_bytes`, :meth:`~.is_dir` work out of the box.
         
-        :returns: A dictionary with the keys 'modified', 'bytes' and 'is_dir' containing the corresponding metadata for *path*  
+        :returns: A dictionary with the keys 'modified', 'bytes' and 'is_dir' containing the corresponding metadata for *path*
+          
         The value for 'modified' is a date in seconds, stating when the object corresponding to *path* was last modified.  
         The value for 'bytes' is the number of bytes of the object corresponding to *path*. It is 0 if the object is a directory.
         The value for 'is_dir' is True if the object is a directory and False otherwise.
         
         :raises: NoSuchFilesytemObjectError if the object does not exist
-        :raises: NotImplementedError if the method is not implemented
         """
         raise NotImplementedError()
 
     def is_dir(self, path):
+        ''':returns: True if *path* is a remote file, and False if it is a remote directory
+        :raises: NoSuchFilesytemObjectError if the remote object does not exist'''
         resp = self.get_metadata(path)
         return resp['is_dir']
     
@@ -166,6 +178,7 @@ class Store(object):
         pass
     
     def reconnect(self):
+        '''Try to reconnect to the service'''
         pass
     
     def get_max_filesize(self):
