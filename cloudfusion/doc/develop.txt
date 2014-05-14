@@ -1,9 +1,334 @@
 Developers documentation
 ======================================
 
+Introduction
+---------------------
+
+It is quite easy to develop new extensions to CloudFusion, as this has been one of the design goals from the start.
+CloudFusion provides a generic test framework to verify the implementations in a continuous testing cycle,
+which prevents untested or error prone code to be delivered to the end user. 
+The framework can be used directly without the file system interface, 
+though using it through the file system interface has the advantage that it can be used by arbitrary programming languages.
+
+
+Using the API Directly
+-----------------------
+
+Here are some example scripts on how to use CloudFusion's internal API, if you do not want to use it from the file system interface.
+The implementations are interchangeable. If you want to use Amazon S3 instead of Dropbox,
+you only need to change the client and everything else stays the same. 
+The Amazon S3 example is a simple Hello World! example. 
+The WebDAV example shows how to use the BulkGetMetadata interface to quickly get the metadata of all file within a single directory.
+
+
+
+Extensive Example with Dropbox
+++++++++++++++++++++++++++++++++
+
+This is an extensive example script on how to use CloudFusion's internal API to access Dropbox.
+All methods except for get_config can also be used for the other Store implementations. 
+The wrapper MetadataCachingStore allows to cache metadata information like that returned from directory listings.
+The wrapper MultiprocessingCachingStore caches downloaded files to allow quick access without downloading them again,
+and allows asynchronous file upload. It waits some time before uploading the file.
+The subclass TransparentMultiprocessingCachingStore has the same abilities, but moreover, it offers information about
+which files are not uploaded yet, how much space the cache takes, which errors have occured etc.::
+
+    from cloudfusion.store.dropbox.dropbox_store import DropboxStore
+    from cloudfusion.store.metadata_caching_store import MetadataCachingStore
+    from cloudfusion.store.transparent_caching_store import TransparentMultiprocessingCachingStore
+    from StringIO import StringIO
+    
+    def main():
+        config = DropboxStore.get_config()
+        '''
+        {'consumer_key': 'eTBkeDNqM2cwc2lvZ2ow',
+         'consumer_secret': 'cWF4dHptbGswcWJmMGRs',
+         'password': '',
+         'root': 'dropbox',
+         'user': ''}
+        '''
+        #Add username/password
+        config['user'] = 'quirkquarks@web.de'
+        config['password'] = 'MySecret123$!'
+        
+        #Create the actual client
+        client = DropboxStore(config)
+        
+        #Get directory listing (may take a few seconds)
+        client.get_directory_listing("/")
+        '''
+        [u'/ordner', u'/neuer ordner', u'/test_4', u'/My DB']
+        '''
+        
+        client.get_metadata('/test_4')
+        '''
+        {'bytes': 91750400,
+         'is_dir': False,
+         'modified': 1390147673,
+         'path': u'/test_4'}
+        '''
+        
+        #Wrap with metadata caching store, to speed up consecutive calls to get_metadata, and get_directory_listing
+        client = MetadataCachingStore(client)
+        
+        #Wrap with multiprocessing caching store, for asynchronous uploads, and to speed up consecutive calls to get_file
+        #When given the same session id even after computer crash or restart, it will remember cached files,
+        #including files that still need to be uploaded
+        client = TransparentMultiprocessingCachingStore(client, cache_id='session1')
+        file_content = client.get_file('/test_4') #takes long since test_4 is large (90 MB)
+        file_content = client.get_file('/test_4') #very fast, since the file is cached on the local hard disk
+        
+        #Wrap file content into a file object
+        fileobj = StringIO() 
+        fileobj.write(file_content)
+        fileobj.seek(0) # set to beginning of file for further read operations
+        
+        client.store_fileobject(fileobj, '/test_5') # returns immediately, since uploads are now asynchronous
+        client.get_dirty_files() #list files that are not entirely uploaded
+        '''
+        ['/test_5']
+        '''
+        client.get_dirty_files() #call again after a few minutes, when the file is uploaded
+        '''
+        []
+        '''
+        client.get_cachesize() # get amount of cached data in MB
+        '''
+        91
+        '''
+        client.get_exception_stats() # get exceptions that occurred
+        '''
+        {}
+        '''
+        client.get_downloaded()      # get amount of downloaded data in MB (1000*1000 bytes)
+        client.get_download_rate()      # get amount of downloaded data im MBps (1000*1000 bytes per second)
+        '''
+        2.288234288664367
+        '''
+        client.get_upload_rate()
+        '''
+        0.22592696222436814
+        '''
+        
+        #Even though it is not yet uploaded, you can access the newly created file:
+        client.get_directory_listing("/")
+        [u'/ordner',
+         u'/neuer ordner',
+         '/test_5',
+         u'/test_4',
+         u'/My DB']
+    
+    if __name__ == '__main__':
+        main()
+
+
+WebDAV and the BulkGetMetadata Interface
++++++++++++++++++++++++++++++++++++++++++++++
+
+Webdav, Amazon, and Google Storage provide subclasses supporting the BulkGetMetadata interface with the method :meth:`cloudfusion.store.bulk_get_metadata.BulkGetMetadata.get_bulk_metadata`,
+i.e. :meth:`cloudfusion.store.webdav.bulk_get_metadata_webdav_store.BulkGetMetadataWebdavStore.get_bulk_metadata`. 
+These subclasses can be used to quickly get metadata of all files withing a directory (see Webdav example). 
+
+Here is an example for WebDAV::
+
+    from cloudfusion.store.webdav.webdav_store import WebdavStore # instead of WebdavStore we use BulkGetMetadataWebdavStore
+    from cloudfusion.store.webdav.bulk_get_metadata_webdav_store import BulkGetMetadataWebdavStore
+    from cloudfusion.store.metadata_caching_store import MetadataCachingStore
+    from cloudfusion.store.transparent_caching_store import TransparentMultiprocessingCachingStore
+    from StringIO import StringIO
+    
+    def main():
+        config = {}
+        #url can also contain an existing subfolder to access, i.e. https://webdav.mediencenter.t-online.de/myfolder
+        #url can also contain the port for the WebDAV server, i.e. https://webdav.mediencenter.t-online.de:443
+        config['url'] = 'https://webdav.mediencenter.t-online.de' 
+        config['user'] = 'joe42' #your account username (this might be your e-mail address for other providers)
+        config['password'] = 'MySecret!23$' #your account password
+        
+        #Create the actual client
+        client = BulkGetMetadataWebdavStore(config)
+        
+        #Get directory listing (may take a few seconds)
+        client.get_bulk_metadata("/")
+        '''
+        {u'/': {'bytes': 0, 'is_dir': True, 'modified': 1400688126, 'path': u'/'},
+         u'/My Folder': {'bytes': 0,
+          'is_dir': True,
+          'modified': 1400352031,
+          'path': u'/My Folder'},
+         u'/_tower of god 2_000_1#0#95#1': {'bytes': 143360,
+          'is_dir': False,
+          'modified': 1396871330,
+          'path': u'/_tower of god 2_000_1#0#95#1'},
+         u'/_tower of god 2_000_10#0#104#1': {'bytes': 143360,
+          'is_dir': False,
+          'modified': 1396871390,
+          'path': u'/_tower of god 2_000_10#0#104#1'},
+         u'/_tower of god_2_014_9#0#439#1': {'bytes': 143360,
+          'is_dir': False,
+          'modified': 1396956942,
+          'path': u'/_tower of god_2_014_9#0#439#1'},
+         u'/dir3': {'bytes': 0,
+          'is_dir': True,
+          'modified': 1400503492,
+          'path': u'/dir3'},
+         u'/dirr': {'bytes': 0,
+          'is_dir': True,
+          'modified': 1400503492,
+          'path': u'/dirr'}}
+        '''
+        #...
+        
+    if __name__ == '__main__':
+        main()
+
+
+Amazon S3 and Hello World!
+++++++++++++++++++++++++++++++++
+
+Here is an example for Amazon S3. The bucket will be created if it does not exist. 
+A bucket is similar to a subfolder, to which access with CloudFusion is restricted.  
+Key and Secret can be obtained from the console.aws.amazon.com/s3/home
+
+* Click on your name on the top left and select Security Credentials form the drop down menu.
+* Go to Access Keys and Generate New Access Keys to generate the new key pair.
+
+And here is the code::
+
+    from cloudfusion.store.s3.amazon_store import AmazonStore
+    from cloudfusion.store.metadata_caching_store import MetadataCachingStore
+    from cloudfusion.store.transparent_caching_store import TransparentMultiprocessingCachingStore
+    from StringIO import StringIO
+    
+    def main():
+        config = {}
+        config['consumer_key'] = 'FDS54548SDF8D2S311DF' 
+        config['consumer_secret'] = 'D370JKD=564++873ZHFD9FDKDD'
+        config['bucket_name'] = 'cloudfusion'
+        
+        #Create the actual client
+        client = AmazonStore(config)
+        
+        fileobj = StringIO()
+        fileobj.write('Hello World!')
+        fileobj.seek(0)
+        
+        client.store_fileobject(fileobj, '/hello world.txt') #stores the text to hello world.txt file and returns modified time stamp (which is not important here)
+        '''
+        1400093364
+        '''
+        client.get_file('/hello world.txt') # get the contents of the file:
+        '''
+        'Hello World!'
+        '''
+        
+        #Get directory listing 
+        client.get_directory_listing("/")
+        '''
+        [u'/chunk_IHvsqNQ=_-A==.tar',
+         u'/chunk_IHvsqNQ=_-Q==.tar',
+         u'/chunk_IHvsqNQ=_1A==.tar',
+         u'/chunk_IHvsqNQ=_1Q==.tar',
+         u'/chunk_IHvsqNQ=_1g==.tar',
+         u'/chunk_IHvsqNQ=_zw==.tar', 
+         u'/hello world.txt',
+         u'/My Amazon',
+         u'/Untitled Folder',
+         u'/directory',
+         u'/logs']
+
+        '''
+        #...
+        
+    if __name__ == '__main__':
+        main()
+
+
+
+Google Storage
+++++++++++++++++++++++++++++++++
+
+Here is an example for Google Storage. The bucket will be created if it does not exist. 
+A bucket is similar to a subfolder, to which access with CloudFusion is restricted.  
+Key and secret can be obtained from the developer's console:
+
+* Go to console.developers.google.com/project
+* Create a new project
+* Select Project dashboard on the left, which opens a new tab
+* Go to the new tab
+* Select Billing on the left to set up billing
+* Select Google Cloud Storage on the left 
+* Click on the button labeled "Make this my default project for interoperable storage access"
+* Click on Interoperable Access on the left 
+* Click Generate new key, to generate the new key pair
+
+And here is the code::
+
+    from cloudfusion.store.gs.google_store import GoogleStore   
+    from cloudfusion.store.metadata_caching_store import MetadataCachingStore
+    from cloudfusion.store.transparent_caching_store import TransparentMultiprocessingCachingStore
+    from StringIO import StringIO
+    
+    def main():
+        config = {}
+        config['consumer_key'] = 'FDS54548SDF8D2S311DF' 
+        config['consumer_secret'] = 'D370JKD=564++873ZHFD9FDKDD'
+        config['bucket_name'] = 'cloudfusion'
+        
+        #Create the actual client
+        client = GoogleStore(config)
+        
+        #Get directory listing (may take a few seconds)
+        client.get_directory_listing("/")
+        '''
+        [u'/neuer ordner', u'/test', u'/My Google']
+        '''
+        #...
+        
+    if __name__ == '__main__':
+        main()
+
+
+  
+
+Sugarsync
+++++++++++++++++++++++++++++++++
+
+Here is an example for accessing Sugarsync::
+
+    from cloudfusion.store.sugarsync.sugarsync_store import SugarsyncStore 
+    from cloudfusion.store.metadata_caching_store import MetadataCachingStore
+    from cloudfusion.store.transparent_caching_store import TransparentMultiprocessingCachingStore
+    from StringIO import StringIO
+    
+    def main():
+        config = SugarsyncStore.get_config()
+        config['user'] = 'me@emailserver.com' #your account username/e-mail address
+        config['password'] = 'MySecret!23$' #your account password
+        
+        #Create the actual client
+        client = SugarsyncStore(config)
+        
+        #Get directory listing (may take a few seconds)
+        client.get_directory_listing("/")
+        '''
+        [u'/ordner', u'/neuer ordner', u'/test_4', u'/My DB']
+        '''
+        #...
+        
+    if __name__ == '__main__':
+        main()
+
+
+
+
 Extensions
 ---------------------
 
+To support a new cloud storage or protocol, implement the central `Store Interface <https://github.com/joe42/CloudFusion/blob/master/cloudfusion/store/store.py>`_.
+This simple interface frees developers from having to program caching mechanisms, multithreading, or a file system interface,
+and allows the implementation to be integrated into CloudFusion's continuous testing cycle with automatically generated tests for quality assurance. 
+Please contact me on Github if you want to develop a new extension for CloudFusion. I would be glad to help you. 
 
 Documentation
 ------------------------
@@ -14,10 +339,12 @@ Requirements
 * python-sphinx
 * texlive-full for latex documentation
 
+Generate Documentation
++++++++++++++++++++++++
+
 To generate this documentation first call::
 
-    mkdir -p .cloudfusion/logs # work around for now
-	cloudfusion/doc/generate_modules.py -d cloudfusion/doc -f -m 5 cloudfusion main.py dropbox cloudfusion/fuse.py cloudfusion/conf cloudfusion/doc
+	cloudfusion/doc/generate_modules.py -d cloudfusion/doc -f -m 5 cloudfusion main.py dropbox cloudfusion/fuse.py cloudfusion/conf cloudfusion/doc third_party
 	
 * -d defines the destination directory for the documentation to generate
 * -f means to override existing files
@@ -38,15 +365,39 @@ Tests
 Requirements
 ++++++++++++++++++
 
-* nosy
 * nosetests
+* nosy
 
-First create configuration files for all services in "cloudfusion/config". For the Dropbox service, the configuration file needs to be called
-*dropbox_testing.ini*. For sugarsync the name is *sugarsync_testing.ini*. 
+First create configuration files for all services in "cloudfusion/config". The following table shows the names
+of the configuration files that are required for each service.
+
+:Dropbox: dropbox_testing.ini
+:SugarSync: sugarsync_testing.ini
+:Amazon S3: AmazonS3_testing.ini
+:Google Storage: Google_testing.ini
+:GMX: Webdav_gmx_testing.ini
+:T-Online: Webdav_tonline_testing.ini
 
 To run all tests call::
 
 	nosetests -v -s cloudfusion.tests.store_test
+
+Individual test can be run as well::
+   
+   #run only tests for Dropbox and Sugarsync:
+   nosetests -v -s cloudfusion.tests.store_test
+   
+   #run only tests for Amazon S3 and Google Storage:
+   nosetests -v -s cloudfusion.tests.store_test2
+   
+   #run only tests for GMX and T-Online:
+   nosetests -v -s cloudfusion.tests.store_test_webdav
+   
+   #run only tests for box.com and yandex.com:
+   nosetests -v -s cloudfusion.tests.store_test_webdav2
+   
+   #running several individual tests:
+   nosetests -v -s cloudfusion.tests.cache_test cloudfusion.tests.lru_cache_test  cloudfusion.tests.persistent_lru_cache_test
 
 -v and -s are optional flags for verbose output and output of anything printed to stdout.
 
