@@ -114,7 +114,7 @@ class CadaverWebDAVClient(object):
                 ret.append(directory+line)
         return ret
     
-    def _get_metadata(self, path):
+    def get_metadata(self, path):
         ''':raises: StoreAccessError if propfind does not return getcontentlength or getlastmodified property
         :raises: NoSuchFilesytemObjectError if path does not exist'''
         res = self._webdav_cmd('propget', path[1:])
@@ -131,7 +131,7 @@ class CadaverWebDAVClient(object):
                 mod_date =  int(time.mktime(cal.parse(mod_date)[0]))
                 ret["modified"] = mod_date
         if not ( 'is_dir' in ret and 'bytes' in ret and 'modified' in ret):
-            raise StoreAccessError("Error in _get_metadata(%s): \n no getcontentlength or getlastmodified property in %s" % (path, res))
+            raise StoreAccessError("Error in get_metadata(%s): \n no getcontentlength or getlastmodified property in %s" % (path, res))
         ret["path"] = path
         return ret
     
