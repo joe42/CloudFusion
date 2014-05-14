@@ -170,8 +170,6 @@ class TinyDAVClient(object):
         response = self._get_client().propfind(self.root + directory, depth=1)
         if response.content == '':
             return []
-        if not response in range(200, 300):
-            raise StoreAccessError(response.statusline, int(response))
         response_soup = BeautifulSoup(response.content)
         multi_response = response_soup.findAll(re.compile(r'(?i)[a-z0-9]:response'))
         ret = []
