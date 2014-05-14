@@ -182,3 +182,44 @@ class TinyDAVClient(object):
             if path != self.root + directory:
                 ret.append( path )
         return ret 
+    
+    
+    @retry((Exception), tries=1, delay=0)
+    def get_bulk_metadata(self, directory):
+        ''':returns: A dictionary mapping the path of every file object in, and including *directory* to a dictionary with the keys 
+        'modified', 'bytes' and 'is_dir' containing the corresponding metadata for the file object.
+        The value for 'modified' is a date in seconds, stating when the file object was last modified.  
+        The value for 'bytes' is the number of bytes of the file object. It is 0 if the object is a directory.
+        The value for 'is_dir' is True if the file object is a directory and False otherwise.
+        
+        :raises: NoSuchFilesytemObjectError if the directory does not exist
+        '''
+        response = self._get_client().propfind(self.root + directory, depth=1)
+        response_soup = BeautifulSoup(response.content)
+        multi_response = response_soup.findAll(re.compile(r'(?i)[a-z0-9]:response'))
+        ret = {}
+        for response in multi_response:
+            path = response.find(re.compile(r'(?i)[a-z0-9]:href')).text
+            path = unquote(path)
+            item = {}
+            if path.endswith('/') and path != '/':
+                path = path[:-1]
+            item["path"] = path
+            mod_date = response.find(re.compile(r'(?i)[a-z0-9]:getlastmodified')).text
+            cal = pdt.Calendar()
+            mod_date =  int(time.mktime(cal.parse(mod_date)[0]))
+            item["modified"] = mod_date
+            resource_type = response.find(re.compile(r'(?i)[a-z0-9]:resourcetype'))
+            if resource_type.findChild() == None:
+                item["is_dir"] = False #GMX Mediacenter does not necessarily return a type in resourcetype tag, so we just assume it is a file
+            else: 
+                item["is_dir"] = resource_type.findChild().name.split(':')[-1] == 'collection'
+            if not item["is_dir"]:
+                item["bytes"] = int(response.find(re.compile(r'(?i)[a-z0-9]:getcontentlength')).text)
+            else:
+                item["bytes"] = 0
+            if not ( 'is_dir' in item and 'bytes' in item and 'modified' in item):
+                raise StoreAccessError("Error in get_metadata(%s): \n no getcontentlength or getlastmodified property in %s" % (path, response))
+            ret[path] = item 
+
+        return ret 

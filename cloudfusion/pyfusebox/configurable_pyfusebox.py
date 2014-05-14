@@ -196,8 +196,8 @@ class ConfigurablePyFuseBox(PyFuseBox):
                 from cloudfusion.store.s3.bulk_get_metadata_amazon_store import BulkGetMetadataAmazonStore
                 store = BulkGetMetadataAmazonStore(auth)
             elif service.lower() == "webdav" or service.find('dav') >= 0:
-                from cloudfusion.store.webdav.webdav_store import WebdavStore
-                store = WebdavStore(auth)
+                from cloudfusion.store.webdav.bulk_get_metadata_webdav_store import BulkGetMetadataWebdavStore
+                store = BulkGetMetadataWebdavStore(auth)
             else: # default
                 from cloudfusion.store.dropbox.dropbox_store import DropboxStore
                 store = DropboxStore(auth)
