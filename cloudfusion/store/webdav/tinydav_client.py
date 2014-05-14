@@ -88,7 +88,7 @@ class TinyDAVClient(object):
         else:
             ret["bytes"] = 0
         if not ( 'is_dir' in ret and 'bytes' in ret and 'modified' in ret):
-            raise StoreAccessError("Error in _get_metadata(%s): \n no getcontentlength or getlastmodified property in %s" % (path, response))
+            raise StoreAccessError("Error in get_metadata(%s): \n no getcontentlength or getlastmodified property in %s" % (path, response))
 
         return ret 
     
