@@ -3,7 +3,8 @@ Created on 08.04.2011
 
 @author: joe
 '''
-
+from cloudfusion.store.store import NoSuchFilesytemObjectError, StoreAccessError,\
+    AlreadyExistsError 
 import time
 from cloudfusion.store.store import *
 import logging
@@ -121,9 +122,11 @@ class WebdavStore(Store):
         return self.tinyclient.get_directory_listing(directory)
     
     def _handle_error(self, error, method_name, remaining_tries, *args, **kwargs):
-        if isinstance(error, NoSuchFilesytemObjectError):
+        if isinstance(error, NoSuchFilesytemObjectError) or \
+            isinstance(error, AlreadyExistsError) or \
+            isinstance(error, StoreAccessError):
             self.logger.error("Error could not be handled: %s", error)
-            raise error # do not retry (error cannot be handled)
+            raise error
         if remaining_tries == 0: # throw error after last try 
             raise StoreAccessError(str(error), 0) 
         return False
