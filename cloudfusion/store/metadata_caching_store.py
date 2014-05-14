@@ -304,8 +304,8 @@ class MetadataCachingStore(Store):
                 self.entries.write(path, Entry())
         return self.entries.exists(path)
     
-    def _get_metadata(self, path):
-        self.logger.debug("meta cache _get_metadata %s", path)
+    def get_metadata(self, path):
+        self.logger.debug("meta cache get_metadata %s", path)
         if self.entries.exists(path) and self.entries.is_expired(path):
             self.logger.debug("1.1")
             self.entries.delete(path)
@@ -317,8 +317,8 @@ class MetadataCachingStore(Store):
             self.logger.debug("entry exists")
             if not None in [entry.is_dir, entry.modified, entry.size]:
                 return {'is_dir': entry.is_dir, 'modified': entry.modified, 'bytes': entry.size}
-        self.logger.debug("meta cache _get_metadata entry does not exist or is expired")
-        metadata = self.store._get_metadata(path)
+        self.logger.debug("meta cache get_metadata entry does not exist or is expired")
+        metadata = self.store.get_metadata(path)
         entry = self._prepare_entry(path, metadata)
         self.entries.write(path, entry)
         if not entry.is_dir and isinstance(self.store, BulkGetMetadata):

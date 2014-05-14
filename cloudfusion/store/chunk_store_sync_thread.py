@@ -454,7 +454,7 @@ class ChunkStoreSyncThread(object):
                 readers_to_be_removed.append(reader)
             if reader.is_successful():
                 content = reader.get_result() # block until read is done
-                self.refresh_cache_entry(reader.path, content, self.store._get_metadata(reader.path)['modified']) #[shares_resource: write self.entries]
+                self.refresh_cache_entry(reader.path, content, self.store.get_metadata(reader.path)['modified']) #[shares_resource: write self.entries]
                 self.stats.add_finished_worker(reader)
         for reader in readers_to_be_removed:
             self.readers.remove(reader)

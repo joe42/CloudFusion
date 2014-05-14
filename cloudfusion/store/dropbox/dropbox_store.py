@@ -509,7 +509,7 @@ class DropboxStore(Store):
         self.logger.error(log)
         
     @retry((Exception,RESTSocketError))
-    def _get_metadata(self, path):
+    def get_metadata(self, path):
         self.logger.debug("getting metadata for %s", path)
         self._raise_error_if_invalid_path(path)
         if path == "/": # workaraund for root metadata
@@ -524,10 +524,10 @@ class DropboxStore(Store):
         except rest.ErrorResponse as resp:
             if resp.status == HTTP_STATUS.NOT_FOUND:
                 msg = None
-                self._log_http_error("_get_metadata", path, resp, msg)
+                self._log_http_error("get_metadata", path, resp, msg)
                 HTTP_STATUS.generate_exception(resp.status, str(resp))
             elif resp.status != 200:
-                self._log_http_error("_get_metadata", path, resp)
+                self._log_http_error("get_metadata", path, resp)
                 HTTP_STATUS.generate_exception(resp.status, str(resp))
         object_is_deleted = 'is_deleted' in resp and resp['is_deleted']
         if object_is_deleted:

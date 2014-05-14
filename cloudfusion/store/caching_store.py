@@ -27,7 +27,7 @@ class MultiprocessingCachingStore(Store):
         :param cache_size_in_mb: Approximate limit of the cache in MB.
         :param cache_id: Serves as identifier for a persistent cache instance. """ 
         #prevent simultaneous access to store (synchronous use of __deepcopy__ by _store SyncThread and a different method): 
-        self.store = SynchronizeProxy(store, private_methods_to_synchronize=['_get_metadata', '__deepcopy__'])
+        self.store = SynchronizeProxy(store, private_methods_to_synchronize=['__deepcopy__'])
         if cache_id == None:
             cache_id = str(random.random()) 
         self.logger = logging.getLogger(self.get_logging_handler())
@@ -113,7 +113,7 @@ class MultiprocessingCachingStore(Store):
     def _get_actual_modified_date(self, path):
         ret = 0
         if self.store.exists(path):
-            ret = self.store._get_metadata(path)['modified']
+            ret = self.store.get_metadata(path)['modified']
         return ret
                 
     def store_fileobject(self, fileobject, path):
@@ -181,7 +181,7 @@ class MultiprocessingCachingStore(Store):
     def get_modified(self, path):
         if self.entries.exists(path):
             return self.entries.get_modified(path)
-        return self._get_metadata(path)["modified"]
+        return self.get_metadata(path)["modified"]
     
     def get_directory_listing(self, directory):
         #merge cached files and entries from store into set with unique entries
@@ -196,18 +196,18 @@ class MultiprocessingCachingStore(Store):
     def get_bytes(self, path):
         if self.entries.exists(path):
             return len(self.entries.peek(path))
-        return self._get_metadata(path)['bytes']
+        return self.get_metadata(path)['bytes']
     
     def exists(self, path):
         if self.entries.exists(path):
             return True
         try:
-            self._get_metadata(path)
+            self.get_metadata(path)
             return True
         except NoSuchFilesytemObjectError:
             return False
     
-    def _get_metadata(self, path):
+    def get_metadata(self, path):
         with self.sync_thread.protect_cache_from_write_access: # think about performance issues here, since this is called all the time
             metadata = {}
             if self.entries.exists(path):
@@ -215,13 +215,13 @@ class MultiprocessingCachingStore(Store):
                 metadata['bytes'] = len(self.entries.peek(path))
                 metadata['is_dir'] = False
             else:
-                metadata = self.store._get_metadata(path)
+                metadata = self.store.get_metadata(path)
             return metadata
 
     def is_dir(self, path):
         if self.entries.exists(path):
             return False
-        return self._get_metadata(path)["is_dir"]
+        return self.get_metadata(path)["is_dir"]
     
     def flush(self):
         self.logger.debug("flushing")

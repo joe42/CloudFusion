@@ -123,7 +123,7 @@ class Store(object):
                 pass
  
     def get_modified(self, path):
-        resp = self._get_metadata(path)
+        resp = self.get_metadata(path)
         return resp['modified']  
     
     def get_directory_listing(self, directory):
@@ -131,17 +131,17 @@ class Store(object):
         raise NotImplementedError()
     
     def get_bytes(self, path):
-        resp = self._get_metadata(path)
+        resp = self.get_metadata(path)
         return resp['bytes']
     
     def exists(self, path):
         try:
-            self._get_metadata(path)
+            self.get_metadata(path)
             return True
         except NoSuchFilesytemObjectError:
             return False;
     
-    def _get_metadata(self, path):
+    def get_metadata(self, path):
         """ This method is a hook that can be implemented by subclasses. 
         If it is implemented, the methods :meth:`~.exists`, :meth:`~.get_bytes`, :meth:`~.is_dir` work out of the box.
         
@@ -156,7 +156,7 @@ class Store(object):
         raise NotImplementedError()
 
     def is_dir(self, path):
-        resp = self._get_metadata(path)
+        resp = self.get_metadata(path)
         return resp['is_dir']
     
     def get_logging_handler(self):

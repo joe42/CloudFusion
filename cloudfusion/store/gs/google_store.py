@@ -224,7 +224,7 @@ class GoogleStore(Store):
         return False
         
     @retry((Exception))
-    def _get_metadata(self, path):
+    def get_metadata(self, path):
         self.logger.debug("getting metadata for %s", path)
         self._raise_error_if_invalid_path(path)
         if path == "/": # workaraund for root metadata
@@ -238,7 +238,7 @@ class GoogleStore(Store):
         if k == None:
             k = self.bucket.get_key(path[1:]+'/')
         if k == None:
-            self.logger.debug('_get_metadata(%s) does not exist' % path)
+            self.logger.debug('get_metadata(%s) does not exist' % path)
             raise NoSuchFilesytemObjectError('%s does not exist' % path)
         ret = {}
         ret["bytes"] = k.size

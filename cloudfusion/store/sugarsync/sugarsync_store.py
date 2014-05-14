@@ -404,7 +404,7 @@ class SugarsyncStore(Store):
         else:
             #if dest exists remove
             try:
-                meta = self._get_metadata(path_to_dest)
+                meta = self.get_metadata(path_to_dest)
             except:
                 meta = None
             if meta: #object exists
@@ -479,7 +479,7 @@ class SugarsyncStore(Store):
     
     # worst case: can break backups if it fails
     @retry((Exception,socket.error))
-    def _get_metadata(self, path):
+    def get_metadata(self, path):
         self.logger.debug("getting metadata for %s", path)
         self._raise_error_if_invalid_path(path)
         if path == "/": # workaraund for root metadata necessary for sugarsync?

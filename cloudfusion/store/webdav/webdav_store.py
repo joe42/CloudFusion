@@ -120,7 +120,7 @@ class WebdavStore(Store):
         return False
         
     @retry((Exception), tries=14, delay=0.1, backoff=2)
-    def _get_metadata(self, path):
+    def get_metadata(self, path):
         self.logger.debug("getting metadata for %s", path)
         return self.tinyclient.get_metadata(path)
         

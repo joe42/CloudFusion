@@ -24,7 +24,7 @@ class ChunkMultiprocessingCachingStore(Store):
         :param hard_cache_size_limit_in_mb: Hard limit of the cache in MB, exceeding this limit should slow down write operations.
         :param cache_id: Serves as identifier for a persistent cache instance. """ 
         #prevent simultaneous access to store (synchronous use of __deepcopy__ by _store SyncThread and a different method): 
-        self.store = SynchronizeProxy(store, private_methods_to_synchronize=['_get_metadata', '__deepcopy__'])
+        self.store = SynchronizeProxy(store, private_methods_to_synchronize=['__deepcopy__'])
         self.max_archive_size_in_mb = max_archive_size_in_mb
         if cache_id == None:
             cache_id = str(random.random()) 
@@ -145,8 +145,8 @@ class ChunkMultiprocessingCachingStore(Store):
         chunk_id = self.sync_thread.chunk_mapper.get_chunk_uuid(path)
         #print "get chunk id2"
         if not chunk_id:
-            return self._get_metadata(path)["modified"] #may be a directory
-        return self._get_metadata(get_parent_dir(path)+chunk_id)["modified"]
+            return self.get_metadata(path)["modified"] #may be a directory
+        return self.get_metadata(get_parent_dir(path)+chunk_id)["modified"]
     
     def get_directory_listing(self, directory):
         #merge cached files and entries from store into set with unique entries
@@ -172,25 +172,25 @@ class ChunkMultiprocessingCachingStore(Store):
             if self.sync_thread.chunk_mapper.get_chunk_uuid(path):
                 self._refresh_cache(path)
             else:
-                return self._get_metadata(path)['bytes'] # assume that it is a directory, since it is not a file in the mapping or cache
+                return self.get_metadata(path)['bytes'] # assume that it is a directory, since it is not a file in the mapping or cache
         return len(self.entries.peek(path))
         
     def exists(self, path):##
         if self.entries.exists(path) or self.sync_thread.chunk_mapper.get_chunk_uuid(path):
             return True
         try:
-            self._get_metadata(path)
+            self.get_metadata(path)
             return True
         except NoSuchFilesytemObjectError,e:
             #print "error:"+str(e)
             return False
     
-    def _get_metadata(self, path): 
+    def get_metadata(self, path): 
         with self.sync_thread.protect_cache_from_write_access: # think about performance issues here, since this is called all the time
             metadata = {}
             if not self.entries.exists(path):
                 if not self.sync_thread.chunk_mapper.get_chunk_uuid(path):
-                    return self.store._get_metadata(path) # cannot assume that it is a directory, since the filesystem calls this on non existing files that are to be created
+                    return self.store.get_metadata(path) # cannot assume that it is a directory, since the filesystem calls this on non existing files that are to be created
                 self._refresh_cache(path)    
             metadata['modified'] = self.entries.get_modified(path)
             metadata['bytes'] = len(self.entries.peek(path))
@@ -200,7 +200,7 @@ class ChunkMultiprocessingCachingStore(Store):
     def is_dir(self, path):
         if self.entries.exists(path) or self.sync_thread.chunk_mapper.get_chunk_uuid(path):
             return False
-        return self._get_metadata(path)['is_dir']# we could also assume that it is a directory, since it is not a file in the mapping or cache
+        return self.get_metadata(path)['is_dir']# we could also assume that it is a directory, since it is not a file in the mapping or cache
     
     def flush(self):
         self.logger.debug("flushing")
