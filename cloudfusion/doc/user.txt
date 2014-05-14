@@ -42,8 +42,8 @@ Name            WebDAV URL                                   Free Storage  Furth
 ==============  ============================================ ============  ======================================================
 T-Online_       https://webdav.mediencenter.t-online.de      25 GB         German Provider                           
 4shared_        https://webdav.4shared.com                   15 GB         3 GB daily traffic, 30 GB monthly, cannot delete directories                            
+Box.com_        https://dav.box.com/dav                      10 GB         
 GMX_            https://webdav.mc.gmx.net                    2  GB         German Provider     
-Box.com_        https://dav.box.com/dav                      None          WebDAV access only with paid account
 OneDrive_       see: blog.lazut.in_                          7  GB         Does not seem to work anymore
 ==============  ============================================ ============  ======================================================
 
