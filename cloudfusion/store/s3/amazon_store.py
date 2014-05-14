@@ -27,6 +27,20 @@ class AmazonStore(Store):
     file objects with content type "application/x-directory" or file objects ending with _$folder$ are recognized as directories, too.'''
     
     def __init__(self, config):
+        '''*config* is a dictionary with the keys consumer_key (access_key_id), consumer_secret (secret_access_key), and bucket_name. For instance::
+
+                config['consumer_key'] = 'FDS54548SDF8D2S311DF' 
+                config['consumer_secret'] = 'D370JKD=564++873ZHFD9FDKDD'
+                config['bucket_name'] = 'cloudfusion'
+                
+            The bucket will be created if it does not exist. A bucket is similar to a subfolder,
+            to which access with CloudFusion is restricted.         
+            Key and Secret can be obtained from the console.aws.amazon.com/s3/home
+            
+            * Click on your name on the top left and select Security Credentials form the drop down menu.
+            * Go to Access Keys and Generate New Access Keys to generate the new key pair.
+            
+        :param config: dictionary with key value pairs'''
         super(AmazonStore, self).__init__()
         self.name = 'amazon'
         self._logging_handler = self.name

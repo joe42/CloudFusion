@@ -94,6 +94,29 @@ class HTTP_STATUS(object):
 
 class DropboxStore(Store):
     def __init__(self, config):
+        '''*config* can be obtained from the function :func:`cloudfusion.store.dropbox.dropbox_store.DropboxStore.get_config`,
+        but you need to add user and password::
+        
+            config = DropboxStore.get_config()
+            config['user'] = 'me@emailserver.com' #your account username/e-mail address
+            config['password'] = 'MySecret!23$' #your account password
+        
+        You may add a cache id, so that you can continue previous sessions. If you use the same cache id in a later session, 
+        the store will remember some metadata and does not need to rely on auto-login (since the auto-login feature often breaks because Dropbox changes their interface)::
+        
+            config['cache_id'] = 'dropbox_db' 
+             
+        You can also choose between full access to dropbox or to a single subfolder by setting the value for 'root'::
+        
+            config['root'] = 'dropbox' #for full dropbox access (this is the default) or 
+            config['root'] = 'app_folder' #for restricted access to one subfolder
+        
+        Or you can use a configuration file that already has password and username set by specifying a path::
+        
+            path_to_my_config_file = '/home/joe/MyDropbox.ini'       
+            config = DropboxStore.get_config(path_to_my_config_file)
+        
+        :param config: dictionary with key value pairs'''
         self._logging_handler = 'dropbox'
                 #TODO: check if is filehandler
         self.logger = logging.getLogger(self._logging_handler)

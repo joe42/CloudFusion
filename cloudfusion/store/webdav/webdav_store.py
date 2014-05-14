@@ -14,6 +14,15 @@ from cloudfusion.store.webdav.tinydav_client import TinyDAVClient
 
 class WebdavStore(Store):
     def __init__(self, config):
+        '''*config* is a dictionary with the keys user, password, and URL. For instance::
+        
+                #url can also contain an existing subfolder to access, i.e. https://webdav.mediencenter.t-online.de/myfolder
+                #url can also contain the port for the WebDAV server, i.e. https://webdav.mediencenter.t-online.de:443
+                config['url'] = 'https://webdav.mediencenter.t-online.de' 
+                config['user'] = 'me@emailserver.com' #your account username/e-mail address
+                config['password'] = 'MySecret!23$' #your account password
+
+        :param config: dictionary with key value pairs'''
         super(WebdavStore, self).__init__()
         self.name = 'webdav'
         self._logging_handler = self.name

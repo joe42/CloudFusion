@@ -29,6 +29,27 @@ class GoogleStore(Store):
     file objects with content type "application/x-directory" or file objects ending with _$folder$ are recognized as directories, too.'''
     
     def __init__(self, config):
+        '''*config* is a dictionary with the keys consumer_key (access_key_id), consumer_secret (secret_access_key), and bucket_name. For instance::
+        
+                config['consumer_key'] = 'FDS54548SDF8D2S311DF' 
+                config['consumer_secret'] = 'D370JKD=564++873ZHFD9FDKDD'
+                config['bucket_name'] = 'cloudfusion'
+                
+            The bucket will be created if it does not exist. A bucket is similar to a subfolder,
+            to which access with CloudFusion is restricted.         
+            Key and secret can be obtained from the developer's console:
+            
+            * Go to console.developers.google.com/project
+            * Create a new project
+            * Select Project dashboard on the left, which opens a new tab
+            * Go to the new tab
+            * Select Billing on the left to set up billing
+            * Select Google Cloud Storage on the left 
+            * Click on the button labeled "Make this my default project for interoperable storage access"
+            * Click on Interoperable Access on the left 
+            * Click Generate new key, to generate the new key pair
+            
+        :param config: dictionary with key value pairs'''
         super(GoogleStore, self).__init__()
         self.name = 'google'
         self._logging_handler = self.name

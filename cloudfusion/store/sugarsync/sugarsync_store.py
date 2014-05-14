@@ -114,6 +114,19 @@ def wait_for_event(event):
  
 class SugarsyncStore(Store):
     def __init__(self, config):
+        '''*config* can be obtained from the function :func:`cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore.get_config`,
+        but you need to add user and password::
+        
+            config = SugarsyncStore.get_config()
+            config['user'] = 'me@emailserver.com' #your account username/e-mail address
+            config['password'] = 'MySecret!23$' #your account password
+        
+        Or you can use a configuration file that already has password and username set by specifying a path::
+        
+            path_to_my_config_file = '/home/joe/MySugarsync.ini'       
+            config = get_config(path_to_my_config_file)
+        
+        :param config: dictionary with key value pairs'''
         #self.dir_listing_cache = {}
         self._logging_handler = 'sugarsync'
         self.logger = logging.getLogger(self._logging_handler)
