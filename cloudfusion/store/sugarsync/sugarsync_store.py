@@ -133,6 +133,19 @@ class SugarsyncStore(Store):
             self.root_folders['/'+folder] = syncfolders[folder]
         super(SugarsyncStore, self).__init__() 
         
+    @staticmethod
+    def get_config(self, path_to_configfile=None):
+        '''Get initial sugarsync configuration to initialize :class:`cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore`
+        :param path_to_configfile: path to a configuration file or None, which will use the default configuration file'''
+        from ConfigParser import SafeConfigParser
+        import cloudfusion
+        config = SafeConfigParser()
+        if not path_to_configfile:
+            path_to_configfile = os.path.dirname(cloudfusion.__file__)+"/config/Sugarsync.ini"
+        config_file = open(path_to_configfile, "r")
+        config.readfp(config_file)
+        return dict(config.items('auth'))
+        
     def get_name(self):
         self.logger.debug("getting name")
         return "Sugarsync"
