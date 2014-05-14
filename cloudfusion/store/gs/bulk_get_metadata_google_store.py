@@ -21,25 +21,19 @@ class BulkGetMetadataGoogleStore(GoogleStore, BulkGetMetadata):
         """
         ret = {}
         directory += '/' if directory != '/' else ''
-        print "bulk list "+repr(directory[1:])
         listing = self.bucket.list(directory[1:], "/")
-        print "listing1 "+repr(listing)
-        try:
-            for obj in listing:
-                path = '/'+obj.name if obj.name[-1] != '/' else '/'+obj.name[:-1]
-                metadata = {}
-                cal = pdt.Calendar()
-                if self._is_dir(obj):
-                    metadata["is_dir"] = self._is_dir(obj)
-                    metadata["modified"] = time.time()
-                    metadata["bytes"] = 0
-                else:
-                    mod_date = int(time.mktime(cal.parse(obj.last_modified)[0]))
-                    metadata["modified"] = mod_date
-                    metadata["is_dir"] = self._is_dir(obj)
-                    metadata["bytes"] = obj.size
-                ret[path] = metadata
-        except Exception,e:
-            print "error: "+repr(e)    
-        print "listing "+repr(ret)
+        for obj in listing:
+            path = '/'+obj.name if obj.name[-1] != '/' else '/'+obj.name[:-1]
+            metadata = {}
+            cal = pdt.Calendar()
+            if self._is_dir(obj):
+                metadata["is_dir"] = self._is_dir(obj)
+                metadata["modified"] = time.time()
+                metadata["bytes"] = 0
+            else:
+                mod_date = int(time.mktime(cal.parse(obj.last_modified)[0]))
+                metadata["modified"] = mod_date
+                metadata["is_dir"] = self._is_dir(obj)
+                metadata["bytes"] = obj.size
+            ret[path] = metadata
         return ret
