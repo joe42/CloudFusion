@@ -55,12 +55,12 @@ Copy the Google Storage configuration file located at **cloudfusion/cloudfusion/
 Add your access_key_id, and secret_access_key to the configuration file. Details on obtaining these are inside the configuration file.
 
 Amazon S3
-++++++++++++++
++++++++++
 Copy the Amazon S3 configuration file located at **cloudfusion/cloudfusion/config/AmazonS3.ini** to your home directory.
 Add your access_key_id, and secret_access_key to the configuration file. Details on obtaining these are inside the configuration file.
 
 WebDAV
-++++++++++++++
+++++++
 Copy the WebDAV configuration file located at **cloudfusion/cloudfusion/config/Webdav.ini** to your home directory.
 Add the URL of the server, your username, and your  password to the configuration file. 
 Here some information about WebDAV providers:
@@ -131,7 +131,10 @@ Sugarsync has a maximum file upload size of 100MB. It does not allow Outlook .ps
 
 
 Advanced Features
-------------------
+-----------------
+
+Archiving Store
++++++++++++++++
 
 Uploading a large amount of small files is quite slow. Instead, try putting the line::
 
@@ -139,11 +142,46 @@ Uploading a large amount of small files is quite slow. Instead, try putting the 
 
 into the [store] section of your configuration file. With this, CloudFusion will transparently store multiple small files 
 inside the same directory into single archives.
-Using this parameter with Dropbox solves the problem, that Dropbox does not distinguish file names by case.
-I.e. the difference between "file", and "FILE" is ignored, in contrast to Linux file systems, where these would be different files.
+Using this parameter with Dropbox also solves the problem, that Dropbox does not distinguish file names by case.
+I.e. Dropbox ignores the difference between "file", and "FILE", in contrast to Linux file systems, where these would be different files.
 This feature is still experimental, but increases upload rate for small files a lot. 
 A database is created in the temporary directory, which is necessary to access the files.
 This means, that you will only be able to see the files from this one CloudFusion installation.
+
+Statistics
+++++++++++
+
+Statistics can be read from the files in *mnt/stats*. The file *stats* contains general performance statistics, 
+*errors* contains a summary of recently occured exceptions, and *notuploaded* contains files that are not yet completely uploaded to the remote storage provider.
+
+Caching
++++++++
+
+Advanced options can be set in the configuration file in order to set limits to how much or how long data is cached::
+
+   #Approximate cache size limit in MB;
+   cache_size = 5000
+   
+   # Hard cache size limit in MB. If this is exceeded, write operations are slowed down significantly,
+   # until enough space is free again. 
+   hard_cache_size_limit = 10000
+   
+   #How many seconds it may take until a file you just wrote is beginning to be uploaded, always counting from the time 
+   #you last modified the file.
+   #During this time you can delete the file again, without ever uploading the file.
+   #If your files change a lot, and you are in no hurry to upload them, set this to about 10 minutes or more (600).
+   cache = 60
+   
+   #How many seconds it may take for you to see changes made to your Dropbox account by another application.
+   #During this time you do not need to communicate with the store to see a directory listing, for instance.
+   #So listing directories is very fast. 
+   #Set this to 15, if you quickly want to see files uploaded by your mobile computer or handheld, when you refresh the directory.
+   #If you upload file through CloudFusion only, this can be set to ten minutes (600).
+   metadata_cache = 120
+   
+   #Identifier for persistent database. Use one id per cloud account to keep the cache after application shutdown.
+   #Default value is a random number.
+   cache_id = dropboxacc1
 
 
 
