@@ -9,8 +9,6 @@ import tempfile
 from ConfigParser import SafeConfigParser
 import cloudfusion
 from cloudfusion.store.chunk_caching_store import ChunkMultiprocessingCachingStore
-from cloudfusion.store.s3.amazon_store import AmazonStore
-from cloudfusion.store.gs.google_store import GoogleStore
 from cloudfusion.store.webdav.webdav_store import WebdavStore
 
 LOCAL_TESTFILE_PATH = "cloudfusion/tests/testfile"
@@ -71,11 +69,11 @@ io_apis = []
 def setUp():
     webdav_config1 = get_webdav_gmx_config()
     ##webdav_config2 = get_webdav_fourshared_config() # cannot delete directory at all (server says action is successful even though it is not)
-    ##webdav_config3 = get_webdav_box_config()        # seems very buggy; often authorization does not work
+    webdav_config3 = get_webdav_box_config()        # seems very buggy; often authorization does not work
     webdav_config4 = get_webdav_tonline_config()
     io_apis.append( WebdavStore(webdav_config1) )
     ##io_apis.append( WebdavStore(webdav_config2) )
-    ##io_apis.append( WebdavStore(webdav_config3) )
+    io_apis.append( WebdavStore(webdav_config3) )
     io_apis.append( WebdavStore(webdav_config4) )
     time.sleep(10)
     for io_api in io_apis:

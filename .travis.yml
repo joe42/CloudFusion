@@ -12,7 +12,7 @@ branches:
   - development
 env:
   global:
-  #usr,pw,gh_token, s3_id&key, gs_id&key, webdav_usr&pwd
+  #usr,pw,gh_token, s3_id&key, gs_id&key, webdav_usr&pwd, webdav2_usr&pwd, webdav3_usr&pwd
   - secure: KlCTerTwn7SZnW8z7wcv0NW2LbVt63HqPddnt6NJEqI0G2VzZbk3HNeWehcll3yPkavE2rQfa58TIN4Tkn03lbDWeTqtPdHD+VR3xkrGhrC672n9YEoM1rgaY5dAmhqbuSXB6EjNwXr/Ry91HtFwC+m0gcvZ1lnnDLoaosV6SYU=
   - secure: cyBcqoKCisTGGsgPp1F04VYdJTu7d3U5ma4ieP2yfFwIlKLSNg2qtZNf7tMAHYm4cz+dpnksVd54LWjA7XHODmMrBRhp4RwhKDo8835hx2q/KAKCkLD79gXwUVE42QqfyLEYAxBpRe3+ASKtJRDOhdVF6f/hK6XSSo5YcEaWQ4w=
   - secure: SQQVDBOVZ1Slwnj1yaEh6gpIM+Pdi03b81k+fl+AWwhmVDB1lTXBb3PPI+V8lvLSN3eia9xUIaVOF5B+/wOWbxwR17plD1mD/sVaZn/GkSJtiKLTr+h7goVcFff2toahtuPYg8IhLnaWgUpB7Xqvr739peloCKBRT1HmNuNf2mg=
@@ -24,4 +24,6 @@ env:
   - secure: Ud3JlFbRY5zZZ7Njk0B1NV0jSp91g5P2IuDkjkRWe8RGtdhnYnXr2xZfQMlYQ/N/erqyn2rTYjT3CSGf+3s7525HRqvi9VnJon5oy5QCQ4viWEvGg5BcSra5IVLVPcdTVl9AfT5g475IBpc7QcULUJBgRE7C1nJ6kZvSTPrzjIQ=
   - secure: MXePlDZZ4NmJzCtLS6Ck8gBLJN9zllIAJ/ULvgojqBfzHBDKVZii2AHz/WIBu5gk+8Bs9Fd3BPAsGpWWLaqLyDLyDGO+dP/x4xvp0eOg0A/lLqOaBkGktuCPOyfDVupFZnhgQaAOG09EY5C7j0BCZyX+zF4VMWBWZqa37XqcHSc=
   - secure: cyQmi1UwNYLTI4qFfhREsGyG2hs8MuENitQ+pAZzsq+rzVRLJbyzyRgj+NH8ORNCMJxSe7frvtRo4C6qTGZsB6FSoSh3diN0sxM73PNx6v2q82e1Z9yPPyZVI77e/0WLjHwhIO1aCxzbfTzMkBurfFhVxdA0hQhwJr2fAq+KtCA=
+  - secure: Q1L5VcrdYyFxUXWXMDHBzVn4vRTSzTUmH4+ylmYCSHgc9HcbyTM8JcSyOxJ2pDKPN1otj6ShxxoAgeiNk4nioTZRXLpiFan+AlMyPaRcWeGq0OOjYXaR32swYs73BbJAHsSwr69bqTOiIaw3Tm54ETFFUzuy/R+nVZX3Q5Yk+Bk=
+  - secure: YVSH7CEgWjUSP1HxY+RIsGKFlIYNOLsDY0F7do+GqiPCa3/iQECAd4FXIPDI4HvFwbVXXCc/jdRKlG84UkyaXmvKD/nBD7sT/PWHVB7LB9zKzGuH7E9PFJeb4GEriH1MHxwDqbbmwJbxxzzJmKiY/nFrVT3Rs530pVB/Y2MaUSE=
 cache: apt

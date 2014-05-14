@@ -56,6 +56,8 @@ perl -pi -e "s/user =.*/user =${WEBDAV_USR}/g" cloudfusion/config/Webdav_tonline
 perl -pi -e "s/password =.*/password =${WEBDAV_PWD}/g" cloudfusion/config/Webdav_tonline_testing.ini
 perl -pi -e "s/user =.*/user =${WEBDAV2_USR}/g" cloudfusion/config/Webdav_gmx_testing.ini
 perl -pi -e "s/password =.*/password =${WEBDAV2_PWD}/g" cloudfusion/config/Webdav_gmx_testing.ini
+perl -pi -e "s/user =.*/user =${WEBDAV3_USR}/g" cloudfusion/config/Webdav_box_testing.ini
+perl -pi -e "s/password =.*/password =${WEBDAV3_PWD}/g" cloudfusion/config/Webdav_box_testing.ini
 
 #options: -x stop on first error, -v verbose, -s output stdout messgages immediately, --with-coverage produce coverage results
 #bash -c "nosetests -v -s -x cloudfusion/tests/db_logging_thread_test.py --with-coverage &>test1_log; status=$?; mv .coverage .coverage.3; exit $status" & #about 18 Min runtime
