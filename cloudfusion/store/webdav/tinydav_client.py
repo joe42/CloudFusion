@@ -11,12 +11,12 @@ from bs4 import BeautifulSoup
 from xml.etree import ElementTree
 import logging
 try:
-    from urllib3 import quote
+    from urllib3 import quote, unquote
 except:
     try:
-        from urllib2 import quote
+        from urllib2 import quote, unquote
     except:
-        from urllib import quote
+        from urllib import quote, unquote
 
 class TinyDAVClient(object):
     '''A parital WebDAV client implementation based on tinydav, since cadaver v0.23.3 cannot handle 
@@ -72,8 +72,8 @@ class TinyDAVClient(object):
         response = self._get_client().propfind(self.root + path, depth=0)
         response_soup = BeautifulSoup(response.content)
         response = response_soup.find(re.compile(r'(?i)[a-z0-9]:response'))
-        ret = {} 
-        ret["path"] = response.find(re.compile(r'(?i)[a-z0-9]:href')).text
+        ret = {}
+        ret["path"] = path
         mod_date = response.find(re.compile(r'(?i)[a-z0-9]:getlastmodified')).text
         cal = pdt.Calendar()
         mod_date =  int(time.mktime(cal.parse(mod_date)[0]))
@@ -177,7 +177,8 @@ class TinyDAVClient(object):
         ret = []
         for response in multi_response:
             path = response.find(re.compile(r'(?i)[a-z0-9]:href')).text
-            if path.endswith('/'):
+            path = unquote(path)
+            if path.endswith('/') and path != '/':
                 path = path[:-1]
             if path != self.root + directory:
                 ret.append( path )
