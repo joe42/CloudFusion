@@ -56,15 +56,19 @@ class TransparentMultiprocessingCachingStore(MultiprocessingCachingStore, Transp
         return ret
 
     def get_downloaded(self):
+        """Get amount of data downloaded from a store in MB"""
         return self.sync_thread.get_downloaded()
     
     def get_uploaded(self):
+        """Get amount of data uploaded to a store in MB"""
         return self.sync_thread.get_uploaded()
     
     def get_download_rate(self):
+        """Get download rate in MB/s"""
         return self.sync_thread.get_download_rate()
     
     def get_upload_rate(self):
+        """Get upload rate in MB/s"""
         return self.sync_thread.get_upload_rate()
     
     def get_cache_hits(self):
