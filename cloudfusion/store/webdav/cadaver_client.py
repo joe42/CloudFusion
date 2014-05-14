@@ -8,7 +8,8 @@ import os
 
 class CadaverWebDAVClient(object):
     '''WebDav client implemented using the Debian package cadaver.
-    .. deprecated:: 
+    .. warning:: 
+    
         This class is deprecated, since cadaver v0.23.3 cannot handle the response of https://webdav.4shared.com, 
         which sends properties without a namespace, and due to bad error handling.
         use :class:`cloudfusion.store.webdav.tinydav_clien.TinyDAVClient` instead.

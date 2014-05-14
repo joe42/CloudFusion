@@ -52,7 +52,7 @@ class LRUCache(Cache):
         self.resize_interval = seconds
         
     def get_resize_intervall(self):
-        ''':returns: The minimal interval between consecutive calls to reduce cache size as a float in seconds.
+        ''':returns: The minimal interval between consecutive calls to reduce cache size as a float in seconds.\
         The default is one second.'''
         return self.resize_interval
         

@@ -33,8 +33,7 @@ class DictXMLParser(object):
                 dict_tree[enclosing_tag] = self.getText(leaf)
 
     def populate_dict_with_XML_leaf_textnodes(self, xml_data, dict_tree):
-        """ Puts the text of the XML tags of *xml_data* specified by *dict_tree* into *dict_tree* .
-        
+        """ Puts the text of the XML tags of *xml_data* specified by *dict_tree* into *dict_tree*.
         The *dict_tree* is a dictionary describing a subtree of *xml_data*. 
         The dictionarie's keys correspond to the first XML tags with the same name on the same nesting level of the dictionary.
         Therefore the keys in the dictionary {"root": {"element1": "", "element2": ""}} match the root tag <root> 
@@ -42,6 +41,7 @@ class DictXMLParser(object):
         The dictionarie's most deeply nested elements must be empty strings. 
         This value is replaced by the text of the corresponding key's XML tag.
         Given the previous dictionary and the following XML structure:
+
             .. code-block:: xml
             
                 <root>
@@ -72,6 +72,7 @@ class DictXMLParser(object):
         The dictionarie's most deeply nested elements must be empty strings. 
         This value is replaced by the text of the corresponding key's XML tag.
         Given the previous dictionary and the following XML structure:
+        
             .. code-block:: xml
                     
                 <root>

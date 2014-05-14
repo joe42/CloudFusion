@@ -73,8 +73,8 @@ class ChunkMultiprocessingCachingStore(Store):
     
     
     def get_file(self, path_to_file):
-        """ :returns: string -- the data of the file with the path *path_to_file*
-        If the file was updated in the wrapped store, then its content in the cache will be updated if its entry is expired but not dirty. 
+        """ If the file was updated in the wrapped store, then its content in the cache will be updated if its entry is expired but not dirty.
+        :returns: string -- the data of the file with the path *path_to_file*
         """
         #wait a little, so that storesyncthread gets lock as well
         #i could sleep here for one second for instance
