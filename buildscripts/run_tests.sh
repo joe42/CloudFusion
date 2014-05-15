@@ -60,20 +60,18 @@ perl -pi -e "s/password =.*/password =${WEBDAV3_PWD}/g" cloudfusion/config/Webda
 perl -pi -e "s/user =.*/user =${WEBDAV4_USR}/g" cloudfusion/config/Webdav_yandex_testing.ini
 perl -pi -e "s/password =.*/password =${WEBDAV4_PWD}/g" cloudfusion/config/Webdav_yandex_testing.ini
 
-#options: -x stop on first error, -v verbose, -s output stdout messgages immediately, --with-coverage produce coverage results
-#bash -c "nosetests -v -s -x cloudfusion/tests/db_logging_thread_test.py --with-coverage &>test1_log; status=$?; mv .coverage .coverage.3; exit $status" & #about 18 Min runtime
+#options: -x stop on first error, -v verbose, -s output stdout messgages immediately
+#bash -c "nosetests -v -s -x cloudfusion/tests/db_logging_thread_test.py &>test1_log; status=$?; exit $status" & #about 18 Min runtime
 #pid1=$!
-#bash -c "nosetests -v -s -x cloudfusion/tests/synchronize_proxy_test.py --with-coverage &>test2_log; status=$?; mv .coverage .coverage.2; exit $status" & #about 17 Min runtime
+#bash -c "nosetests -v -s -x cloudfusion/tests/synchronize_proxy_test.py &>test2_log; status=$?; exit $status" & #about 17 Min runtime
 #pid2=$!                          
-bash -c "nosetests -v -s -x cloudfusion/tests/store_test2.py --with-coverage  &>test3_log; status=$?; mv .coverage .coverage.3; exit $status" &    #about 20 Min runtime                  
+bash -c "nosetests -v -s -x cloudfusion/tests/store_test2.py  &>test3_log; status=$?;exit $status" &    #about 20 Min runtime                  
 pid3=$!
-bash -c "nosetests -v -s -x cloudfusion/tests/store_test_webdav.py --with-coverage  &>test4_log; status=$?; mv .coverage .coverage.4; exit $status" &                  
+bash -c "nosetests -v -s -x cloudfusion/tests/store_test_webdav.py  &>test4_log; status=$?; exit $status" &                  
 pid4=$!
-bash -c "nosetests -v -s -x cloudfusion/tests/store_test_webdav2.py --with-coverage  &>test5_log; status=$?; mv .coverage .coverage.5; exit $status" &                  
+bash -c "nosetests -v -s -x cloudfusion/tests/store_test_webdav2.py  &>test5_log; status=$?; exit $status" &                  
 pid5=$!
-nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py -I store_test2.py --with-coverage   
-mv .coverage .coverage.4
-
+nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py -I store_test2.py   
 
 
 #wait $pid1    #wait for test process to end
@@ -98,10 +96,6 @@ rm cloudfusion/config/Google_testing.ini
 rm cloudfusion/config/AmazonS3_testing.ini
 rm cloudfusion/config/Webdav_gmx_testing.ini
 rm cloudfusion/config/Webdav_tonline_testing.ini
-
-coverage combine #combine coverage report
-coverage html
-coverage xml     #create cobertura compatible report
 
 
 rm cloudfusion/config/Webdav_box_testing.ini
