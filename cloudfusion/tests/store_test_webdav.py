@@ -64,6 +64,13 @@ def get_webdav_fourshared_config():
     auth = dict(config.items('auth'))
     return auth
 
+def get_webdav_yandex_config():
+    config = SafeConfigParser()
+    config_file = open(os.path.dirname(cloudfusion.__file__)+"/config/Webdav_yandex_testing.ini", "r")
+    config.readfp(config_file)
+    auth = dict(config.items('auth'))
+    return auth
+
 io_apis = []
 
 def setUp():
@@ -71,10 +78,12 @@ def setUp():
     ##webdav_config2 = get_webdav_fourshared_config() # cannot delete directory at all (server says action is successful even though it is not)
     webdav_config3 = get_webdav_box_config()        # seems very buggy; often authorization does not work
     webdav_config4 = get_webdav_tonline_config()
+    webdav_config5 = get_webdav_yandex_config()
     io_apis.append( WebdavStore(webdav_config1) )
     ##io_apis.append( WebdavStore(webdav_config2) )
     io_apis.append( WebdavStore(webdav_config3) )
     io_apis.append( WebdavStore(webdav_config4) )
+    io_apis.append( WebdavStore(webdav_config5) )
     time.sleep(10)
     for io_api in io_apis:
         try:
