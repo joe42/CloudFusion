@@ -69,7 +69,7 @@ class TinyDAVClient(object):
             return False
         if isinstance(error, HTTPServerError):
             self.logger.error("Error could not be handled: %s", error)
-            raise StoreAccessError(error,0) # do not retry (error cannot be handled)
+            raise error # do not retry (error cannot be handled)
         if remaining_tries == 0: # throw error after last try 
             raise error
         return False
