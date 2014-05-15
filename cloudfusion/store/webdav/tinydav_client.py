@@ -94,12 +94,12 @@ class TinyDAVClient(object):
     
     @retry((Exception), tries=1, delay=0)
     def get_overall_space(self):
-        response = self._get_client().propfind(self.root, depth=0)
+        response = self._get_client().propfind(self.root, depth=0, properties=["quota-available-bytes"])
         response_soup = BeautifulSoup(response.content)
         response = response_soup.find(re.compile(r'(?i)[a-z0-9]:response'))
-        ret = response.find(re.compile(r'(?i)[a-z0-9]:quota-available-bytes')).text
+        ret = response.find(re.compile(r'(?i)[a-z0-9]:quota-available-bytes'))
         if ret:
-            return int(ret)
+            return int(ret.text)
         return 1000000000
     
     @retry((Exception), tries=1, delay=0)
