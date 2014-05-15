@@ -42,7 +42,6 @@ cp cloudfusion/config/Sugarsync.ini cloudfusion/config/sugarsync_testing.ini
 cp cloudfusion/config/Dropbox.ini cloudfusion/config/Dropbox.ini.bck #backup config file
 cp cloudfusion/config/Google.ini cloudfusion/config/Google_testing.ini
 cp cloudfusion/config/AmazonS3.ini cloudfusion/config/AmazonS3_testing.ini
-cp cloudfusion/config/Webdav.ini cloudfusion/config/Webdav_testing.ini
 
 perl -pi -e "s/user = /user = ${USR}/g" cloudfusion/config/Dropbox.ini
 perl -pi -e "s/password = /password = ${PW}/g" cloudfusion/config/Dropbox.ini
@@ -70,6 +69,8 @@ bash -c "nosetests -v -s -x cloudfusion/tests/store_test2.py --with-coverage  &>
 pid3=$!
 bash -c "nosetests -v -s -x cloudfusion/tests/store_test_webdav.py --with-coverage  &>test4_log; status=$?; mv .coverage .coverage.4; exit $status" &                  
 pid4=$!
+bash -c "nosetests -v -s -x cloudfusion/tests/store_test_webdav2.py --with-coverage  &>test5_log; status=$?; mv .coverage .coverage.5; exit $status" &                  
+pid5=$!
 nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py -I store_test2.py --with-coverage   
 mv .coverage .coverage.4
 
@@ -87,6 +88,9 @@ cat test3_log
 wait $pid4
 (exit $?)
 cat test4_log
+wait $pid5
+(exit $?)
+cat test5_log
 
 mv cloudfusion/config/Dropbox.ini.bck cloudfusion/config/Dropbox.ini
 rm cloudfusion/config/sugarsync_testing.ini
@@ -99,6 +103,9 @@ coverage combine #combine coverage report
 coverage html
 coverage xml     #create cobertura compatible report
 
+
+rm cloudfusion/config/Webdav_box_testing.ini
+rm cloudfusion/config/Webdav_yandex_testing.ini
 
 #clean up
 cd $HOME
