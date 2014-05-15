@@ -118,11 +118,11 @@ class TinyDAVClient(object):
     def upload(self, local_file_path, remote_file_path):
         '''Upload the file at *local_file_path* to the path *remote_file_path* at the remote server'''
         with open(local_file_path) as fd:
-            self._get_client().put(remote_file_path, fd)
+            self._get_client().put(self.root + remote_file_path, fd)
         
     @retry((Exception), tries=1, delay=0)    
     def get_file(self, path_to_file): 
-        response = self._get_client().get(path_to_file)
+        response = self._get_client().get(self.root + path_to_file)
         return response.content 
     
     def _get_client(self):
@@ -134,13 +134,13 @@ class TinyDAVClient(object):
     def move(self, source, target):
         ''':raises: NoSuchFilesytemObjectError if source does not exist'''
         target = quote(target)
-        self._get_client().move(source, target, overwrite=True)
+        self._get_client().move(self.root + source, self.root + target, overwrite=True)
         
     @retry((Exception), tries=1, delay=0)
     def copy(self, source, target):
         ''':raises: NoSuchFilesytemObjectError if source does not exist'''
         target = quote(target)
-        self._get_client().copy(source, target, overwrite=True)
+        self._get_client().copy(self.root + source, self.root + target, overwrite=True)
     
     @retry((Exception), tries=1, delay=0)
     def rmdir(self, directory):
@@ -178,6 +178,8 @@ class TinyDAVClient(object):
             path = unquote(path)
             if path.endswith('/') and path != '/':
                 path = path[:-1]
+            if path.startswith(self.root): #cut off root
+                path = path[len(self.root):]
             if path != self.root + directory:
                 ret.append( path )
         return ret 
@@ -204,6 +206,8 @@ class TinyDAVClient(object):
             item = {}
             if path.endswith('/') and path != '/':
                 path = path[:-1]
+            if path.startswith(self.root): #cut off root
+                path = path[len(self.root):]
             item["path"] = path
             mod_date = response.find(re.compile(r'(?i)[a-z0-9]:getlastmodified')).text
             cal = pdt.Calendar()
