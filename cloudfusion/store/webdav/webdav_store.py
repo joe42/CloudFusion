@@ -125,6 +125,9 @@ class WebdavStore(Store):
         return self.tinyclient.get_directory_listing(directory)
     
     def _handle_error(self, error, method_name, remaining_tries, *args, **kwargs):
+        if method_name == 'get_file': #box.com does not instantly see files that are written to it (eventual consistency)
+            if isinstance(error, NoSuchFilesytemObjectError):
+                return False
         if isinstance(error, NoSuchFilesytemObjectError) or \
             isinstance(error, AlreadyExistsError) or \
             isinstance(error, StoreAccessError):
