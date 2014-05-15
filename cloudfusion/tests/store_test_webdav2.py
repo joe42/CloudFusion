@@ -33,25 +33,16 @@ REMOTE_NON_EXISTANT_DIR = REMOTE_TESTDIR+"/"+"i_am_a_folder_which_does_not_exist
 REMOTE_DELETED_FILE = REMOTE_TESTDIR+"/"+"i_am_a_file_which_is_deleted"
 REMOTE_DELETED_DIR = REMOTE_TESTDIR+"/"+"i_am_a_folder_which_is_deleted"
 
-
-def get_webdav_gmx_config():
+def get_webdav_box_config():
     config = SafeConfigParser()
-    config_file = open(os.path.dirname(cloudfusion.__file__)+"/config/Webdav_gmx_testing.ini", "r")
+    config_file = open(os.path.dirname(cloudfusion.__file__)+"/config/Webdav_box_testing.ini", "r")
     config.readfp(config_file)
     auth = dict(config.items('auth'))
     return auth
 
-def get_webdav_tonline_config():
+def get_webdav_yandex_config():
     config = SafeConfigParser()
-    config_file = open(os.path.dirname(cloudfusion.__file__)+"/config/Webdav_tonline_testing.ini", "r")
-    config.readfp(config_file)
-    auth = dict(config.items('auth'))
-    return auth
-
-
-def get_webdav_fourshared_config():
-    config = SafeConfigParser()
-    config_file = open(os.path.dirname(cloudfusion.__file__)+"/config/Webdav_fourshared_testing.ini", "r")
+    config_file = open(os.path.dirname(cloudfusion.__file__)+"/config/Webdav_yandex_testing.ini", "r")
     config.readfp(config_file)
     auth = dict(config.items('auth'))
     return auth
@@ -59,12 +50,10 @@ def get_webdav_fourshared_config():
 io_apis = []
 
 def setUp():
-    gmx_config = get_webdav_gmx_config()
-    ##webdav_config2 = get_webdav_fourshared_config() # cannot delete directory at all (server says action is successful even though it is not)
-    tonline_config = get_webdav_tonline_config()
-    io_apis.append( WebdavStore(gmx_config) )
-    ##io_apis.append( WebdavStore(webdav_config2) )
-    io_apis.append( WebdavStore(tonline_config) )
+    box_config = get_webdav_box_config()        # seems very buggy; often authorization does not work
+    yandex_config = get_webdav_yandex_config()
+    io_apis.append( WebdavStore(box_config) )
+    io_apis.append( WebdavStore(yandex_config) )
     time.sleep(10)
     for io_api in io_apis:
         try:
