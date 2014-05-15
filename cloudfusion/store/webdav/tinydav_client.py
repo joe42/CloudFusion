@@ -10,6 +10,7 @@ from cloudfusion.util.exponential_retry import retry
 from bs4 import BeautifulSoup
 from xml.etree import ElementTree
 import logging
+import socket, errno
 try:
     from urllib3 import quote, unquote
 except:
@@ -58,6 +59,14 @@ class TinyDAVClient(object):
                 raise NoSuchFilesytemObjectError(http_response.reason, http_response.status)
             elif http_response.status == 405 or http_response.status == 409:#405 is method not allowed; 4shared responds with 409 (Conflict) if directory already exists
                 raise AlreadyExistsError(http_response.reason, http_response.status)
+        if isinstance(error, socket.error):
+            msg = 'Retry on socket error'
+            if isinstance(error.args, tuple):
+                msg += " with errno %d" % error[0]
+                if error[0] == errno.EPIPE:
+                    msg += ". Detected remote disconnect"
+                self.logger.error(msg+'.')
+            return False
         if isinstance(error, HTTPServerError):
             self.logger.error("Error could not be handled: %s", error)
             raise StoreAccessError(error,0) # do not retry (error cannot be handled)
@@ -114,7 +123,7 @@ class TinyDAVClient(object):
                 ret += int(size.text)
         return ret
     
-    @retry((Exception), tries=1, delay=0)
+    @retry((Exception), tries=2, delay=0)
     def upload(self, local_file_path, remote_file_path):
         '''Upload the file at *local_file_path* to the path *remote_file_path* at the remote server'''
         with open(local_file_path) as fd:
