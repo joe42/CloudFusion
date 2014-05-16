@@ -117,10 +117,12 @@ class WebdavStore(Store):
         self.logger.debug("moving %s to %s", path_to_src, path_to_dest)
         self.tinyclient.move(path_to_src, path_to_dest)
     
+    @retry((Exception), tries=4, delay=0.1, backoff=2) 
     def get_overall_space(self):
         self.logger.debug("retrieving all space") 
         return self.tinyclient.get_overall_space()
 
+    @retry((Exception), tries=4, delay=0.1, backoff=2) #Got HTTP error BAD REQUEST 400 from t-online once
     def get_used_space(self):
         self.logger.debug("retrieving used space")
         return self.tinyclient.get_used_space()
