@@ -92,7 +92,13 @@ class WebdavStore(Store):
             else:
                 self.tinyclient.rm(path)
         except NoSuchFilesytemObjectError, e:
-            pass
+            time.sleep(2) #yandex.com does not instantly see files that are written to it when deleting them (eventual consistency)
+            if is_dir:
+                self.tinyclient.rmdir(path)
+            else:
+                self.tinyclient.rm(path)
+
+        
         
     def account_info(self):
         self.logger.debug("retrieving account info")
