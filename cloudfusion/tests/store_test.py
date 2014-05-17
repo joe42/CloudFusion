@@ -11,6 +11,7 @@ import tempfile
 from ConfigParser import SafeConfigParser
 import cloudfusion
 from cloudfusion.store.chunk_caching_store import ChunkMultiprocessingCachingStore
+from cloudfusion.store.bulk_get_metadata import BulkGetMetadata
 
 LOCAL_TESTFILE_PATH = "cloudfusion/tests/testfile"
 LOCAL_BIGTESTFILE_PATH = "cloudfusion/tests/bigtestfile"
@@ -53,8 +54,8 @@ def setUp():
     dropbox_config = get_dropbox_config() 
     sugarsync_config = get_sugarsync_config()
     dropbox_store = DropboxStore(dropbox_config) 
-    io_apis.append( dropbox_store )
     io_apis.append(SugarsyncStore(sugarsync_config))
+    io_apis.append( dropbox_store )
     io_apis.append( ChunkMultiprocessingCachingStore( ( SugarsyncStore(sugarsync_config) ) ) )
     io_apis.append( MetadataCachingStore( dropbox_store ) )
     time.sleep(10)
@@ -76,6 +77,9 @@ def test_io_apis():
 #        test = partial(_test_with_root_filepath, io_api)
 #        test.description = io_api.get_name()+":"+" "+"fail on determining if file system object is a file or a directory"
 #        yield (test, ) 
+        test = partial(_test_bulk_get_metadata, io_api)
+        test.description = io_api.get_name()+":"+" "+"get bulk metadata"
+        yield (test, ) 
         test = partial(_test_get_free_space, io_api)
         test.description = io_api.get_name()+":"+" "+"getting free space"
         yield (test, )
@@ -250,6 +254,29 @@ def _test_get_directory_listing(io_api):
     _assert_all_in(listing, [root+'Test1',root+"tesT2",root+"testdub",root+"testcasesensitivity",root+LOCAL_TESTFILE_NAME]) 
     _assert_all_in(cached_listing1, [root+'Test1',root+"tesT2",root+"testdub",root+"testcasesensitivity",root+LOCAL_TESTFILE_NAME]) 
     _assert_all_in(cached_listing2, [root+'Test1',root+"tesT2",root+"testdub",root+"testcasesensitivity",root+LOCAL_TESTFILE_NAME]) 
+
+def _test_bulk_get_metadata(io_api): 
+    if not isinstance(io_api, BulkGetMetadata):
+        return
+    _create_directories(io_api, REMOTE_TESTDIR)
+    io_api.store_file(LOCAL_TESTFILE_PATH, REMOTE_TESTDIR) #testfile
+    time.sleep(5) #wait for file to be stored (eventual consistency)
+    metadata = io_api.get_bulk_metadata(REMOTE_TESTDIR)
+    cached_metadata1 = io_api.get_bulk_metadata(REMOTE_TESTDIR)
+    cached_metadata2 = io_api.get_bulk_metadata(REMOTE_TESTDIR)
+    _delete_directories(io_api, REMOTE_TESTDIR)
+    _delete_file(io_api, LOCAL_TESTFILE_NAME, REMOTE_TESTDIR)
+    root = REMOTE_TESTDIR+"/"
+    for path in [root+'Test1',root+"tesT2",root+"testdub",root+"testcasesensitivity",root+LOCAL_TESTFILE_NAME]:
+        for metadata in [metadata, cached_metadata1, cached_metadata2]:
+            if path != root+LOCAL_TESTFILE_NAME:
+                assert metadata[path]['is_dir'] == True
+                assert metadata[path]['bytes'] == 0
+                assert 'modified' in metadata[path]
+            else:
+                assert metadata[path]['is_dir'] == False
+                assert metadata[path]['bytes'] == 4
+                assert 'modified' in metadata[path]  
 
 def _test_move_directory(io_api):
     io_api.create_directory(REMOTE_MOVE_TESTDIR_ORIGIN)
