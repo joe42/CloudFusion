@@ -12,9 +12,6 @@ class StoreAccessError(Exception):
 class DateParseError(Exception):
     def __init__(self, msg):
         super(DateParseError, self).__init__(msg)
-class RetrieveMetadataError(StoreAccessError): 
-    def __init__(self, path, msg="", status=0):
-        super(RetrieveMetadataError, self).__init__("Could not retrieve metadata for "+path+"\nDescription: "+msg, status)
 class StoreSpaceLimitError(StoreAccessError):
     def __init__(self, msg="", status=0):
         super(StoreSpaceLimitError, self).__init__(msg, status)
