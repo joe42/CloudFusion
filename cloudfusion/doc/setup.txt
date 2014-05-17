@@ -16,8 +16,7 @@ To install CloudFusion do the following::
 
     sudo apt-get install git
     git clone git://github.com/joe42/CloudFusion.git
-    sudo apt-get install python-setuptools gcc libssl-dev python-dev                 #On Ubuntu
-    sudo apt-get install python-setuptools gcc openssl-devel python-devel fuse-utils #On Debian
+    sudo apt-get install python-setuptools gcc libssl-dev libffi-dev python-dev fuse-utils 
     cd CloudFusion
     sudo python setup.py install
     
