@@ -282,7 +282,7 @@ class SugarsyncStore(Store):
         return resp.data 
     
     # retry does not really matter with caching_store
-    @retry((Exception,socket.error), tries=1, delay=0) 
+    @retry((Exception,socket.error), tries=2, delay=0) 
     def store_file(self, path_to_file, dest_dir="/", remote_file_name = None, interrupt_event=None):
         if not remote_file_name:
             remote_file_name = os.path.basename(path_to_file)
@@ -323,7 +323,7 @@ class SugarsyncStore(Store):
             HTTP_STATUS.generate_exception(resp.status, str(resp))
         return int(time.mktime( time.strptime(resp.headers['Date'], "%a, %d %b %Y %H:%M:%S GMT") ) - self.time_difference) 
             
-    @retry((Exception,socket.error), tries=1, delay=0) 
+    @retry((Exception,socket.error), tries=2, delay=0) 
     def store_fileobject(self, fileobject, path_to_file):
         self.logger.debug("storing file object to %s", path_to_file)
         if not self.exists(path_to_file):

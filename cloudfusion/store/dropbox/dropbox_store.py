@@ -370,7 +370,7 @@ class DropboxStore(Store):
             self.move(resp_path, path)
 
     # retry does not really matter with caching_store
-    @retry((Exception,RESTSocketError), tries=1, delay=0) 
+    @retry((Exception,RESTSocketError), tries=2, delay=0) 
     def store_fileobject(self, fileobject, path, interrupt_event=None):
         size = self.__get_size(fileobject)
         self.logger.debug("Storing file object of size %s to %s", size, path)

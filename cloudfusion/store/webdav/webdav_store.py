@@ -64,7 +64,7 @@ class WebdavStore(Store):
         fileobject.seek(pos, 0)
         return size
     
-    @retry((Exception), tries=1, delay=0) 
+    @retry((Exception), tries=2, delay=0) 
     def store_fileobject(self, fileobject, path, interrupt_event=None):
         size = self.__get_size(fileobject)
         self.logger.debug("Storing file object of size %s to %s", size, path)
