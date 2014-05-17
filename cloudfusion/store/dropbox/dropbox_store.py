@@ -279,14 +279,16 @@ class DropboxStore(Store):
     def _close(self):
         if not self._is_copy:
             try:
-                if not os.path.exists(self._revision_db_dir):
-                    os.makedirs(self._revision_db_dir)
+                if not os.path.exists(self._cache_dir):
+                    os.makedirs(self._cache_dir)
                 self.myshelve = shelve.open(self._revision_db_path)
                 self.myshelve.update(self._revisions)
                 self.myshelve.close()
             except Exception, e: 
                 import sys
                 sys.stderr("Could not store Dropbox file revisions: %s" % e)
+                import traceback
+                traceback.print_exc()
     
     def __deepcopy__(self, memo):
         from copy import deepcopy
