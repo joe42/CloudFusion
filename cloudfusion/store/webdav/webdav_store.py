@@ -86,19 +86,10 @@ class WebdavStore(Store):
     def delete(self, path, is_dir=False):
         self.logger.debug("deleting %s", path)
         self._raise_error_if_invalid_path(path)
-        try:
-            if is_dir:
-                self.tinyclient.rmdir(path)
-            else:
-                self.tinyclient.rm(path)
-        except NoSuchFilesytemObjectError, e:
-            time.sleep(2) #yandex.com does not instantly see files that are written to it when deleting them (eventual consistency)
-            if is_dir:
-                self.tinyclient.rmdir(path)
-            else:
-                self.tinyclient.rm(path)
-
-        
+        if is_dir:
+            self.tinyclient.rmdir(path)
+        else:
+            self.tinyclient.rm(path)
         
     def account_info(self):
         self.logger.debug("retrieving account info")
@@ -134,7 +125,7 @@ class WebdavStore(Store):
     
     def _handle_error(self, error, method_name, remaining_tries, *args, **kwargs):
         if method_name == 'get_file': #box.com does not instantly see files that are written to it (eventual consistency)
-            if isinstance(error, NoSuchFilesytemObjectError):
+            if isinstance(error, NoSuchFilesytemObjectError) and remaining_tries != 0:
                 return False
         if isinstance(error, NoSuchFilesytemObjectError) or \
             isinstance(error, AlreadyExistsError) or \

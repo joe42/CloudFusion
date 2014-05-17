@@ -56,6 +56,9 @@ class TinyDAVClient(object):
         if isinstance(error, HTTPUserError):
             http_response = error.response.response # error.response is HTTPResponse or a WebDAVResponse, and error.response.response is a httplib.HTTPResponse
             if http_response.status == 404:               #'WebDAVResponse' object has no attribute 'status
+                #box.com and yandex.com do not instantly see files that are written to it (eventual consistency), so retry once
+                if method_name in ['get_metadata', 'rmdir', 'rm', 'move', 'copy']  and remaining_tries != 0: 
+                    return False
                 raise NoSuchFilesytemObjectError(http_response.reason, http_response.status)
             elif http_response.status == 405 or http_response.status == 409:#405 is method not allowed; 4shared responds with 409 (Conflict) if directory already exists
                 raise AlreadyExistsError(http_response.reason, http_response.status)
@@ -74,7 +77,7 @@ class TinyDAVClient(object):
             raise error
         return False
         
-    @retry((Exception), tries=1, delay=0)
+    @retry((Exception), tries=2, delay=1)
     def get_metadata(self, path):
         ''':raises: StoreAccessError if propfind does not return getcontentlength or getlastmodified property
         :raises: NoSuchFilesytemObjectError if path does not exist'''
@@ -139,19 +142,19 @@ class TinyDAVClient(object):
         client.setbasicauth(self.user, self.pwd)
         return client
     
-    @retry((Exception), tries=1, delay=0)
+    @retry((Exception), tries=2, delay=1)
     def move(self, source, target):
         ''':raises: NoSuchFilesytemObjectError if source does not exist'''
         target = quote(target)
         self._get_client().move(self.root + source, self.root + target, overwrite=True)
         
-    @retry((Exception), tries=1, delay=0)
+    @retry((Exception), tries=2, delay=1)
     def copy(self, source, target):
         ''':raises: NoSuchFilesytemObjectError if source does not exist'''
         target = quote(target)
         self._get_client().copy(self.root + source, self.root + target, overwrite=True)
     
-    @retry((Exception), tries=1, delay=0)
+    @retry((Exception), tries=2, delay=1)
     def rmdir(self, directory):
         ''':raises: StoreAccessError if the directory cannot be deleted
         :raises: NoSuchFilesytemObjectError if path does not exist'''
@@ -159,7 +162,7 @@ class TinyDAVClient(object):
             directory += '/'
         self._get_client().delete(self.root + directory, {'Depth':"infinity"})
     
-    @retry((Exception), tries=1, delay=0)
+    @retry((Exception), tries=2, delay=1)
     def rm(self, filepath):
         ''':raises: StoreAccessError if the file cannot be deleted
         :raises: NoSuchFilesytemObjectError if path does not exist'''
