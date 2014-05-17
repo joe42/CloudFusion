@@ -16,6 +16,7 @@ import logging
 from cloudfusion.util.exponential_retry import retry
 from cloudfusion.mylogging import db_logging_thread
 import sys
+from ConfigParser import DuplicateSectionError
 
 class GoogleStore(Store):
     '''Subclass of Store implementing an interface to the Google Storage storage.
@@ -60,6 +61,11 @@ class GoogleStore(Store):
         self.access_key_id = config['consumer_key']
         self.secret_access_key = config['consumer_secret']
         self.write_gsutil_config()
+        try:
+            boto.config.add_section('Boto')
+        except DuplicateSectionError, e:
+            pass
+        boto.config.set('Boto','http_socket_timeout','10') # Set sensible timeout value
         self.reconnect()
         self.logger.info("api initialized")
 
