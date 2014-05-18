@@ -7,7 +7,7 @@ class TransparentChunkMultiprocessingCachingStore(ChunkMultiprocessingCachingSto
     '''
     Implements the :class:`cloudfusion.store.cache_stats.TransparentStore` interface to get statistics about a cache wrapping a store.
     '''
-    def __init__(self, store, cache_expiration_time=60, cache_size_in_mb=2000, hard_cache_size_limit_in_mb=3000, cache_id=str(random.random()), max_archive_size_in_mb = 4, cache_dir='/tmp/cloudfusion'):
+    def __init__(self, store, cache_expiration_time=60, cache_size_in_mb=2000, hard_cache_size_limit_in_mb=3000, cache_id=None, max_archive_size_in_mb = 4, cache_dir='/tmp/cloudfusion'):
         """
         :param store: the store whose access should be cached 
         :param cache_expiration_time: the time in seconds until any cache entry is expired
@@ -15,7 +15,9 @@ class TransparentChunkMultiprocessingCachingStore(ChunkMultiprocessingCachingSto
         :param hard_cache_size_limit_in_mb: Hard limit of the cache in MB, exceeding this limit should slow down write operations.
         :param cache_id: Serves as identifier for a persistent cache instance. 
         :param max_archive_size_in_mb: the maximum size of an archive 
-        :param cache_dir: Cache directory on local hard drive disk, default value is */tmp/cloudfusion*.""" 
+        :param cache_dir: Cache directory on local hard drive disk, default value is */tmp/cloudfusion*."""
+        if not cache_id:
+            cache_id = str(random.random())
         super( TransparentChunkMultiprocessingCachingStore, self ).__init__(store, cache_expiration_time, cache_size_in_mb, cache_id, max_archive_size_in_mb, cache_dir)
         self.hard_cache_size_limit = hard_cache_size_limit_in_mb
         self.cache_misses = 0
