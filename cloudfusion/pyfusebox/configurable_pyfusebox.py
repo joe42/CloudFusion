@@ -40,7 +40,7 @@ class ConfigurablePyFuseBox(PyFuseBox):
             return self.virtual_file.getattr()
         if self.virtual_file.get_subdir(path):
             return self._getattr_for_folder_with_full_access()
-        if self.store_initialized and path.startswith(self.DATA_FOLDER_PATH):
+        if self.store_initialized and path.startswith(self.DATA_FOLDER_PATH+'/'): #slash prevents getattr on /datata/x
             path = self.remove_data_folder_prefix(path)
             return super( ConfigurablePyFuseBox, self ).getattr(path, fh)
         if path == self.DATA_FOLDER_PATH: 
