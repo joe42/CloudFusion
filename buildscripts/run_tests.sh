@@ -60,6 +60,16 @@ perl -pi -e "s/password =.*/password =${WEBDAV3_PWD}/g" cloudfusion/config/Webda
 perl -pi -e "s/user =.*/user =${WEBDAV4_USR}/g" cloudfusion/config/Webdav_yandex_testing.ini
 perl -pi -e "s/password =.*/password =${WEBDAV4_PWD}/g" cloudfusion/config/Webdav_yandex_testing.ini
 
+# These tests are interdependent, so wait before store_test, and store_test2 begin
+bash -c "nosetests -v -s -x cloudfusion/tests/transparent_store_test_no_sync.py  &>test6_log; status=$?; exit $status" &                  
+pid6=$!
+nosetests -v -s -x cloudfusion/tests/transparent_store_test_with_sync.py
+
+wait $pid6
+(exit $?)
+cat test6_log
+
+
 #options: -x stop on first error, -v verbose, -s output stdout messgages immediately
 #bash -c "nosetests -v -s -x cloudfusion/tests/db_logging_thread_test.py &>test1_log; status=$?; exit $status" & #about 18 Min runtime
 #pid1=$!
@@ -71,7 +81,7 @@ bash -c "nosetests -v -s -x cloudfusion/tests/store_test_webdav.py  &>test4_log;
 pid4=$!
 bash -c "nosetests -v -s -x cloudfusion/tests/store_test_webdav2.py  &>test5_log; status=$?; exit $status" &                  
 pid5=$!
-nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py -I store_test2.py   
+nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py -I store_test2.py  -I store_test_webdav.py  -I store_test_webdav2.py -I transparent_store_test_no_sync.py -I transparent_store_test_with_sync.py   
 
 
 #wait $pid1    #wait for test process to end
@@ -89,6 +99,7 @@ cat test4_log
 wait $pid5
 (exit $?)
 cat test5_log
+
 
 mv cloudfusion/config/Dropbox.ini.bck cloudfusion/config/Dropbox.ini
 rm cloudfusion/config/sugarsync_testing.ini
