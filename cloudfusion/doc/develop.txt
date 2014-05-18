@@ -245,8 +245,8 @@ And here is the code::
 
 
 
-Google Storage
-++++++++++++++++++++++++++++++++
+Google Storage and the Archiving Layer
+++++++++++++++++++++++++++++++++++++++
 
 Here is an example for Google Storage. The bucket will be created if it does not exist. 
 A bucket is similar to a subfolder, to which access with CloudFusion is restricted.  
@@ -266,7 +266,7 @@ And here is the code::
 
     from cloudfusion.store.gs.google_store import GoogleStore   
     from cloudfusion.store.metadata_caching_store import MetadataCachingStore
-    from cloudfusion.store.transparent_caching_store import TransparentMultiprocessingCachingStore
+    from cloudfusion.store.transparent_chunk_caching_store import TransparentChunkMultiprocessingCachingStore
     from StringIO import StringIO
     
     def main():
@@ -283,7 +283,51 @@ And here is the code::
         '''
         [u'/neuer ordner', u'/test', u'/My Google']
         '''
+
+        #Wrap with metadata caching store, to speed up consecutive calls to get_metadata, and get_directory_listing
+        client = MetadataCachingStore(client)
+        
+        #Wrap with archiving caching store, for putting small files in the same directory in one archive,
+        #for asynchronous uploads, and to speed up consecutive calls to get_file
+        #When given the same session id even after computer crash or restart, it will remember cached files,
+        #including files that still need to be uploaded
+        client = TransparentChunkMultiprocessingCachingStore(client, cache_id='session2')
+                
+        #Wrap file content into a file object
+        fileobj = StringIO() 
+        fileobj.write(file_content)
+        fileobj.seek(0) # set to beginning of file for further read operations
+        
+        # uploading multiple small files in the same directory (in this case the directory is '/')
+        # upload is delayed for a few minutes, but the actual upload is very fast onece it starts
+        client.store_fileobject(fileobj, '/test_1') # returns immediately, since uploads are now asynchronous
+        fileobj.seek(0) #seek to beginning of file, so that it can be read again
+        client.store_fileobject(fileobj, '/test_2')
+        fileobj.seek(0)
+        client.store_fileobject(fileobj, '/test_3')
+        fileobj.seek(0)
+        client.store_fileobject(fileobj, '/test_4')
+        fileobj.seek(0)
+        client.store_fileobject(fileobj, '/test_5')
+        fileobj.seek(0)
+        client.store_fileobject(fileobj, '/test_6')
+        fileobj.seek(0)
+        client.store_fileobject(fileobj, '/test_7')
+        fileobj.seek(0)
+        client.store_fileobject(fileobj, '/test_8')
+        fileobj.seek(0)
         #...
+        client.store_fileobject(fileobj, '/test_100')
+        
+        client.get_dirty_files() #list files that are not entirely uploaded
+        '''
+        ['/test_1',...]
+        '''
+        client.get_dirty_files() #call again after ~5 minutes, when the file is uploaded
+        '''
+        []
+        '''
+        
         
     if __name__ == '__main__':
         main()
