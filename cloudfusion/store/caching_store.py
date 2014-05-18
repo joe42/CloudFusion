@@ -20,12 +20,13 @@ class MultiprocessingCachingStore(Store):
     Unlike CachingStore, guarantees that write operations do not block for transfer, until the cache size limit is reached.
     Unlike CachingStore, guarantees that no write operations on the wrapped store are invoked until a cached item expires.
     """
-    def __init__(self, store, cache_expiration_time=60, cache_size_in_mb=2000, cache_id=None):
+    def __init__(self, store, cache_expiration_time=60, cache_size_in_mb=2000, cache_id=None, cache_dir='/tmp/cloudfusion/'):
         """
         :param store: the store whose access should be cached 
         :param cache_expiration_time: the time in seconds until any cache entry is expired
         :param cache_size_in_mb: Approximate limit of the cache in MB.
-        :param cache_id: Serves as identifier for a persistent cache instance. """ 
+        :param cache_id: Serves as identifier for a persistent cache instance.
+        :param cache_dir: Cache directory on local hard drive disk, default value is */tmp/cloudfusion*. """ 
         #prevent simultaneous access to store (synchronous use of __deepcopy__ by _store SyncThread and a different method): 
         self.store = SynchronizeProxy(store, private_methods_to_synchronize=['__deepcopy__'])
         if cache_id == None:
@@ -35,7 +36,8 @@ class MultiprocessingCachingStore(Store):
 #        self.temp_file = tempfile.SpooledTemporaryFile()
         self.cache_expiration_time = cache_expiration_time
         self.time_of_last_flush = time.time()
-        self.entries = SynchronizeProxy( PersistentLRUCache("/tmp/cloudfusion/cachingstore_"+cache_id, cache_expiration_time, cache_size_in_mb) ) #[shares_resource: write self.entries]
+        self.cache_dir = cache_dir[:-1] if cache_dir[-1:] == '/' else cache_dir # remove slash at the end
+        self.entries = SynchronizeProxy( PersistentLRUCache(self.cache_dir+"/cachingstore_"+cache_id, cache_expiration_time, cache_size_in_mb) ) #[shares_resource: write self.entries]
         self.sync_thread = StoreSyncThread(self.entries, self.store, self.logger)
         self.sync_thread.start()
     

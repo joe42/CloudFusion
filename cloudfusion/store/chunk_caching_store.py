@@ -15,14 +15,15 @@ class ChunkMultiprocessingCachingStore(Store):
     Write operations do not block for transfer, until the cache size limit is reached.
     No write operations on the wrapped store are invoked until a cached item expires.
     '''
-    def __init__(self, store, cache_expiration_time=60, cache_size_in_mb=2000, cache_id=None, max_archive_size_in_mb = 4):
+    def __init__(self, store, cache_expiration_time=60, cache_size_in_mb=2000, cache_id=None, max_archive_size_in_mb = 4, cache_dir='/tmp/cloudfusion'):
         """
         :param store: the store whose access should be cached 
         :param max_archive_size_in_mb: the maximum size of an archive 
         :param cache_expiration_time: the time in seconds until any cache entry is expired
         :param cache_size_in_mb: Approximate (soft) limit of the cache in MB.
         :param hard_cache_size_limit_in_mb: Hard limit of the cache in MB, exceeding this limit should slow down write operations.
-        :param cache_id: Serves as identifier for a persistent cache instance. """ 
+        :param cache_id: Serves as identifier for a persistent cache instance. 
+        :param cache_dir: Cache directory on local hard drive disk, default value is */tmp/cloudfusion*.""" 
         #prevent simultaneous access to store (synchronous use of __deepcopy__ by _store SyncThread and a different method): 
         self.store = SynchronizeProxy(store, private_methods_to_synchronize=['__deepcopy__'])
         self.max_archive_size_in_mb = max_archive_size_in_mb
@@ -32,7 +33,8 @@ class ChunkMultiprocessingCachingStore(Store):
         self.logger.debug("creating ChunkTransparentMultiprocessingCachingStore object")
         self.cache_expiration_time = cache_expiration_time
         self.time_of_last_flush = time.time()
-        temp_dir = "/tmp/cloudfusion/cachingstore_"+cache_id
+        self.cache_dir = cache_dir[:-1] if cache_dir[-1:] == '/' else cache_dir # remove slash at the end
+        temp_dir = self.cache_dir+"/cachingstore_"+cache_id
         self.entries = SynchronizeProxy( PersistentLRUCache(temp_dir, cache_expiration_time, cache_size_in_mb) ) #[shares_resource: write self.entries]
         self.sync_thread = ChunkStoreSyncThread(self.entries, self.store, temp_dir, self.logger)
         self.sync_thread.start()

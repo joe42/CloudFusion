@@ -162,7 +162,12 @@ class DropboxStore(Store):
             cache_id = config['cache_id'] # add actual cache_id
         else:
             cache_id = str(random.random())
-        cache_dir = "/tmp/cloudfusion/cachingstore_" + cache_id
+        if 'cache_dir' in config:
+            cache_dir = config['cache_dir']
+            cache_dir = cache_dir[:-1] if cache_dir[-1:] == '/' else cache_dir # remove slash at the end
+        else:
+            cache_dir = '/tmp/cloudfusion'
+        cache_dir = cache_dir+"/cachingstore_" + cache_id
         return cache_dir
         
     def create_session(self, config, cache_dir):
@@ -446,7 +451,7 @@ class DropboxStore(Store):
             HTTP_STATUS.generate_exception(resp.status, str(resp), "create_directory")
         
     # worst case: should happen mostly with user interaction, so fast feedback is more important
-    @retry((Exception,RESTSocketError), tries=1, delay=0)
+    @retry((Exception,RESTSocketError), tries=2, delay=0)
     def duplicate(self, path_to_src, path_to_dest):
         self.logger.debug("duplicating %s to %s", path_to_src, path_to_dest)
         self._raise_error_if_invalid_path(path_to_src)
@@ -460,7 +465,7 @@ class DropboxStore(Store):
         self._add_revision(path_to_dest, resp['rev'])
     
     # worst case: should happen mostly with user interaction, so fast feedback is more important
-    @retry((Exception,RESTSocketError), tries=1, delay=0)
+    @retry((Exception,RESTSocketError), tries=2, delay=0)
     def move(self, path_to_src, path_to_dest):
         self.logger.debug("moving %s to %s", path_to_src, path_to_dest)
         self._raise_error_if_invalid_path(path_to_src)
