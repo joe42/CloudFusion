@@ -59,9 +59,9 @@ class TinyDAVClient(object):
                 #box.com and yandex.com do not instantly see files that are written to it (eventual consistency), so retry once
                 if method_name in ['get_metadata', 'rmdir', 'rm', 'move', 'copy']  and remaining_tries != 0: 
                     return False
-                raise NoSuchFilesytemObjectError(http_response.reason, http_response.status)
+                raise NoSuchFilesytemObjectError(args[0], http_response.status)
             elif http_response.status == 405 or http_response.status == 409:#405 is method not allowed; 4shared responds with 409 (Conflict) if directory already exists
-                raise AlreadyExistsError(http_response.reason, http_response.status)
+                raise AlreadyExistsError(args[0], http_response.status)
         if isinstance(error, socket.error):
             msg = 'Retry on socket error'
             if isinstance(error.args, tuple):
