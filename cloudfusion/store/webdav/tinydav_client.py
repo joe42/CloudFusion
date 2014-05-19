@@ -142,6 +142,7 @@ class TinyDAVClient(object):
     def _get_client(self):
         client = WebDAVClient(self.url, self.port)
         client.setbasicauth(self.user, self.pwd)
+        client.timeout = 60 #set reasonable timeout
         return client
     
     @retry((Exception), tries=2, delay=1)
