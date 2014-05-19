@@ -168,12 +168,13 @@ class ChunkFactory(object):
                     ret = True
                     break
         if archive_to_swap:
-            def close(self):
-                pass
+            class FakeFileObject(object):
+                def __init__(self, name):
+                    self.name = name
+                def close(self):
+                    pass
             for store_filepath, disk_filepath in archive_to_swap.files.iteritems():
-                fake_fileobj = object()
-                fake_fileobj.name = disk_filepath
-                fake_fileobj.close = types.MethodType( close, fake_fileobj )
+                fake_fileobj = FakeFileObject(disk_filepath)
                 self.add(fake_fileobj, disk_filepath)
             
         for archive in self.archives.values():
