@@ -43,6 +43,8 @@ class WebdavStore(Store):
                 setattr(result, k, self.logger)
             elif k == '_logging_handler':
                 setattr(result, k, self._logging_handler)
+            elif k == 'tinyclient':
+                setattr(result, k, self.tinyclient)
             else:
                 setattr(result, k, deepcopy(v, memo))
         return result
