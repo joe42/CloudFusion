@@ -110,8 +110,10 @@ class TinyDAVClient(object):
         response_soup = BeautifulSoup(response.content)
         response = response_soup.find(re.compile(r'(?i)[a-z0-9]:response'))
         ret = response.find(re.compile(r'(?i)[a-z0-9]:quota-available-bytes'))
-        if ret:
+        try:
             return int(ret.text)
+        except Exception, e:
+            self.logger.error("Get overall space failed with: %s; instead returning default value of 1000000000", str(e))
         return 1000000000
     
     @retry((Exception), tries=1, delay=0)
