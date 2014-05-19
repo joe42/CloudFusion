@@ -173,7 +173,7 @@ class DropboxStore(Store):
     def create_session(self, config, cache_dir):
         key = hashlib.sha224(config['user']+config['password']).hexdigest() #key for token from last session
         try:
-            credentials_db = shelve.open(cache_dir+'/credentials')
+            credentials_db = shelve.open(cache_dir+'/credentials', protocol=-1) # use protocol -1 since token defines slots
         except:
             self.logger.debug("Credentials database could not be loaded.")
             credentials_db = {}
