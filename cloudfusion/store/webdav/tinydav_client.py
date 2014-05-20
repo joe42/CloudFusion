@@ -113,8 +113,8 @@ class TinyDAVClient(object):
         try:
             return int(ret.text)
         except Exception, e:
-            self.logger.error("Get overall space failed with: %s; instead returning default value of 1000000000", str(e))
-        return 1000000000
+            self.logger.error("Get overall space failed with: %s; instead returning default value of 1TB", str(e))
+        return 1000*1000*1000*1000 #set to 1 TB 
     
     @retry((Exception), tries=1, delay=0)
     def get_used_space(self):
@@ -141,7 +141,7 @@ class TinyDAVClient(object):
     
     def _get_client(self):
         client = WebDAVClient(self.url, self.port)
-        client.setbasicauth(self.user, self.pwd)
+        client.setbasicauth(self.user, self.pwd) 
         client.timeout = 60 #set reasonable timeout
         return client
     

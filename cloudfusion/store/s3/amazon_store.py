@@ -190,7 +190,7 @@ class AmazonStore(Store):
     
     def get_overall_space(self):
         self.logger.debug("retrieving all space")
-        return 1000000000
+        return 1000*1000*1000*1000 #set to 1 TB 
 
     def get_used_space(self):
         self.logger.debug("retrieving used space")
