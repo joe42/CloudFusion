@@ -65,6 +65,7 @@ class GoogleStore(Store):
             boto.config.add_section('Boto')
         except DuplicateSectionError, e:
             pass
+        boto.config.set('Boto','debug','0') # no debug messages from boto itself
         boto.config.set('Boto','http_socket_timeout','10') # Set sensible timeout value
         self.reconnect()
         self.logger.info("api initialized")
