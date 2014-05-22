@@ -231,6 +231,8 @@ class GoogleStore(Store):
         #self._raise_error_if_invalid_path(directory)
         directory += '/' if directory != '/' else ''
         listing = self.bucket.list(directory[1:], "/") 
+        if directory != '/':            
+            listing = [o for o in listing if o.name != directory[1:]] 
         listing = ['/'+o.name if o.name[-1] != '/' else '/'+o.name[:-1] for o in listing] #remove trailing slash and add preceding slash
         return listing
     
