@@ -53,9 +53,9 @@ def setUp():
     box_config = get_webdav_box_config() 
     yandex_config = get_webdav_yandex_config()
     io_apis.append( TransparentChunkMultiprocessingCachingStore( WebdavStore(box_config) ) )
-    io_apis.append( TransparentChunkMultiprocessingCachingStore( WebdavStore( box_config ) ) )
-    io_apis.append( TransparentMultiprocessingCachingStore( WebdavStore(yandex_config) ) )
-    io_apis.append( TransparentMultiprocessingCachingStore( WebdavStore( yandex_config ) ) )
+    io_apis.append( TransparentChunkMultiprocessingCachingStore( MetadataCachingStore ( WebdavStore( yandex_config ) ) ) )
+    io_apis.append( TransparentMultiprocessingCachingStore( WebdavStore(box_config) ) )
+    io_apis.append( TransparentMultiprocessingCachingStore( MetadataCachingStore ( WebdavStore( yandex_config ) ) ) )
     time.sleep(10)
     for io_api in io_apis:
         try:
