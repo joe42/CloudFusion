@@ -66,9 +66,13 @@ def setUp():
             io_api.create_directory(REMOTE_TESTDIR)
         except AlreadyExistsError:
             pass
+
 def tearDown():
     for io_api in io_apis:
-        io_api.delete(REMOTE_TESTDIR, True)
+        try:
+            io_api.delete(REMOTE_TESTDIR, True)
+        except NoSuchFilesytemObjectError:
+            pass
  
 def test_io_apis():
     for io_api in io_apis:
