@@ -576,6 +576,7 @@ class ChunkStoreSyncThread(object):
                     #print "duplicate pop: "+d
                     listing = self.store.get_directory_listing(d)
                     for item in listing:
+                        item = os.path.basename(item)
                         #print "duplicate iterate:"+item
                         if self.chunk_mapper.get_chunk_uuid(src_directory+item): #if mapping exists, item is a file
                             new_chunk_uuid = self.chunk_mapper.get_next_chunk_uuid()
