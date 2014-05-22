@@ -191,11 +191,13 @@ class TinyDAVClient(object):
         for response in multi_response:
             path = response.find(re.compile(r'(?i)[a-z0-9]:href')).text
             path = unquote(path)
-            if path.endswith('/') and path != '/':
+            if path == '/' or path == '':
+                continue
+            if path.endswith('/'):
                 path = path[:-1]
             if path.startswith(self.root): #cut off root
                 path = path[len(self.root):]
-            if path != self.root + directory:
+            if path != directory:
                 ret.append( path )
         return ret 
     
