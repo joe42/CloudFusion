@@ -147,7 +147,7 @@ class SugarsyncStore(Store):
         super(SugarsyncStore, self).__init__() 
         
     @staticmethod
-    def get_config(self, path_to_configfile=None):
+    def get_config(path_to_configfile=None):
         '''Get initial sugarsync configuration to initialize :class:`cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore`
         :param path_to_configfile: path to a configuration file or None, which will use the default configuration file'''
         from ConfigParser import SafeConfigParser
