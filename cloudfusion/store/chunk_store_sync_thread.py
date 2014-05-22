@@ -290,7 +290,7 @@ class PersistentChunkMapper(object):
     
     def get_chunk_uuid(self, filepath):
         ''':returns: the uuid of the chunk that filepath is stored in or None if it does not exist'''
-        if not filepath in self.filepath_mapping:
+        if not filepath.encode("utf8") in self.filepath_mapping:
             return None
         self.logger.debug(filepath+" --> "+self.filepath_mapping[filepath])
         return self.filepath_mapping[filepath]       
