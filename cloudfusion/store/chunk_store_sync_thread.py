@@ -241,7 +241,7 @@ class PersistentChunkMapper(object):
         :returns: list of absolute filepaths for files in the chunk'''
         self.logger.debug("absolute chunk_name in get_files_in_chunk:"+chunk_name)
         parent_dir = get_parent_dir(chunk_name)
-        chunk_name = os.path.basename(chunk_name) #we only need the name of the chunk, as it is a unique identifier
+        chunk_name = os.path.basename(chunk_name).encode("utf8") #we only need the name of the chunk, as it is a unique identifier
         if chunk_name in self.alias_mapping:
             filenames = self.alias_mapping[chunk_name]
         elif chunk_name in self.chunk_mapping:
@@ -257,6 +257,7 @@ class PersistentChunkMapper(object):
         :param chunk_id: unique id of the chunk
         :returns: a generator iterating over the file is the chunk'''
         tar = tarfile.open(name=None, mode='r', fileobj=DataFileWrapper(chunk_content))
+        chunk_id = chunk_id.encode("utf8")
         if chunk_id in self.alias_mapping:
             filepaths = self.alias_mapping[chunk_id]
         else:
@@ -269,8 +270,10 @@ class PersistentChunkMapper(object):
     def put(self, chunk_uuid, filepaths):
         '''Adds a chunk mapping between chunk_uuid and filepaths'''
         files = map(os.path.basename, filepaths)
+        chunk_uuid = chunk_uuid.encode("utf8")
         self.chunk_mapping[chunk_uuid] = files #create tuple with (filename,filename_alias)
         for filepath in filepaths:
+            filepath = filepath.encode("utf8")
             self.filepath_mapping[filepath] = chunk_uuid
             #print (filepath+" <-- "+chunk_uuid)
         self.filepath_mapping.sync()
@@ -278,9 +281,10 @@ class PersistentChunkMapper(object):
         
     def add_aliases(self, chunk_uuid, alias_filepaths, new_alias_filepaths): #dont use put, as it wuold overwrite filepath_mapping with new chunk
         '''Adds an alias of a file in the chunk with id chunk_uuid'''
-        new_alias_filenames = [os.path.basename(x) for x in new_alias_filepaths] #replace previous alias
+        new_alias_filenames = [os.path.basename(x).encode("utf8") for x in new_alias_filepaths] #replace previous alias
         #aliases = [os.path.basename(new_filepath_alias) if x == os.path.basename(filepath_alias) else os.path.basename(filepath_alias) for x in files] #replace previous alias
         self.logger.debug("new aliases: "+repr(new_alias_filepaths)+" for files: "+repr(alias_filepaths)+" in "+chunk_uuid)
+        chunk_uuid = chunk_uuid.encode("utf8")
         self.alias_mapping[chunk_uuid] = new_alias_filenames
         for alias in new_alias_filepaths:
             self.filepath_mapping[alias] = chunk_uuid
@@ -290,13 +294,15 @@ class PersistentChunkMapper(object):
     
     def get_chunk_uuid(self, filepath):
         ''':returns: the uuid of the chunk that filepath is stored in or None if it does not exist'''
-        if not filepath.encode("utf8") in self.filepath_mapping:
+        filepath = filepath.encode("utf8")
+        if not filepath in self.filepath_mapping:
             return None
         self.logger.debug(filepath+" --> "+self.filepath_mapping[filepath])
         return self.filepath_mapping[filepath]       
     
     def remove_file(self, filepath):
         '''Remove filepath from the mapping.'''
+        filepath = filepath.encode("utf8")
         if not filepath in self.filepath_mapping:
             return
         chunk_id = self.filepath_mapping[filepath]
@@ -710,7 +716,7 @@ class ChunkStoreSyncThread(object):
                 raise err
             for filepath, file_content, modified_date in self.chunk_mapper.iterate_files_from_chunk(tar_content, chunk_id):
                 if not self.cache.exists(parent_dir+filepath):
-                    if self.chunk_mapper.filepath_mapping[parent_dir+filepath] == chunk_id: # only if the file contents in the chunk is the current version
+                    if self.chunk_mapper.filepath_mapping[(parent_dir+filepath).encode("utf8")] == chunk_id: # only if the file contents in the chunk is the current version
                         self.refresh_cache_entry(parent_dir+filepath, file_content, modified_date) #[shares_resource: write self.entries]
             self.readers.remove(reader)
             
