@@ -204,7 +204,7 @@ class TinyDAVClient(object):
     
     @retry((Exception), tries=1, delay=0)
     def get_bulk_metadata(self, directory):
-        ''':returns: A dictionary mapping the path of every file object in, and including *directory* to a dictionary with the keys\
+        ''':returns: A dictionary mapping the path of every file object in *directory* to a dictionary with the keys\
         'modified', 'bytes' and 'is_dir' containing the corresponding metadata for the file object.
         
         The value for 'modified' is a date in seconds, stating when the file object was last modified.  
@@ -221,8 +221,12 @@ class TinyDAVClient(object):
             path = response.find(re.compile(r'(?i)[a-z0-9]:href')).text
             path = unquote(path)
             item = {}
-            if path.endswith('/') and path != '/':
+            if path == '/' or path == '':
+                continue
+            if path.endswith('/'):
                 path = path[:-1]
+            if path == self.root + directory:
+                continue
             if path.startswith(self.root): #cut off root
                 path = path[len(self.root):]
             item["path"] = path

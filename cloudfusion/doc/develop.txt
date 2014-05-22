@@ -151,7 +151,6 @@ Here is an example for WebDAV::
         #Get directory listing (may take a few seconds)
         client.get_bulk_metadata("/")
         '''
-        {u'/': {'bytes': 0, 'is_dir': True, 'modified': 1400688126, 'path': u'/'},
          u'/My Folder': {'bytes': 0,
           'is_dir': True,
           'modified': 1400352031,
