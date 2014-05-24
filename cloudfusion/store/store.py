@@ -158,6 +158,23 @@ class Store(object):
         except NoSuchFilesytemObjectError:
             return False;
     
+    def __deepcopy__(self, memo):
+        '''This method is needed for copying the Store instance to other processes.
+        Overwrite this method to add a property that cannot be serialized or should be shared by multiple processes.
+        The property can be added by creating a new branch in the if statement, comparing k with the property name.'''
+        from copy import deepcopy
+        cls = self.__class__
+        result = cls.__new__(cls)
+        memo[id(self)] = result
+        for k, v in self.__dict__.items():
+            if k == 'logger':
+                setattr(result, k, self.logger)
+            elif k == '_logging_handler':
+                setattr(result, k, self._logging_handler)
+            else:
+                setattr(result, k, deepcopy(v, memo))
+        return result
+    
     def get_metadata(self, path):
         """ This method is a hook that must be implemented by subclasses. 
         If it is implemented, the methods :meth:`~.exists`, :meth:`~.get_bytes`, :meth:`~.is_dir` work out of the box.
