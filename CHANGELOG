@@ -4,6 +4,16 @@ B: Added Features
 C: Bugfixes
 _stable means that the changes were successfully tested with all tests in the test suite, and a stress test for at least 24h
 
+v.6.2.14_stable:
+    * Bugfix in metadata caching layer, which caused already cached data to be retrieved
+    * Add Feature Support for WebDAV
+    * Add Feature Fast Directory Listing for WebDAV
+    * Bugfix directory listing for Amazon S3 and Google Storage (don't list the directory name itself)
+    * Bugfix file system; remove wrong exception, when renaming, add exception EISDIR (old is file, new is directory), add exception ENOTEMPTY when non empty directory should be removed
+    * Bugfixes for archiving layer
+    * Bugfix to show overall space for WebDAV if possible
+    * Bugfix socket timeout settings, which were se to indefinite, leading to blocking processes
+    * Bugfix for persistent revisions and credentials for Dropbox
 v.5.10.15_stable:
     * Modify method delete of interface Store, adding is_dir parameter which is True iff the path to delete is a directory
     * Use parameter stop to stop cloudfusion
