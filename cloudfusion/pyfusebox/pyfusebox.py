@@ -159,6 +159,10 @@ class PyFuseBox(Operations):
     def rename(self, old, new):
         self.logger.debug("rename %s to %s", old, new)
         try:
+            source_is_file = not self.store.is_dir()
+            destination_is_directory = self.store.is_dir()
+            if source_is_file and destination_is_directory:
+                raise FuseOSError(EISDIR)
             #if file is opened with gedit a hidden file is written and immediately renamed to the target file without flushing 
             if old in self.temp_file: 
                 self.logger.debug("flushing before renaming %s", old)
