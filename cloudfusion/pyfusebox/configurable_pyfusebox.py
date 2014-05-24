@@ -187,6 +187,11 @@ class ConfigurablePyFuseBox(PyFuseBox):
         self.store_initialized = True
         
     def __get_new_store(self, service, auth):
+        '''To add a new implementation of :class:`cloudfusion.store.Store`, add an elif branch in the if statement.
+        The parameter service is the value of the variable name specified in the configuration file in the [store] section.
+        The parameter auth is a dictionary with every variable specified in the configuration file in the [auth] section, such as password and user.
+        :param service: The name of the service to be used. I.e. Sugarsync, Dropbox, or Google Storage.
+        :param auth: Dictionary of the variable specified in the configuration file's [auth] section.'''
         self.logger.debug("__get_new_store:")
         try:
             if service.lower() == "sugarsync":
