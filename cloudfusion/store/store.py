@@ -33,6 +33,13 @@ class InterruptedException(Exception):
 
     
 class Store(object):
+    '''Central interface for any cloud storage provider. 
+    Any cloud storage provider that is used by CloudFusion needs to implement this interface.
+    After implementing the interface for a new provider, you can add file system access to it by
+    introducing a new branch to the if statement in :meth:`cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.__get_new_store`.
+    Advanced functionality such as caching and concurrency are supplied by wrappers, which are already implemented.
+    Path parameters are always absolute paths of a file system, starting with a '/'
+    '''
     def _is_valid_path(self, path):
         return path[0] == "/";
     
@@ -51,6 +58,8 @@ class Store(object):
     
     def store_file(self, path_to_file, dest_dir="/", remote_file_name = None, interrupt_event=None):
         """Store the local file *path_to_file* to directory *dest_dir* on the store.
+        :param path_to_file: local file path
+        :param dest_dir: remote destination directory to store the contents of the local file to
         :param remote_file_name: the file name on the store; by default this is the original file name if this parameter is None.
         :param interrupt_event: (optional) If the value is not None, listen for an interrupt event with with interrupt_event.wait() \
         until the file has been stored. Abort the upload if interrupt_event.wait() returns.
@@ -64,7 +73,8 @@ class Store(object):
         
     def store_fileobject(self, fileobject, path, interrupt_event=None):
         """Store the contents of *fileobject* to *path* on the store.
-        :param remote_file_name: the file name on the store or the original file name if this parameter is None.
+        :param fileobject: A file like object. The position of the fileobject needs to be at 0 (use fileobject.seek(0) before calling this method)
+        :param path: The remote file path to store the contents of fileobject to
         :param interrupt_event: (optional) If the value is not None, listen for an interrupt event with with interrupt_event.wait() \
         until the file has been stored. Abort the upload if interrupt_event.wait() returns.
         :returns: (optional) the date in seconds, when the file was updated"""
@@ -101,22 +111,22 @@ class Store(object):
         raise NotImplementedError()
         
     def duplicate(self, path_to_src, path_to_dest):
-        """Duplicate file or directory from *path_to_src* to *directory path_to_dest*.
-        If *path_to_dest* exists, it is overwritten by the file or directory specified by *path_to_src*
+        """Duplicate file or directory from *path_to_src* to *path_to_dest*.
+        If *path_to_dest* exists before, it is deleted or overwritten.
         If *path_to_src* is a directory, the directory is duplicated with all its files and directories.
-        Either this method or :meth:`~.move` needs to be implemented in a subclass to work with :class:`cloudfusion.pyfusebox.pyfusebox.PyFuseBox`.
+        Either this method or :meth:`~.move` needs to be implemented in a subclass.
         :param path_to_src: must never be the same as *path_to_dest*
         :param path_to_dest: must end in the name of the child directory or the file specified by *path_to_src*"""
         raise NotImplementedError()
         
     def move(self, path_to_src, path_to_dest):
-        """Move file or directory from *path_to_src* to *directory path_to_dest*.
-        If *path_to_dest* exists, it is overwritten by the file or directory specified by *path_to_src*
-        If *path_to_src* is a directory, the directory is moved with all its files and directories.
+        """Rename a remote file or directory *path_to_src* to *path_to_dest*. 
+        If *path_to_dest* exists before, it is deleted or overwritten.
+        If *path_to_src* is a directory, the directory is renamed to *path_to_dest*.
         Default implementation relies on an implementation of :meth:`~.duplicate` in a subclass, but it should be overwritten.
-        Either this method or :meth:`~.duplicate` needs to be implemented in a subclass to work with :class:`cloudfusion.pyfusebox.pyfusebox.PyFuseBox`.
-        :param path_to_src: must never be the same as *path_to_dest*
-        :param path_to_dest: must end in the name of the child directory or the file specified by *path_to_src*"""
+        Either this method or :meth:`~.duplicate` needs to be implemented in a subclass.
+        :param path_to_src: path to a remote file or directory
+        :param path_to_dest: path of the new remote file or directory"""
         self.duplicate(path_to_src, path_to_dest)
         try:
             self.delete(path_to_src, is_dir=True)
@@ -169,15 +179,20 @@ class Store(object):
         return resp['is_dir']
     
     def get_logging_handler(self):
+        '''Get the name of the logging handler used by a subclass, so that the wrappers may use the same logger.
+        Wrappers are responsible for extended functionality like caching data or concurrency i.e. :class:`cloudfusion.store.transparent_caching_store.TransparentMultiprocessingCachingStore`.
+        This method might simply return :meth:`~.get_name`, even if the subclass does not use a logger.
+        :return: the name of the logging handler used by a subclass and its wrappers.'''
         raise NotImplementedError()
     
     def flush(self):
+        '''Deprecated, do not overwrite this method.'''
         pass
     
     def reconnect(self):
-        '''Try to reconnect to the service'''
+        '''Try to reconnect to the service.'''
         pass
     
     def get_max_filesize(self):
-        """Return maximum number of bytes per file"""
+        """Return maximum number of bytes per file; Some cloud storages limit the size of files to be uploaded."""
         return 1000*1000*1000
