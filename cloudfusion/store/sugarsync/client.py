@@ -6,8 +6,12 @@ from cloudfusion.util.xmlparser import DictXMLParser
 from cloudfusion.util.string import *
 import base64
 import xml.dom.minidom 
+from requests.auth import AuthBase
 
-#make thread safe by adding connection creation to every method call
+class NoAuth(AuthBase):
+    """Do nothing authentication handler, to prevent requests from using credentials stored in the .netrc configuration file."""
+    def __call__(self, request):
+        return request
 
 class SugarsyncClient(object):
     def __init__(self, config):
@@ -129,7 +133,7 @@ class SugarsyncClient(object):
     
     def put_file(self, fileobject, path_to_file):
         headers = {"Host": self.host, "Authorization": self.token}
-        response = requests.put("https://"+self.host+"/file/:sc:%s:%s/data" % (self.uid, path_to_file), data=fileobject, headers=headers, allow_redirects=True, timeout=30)
+        response = requests.put("https://"+self.host+"/file/:sc:%s:%s/data" % (self.uid, path_to_file), data=fileobject, headers=headers, allow_redirects=True, timeout=30, auth=NoAuth())
         ret = HTTPResponse.get_instance( response.status_code, "No reason given", response.headers, response.content)
         return ret
     
@@ -137,7 +141,7 @@ class SugarsyncClient(object):
         headers = {"Host": self.host, "Authorization": self.token}
         try:
             with open(path_to_src) as fileobject:
-                response = requests.put("https://"+self.host+"/file/:sc:%s:%s/data" % (self.uid, path_to_dest), data=fileobject, headers=headers, allow_redirects=True, timeout=30)
+                response = requests.put("https://"+self.host+"/file/:sc:%s:%s/data" % (self.uid, path_to_dest), data=fileobject, headers=headers, allow_redirects=True, timeout=30, auth=NoAuth())
             ret = HTTPResponse.get_instance( response.status_code, "No reason given", response.headers, response.content)
         except Exception, e:
             ret = e
