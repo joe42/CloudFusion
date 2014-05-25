@@ -60,15 +60,8 @@ perl -pi -e "s/password =.*/password =${WEBDAV3_PWD}/g" cloudfusion/config/Webda
 perl -pi -e "s/user =.*/user =${WEBDAV4_USR}/g" cloudfusion/config/Webdav_yandex_testing.ini
 perl -pi -e "s/password =.*/password =${WEBDAV4_PWD}/g" cloudfusion/config/Webdav_yandex_testing.ini
 
-# These tests are interdependent, so wait before store_test, and store_test2 begin
-bash -c "nosetests -v -s -x cloudfusion/tests/transparent_store_test_no_sync.py  &>test6_log; status=$?; exit $status" &                  
-pid6=$!
-nosetests -v -s -x cloudfusion/tests/transparent_store_test_with_sync.py
-
-wait $pid6
-(exit $?)
-cat test6_log
-
+# This tests is interdependent, so wait before store_test, and store_test2 begin
+nosetests -v -s -x cloudfusion/tests/transparent_store_test_no_sync.py
 
 #options: -x stop on first error, -v verbose, -s output stdout messgages immediately
 #bash -c "nosetests -v -s -x cloudfusion/tests/db_logging_thread_test.py &>test1_log; status=$?; exit $status" & #about 18 Min runtime
