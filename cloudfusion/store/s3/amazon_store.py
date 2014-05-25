@@ -143,6 +143,7 @@ class AmazonStore(Store):
         k.set_contents_from_string('')
         
         
+    @retry((Exception), tries=1)
     def duplicate(self, path_to_src, path_to_dest):
         self.logger.debug("duplicating %s to %s", path_to_src, path_to_dest)
         path_to_dest = path_to_dest[1:] #remove / from beginning
@@ -164,6 +165,7 @@ class AmazonStore(Store):
             new_path = path_to_dest+key.name.split(path_to_src,1)[1]
             key.copy(self.bucket, new_path)
     
+    @retry((Exception), tries=1)
     def move(self, path_to_src, path_to_dest):
         self.logger.debug("moving %s to %s", path_to_src, path_to_dest)
         path_to_dest = path_to_dest[1:] #remove / from beginning

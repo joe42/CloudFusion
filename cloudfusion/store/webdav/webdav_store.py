@@ -102,10 +102,12 @@ class WebdavStore(Store):
         self.logger.debug("creating directory %s", directory)
         self.tinyclient.mkdir(directory)
         
+    @retry((Exception), tries=1)
     def duplicate(self, path_to_src, path_to_dest):
         self.logger.debug("duplicating %s to %s", path_to_src, path_to_dest)
         self.tinyclient.copy(path_to_src, path_to_dest)
     
+    @retry((Exception), tries=1)
     def move(self, path_to_src, path_to_dest):
         self.logger.debug("moving %s to %s", path_to_src, path_to_dest)
         self.tinyclient.move(path_to_src, path_to_dest)
