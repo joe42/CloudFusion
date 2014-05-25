@@ -24,7 +24,7 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="CloudFusion 0.01 documentation" href="#" />
-    <link rel="next" title="Users documentation" href="user.html" /> 
+    <link rel="next" title="Installation" href="setup.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,7 +37,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="user.html" title="Users documentation"
+          <a href="setup.html" title="Installation"
              accesskey="N">next</a> |</li>
         <li><a href="#">CloudFusion 0.01 documentation</a> &raquo;</li> 
       </ul>
@@ -52,34 +52,50 @@
 <h1>Welcome to CloudFusion&#8217;s documentation!<a class="headerlink" href="#welcome-to-cloudfusion-s-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>CloudFusion lets you access your Dropbox or Sugarsync files from Linux like any file on your desktop.</p>
+<p>CloudFusion lets you access your Dropbox, Sugarsync, Amazon S3, Google Storage, and WebDAV storages from Linux like any file on your desktop.</p>
 </div>
 <div class="section" id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Flexible caching layers</li>
+<li>Limited cache size</li>
+<li>Persistent cache to prevent data loss on crash</li>
+<li>Error handling layers</li>
+<li>Multi-threading</li>
+<li>Statistics Interface</li>
+<li>Auto-Login</li>
+<li>No root privileges needed for running</li>
 </ul>
 </div>
 <div class="section" id="further-development">
 <h2>Further development<a class="headerlink" href="#further-development" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>File attributes (modified timestamp, permissions)</li>
+<li>Improved error handling for Amazon S3 and Google Storage</li>
+<li>Integration of Google Drive, and box.com</li>
+<li>Integration of SFTP</li>
+</ul>
 </div>
 <div class="section" id="contents">
 <h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="user.html">Users documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="user.html#start-cloudfusion">Start CloudFusion</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user.html#create-a-configuration-file">Create a Configuration File</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user.html#configuring-cloudfusion">Configuring CloudFusion</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user.html#advanced-usage">Advanced Usage:</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="setup.html">Setup documentation</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="setup.html#requirements">Requirements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="setup.html#install">Install</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="user.html">Users documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user.html#get-started">Get started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user.html#shut-down">Shut Down</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user.html#restrictions">Restrictions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user.html#advanced-features">Advanced Features</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="develop.html">Developers documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="develop.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="develop.html#using-the-api-directly">Using the API Directly</a></li>
 <li class="toctree-l2"><a class="reference internal" href="develop.html#extensions">Extensions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="develop.html#documentation">Documentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="develop.html#tests">Tests</a></li>
@@ -111,17 +127,15 @@
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#features">Features</a></li>
 <li><a class="reference internal" href="#further-development">Further development</a></li>
-<li><a class="reference internal" href="#contents">Contents</a><ul>
-</ul>
-</li>
+<li><a class="reference internal" href="#contents">Contents</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Next topic</h4>
-  <p class="topless"><a href="user.html"
-                        title="next chapter">Users documentation</a></p>
+  <p class="topless"><a href="setup.html"
+                        title="next chapter">Installation</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/index.txt"
@@ -154,14 +168,14 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="user.html" title="Users documentation"
+          <a href="setup.html" title="Installation"
              >next</a> |</li>
         <li><a href="#">CloudFusion 0.01 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Johannes Müller.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The client Module &mdash; CloudFusion 0.01 documentation</title>
+    <title>The sugarsync_store Module &mdash; CloudFusion 0.01 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -25,8 +25,8 @@
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
     <link rel="up" title="Subpackages" href="store.html" />
-    <link rel="next" title="The persistent_lru_cache_test Module" href="tests.html" />
-    <link rel="prev" title="The dropbox_store Module" href="store.dropbox.html" /> 
+    <link rel="next" title="The file_decorator Module" href="store.dropbox.html" />
+    <link rel="prev" title="The amazon_store Module" href="store.s3.html" /> 
   </head>
   <body>
     <div class="related">
@@ -39,10 +39,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tests.html" title="The persistent_lru_cache_test Module"
+          <a href="store.dropbox.html" title="The file_decorator Module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="store.dropbox.html" title="The dropbox_store Module"
+          <a href="store.s3.html" title="The amazon_store Module"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li>
@@ -55,113 +55,7 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-cloudfusion.store.sugarsync.client">
-<span id="the-client-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">client</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.sugarsync.client" title="Permalink to this headline">¶</a></h1>
-<p>Created on 04.05.2011</p>
-<dl class="class">
-<dt id="cloudfusion.store.sugarsync.client.HTTPResponse">
-<em class="property">class </em><tt class="descclassname">cloudfusion.store.sugarsync.client.</tt><tt class="descname">HTTPResponse</tt><big>(</big><em>response</em>, <em>data</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.HTTPResponse" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<dl class="classmethod">
-<dt id="cloudfusion.store.sugarsync.client.HTTPResponse.get_instance">
-<em class="property">classmethod </em><tt class="descname">get_instance</tt><big>(</big><em>status</em>, <em>reason</em>, <em>headers</em>, <em>data</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.HTTPResponse.get_instance" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.sugarsync.client.HTTPResponse.getheader">
-<tt class="descname">getheader</tt><big>(</big><em>name</em>, <em>default=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.HTTPResponse.getheader" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.sugarsync.client.HTTPResponse.getheaders">
-<tt class="descname">getheaders</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.HTTPResponse.getheaders" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient">
-<em class="property">class </em><tt class="descclassname">cloudfusion.store.sugarsync.client.</tt><tt class="descname">SugarsyncClient</tt><big>(</big><em>config</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<dl class="method">
-<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient._reconnect">
-<tt class="descname">_reconnect</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient._reconnect" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.create_file">
-<tt class="descname">create_file</tt><big>(</big><em>directory</em>, <em>name</em>, <em>mime='text/x-cloudfusion'</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.create_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.create_folder">
-<tt class="descname">create_folder</tt><big>(</big><em>directory</em>, <em>name</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.create_folder" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.create_token">
-<tt class="descname">create_token</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.create_token" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.create_user">
-<tt class="descname">create_user</tt><big>(</big><em>username</em>, <em>password</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.create_user" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.delete_file">
-<tt class="descname">delete_file</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.delete_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.delete_folder">
-<tt class="descname">delete_folder</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.delete_folder" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.duplicate_file">
-<tt class="descname">duplicate_file</tt><big>(</big><em>path_to_src</em>, <em>path_to_dest</em>, <em>name</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.duplicate_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.get_dir_listing">
-<tt class="descname">get_dir_listing</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.get_dir_listing" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.get_file">
-<tt class="descname">get_file</tt><big>(</big><em>path_to_file</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.get_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.get_file_metadata">
-<tt class="descname">get_file_metadata</tt><big>(</big><em>path_to_file</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.get_file_metadata" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.get_folder_metadata">
-<tt class="descname">get_folder_metadata</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.get_folder_metadata" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.put_file">
-<tt class="descname">put_file</tt><big>(</big><em>fileobject</em>, <em>path_to_file</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.put_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.put_file_async">
-<tt class="descname">put_file_async</tt><big>(</big><em>path_to_src</em>, <em>path_to_dest</em>, <em>response_queue</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.put_file_async" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.user_info">
-<tt class="descname">user_info</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.user_info" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.store.sugarsync.sugarsync_store">
+  <div class="section" id="module-cloudfusion.store.sugarsync.sugarsync_store">
 <span id="the-sugarsync-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">sugarsync_store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.sugarsync.sugarsync_store" title="Permalink to this headline">¶</a></h1>
 <p>Created on 08.04.2011</p>
 <dl class="class">
@@ -244,14 +138,29 @@
 <dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore">
 <em class="property">class </em><tt class="descclassname">cloudfusion.store.sugarsync.sugarsync_store.</tt><tt class="descname">SugarsyncStore</tt><big>(</big><em>config</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="store.html#cloudfusion.store.store.Store" title="cloudfusion.store.store.Store"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.store.Store</span></tt></a></p>
+<p><em>config</em> can be obtained from the function <a class="reference internal" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore.get_config" title="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore.get_config"><tt class="xref py py-func docutils literal"><span class="pre">cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore.get_config()</span></tt></a>,
+but you need to add user and password:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">config</span> <span class="o">=</span> <span class="n">SugarsyncStore</span><span class="o">.</span><span class="n">get_config</span><span class="p">()</span>
+<span class="n">config</span><span class="p">[</span><span class="s">&#39;user&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;me@emailserver.com&#39;</span> <span class="c">#your account username/e-mail address</span>
+<span class="n">config</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;MySecret!23$&#39;</span> <span class="c">#your account password</span>
+</pre></div>
+</div>
+<p>Or you can use a configuration file that already has password and username set by specifying a path:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">path_to_my_config_file</span> <span class="o">=</span> <span class="s">&#39;/home/joe/MySugarsync.ini&#39;</span>       
+<span class="n">config</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">(</span><span class="n">path_to_my_config_file</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> &#8211; dictionary with key value pairs</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._create_file">
 <tt class="descname">_create_file</tt><big>(</big><em>path</em>, <em>mime='text/x-cloudfusion'</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._create_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._get_metadata">
-<tt class="descname">_get_metadata</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._get_metadata" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -314,6 +223,13 @@
 <tt class="descname">duplicate</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore.duplicate" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="staticmethod">
+<dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore.get_config">
+<em class="property">static </em><tt class="descname">get_config</tt><big>(</big><em>path_to_configfile=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore.get_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get initial sugarsync configuration to initialize <a class="reference internal" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore" title="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore</span></tt></a>
+:param path_to_configfile: path to a configuration file or None, which will use the default configuration file</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore.get_directory_listing">
 <tt class="descname">get_directory_listing</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore.get_directory_listing" title="Permalink to this definition">¶</a></dt>
@@ -334,6 +250,11 @@
 <tt class="descname">get_max_filesize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore.get_max_filesize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return maximum number of bytes per file</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore.get_metadata">
+<tt class="descname">get_metadata</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore.get_metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore.get_name">
@@ -373,6 +294,124 @@
 <dd></dd></dl>
 
 </div>
+<div class="section" id="module-cloudfusion.store.sugarsync.client">
+<span id="the-client-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">client</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.sugarsync.client" title="Permalink to this headline">¶</a></h1>
+<p>Created on 04.05.2011</p>
+<dl class="class">
+<dt id="cloudfusion.store.sugarsync.client.HTTPResponse">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.sugarsync.client.</tt><tt class="descname">HTTPResponse</tt><big>(</big><em>response</em>, <em>data</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.HTTPResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="classmethod">
+<dt id="cloudfusion.store.sugarsync.client.HTTPResponse.get_instance">
+<em class="property">classmethod </em><tt class="descname">get_instance</tt><big>(</big><em>status</em>, <em>reason</em>, <em>headers</em>, <em>data</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.HTTPResponse.get_instance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.client.HTTPResponse.getheader">
+<tt class="descname">getheader</tt><big>(</big><em>name</em>, <em>default=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.HTTPResponse.getheader" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.client.HTTPResponse.getheaders">
+<tt class="descname">getheaders</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.HTTPResponse.getheaders" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.store.sugarsync.client.NoAuth">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.sugarsync.client.</tt><tt class="descname">NoAuth</tt><a class="headerlink" href="#cloudfusion.store.sugarsync.client.NoAuth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">requests.auth.AuthBase</span></tt></p>
+<p>Do nothing authentication handler, to prevent requests from using credentials stored in the .netrc configuration file.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.sugarsync.client.</tt><tt class="descname">SugarsyncClient</tt><big>(</big><em>config</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient._reconnect">
+<tt class="descname">_reconnect</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient._reconnect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.create_file">
+<tt class="descname">create_file</tt><big>(</big><em>directory</em>, <em>name</em>, <em>mime='text/x-cloudfusion'</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.create_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.create_folder">
+<tt class="descname">create_folder</tt><big>(</big><em>directory</em>, <em>name</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.create_folder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.create_token">
+<tt class="descname">create_token</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.create_token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.create_user">
+<tt class="descname">create_user</tt><big>(</big><em>username</em>, <em>password</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.create_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.delete_file">
+<tt class="descname">delete_file</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.delete_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.delete_folder">
+<tt class="descname">delete_folder</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.delete_folder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.duplicate_file">
+<tt class="descname">duplicate_file</tt><big>(</big><em>path_to_src</em>, <em>path_to_dest</em>, <em>name</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.duplicate_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.get_dir_listing">
+<tt class="descname">get_dir_listing</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.get_dir_listing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.get_file">
+<tt class="descname">get_file</tt><big>(</big><em>path_to_file</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.get_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.get_file_metadata">
+<tt class="descname">get_file_metadata</tt><big>(</big><em>path_to_file</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.get_file_metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.get_folder_metadata">
+<tt class="descname">get_folder_metadata</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.get_folder_metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.get_syncfolders">
+<tt class="descname">get_syncfolders</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.get_syncfolders" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.put_file">
+<tt class="descname">put_file</tt><big>(</big><em>fileobject</em>, <em>path_to_file</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.put_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.put_file_async">
+<tt class="descname">put_file_async</tt><big>(</big><em>path_to_src</em>, <em>path_to_dest</em>, <em>response_queue</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.put_file_async" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.user_info">
+<tt class="descname">user_info</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.user_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 
 
           </div>
@@ -382,16 +421,16 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">client</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.store.sugarsync.sugarsync_store">The <tt class="docutils literal"><span class="pre">sugarsync_store</span></tt> Module</a></li>
+<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">sugarsync_store</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.store.sugarsync.client">The <tt class="docutils literal"><span class="pre">client</span></tt> Module</a></li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="store.dropbox.html"
-                        title="previous chapter">The <tt class="docutils literal"><span class="pre">dropbox_store</span></tt> Module</a></p>
+  <p class="topless"><a href="store.s3.html"
+                        title="previous chapter">The <tt class="docutils literal"><span class="pre">amazon_store</span></tt> Module</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="tests.html"
-                        title="next chapter">The <tt class="docutils literal"><span class="pre">persistent_lru_cache_test</span></tt> Module</a></p>
+  <p class="topless"><a href="store.dropbox.html"
+                        title="next chapter">The <tt class="docutils literal"><span class="pre">file_decorator</span></tt> Module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/store.sugarsync.txt"
@@ -424,10 +463,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tests.html" title="The persistent_lru_cache_test Module"
+          <a href="store.dropbox.html" title="The file_decorator Module"
              >next</a> |</li>
         <li class="right" >
-          <a href="store.dropbox.html" title="The dropbox_store Module"
+          <a href="store.s3.html" title="The amazon_store Module"
              >previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li>
@@ -436,7 +475,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Johannes Müller.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

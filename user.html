@@ -24,8 +24,8 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
-    <link rel="next" title="Setup documentation" href="setup.html" />
-    <link rel="prev" title="Welcome to CloudFusion’s documentation!" href="index.html" /> 
+    <link rel="next" title="Developers documentation" href="develop.html" />
+    <link rel="prev" title="Installation" href="setup.html" /> 
   </head>
   <body>
     <div class="related">
@@ -38,10 +38,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="setup.html" title="Setup documentation"
+          <a href="develop.html" title="Developers documentation"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Welcome to CloudFusion’s documentation!"
+          <a href="setup.html" title="Installation"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li> 
       </ul>
@@ -54,43 +54,168 @@
             
   <div class="section" id="users-documentation">
 <h1>Users documentation<a class="headerlink" href="#users-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="start-cloudfusion">
-<h2>Start CloudFusion<a class="headerlink" href="#start-cloudfusion" title="Permalink to this headline">¶</a></h2>
-<p>To run the application make a directory mnt and from your home directory call:</p>
-<div class="highlight-python"><pre>python -m cloudfusion.main mnt</pre>
-</div>
-</div>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>After installing CloudFusion, you need to create a configuration file for the storage provider you want to use as described below.</p>
 <div class="section" id="create-a-configuration-file">
-<h2>Create a Configuration File<a class="headerlink" href="#create-a-configuration-file" title="Permalink to this headline">¶</a></h2>
+<h3>Create a Configuration File<a class="headerlink" href="#create-a-configuration-file" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="sugarsync">
-<h3>Sugarsync<a class="headerlink" href="#sugarsync" title="Permalink to this headline">¶</a></h3>
-<p>Copy the Sugarsync configuration file located at <strong>cloudfusion/config/Sugarsync.ini</strong> to your home directory.
-Edit the configuration file by adding your e-mail address as your username and a password.</p>
+<h4>Sugarsync<a class="headerlink" href="#sugarsync" title="Permalink to this headline">¶</a></h4>
+<p>Copy the Sugarsync configuration file located at <strong>cloudfusion/cloudfusion/config/Sugarsync.ini</strong> to your home directory.
+Edit the configuration file by adding your e-mail address as your username and a password.
+Your account will expire after a month, except if you change to a payed account.</p>
 </div>
 <div class="section" id="dropbox">
-<h3>Dropbox<a class="headerlink" href="#dropbox" title="Permalink to this headline">¶</a></h3>
-<p>Simply copy the Dropbox configuration file located at <strong>cloudfusion/config/Dropbox.ini</strong> to your home directory.
+<h4>Dropbox<a class="headerlink" href="#dropbox" title="Permalink to this headline">¶</a></h4>
+<p>Simply copy the Dropbox configuration file located at <strong>cloudfusion/cloudfusion/config/Dropbox.ini</strong> to your home directory.
 If you do not have a Dropbox account already, you can create a new one at <a class="reference external" href="https://www.dropbox.com">https://www.dropbox.com</a>.
-No further steps are required.</p>
+Edit the configuration file by adding your username and a password.</p>
+</div>
+<div class="section" id="google-storage">
+<h4>Google Storage<a class="headerlink" href="#google-storage" title="Permalink to this headline">¶</a></h4>
+<p>Copy the Google Storage configuration file located at <strong>cloudfusion/cloudfusion/config/Google.ini</strong> to your home directory.
+Add your access_key_id, and secret_access_key to the configuration file. Details on obtaining these are inside the configuration file.</p>
+</div>
+<div class="section" id="amazon-s3">
+<h4>Amazon S3<a class="headerlink" href="#amazon-s3" title="Permalink to this headline">¶</a></h4>
+<p>Copy the Amazon S3 configuration file located at <strong>cloudfusion/cloudfusion/config/AmazonS3.ini</strong> to your home directory.
+Add your access_key_id, and secret_access_key to the configuration file. Details on obtaining these are inside the configuration file.</p>
+</div>
+<div class="section" id="webdav">
+<h4>WebDAV<a class="headerlink" href="#webdav" title="Permalink to this headline">¶</a></h4>
+<p>Copy the WebDAV configuration file located at <strong>cloudfusion/cloudfusion/config/Webdav.ini</strong> to your home directory.
+Add the URL of the server, your username, and your  password to the configuration file.
+Here some information about WebDAV providers:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="34%" />
+<col width="9%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">WebDAV URL</th>
+<th class="head">Free Storage</th>
+<th class="head">Further Details</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="https://mediencenter.t-online.de">T-Online</a></td>
+<td><a class="reference external" href="https://webdav.mediencenter.t-online.de">https://webdav.mediencenter.t-online.de</a></td>
+<td>25 GB</td>
+<td>German Provider</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="http://4shared.com/">4shared</a></td>
+<td><a class="reference external" href="https://webdav.4shared.com">https://webdav.4shared.com</a></td>
+<td>15 GB</td>
+<td>3 GB daily traffic, 30 GB monthly, cannot delete directories</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="https://www.box.com/">Box.com</a></td>
+<td><a class="reference external" href="https://dav.box.com/dav">https://dav.box.com/dav</a></td>
+<td>10 GB</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="www.yandex.com">yandex.com</a></td>
+<td><a class="reference external" href="https://webdav.yandex.com">https://webdav.yandex.com</a></td>
+<td>10 GB</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="http://www.gmx.net/produkte/mediacenter/">GMX</a></td>
+<td><a class="reference external" href="https://webdav.mc.gmx.net">https://webdav.mc.gmx.net</a></td>
+<td>2  GB</td>
+<td>German Provider</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="https://www.box.com/">OneDrive</a></td>
+<td>see: <a class="reference external" href="http://blog.lazut.in/2012/12/skydrive-webdav-access.html">blog.lazut.in</a></td>
+<td>7  GB</td>
+<td>Does not seem to work anymore</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-<div class="section" id="configuring-cloudfusion">
-<h2>Configuring CloudFusion<a class="headerlink" href="#configuring-cloudfusion" title="Permalink to this headline">¶</a></h2>
-<p>Now copy the configuration file you edited to your mountpoint:</p>
-<div class="highlight-python"><pre>cp ~/db.ini mnt/config/config</pre>
+</div>
+<div class="section" id="get-started">
+<h2>Get started<a class="headerlink" href="#get-started" title="Permalink to this headline">¶</a></h2>
+<p>Start CloudFusion:</p>
+<div class="highlight-python"><div class="highlight"><pre>cloudfusion --config ~/db.ini mnt
+</pre></div>
 </div>
 <p>This assumes that you saved the configuration file as <strong>db.ini</strong> to your home directory.
-If you simply copied the configuration file as suggested, replace <strong>db.ini</strong> with <strong>Sugarsync.ini</strong> or <strong>Dropbox.ini</strong> respectively.
-If you use Dropbox, your webbrowser will prompt you to login into Dropbox and grant access rights to CloudFusion.
-The current time limit for this is one minute. If you did not make it in time, copying the configuration file fails.
-But you can simply retry by copying the configuration again</p>
+If you simply copied the configuration file as suggested, replace <strong>db.ini</strong> with the respective file; i.e. <strong>Sugarsync.ini</strong> or <strong>Dropbox.ini</strong>.</p>
 <p>Enjoy accessing your files in the directory <strong>mnt/data</strong>.</p>
 </div>
-<div class="section" id="advanced-usage">
-<h2>Advanced Usage:<a class="headerlink" href="#advanced-usage" title="Permalink to this headline">¶</a></h2>
-<p>Advanced options can be set dynamically by changing parameters in the file <em>mnt/config/config</em>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#Approximate cache size limit in MB; default 2000:</span>
+<div class="section" id="shut-down">
+<h2>Shut Down<a class="headerlink" href="#shut-down" title="Permalink to this headline">¶</a></h2>
+<p>To shut down CloudFusion, you can delete the file <strong>mnt/config/config</strong>, or use the following command:</p>
+<div class="highlight-python"><div class="highlight"><pre>cloudfusion ~/mnt stop
+</pre></div>
+</div>
+</div>
+<div class="section" id="restrictions">
+<h2>Restrictions<a class="headerlink" href="#restrictions" title="Permalink to this headline">¶</a></h2>
+<p>Cloudfusion does not set the correct permissions or time stamps. See the following projects if this is a requirement:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name"><a class="reference external" href="https://github.com/s3fs-fuse/s3fs-fuse">s3fs</a>:</th><td class="field-body">Amazon S3</td>
+</tr>
+<tr class="field-even field"><th class="field-name"><a class="reference external" href="https://code.google.com/p/s3fuse">s3fuse</a>:</th><td class="field-body">Google Storage</td>
+</tr>
+<tr class="field-odd field"><th class="field-name"><a class="reference external" href="http://savannah.nongnu.org/projects/davfs2">davfs2</a>:</th><td class="field-body">WebDAV (included in Linux standard distributions)</td>
+</tr>
+</tbody>
+</table>
+<p>There is no automatic sync from the online store to local disk. But</p>
+<blockquote>
+<div><ul class="simple">
+<li>you can manually refresh the directory to see changes</li>
+<li>with Dropbox, files are moved to /overwritten directory (online) instead of being overwritten accidentially</li>
+</ul>
+</div></blockquote>
+<p>There is no differential update, which means files are uploaded or downloaded as a whole.</p>
+<p>Dropbox has a maximum file upload size of 150MB and operations can at most work on 10.000 files and folders.
+It does not allow thumbs.db or .ds_store files.</p>
+<p>Sugarsync has a maximum file upload size of 100MB. It does not allow Outlook .pst, Quicken, and Quickbooks.</p>
+</div>
+<div class="section" id="advanced-features">
+<h2>Advanced Features<a class="headerlink" href="#advanced-features" title="Permalink to this headline">¶</a></h2>
+<p>Uploading a large amount of small files is quite slow. Instead, try putting the line:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">type</span> <span class="o">=</span> <span class="n">chunk</span>
+</pre></div>
+</div>
+<p>into the [store] section of your configuration file. With this, CloudFusion will transparently store multiple small files
+inside the same directory into single archives.
+Using this parameter with Dropbox also solves the problem, that Dropbox does not distinguish file names by case.
+I.e. Dropbox ignores the difference between &#8220;file&#8221;, and &#8220;FILE&#8221;, in contrast to Linux file systems, where these would be different files.
+This feature is still experimental, but increases upload rate for small files a lot.
+A database is created in the temporary directory, which is necessary to access the files.
+This means, that you will only be able to see the files from this one CloudFusion installation.</p>
+<p>Statistics can be read from the files in <em>mnt/stats</em>. The file <em>stats</em> contains general performance statistics,
+<em>errors</em> contains a summary of recently occured exceptions, and <em>notuploaded</em> contains files that are not yet completely uploaded to the remote storage provider.</p>
+<p>Advanced options can be set in the configuration file in order to set limits to how much or how long data is cached:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#Approximate cache size limit in MB;</span>
 <span class="n">cache_size</span> <span class="o">=</span> <span class="mi">5000</span>
+
+<span class="c"># Hard cache size limit in MB. If this is exceeded, write operations are slowed down significantly,</span>
+<span class="c"># until enough space is free again.</span>
+<span class="n">hard_cache_size_limit</span> <span class="o">=</span> <span class="mi">10000</span>
+
+<span class="c">#How many seconds it may take until a file you just wrote is beginning to be uploaded, always counting from the time</span>
+<span class="c">#you last modified the file.</span>
+<span class="c">#During this time you can delete the file again, without ever uploading the file.</span>
+<span class="c">#If your files change a lot, and you are in no hurry to upload them, set this to about 10 minutes or more (600).</span>
+<span class="n">cache</span> <span class="o">=</span> <span class="mi">60</span>
+
+<span class="c">#How many seconds it may take for you to see changes made to your Dropbox account by another application.</span>
+<span class="c">#During this time you do not need to communicate with the store to see a directory listing, for instance.</span>
+<span class="c">#So listing directories is very fast.</span>
+<span class="c">#Set this to 15, if you quickly want to see files uploaded by your mobile computer or handheld, when you refresh the directory.</span>
+<span class="c">#If you upload file through CloudFusion only, this can be set to ten minutes (600).</span>
+<span class="n">metadata_cache</span> <span class="o">=</span> <span class="mi">120</span>
+
 <span class="c">#Identifier for persistent database. Use one id per cloud account to keep the cache after application shutdown.</span>
 <span class="c">#Default value is a random number.</span>
 <span class="n">cache_id</span> <span class="o">=</span> <span class="n">dropboxacc1</span>
@@ -108,24 +233,31 @@ But you can simply retry by copying the configuration again</p>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Users documentation</a><ul>
-<li><a class="reference internal" href="#start-cloudfusion">Start CloudFusion</a></li>
+<li><a class="reference internal" href="#introduction">Introduction</a><ul>
 <li><a class="reference internal" href="#create-a-configuration-file">Create a Configuration File</a><ul>
 <li><a class="reference internal" href="#sugarsync">Sugarsync</a></li>
 <li><a class="reference internal" href="#dropbox">Dropbox</a></li>
+<li><a class="reference internal" href="#google-storage">Google Storage</a></li>
+<li><a class="reference internal" href="#amazon-s3">Amazon S3</a></li>
+<li><a class="reference internal" href="#webdav">WebDAV</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#configuring-cloudfusion">Configuring CloudFusion</a></li>
-<li><a class="reference internal" href="#advanced-usage">Advanced Usage:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#get-started">Get started</a></li>
+<li><a class="reference internal" href="#shut-down">Shut Down</a></li>
+<li><a class="reference internal" href="#restrictions">Restrictions</a></li>
+<li><a class="reference internal" href="#advanced-features">Advanced Features</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Welcome to CloudFusion&#8217;s documentation!</a></p>
-  <h4>Next topic</h4>
   <p class="topless"><a href="setup.html"
-                        title="next chapter">Setup documentation</a></p>
+                        title="previous chapter">Installation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="develop.html"
+                        title="next chapter">Developers documentation</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/user.txt"
@@ -158,17 +290,17 @@ But you can simply retry by copying the configuration again</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="setup.html" title="Setup documentation"
+          <a href="develop.html" title="Developers documentation"
              >next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Welcome to CloudFusion’s documentation!"
+          <a href="setup.html" title="Installation"
              >previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Johannes Müller.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

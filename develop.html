@@ -24,8 +24,8 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
-    <link rel="next" title="The nullhandler Module" href="mylogging.html" />
-    <link rel="prev" title="Setup documentation" href="setup.html" /> 
+    <link rel="next" title="The db_logging_thread Module" href="mylogging.html" />
+    <link rel="prev" title="Users documentation" href="user.html" /> 
   </head>
   <body>
     <div class="related">
@@ -38,10 +38,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="mylogging.html" title="The nullhandler Module"
+          <a href="mylogging.html" title="The db_logging_thread Module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="setup.html" title="Setup documentation"
+          <a href="user.html" title="Users documentation"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li> 
       </ul>
@@ -54,8 +54,360 @@
             
   <div class="section" id="developers-documentation">
 <h1>Developers documentation<a class="headerlink" href="#developers-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>It is quite easy to develop new extensions to CloudFusion, as this has been one of the design goals from the start.
+CloudFusion provides a generic test framework to verify the implementations in a continuous testing cycle,
+which prevents untested or error prone code to be delivered to the end user.
+The framework can be used directly without the file system interface,
+though using it through the file system interface has the advantage that it can be used by arbitrary programming languages.</p>
+</div>
+<div class="section" id="using-the-api-directly">
+<h2>Using the API Directly<a class="headerlink" href="#using-the-api-directly" title="Permalink to this headline">¶</a></h2>
+<p>Here are some example scripts on how to use CloudFusion&#8217;s internal API, if you do not want to use it from the file system interface.
+The implementations are interchangeable. If you want to use Amazon S3 instead of Dropbox,
+you only need to change the client and everything else stays the same.
+The Amazon S3 example is a simple Hello World! example.
+The WebDAV example shows how to use the BulkGetMetadata interface to quickly get the metadata of all file within a single directory.</p>
+<div class="section" id="extensive-example-with-dropbox">
+<h3>Extensive Example with Dropbox<a class="headerlink" href="#extensive-example-with-dropbox" title="Permalink to this headline">¶</a></h3>
+<p>This is an extensive example script on how to use CloudFusion&#8217;s internal API to access Dropbox.
+All methods except for get_config can also be used for the other Store implementations.
+The wrapper MetadataCachingStore allows to cache metadata information like that returned from directory listings.
+The wrapper MultiprocessingCachingStore caches downloaded files to allow quick access without downloading them again,
+and allows asynchronous file upload. It waits some time before uploading the file.
+The subclass TransparentMultiprocessingCachingStore has the same abilities, but moreover, it offers information about
+which files are not uploaded yet, how much space the cache takes, which errors have occured etc.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cloudfusion.store.dropbox.dropbox_store</span> <span class="kn">import</span> <span class="n">DropboxStore</span>
+<span class="kn">from</span> <span class="nn">cloudfusion.store.metadata_caching_store</span> <span class="kn">import</span> <span class="n">MetadataCachingStore</span>
+<span class="kn">from</span> <span class="nn">cloudfusion.store.transparent_caching_store</span> <span class="kn">import</span> <span class="n">TransparentMultiprocessingCachingStore</span>
+<span class="kn">from</span> <span class="nn">StringIO</span> <span class="kn">import</span> <span class="n">StringIO</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">DropboxStore</span><span class="o">.</span><span class="n">get_config</span><span class="p">()</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    {&#39;consumer_key&#39;: &#39;eTBkeDNqM2cwc2lvZ2ow&#39;,</span>
+<span class="sd">     &#39;consumer_secret&#39;: &#39;cWF4dHptbGswcWJmMGRs&#39;,</span>
+<span class="sd">     &#39;password&#39;: &#39;&#39;,</span>
+<span class="sd">     &#39;root&#39;: &#39;dropbox&#39;,</span>
+<span class="sd">     &#39;user&#39;: &#39;&#39;}</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c">#Add username/password</span>
+    <span class="n">config</span><span class="p">[</span><span class="s">&#39;user&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;quirkquarks@web.de&#39;</span>
+    <span class="n">config</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;MySecret123$!&#39;</span>
+
+    <span class="c">#Create the actual client</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">DropboxStore</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="c">#Get directory listing (may take a few seconds)</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">get_directory_listing</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    [u&#39;/ordner&#39;, u&#39;/neuer ordner&#39;, u&#39;/test_4&#39;, u&#39;/My DB&#39;]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">client</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">(</span><span class="s">&#39;/test_4&#39;</span><span class="p">)</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    {&#39;bytes&#39;: 91750400,</span>
+<span class="sd">     &#39;is_dir&#39;: False,</span>
+<span class="sd">     &#39;modified&#39;: 1390147673,</span>
+<span class="sd">     &#39;path&#39;: u&#39;/test_4&#39;}</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c">#Wrap with metadata caching store, to speed up consecutive calls to get_metadata, and get_directory_listing</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">MetadataCachingStore</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+
+    <span class="c">#Wrap with multiprocessing caching store, for asynchronous uploads, and to speed up consecutive calls to get_file</span>
+    <span class="c">#When given the same session id even after computer crash or restart, it will remember cached files,</span>
+    <span class="c">#including files that still need to be uploaded</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">TransparentMultiprocessingCachingStore</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">cache_id</span><span class="o">=</span><span class="s">&#39;session1&#39;</span><span class="p">)</span>
+    <span class="n">file_content</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_file</span><span class="p">(</span><span class="s">&#39;/test_4&#39;</span><span class="p">)</span> <span class="c">#takes long since test_4 is large (90 MB)</span>
+    <span class="n">file_content</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_file</span><span class="p">(</span><span class="s">&#39;/test_4&#39;</span><span class="p">)</span> <span class="c">#very fast, since the file is cached on the local hard disk</span>
+
+    <span class="c">#Wrap file content into a file object</span>
+    <span class="n">fileobj</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
+    <span class="n">fileobj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">file_content</span><span class="p">)</span>
+    <span class="n">fileobj</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c"># set to beginning of file for further read operations</span>
+
+    <span class="n">client</span><span class="o">.</span><span class="n">store_fileobject</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="s">&#39;/test_5&#39;</span><span class="p">)</span> <span class="c"># returns immediately, since uploads are now asynchronous</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">get_dirty_files</span><span class="p">()</span> <span class="c">#list files that are not entirely uploaded</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    [&#39;/test_5&#39;]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">get_dirty_files</span><span class="p">()</span> <span class="c">#call again after a few minutes, when the file is uploaded</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    []</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">get_cachesize</span><span class="p">()</span> <span class="c"># get amount of cached data in MB</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    91</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">get_exception_stats</span><span class="p">()</span> <span class="c"># get exceptions that occurred</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    {}</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">get_downloaded</span><span class="p">()</span>      <span class="c"># get amount of downloaded data in MB (1000*1000 bytes)</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">get_download_rate</span><span class="p">()</span>      <span class="c"># get amount of downloaded data im MBps (1000*1000 bytes per second)</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    2.288234288664367</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">get_upload_rate</span><span class="p">()</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    0.22592696222436814</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c">#Even though it is not yet uploaded, you can access the newly created file:</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">get_directory_listing</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
+    <span class="p">[</span><span class="s">u&#39;/ordner&#39;</span><span class="p">,</span>
+     <span class="s">u&#39;/neuer ordner&#39;</span><span class="p">,</span>
+     <span class="s">&#39;/test_5&#39;</span><span class="p">,</span>
+     <span class="s">u&#39;/test_4&#39;</span><span class="p">,</span>
+     <span class="s">u&#39;/My DB&#39;</span><span class="p">]</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="webdav-and-the-bulkgetmetadata-interface">
+<h3>WebDAV and the BulkGetMetadata Interface<a class="headerlink" href="#webdav-and-the-bulkgetmetadata-interface" title="Permalink to this headline">¶</a></h3>
+<p>Webdav, Amazon, and Google Storage provide subclasses supporting the BulkGetMetadata interface with the method <a class="reference internal" href="store.html#cloudfusion.store.bulk_get_metadata.BulkGetMetadata.get_bulk_metadata" title="cloudfusion.store.bulk_get_metadata.BulkGetMetadata.get_bulk_metadata"><tt class="xref py py-meth docutils literal"><span class="pre">cloudfusion.store.bulk_get_metadata.BulkGetMetadata.get_bulk_metadata()</span></tt></a>,
+i.e. <a class="reference internal" href="store.webdav.html#cloudfusion.store.webdav.bulk_get_metadata_webdav_store.BulkGetMetadataWebdavStore.get_bulk_metadata" title="cloudfusion.store.webdav.bulk_get_metadata_webdav_store.BulkGetMetadataWebdavStore.get_bulk_metadata"><tt class="xref py py-meth docutils literal"><span class="pre">cloudfusion.store.webdav.bulk_get_metadata_webdav_store.BulkGetMetadataWebdavStore.get_bulk_metadata()</span></tt></a>.
+These subclasses can be used to quickly get metadata of all files withing a directory (see Webdav example).</p>
+<p>Here is an example for WebDAV:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cloudfusion.store.webdav.webdav_store</span> <span class="kn">import</span> <span class="n">WebdavStore</span> <span class="c"># instead of WebdavStore we use BulkGetMetadataWebdavStore</span>
+<span class="kn">from</span> <span class="nn">cloudfusion.store.webdav.bulk_get_metadata_webdav_store</span> <span class="kn">import</span> <span class="n">BulkGetMetadataWebdavStore</span>
+<span class="kn">from</span> <span class="nn">cloudfusion.store.metadata_caching_store</span> <span class="kn">import</span> <span class="n">MetadataCachingStore</span>
+<span class="kn">from</span> <span class="nn">cloudfusion.store.transparent_caching_store</span> <span class="kn">import</span> <span class="n">TransparentMultiprocessingCachingStore</span>
+<span class="kn">from</span> <span class="nn">StringIO</span> <span class="kn">import</span> <span class="n">StringIO</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c">#url can also contain an existing subfolder to access, i.e. https://webdav.mediencenter.t-online.de/myfolder</span>
+    <span class="c">#url can also contain the port for the WebDAV server, i.e. https://webdav.mediencenter.t-online.de:443</span>
+    <span class="n">config</span><span class="p">[</span><span class="s">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;https://webdav.mediencenter.t-online.de&#39;</span>
+    <span class="n">config</span><span class="p">[</span><span class="s">&#39;user&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;joe42&#39;</span> <span class="c">#your account username (this might be your e-mail address for other providers)</span>
+    <span class="n">config</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;MySecret!23$&#39;</span> <span class="c">#your account password</span>
+
+    <span class="c">#Create the actual client</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">BulkGetMetadataWebdavStore</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="c">#Get directory listing (may take a few seconds)</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">get_bulk_metadata</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">     u&#39;/My Folder&#39;: {&#39;bytes&#39;: 0,</span>
+<span class="sd">      &#39;is_dir&#39;: True,</span>
+<span class="sd">      &#39;modified&#39;: 1400352031,</span>
+<span class="sd">      &#39;path&#39;: u&#39;/My Folder&#39;},</span>
+<span class="sd">     u&#39;/_tower of god 2_000_1#0#95#1&#39;: {&#39;bytes&#39;: 143360,</span>
+<span class="sd">      &#39;is_dir&#39;: False,</span>
+<span class="sd">      &#39;modified&#39;: 1396871330,</span>
+<span class="sd">      &#39;path&#39;: u&#39;/_tower of god 2_000_1#0#95#1&#39;},</span>
+<span class="sd">     u&#39;/_tower of god 2_000_10#0#104#1&#39;: {&#39;bytes&#39;: 143360,</span>
+<span class="sd">      &#39;is_dir&#39;: False,</span>
+<span class="sd">      &#39;modified&#39;: 1396871390,</span>
+<span class="sd">      &#39;path&#39;: u&#39;/_tower of god 2_000_10#0#104#1&#39;},</span>
+<span class="sd">     u&#39;/_tower of god_2_014_9#0#439#1&#39;: {&#39;bytes&#39;: 143360,</span>
+<span class="sd">      &#39;is_dir&#39;: False,</span>
+<span class="sd">      &#39;modified&#39;: 1396956942,</span>
+<span class="sd">      &#39;path&#39;: u&#39;/_tower of god_2_014_9#0#439#1&#39;},</span>
+<span class="sd">     u&#39;/dir3&#39;: {&#39;bytes&#39;: 0,</span>
+<span class="sd">      &#39;is_dir&#39;: True,</span>
+<span class="sd">      &#39;modified&#39;: 1400503492,</span>
+<span class="sd">      &#39;path&#39;: u&#39;/dir3&#39;},</span>
+<span class="sd">     u&#39;/dirr&#39;: {&#39;bytes&#39;: 0,</span>
+<span class="sd">      &#39;is_dir&#39;: True,</span>
+<span class="sd">      &#39;modified&#39;: 1400503492,</span>
+<span class="sd">      &#39;path&#39;: u&#39;/dirr&#39;}}</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c">#...</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="amazon-s3-and-hello-world">
+<h3>Amazon S3 and Hello World!<a class="headerlink" href="#amazon-s3-and-hello-world" title="Permalink to this headline">¶</a></h3>
+<p>Here is an example for Amazon S3. The bucket will be created if it does not exist.
+A bucket is similar to a subfolder, to which access with CloudFusion is restricted.
+Key and Secret can be obtained from the console.aws.amazon.com/s3/home</p>
+<ul class="simple">
+<li>Click on your name on the top left and select Security Credentials form the drop down menu.</li>
+<li>Go to Access Keys and Generate New Access Keys to generate the new key pair.</li>
+</ul>
+<p>And here is the code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cloudfusion.store.s3.amazon_store</span> <span class="kn">import</span> <span class="n">AmazonStore</span>
+<span class="kn">from</span> <span class="nn">cloudfusion.store.metadata_caching_store</span> <span class="kn">import</span> <span class="n">MetadataCachingStore</span>
+<span class="kn">from</span> <span class="nn">cloudfusion.store.transparent_caching_store</span> <span class="kn">import</span> <span class="n">TransparentMultiprocessingCachingStore</span>
+<span class="kn">from</span> <span class="nn">StringIO</span> <span class="kn">import</span> <span class="n">StringIO</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">config</span><span class="p">[</span><span class="s">&#39;consumer_key&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;FDS54548SDF8D2S311DF&#39;</span>
+    <span class="n">config</span><span class="p">[</span><span class="s">&#39;consumer_secret&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;D370JKD=564++873ZHFD9FDKDD&#39;</span>
+    <span class="n">config</span><span class="p">[</span><span class="s">&#39;bucket_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;cloudfusion&#39;</span>
+
+    <span class="c">#Create the actual client</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">AmazonStore</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="n">fileobj</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
+    <span class="n">fileobj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;Hello World!&#39;</span><span class="p">)</span>
+    <span class="n">fileobj</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">client</span><span class="o">.</span><span class="n">store_fileobject</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="s">&#39;/hello world.txt&#39;</span><span class="p">)</span> <span class="c">#stores the text to hello world.txt file and returns modified time stamp (which is not important here)</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    1400093364</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">get_file</span><span class="p">(</span><span class="s">&#39;/hello world.txt&#39;</span><span class="p">)</span> <span class="c"># get the contents of the file:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    &#39;Hello World!&#39;</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c">#Get directory listing</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">get_directory_listing</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    [u&#39;/chunk_IHvsqNQ=_-A==.tar&#39;,</span>
+<span class="sd">     u&#39;/chunk_IHvsqNQ=_-Q==.tar&#39;,</span>
+<span class="sd">     u&#39;/chunk_IHvsqNQ=_1A==.tar&#39;,</span>
+<span class="sd">     u&#39;/chunk_IHvsqNQ=_1Q==.tar&#39;,</span>
+<span class="sd">     u&#39;/chunk_IHvsqNQ=_1g==.tar&#39;,</span>
+<span class="sd">     u&#39;/chunk_IHvsqNQ=_zw==.tar&#39;,</span>
+<span class="sd">     u&#39;/hello world.txt&#39;,</span>
+<span class="sd">     u&#39;/My Amazon&#39;,</span>
+<span class="sd">     u&#39;/Untitled Folder&#39;,</span>
+<span class="sd">     u&#39;/directory&#39;,</span>
+<span class="sd">     u&#39;/logs&#39;]</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c">#...</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="google-storage-and-the-archiving-layer">
+<h3>Google Storage and the Archiving Layer<a class="headerlink" href="#google-storage-and-the-archiving-layer" title="Permalink to this headline">¶</a></h3>
+<p>Here is an example for Google Storage. The bucket will be created if it does not exist.
+A bucket is similar to a subfolder, to which access with CloudFusion is restricted.
+Key and secret can be obtained from the developer&#8217;s console:</p>
+<ul class="simple">
+<li>Go to console.developers.google.com/project</li>
+<li>Create a new project</li>
+<li>Select Project dashboard on the left, which opens a new tab</li>
+<li>Go to the new tab</li>
+<li>Select Billing on the left to set up billing</li>
+<li>Select Google Cloud Storage on the left</li>
+<li>Click on the button labeled &#8220;Make this my default project for interoperable storage access&#8221;</li>
+<li>Click on Interoperable Access on the left</li>
+<li>Click Generate new key, to generate the new key pair</li>
+</ul>
+<p>And here is the code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cloudfusion.store.gs.google_store</span> <span class="kn">import</span> <span class="n">GoogleStore</span>
+<span class="kn">from</span> <span class="nn">cloudfusion.store.metadata_caching_store</span> <span class="kn">import</span> <span class="n">MetadataCachingStore</span>
+<span class="kn">from</span> <span class="nn">cloudfusion.store.transparent_chunk_caching_store</span> <span class="kn">import</span> <span class="n">TransparentChunkMultiprocessingCachingStore</span>
+<span class="kn">from</span> <span class="nn">StringIO</span> <span class="kn">import</span> <span class="n">StringIO</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">config</span><span class="p">[</span><span class="s">&#39;consumer_key&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;FDS54548SDF8D2S311DF&#39;</span>
+    <span class="n">config</span><span class="p">[</span><span class="s">&#39;consumer_secret&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;D370JKD=564++873ZHFD9FDKDD&#39;</span>
+    <span class="n">config</span><span class="p">[</span><span class="s">&#39;bucket_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;cloudfusion&#39;</span>
+
+    <span class="c">#Create the actual client</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">GoogleStore</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="c">#Get directory listing (may take a few seconds)</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">get_directory_listing</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    [u&#39;/neuer ordner&#39;, u&#39;/test&#39;, u&#39;/My Google&#39;]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c">#Wrap with metadata caching store, to speed up consecutive calls to get_metadata, and get_directory_listing</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">MetadataCachingStore</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+
+    <span class="c">#Wrap with archiving caching store, for putting small files in the same directory in one archive,</span>
+    <span class="c">#for asynchronous uploads, and to speed up consecutive calls to get_file</span>
+    <span class="c">#When given the same session id even after computer crash or restart, it will remember cached files,</span>
+    <span class="c">#including files that still need to be uploaded</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">TransparentChunkMultiprocessingCachingStore</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">cache_id</span><span class="o">=</span><span class="s">&#39;session2&#39;</span><span class="p">)</span>
+
+    <span class="c">#Wrap file content into a file object</span>
+    <span class="n">fileobj</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
+    <span class="n">fileobj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">file_content</span><span class="p">)</span>
+    <span class="n">fileobj</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c"># set to beginning of file for further read operations</span>
+
+    <span class="c"># uploading multiple small files in the same directory (in this case the directory is &#39;/&#39;)</span>
+    <span class="c"># upload is delayed for a few minutes, but the actual upload is very fast onece it starts</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">store_fileobject</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="s">&#39;/test_1&#39;</span><span class="p">)</span> <span class="c"># returns immediately, since uploads are now asynchronous</span>
+    <span class="n">fileobj</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c">#seek to beginning of file, so that it can be read again</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">store_fileobject</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="s">&#39;/test_2&#39;</span><span class="p">)</span>
+    <span class="n">fileobj</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">store_fileobject</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="s">&#39;/test_3&#39;</span><span class="p">)</span>
+    <span class="n">fileobj</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">store_fileobject</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="s">&#39;/test_4&#39;</span><span class="p">)</span>
+    <span class="n">fileobj</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">store_fileobject</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="s">&#39;/test_5&#39;</span><span class="p">)</span>
+    <span class="n">fileobj</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">store_fileobject</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="s">&#39;/test_6&#39;</span><span class="p">)</span>
+    <span class="n">fileobj</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">store_fileobject</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="s">&#39;/test_7&#39;</span><span class="p">)</span>
+    <span class="n">fileobj</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">store_fileobject</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="s">&#39;/test_8&#39;</span><span class="p">)</span>
+    <span class="n">fileobj</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c">#...</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">store_fileobject</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="s">&#39;/test_100&#39;</span><span class="p">)</span>
+
+    <span class="n">client</span><span class="o">.</span><span class="n">get_dirty_files</span><span class="p">()</span> <span class="c">#list files that are not entirely uploaded</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    [&#39;/test_1&#39;,...]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">get_dirty_files</span><span class="p">()</span> <span class="c">#call again after ~5 minutes, when the file is uploaded</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    []</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sugarsync">
+<h3>Sugarsync<a class="headerlink" href="#sugarsync" title="Permalink to this headline">¶</a></h3>
+<p>Here is an example for accessing Sugarsync:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cloudfusion.store.sugarsync.sugarsync_store</span> <span class="kn">import</span> <span class="n">SugarsyncStore</span>
+<span class="kn">from</span> <span class="nn">cloudfusion.store.metadata_caching_store</span> <span class="kn">import</span> <span class="n">MetadataCachingStore</span>
+<span class="kn">from</span> <span class="nn">cloudfusion.store.transparent_caching_store</span> <span class="kn">import</span> <span class="n">TransparentMultiprocessingCachingStore</span>
+<span class="kn">from</span> <span class="nn">StringIO</span> <span class="kn">import</span> <span class="n">StringIO</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">SugarsyncStore</span><span class="o">.</span><span class="n">get_config</span><span class="p">()</span>
+    <span class="n">config</span><span class="p">[</span><span class="s">&#39;user&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;me@emailserver.com&#39;</span> <span class="c">#your account username/e-mail address</span>
+    <span class="n">config</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;MySecret!23$&#39;</span> <span class="c">#your account password</span>
+
+    <span class="c">#Create the actual client</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">SugarsyncStore</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="c">#Get directory listing (may take a few seconds)</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">get_directory_listing</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    [u&#39;/ordner&#39;, u&#39;/neuer ordner&#39;, u&#39;/test_4&#39;, u&#39;/My DB&#39;]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c">#...</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="section" id="extensions">
 <h2>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h2>
+<p>To support a new cloud storage or protocol, implement the central <a class="reference external" href="https://github.com/joe42/CloudFusion/blob/master/cloudfusion/store/store.py">Store Interface</a>.
+This simple interface frees developers from having to program caching mechanisms, multithreading, or a file system interface,
+and allows the implementation to be integrated into CloudFusion&#8217;s continuous testing cycle with automatically generated tests for quality assurance.
+Please contact me on Github if you want to develop a new extension for CloudFusion. I would be glad to help you.</p>
 </div>
 <div class="section" id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
@@ -65,9 +417,12 @@
 <li>python-sphinx</li>
 <li>texlive-full for latex documentation</li>
 </ul>
+</div>
+<div class="section" id="generate-documentation">
+<h3>Generate Documentation<a class="headerlink" href="#generate-documentation" title="Permalink to this headline">¶</a></h3>
 <p>To generate this documentation first call:</p>
-<div class="highlight-python"><pre>mkdir -p .cloudfusion/logs # work around for now
-    cloudfusion/doc/generate_modules.py -d cloudfusion/doc -f -m 5 cloudfusion main.py dropbox cloudfusion/fuse.py cloudfusion/conf cloudfusion/doc</pre>
+<div class="highlight-python"><div class="highlight"><pre>cloudfusion/doc/generate_modules.py -d cloudfusion/doc -f -m 5 cloudfusion main.py dropbox cloudfusion/fuse.py cloudfusion/conf cloudfusion/doc third_party
+</pre></div>
 </div>
 <ul class="simple">
 <li>-d defines the destination directory for the documentation to generate</li>
@@ -77,7 +432,8 @@
 <li>followed by a list of paths to exclude from documentation</li>
 </ul>
 <p>Then call:</p>
-<div class="highlight-python"><pre>make -f cloudfusion/doc/Makefile html</pre>
+<div class="highlight-python"><div class="highlight"><pre>make -f cloudfusion/doc/Makefile html
+</pre></div>
 </div>
 <ul class="simple">
 <li>-f means to override existing files</li>
@@ -89,17 +445,54 @@
 <div class="section" id="id1">
 <h3>Requirements<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>nosy</li>
 <li>nosetests</li>
+<li>nosy</li>
 </ul>
-<p>First create configuration files for all services in &#8220;cloudfusion/config&#8221;. For the Dropbox service, the configuration file needs to be called
-<em>dropbox_testing.ini</em>. For sugarsync the name is <em>sugarsync_testing.ini</em>.</p>
+<p>First create configuration files for all services in &#8220;cloudfusion/config&#8221;. The following table shows the names
+of the configuration files that are required for each service.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Dropbox:</th><td class="field-body">dropbox_testing.ini</td>
+</tr>
+<tr class="field-even field"><th class="field-name">SugarSync:</th><td class="field-body">sugarsync_testing.ini</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Amazon S3:</th><td class="field-body">AmazonS3_testing.ini</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Google Storage:</th><td class="field-body">Google_testing.ini</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">GMX:</th><td class="field-body">Webdav_gmx_testing.ini</td>
+</tr>
+<tr class="field-even field"><th class="field-name">T-Online:</th><td class="field-body">Webdav_tonline_testing.ini</td>
+</tr>
+</tbody>
+</table>
 <p>To run all tests call:</p>
-<div class="highlight-python"><pre>nosetests -v -s cloudfusion.tests.store_test</pre>
+<div class="highlight-python"><div class="highlight"><pre>nosetests -v -s cloudfusion.tests.store_test
+</pre></div>
+</div>
+<p>Individual test can be run as well:</p>
+<div class="highlight-python"><div class="highlight"><pre>#run only tests for Dropbox and Sugarsync:
+nosetests -v -s cloudfusion.tests.store_test
+
+#run only tests for Amazon S3 and Google Storage:
+nosetests -v -s cloudfusion.tests.store_test2
+
+#run only tests for GMX and T-Online:
+nosetests -v -s cloudfusion.tests.store_test_webdav
+
+#run only tests for box.com and yandex.com:
+nosetests -v -s cloudfusion.tests.store_test_webdav2
+
+#running several individual tests:
+nosetests -v -s cloudfusion.tests.cache_test cloudfusion.tests.lru_cache_test  cloudfusion.tests.persistent_lru_cache_test
+</pre></div>
 </div>
 <p>-v and -s are optional flags for verbose output and output of anything printed to stdout.</p>
 <p>To run tests automagically during development, as soon as you change something call:</p>
-<div class="highlight-python"><pre>nosy -c cloudfusion/config/nosy.cfg</pre>
+<div class="highlight-python"><div class="highlight"><pre>nosy -c cloudfusion/config/nosy.cfg
+</pre></div>
 </div>
 </div>
 </div>
@@ -107,44 +500,157 @@
 <h2>Modules:<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="mylogging.html">The <tt class="docutils literal"><span class="pre">nullhandler</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mylogging.html">The <tt class="docutils literal"><span class="pre">db_logging_thread</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mylogging.html#module-cloudfusion.mylogging.db_handler">The <tt class="docutils literal"><span class="pre">db_handler</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mylogging.html#module-cloudfusion.mylogging.db_logging_thread">The <tt class="docutils literal"><span class="pre">db_logging_thread</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pyfusebox.html">The <tt class="docutils literal"><span class="pre">pyfusebox</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mylogging.html#module-cloudfusion.mylogging.nullhandler">The <tt class="docutils literal"><span class="pre">nullhandler</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyfusebox.html">The <tt class="docutils literal"><span class="pre">transparent_configurable_pyfusebox</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyfusebox.html#module-cloudfusion.pyfusebox.pyfusebox">The <tt class="docutils literal"><span class="pre">pyfusebox</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyfusebox.html#module-cloudfusion.pyfusebox.configurable_pyfusebox">The <tt class="docutils literal"><span class="pre">configurable_pyfusebox</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pyfusebox.html#module-cloudfusion.pyfusebox.virtualfile">The <tt class="docutils literal"><span class="pre">virtualfile</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pyfusebox.html#module-cloudfusion.pyfusebox.virtualconfigfile">The <tt class="docutils literal"><span class="pre">virtualconfigfile</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pyfusebox.html#module-cloudfusion.pyfusebox.configurable_pyfusebox">The <tt class="docutils literal"><span class="pre">configurable_pyfusebox</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pyfusebox.html#module-cloudfusion.pyfusebox.transparent_configurable_pyfusebox">The <tt class="docutils literal"><span class="pre">transparent_configurable_pyfusebox</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="store.html">Subpackages</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="store.dropbox.html">The <tt class="docutils literal"><span class="pre">dropbox_store</span></tt> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="store.dropbox.html#module-cloudfusion.store.dropbox.file_decorator">The <tt class="docutils literal"><span class="pre">file_decorator</span></tt> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="store.sugarsync.html">The <tt class="docutils literal"><span class="pre">client</span></tt> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="store.sugarsync.html#module-cloudfusion.store.sugarsync.sugarsync_store">The <tt class="docutils literal"><span class="pre">sugarsync_store</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.gs.html">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_google_store</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.gs.html#module-cloudfusion.store.gs.google_store">The <tt class="docutils literal"><span class="pre">google_store</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.s3.html">The <tt class="docutils literal"><span class="pre">amazon_store</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.s3.html#module-cloudfusion.store.s3.bulk_get_metadata_amazon_store">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_amazon_store</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.sugarsync.html">The <tt class="docutils literal"><span class="pre">sugarsync_store</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.sugarsync.html#module-cloudfusion.store.sugarsync.client">The <tt class="docutils literal"><span class="pre">client</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.dropbox.html">The <tt class="docutils literal"><span class="pre">file_decorator</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.dropbox.html#module-cloudfusion.store.dropbox.dropbox_store">The <tt class="docutils literal"><span class="pre">dropbox_store</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.webdav.html">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_webdav_store</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.webdav.html#module-cloudfusion.store.webdav.cadaver_client">The <tt class="docutils literal"><span class="pre">cadaver_client</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.webdav.html#module-cloudfusion.store.webdav.tinydav_client">The <tt class="docutils literal"><span class="pre">tinydav_client</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.webdav.html#module-cloudfusion.store.webdav.webdav_store">The <tt class="docutils literal"><span class="pre">webdav_store</span></tt> Module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.store_sync_thread">The <tt class="docutils literal"><span class="pre">store_sync_thread</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.store_worker">The <tt class="docutils literal"><span class="pre">store_worker</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.metadata_caching_store">The <tt class="docutils literal"><span class="pre">metadata_caching_store</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.caching_store">The <tt class="docutils literal"><span class="pre">caching_store</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.transparent_store">The <tt class="docutils literal"><span class="pre">transparent_store</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.chunk_store_sync_thread">The <tt class="docutils literal"><span class="pre">chunk_store_sync_thread</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.chunk_caching_store">The <tt class="docutils literal"><span class="pre">chunk_caching_store</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.chunk_store_worker">The <tt class="docutils literal"><span class="pre">chunk_store_worker</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.bulk_get_metadata">The <tt class="docutils literal"><span class="pre">bulk_get_metadata</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.store_worker">The <tt class="docutils literal"><span class="pre">store_worker</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.store_sync_thread">The <tt class="docutils literal"><span class="pre">store_sync_thread</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.store">The <tt class="docutils literal"><span class="pre">store</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.transparent_caching_store">The <tt class="docutils literal"><span class="pre">transparent_caching_store</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html">The <tt class="docutils literal"><span class="pre">persistent_lru_cache_test</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.lru_cache_test">The <tt class="docutils literal"><span class="pre">lru_cache_test</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.cache_test">The <tt class="docutils literal"><span class="pre">cache_test</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.synchronize_proxy_test">The <tt class="docutils literal"><span class="pre">synchronize_proxy_test</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.db_logging_thread_test">The <tt class="docutils literal"><span class="pre">db_logging_thread_test</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.caching_store">The <tt class="docutils literal"><span class="pre">caching_store</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.transparent_chunk_caching_store">The <tt class="docutils literal"><span class="pre">transparent_chunk_caching_store</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.metadata_caching_store">The <tt class="docutils literal"><span class="pre">metadata_caching_store</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">The <tt class="docutils literal"><span class="pre">cache_test</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.store_test2">The <tt class="docutils literal"><span class="pre">store_test2</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.xmlparser_test">The <tt class="docutils literal"><span class="pre">xmlparser_test</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.transparent_store_test_no_sync">The <tt class="docutils literal"><span class="pre">transparent_store_test_no_sync</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.synchronize_proxy_test">The <tt class="docutils literal"><span class="pre">synchronize_proxy_test</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.lru_cache_test">The <tt class="docutils literal"><span class="pre">lru_cache_test</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.mp_lru_cache_test">The <tt class="docutils literal"><span class="pre">mp_lru_cache_test</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.db_logging_thread_test">The <tt class="docutils literal"><span class="pre">db_logging_thread_test</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.persistent_lru_cache_test">The <tt class="docutils literal"><span class="pre">persistent_lru_cache_test</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.store_test_webdav2">The <tt class="docutils literal"><span class="pre">store_test_webdav2</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.store_test">The <tt class="docutils literal"><span class="pre">store_test</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.store_test_webdav">The <tt class="docutils literal"><span class="pre">store_test_webdav</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.transparent_store_test_with_sync">The <tt class="docutils literal"><span class="pre">transparent_store_test_with_sync</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="third_party.html">Subpackages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="third_party.requests_1_2_3.html">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.html">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html">Subpackages</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3">The <tt class="docutils literal"><span class="pre">urllib3</span></tt> Package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager">The <tt class="docutils literal"><span class="pre">poolmanager</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.response">The <tt class="docutils literal"><span class="pre">response</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool">The <tt class="docutils literal"><span class="pre">connectionpool</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request">The <tt class="docutils literal"><span class="pre">request</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions">The <tt class="docutils literal"><span class="pre">exceptions</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections">The <tt class="docutils literal"><span class="pre">_collections</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.util">The <tt class="docutils literal"><span class="pre">util</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost">The <tt class="docutils literal"><span class="pre">filepost</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html">The <tt class="docutils literal"><span class="pre">sjisprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.codingstatemachine">The <tt class="docutils literal"><span class="pre">codingstatemachine</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.charsetprober">The <tt class="docutils literal"><span class="pre">charsetprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.universaldetector">The <tt class="docutils literal"><span class="pre">universaldetector</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade">The <tt class="docutils literal"><span class="pre">charade</span></tt> Package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.gb2312prober">The <tt class="docutils literal"><span class="pre">gb2312prober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.mbcsgroupprober">The <tt class="docutils literal"><span class="pre">mbcsgroupprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.big5prober">The <tt class="docutils literal"><span class="pre">big5prober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.latin1prober">The <tt class="docutils literal"><span class="pre">latin1prober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.charsetgroupprober">The <tt class="docutils literal"><span class="pre">charsetgroupprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.mbcharsetprober">The <tt class="docutils literal"><span class="pre">mbcharsetprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.cp949prober">The <tt class="docutils literal"><span class="pre">cp949prober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.chardistribution">The <tt class="docutils literal"><span class="pre">chardistribution</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.escprober">The <tt class="docutils literal"><span class="pre">escprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.euctwprober">The <tt class="docutils literal"><span class="pre">euctwprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.sbcharsetprober">The <tt class="docutils literal"><span class="pre">sbcharsetprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.compat">The <tt class="docutils literal"><span class="pre">compat</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.utf8prober">The <tt class="docutils literal"><span class="pre">utf8prober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.sbcsgroupprober">The <tt class="docutils literal"><span class="pre">sbcsgroupprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.jpcntx">The <tt class="docutils literal"><span class="pre">jpcntx</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.euckrprober">The <tt class="docutils literal"><span class="pre">euckrprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.eucjpprober">The <tt class="docutils literal"><span class="pre">eucjpprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.hebrewprober">The <tt class="docutils literal"><span class="pre">hebrewprober</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.api">The <tt class="docutils literal"><span class="pre">api</span></tt> Module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-api">requests.api</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.sessions">The <tt class="docutils literal"><span class="pre">sessions</span></tt> Module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-session">requests.session</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.structures">The <tt class="docutils literal"><span class="pre">structures</span></tt> Module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-structures">requests.structures</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.models">The <tt class="docutils literal"><span class="pre">models</span></tt> Module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-models">requests.models</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.utils">The <tt class="docutils literal"><span class="pre">utils</span></tt> Module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-utils">requests.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.exceptions">The <tt class="docutils literal"><span class="pre">exceptions</span></tt> Module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-exceptions">requests.exceptions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.certs">The <tt class="docutils literal"><span class="pre">certs</span></tt> Module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#certs-py">certs.py</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.adapters">The <tt class="docutils literal"><span class="pre">adapters</span></tt> Module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-adapters">requests.adapters</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.hooks">The <tt class="docutils literal"><span class="pre">hooks</span></tt> Module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-hooks">requests.hooks</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.auth">The <tt class="docutils literal"><span class="pre">auth</span></tt> Module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-auth">requests.auth</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.cookies">The <tt class="docutils literal"><span class="pre">cookies</span></tt> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="third_party.requests_1_2_3.html#module-cloudfusion.third_party.requests_1_2_3.test_requests">The <tt class="docutils literal"><span class="pre">test_requests</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="third_party.parsedatetime.html">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="third_party.parsedatetime.parsedatetime.html">The <tt class="docutils literal"><span class="pre">parsedatetime</span></tt> Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="third_party.parsedatetime.parsedatetime.html#module-cloudfusion.third_party.parsedatetime.parsedatetime.pdt_locales">The <tt class="docutils literal"><span class="pre">pdt_locales</span></tt> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="third_party.parsedatetime.html#module-cloudfusion.third_party.parsedatetime.run_tests">The <tt class="docutils literal"><span class="pre">run_tests</span></tt> Module</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">The <tt class="docutils literal"><span class="pre">lru_cache</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.synchronize_proxy">The <tt class="docutils literal"><span class="pre">synchronize_proxy</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.pickle_methods">The <tt class="docutils literal"><span class="pre">pickle_methods</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.persistent_lru_cache">The <tt class="docutils literal"><span class="pre">persistent_lru_cache</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.cache">The <tt class="docutils literal"><span class="pre">cache</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.string">The <tt class="docutils literal"><span class="pre">string</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.httplib_patch">The <tt class="docutils literal"><span class="pre">httplib_patch</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.exponential_retry">The <tt class="docutils literal"><span class="pre">exponential_retry</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.xmlparser">The <tt class="docutils literal"><span class="pre">xmlparser</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.string">The <tt class="docutils literal"><span class="pre">string</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.pickle_methods">The <tt class="docutils literal"><span class="pre">pickle_methods</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.exponential_retry">The <tt class="docutils literal"><span class="pre">exponential_retry</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.mp_lru_cache">The <tt class="docutils literal"><span class="pre">mp_lru_cache</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.cache">The <tt class="docutils literal"><span class="pre">cache</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.persistent_lru_cache">The <tt class="docutils literal"><span class="pre">persistent_lru_cache</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.mp_synchronize_proxy">The <tt class="docutils literal"><span class="pre">mp_synchronize_proxy</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.synchronize_proxy">The <tt class="docutils literal"><span class="pre">synchronize_proxy</span></tt> Module</a></li>
 </ul>
 </div>
 </div>
@@ -159,28 +665,36 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Developers documentation</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#using-the-api-directly">Using the API Directly</a><ul>
+<li><a class="reference internal" href="#extensive-example-with-dropbox">Extensive Example with Dropbox</a></li>
+<li><a class="reference internal" href="#webdav-and-the-bulkgetmetadata-interface">WebDAV and the BulkGetMetadata Interface</a></li>
+<li><a class="reference internal" href="#amazon-s3-and-hello-world">Amazon S3 and Hello World!</a></li>
+<li><a class="reference internal" href="#google-storage-and-the-archiving-layer">Google Storage and the Archiving Layer</a></li>
+<li><a class="reference internal" href="#sugarsync">Sugarsync</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#extensions">Extensions</a></li>
 <li><a class="reference internal" href="#documentation">Documentation</a><ul>
 <li><a class="reference internal" href="#requirements">Requirements</a></li>
+<li><a class="reference internal" href="#generate-documentation">Generate Documentation</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#tests">Tests</a><ul>
 <li><a class="reference internal" href="#id1">Requirements</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#modules">Modules:</a><ul>
-</ul>
-</li>
+<li><a class="reference internal" href="#modules">Modules:</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="setup.html"
-                        title="previous chapter">Setup documentation</a></p>
+  <p class="topless"><a href="user.html"
+                        title="previous chapter">Users documentation</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="mylogging.html"
-                        title="next chapter">The <tt class="docutils literal"><span class="pre">nullhandler</span></tt> Module</a></p>
+                        title="next chapter">The <tt class="docutils literal"><span class="pre">db_logging_thread</span></tt> Module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/develop.txt"
@@ -213,17 +727,17 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="mylogging.html" title="The nullhandler Module"
+          <a href="mylogging.html" title="The db_logging_thread Module"
              >next</a> |</li>
         <li class="right" >
-          <a href="setup.html" title="Setup documentation"
+          <a href="user.html" title="Users documentation"
              >previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Johannes Müller.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>
