@@ -31,7 +31,8 @@ Further development
 
 * File attributes (modified timestamp, permissions)
 * Improved error handling for Amazon S3 and Google Storage
-* Integration of Google Drive, and box.com
+* Integration of Google Drive
+* Integration of Mega
 * Integration of SFTP
 
 Contents
