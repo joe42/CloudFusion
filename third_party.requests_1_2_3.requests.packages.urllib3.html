@@ -26,7 +26,7 @@
     <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
     <link rel="up" title="Subpackages" href="third_party.requests_1_2_3.requests.packages.html" />
     <link rel="next" title="Subpackages" href="third_party.requests_1_2_3.requests.packages.urllib3.packages.html" />
-    <link rel="prev" title="The latin1prober Module" href="third_party.requests_1_2_3.requests.packages.charade.html" /> 
+    <link rel="prev" title="The mbcharsetprober Module" href="third_party.requests_1_2_3.requests.packages.charade.html" /> 
   </head>
   <body>
     <div class="related">
@@ -42,7 +42,7 @@
           <a href="third_party.requests_1_2_3.requests.packages.urllib3.packages.html" title="Subpackages"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="third_party.requests_1_2_3.requests.packages.charade.html" title="The latin1prober Module"
+          <a href="third_party.requests_1_2_3.requests.packages.charade.html" title="The mbcharsetprober Module"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li>
@@ -66,432 +66,12 @@
 <li class="toctree-l2"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.packages.ssl_match_hostname.html">The <tt class="docutils literal"><span class="pre">ssl_match_hostname</span></tt> Package</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.packages.html#the-six-module">The <tt class="docutils literal"><span class="pre">six</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.packages.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.packages.ordered_dict">The <tt class="docutils literal"><span class="pre">ordered_dict</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.contrib.html">The <tt class="docutils literal"><span class="pre">pyopenssl</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.contrib.html#the-ntlmpool-module">The <tt class="docutils literal"><span class="pre">ntlmpool</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.packages.html#the-six-module">The <tt class="docutils literal"><span class="pre">six</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.contrib.html">The <tt class="docutils literal"><span class="pre">ntlmpool</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.contrib.html#the-pyopenssl-module">The <tt class="docutils literal"><span class="pre">pyopenssl</span></tt> Module</a></li>
 </ul>
 </div>
-</div>
-<div class="section" id="module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request">
-<span id="the-request-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">request</span></tt> Module<a class="headerlink" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods">
-<em class="property">class </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.</tt><tt class="descname">RequestMethods</tt><big>(</big><em>headers=None</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Convenience mixin for classes who implement a <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen"><tt class="xref py py-meth docutils literal"><span class="pre">urlopen()</span></tt></a> method, such
-as <tt class="xref py py-class docutils literal"><span class="pre">HTTPConnectionPool</span></tt> and
-<tt class="xref py py-class docutils literal"><span class="pre">PoolManager</span></tt>.</p>
-<p>Provides behavior for making common types of HTTP request methods and
-decides which type of request field encoding to use.</p>
-<p>Specifically,</p>
-<p><a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_url" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_url"><tt class="xref py py-meth docutils literal"><span class="pre">request_encode_url()</span></tt></a> is for sending requests whose fields are encoded
-in the URL (such as GET, HEAD, DELETE).</p>
-<p><a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_body" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_body"><tt class="xref py py-meth docutils literal"><span class="pre">request_encode_body()</span></tt></a> is for sending requests whose fields are
-encoded in the <em>body</em> of the request using multipart or www-orm-urlencoded
-(such as for POST, PUT, PATCH).</p>
-<p><a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request"><tt class="xref py py-meth docutils literal"><span class="pre">request()</span></tt></a> is for making any kind of request, it will look up the
-appropriate encoding format and use one of the above two methods to make
-the request.</p>
-<p>Initializer parameters:</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>headers</strong> &#8211; Headers to include with all requests, unless other headers are given
-explicitly.</td>
-</tr>
-</tbody>
-</table>
-<dl class="attribute">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods._encode_body_methods">
-<tt class="descname">_encode_body_methods</tt><em class="property"> = set(['PUT', 'POST', 'TRACE', 'PATCH'])</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods._encode_body_methods" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods._encode_url_methods">
-<tt class="descname">_encode_url_methods</tt><em class="property"> = set(['HEAD', 'GET', 'OPTIONS', 'DELETE'])</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods._encode_url_methods" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request">
-<tt class="descname">request</tt><big>(</big><em>method</em>, <em>url</em>, <em>fields=None</em>, <em>headers=None</em>, <em>**urlopen_kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make a request using <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen"><tt class="xref py py-meth docutils literal"><span class="pre">urlopen()</span></tt></a> with the appropriate encoding of
-<tt class="docutils literal"><span class="pre">fields</span></tt> based on the <tt class="docutils literal"><span class="pre">method</span></tt> used.</p>
-<p>This is a convenience method that requires the least amount of manual
-effort. It can be used in most situations, while still having the option
-to drop down to more specific methods when necessary, such as
-<a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_url" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_url"><tt class="xref py py-meth docutils literal"><span class="pre">request_encode_url()</span></tt></a>, <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_body" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_body"><tt class="xref py py-meth docutils literal"><span class="pre">request_encode_body()</span></tt></a>,
-or even the lowest level <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen"><tt class="xref py py-meth docutils literal"><span class="pre">urlopen()</span></tt></a>.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_body">
-<tt class="descname">request_encode_body</tt><big>(</big><em>method</em>, <em>url</em>, <em>fields=None</em>, <em>headers=None</em>, <em>encode_multipart=True</em>, <em>multipart_boundary=None</em>, <em>**urlopen_kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_body" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make a request using <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen"><tt class="xref py py-meth docutils literal"><span class="pre">urlopen()</span></tt></a> with the <tt class="docutils literal"><span class="pre">fields</span></tt> encoded in
-the body. This is useful for request methods like POST, PUT, PATCH, etc.</p>
-<p>When <tt class="docutils literal"><span class="pre">encode_multipart=True</span></tt> (default), then
-<tt class="xref py py-meth docutils literal"><span class="pre">urllib3.filepost.encode_multipart_formdata()</span></tt> is used to encode the
-payload with the appropriate content type. Otherwise
-<tt class="xref py py-meth docutils literal"><span class="pre">urllib.urlencode()</span></tt> is used with the
-&#8216;application/x-www-form-urlencoded&#8217; content type.</p>
-<p>Multipart encoding must be used when posting files, and it&#8217;s reasonably
-safe to use it in other times too. However, it may break request signing,
-such as with OAuth.</p>
-<p>Supports an optional <tt class="docutils literal"><span class="pre">fields</span></tt> parameter of key/value strings AND
-key/filetuple. A filetuple is a (filename, data, MIME type) tuple where
-the MIME type is optional. For example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">fields</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">&#39;foo&#39;</span><span class="p">:</span> <span class="s">&#39;bar&#39;</span><span class="p">,</span>
-    <span class="s">&#39;fakefile&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;foofile.txt&#39;</span><span class="p">,</span> <span class="s">&#39;contents of foofile&#39;</span><span class="p">),</span>
-    <span class="s">&#39;realfile&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;barfile.txt&#39;</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;realfile&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()),</span>
-    <span class="s">&#39;typedfile&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;bazfile.bin&#39;</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;bazfile&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span>
-                  <span class="s">&#39;image/jpeg&#39;</span><span class="p">),</span>
-    <span class="s">&#39;nonamefile&#39;</span><span class="p">:</span> <span class="s">&#39;contents of nonamefile field&#39;</span><span class="p">,</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>When uploading a file, providing a filename (the first parameter of the
-tuple) is optional but recommended to best mimick behavior of browsers.</p>
-<p>Note that if <tt class="docutils literal"><span class="pre">headers</span></tt> are supplied, the &#8216;Content-Type&#8217; header will be
-overwritten because it depends on the dynamic random boundary string
-which is used to compose the body of the request. The random boundary
-string can be explicitly set with the <tt class="docutils literal"><span class="pre">multipart_boundary</span></tt> parameter.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_url">
-<tt class="descname">request_encode_url</tt><big>(</big><em>method</em>, <em>url</em>, <em>fields=None</em>, <em>**urlopen_kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_url" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make a request using <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen"><tt class="xref py py-meth docutils literal"><span class="pre">urlopen()</span></tt></a> with the <tt class="docutils literal"><span class="pre">fields</span></tt> encoded in
-the url. This is useful for request methods like GET, HEAD, DELETE, etc.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen">
-<tt class="descname">urlopen</tt><big>(</big><em>method</em>, <em>url</em>, <em>body=None</em>, <em>headers=None</em>, <em>encode_multipart=True</em>, <em>multipart_boundary=None</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool">
-<span id="the-connectionpool-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">connectionpool</span></tt> Module<a class="headerlink" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool">
-<em class="property">class </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.</tt><tt class="descname">ConnectionPool</tt><big>(</big><em>host</em>, <em>port=None</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Base class for all connection pools, such as
-<a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool"><tt class="xref py py-class docutils literal"><span class="pre">HTTPConnectionPool</span></tt></a> and <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPSConnectionPool" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPSConnectionPool"><tt class="xref py py-class docutils literal"><span class="pre">HTTPSConnectionPool</span></tt></a>.</p>
-<dl class="attribute">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool.QueueCls">
-<tt class="descname">QueueCls</tt><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool.QueueCls" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">LifoQueue</span></tt></p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool.scheme">
-<tt class="descname">scheme</tt><em class="property"> = None</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool.scheme" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool">
-<em class="property">class </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.</tt><tt class="descname">HTTPConnectionPool</tt><big>(</big><em>host</em>, <em>port=None</em>, <em>strict=False</em>, <em>timeout=None</em>, <em>maxsize=1</em>, <em>block=False</em>, <em>headers=None</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool</span></tt></a>, <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods</span></tt></a></p>
-<p>Thread-safe connection pool for one host.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>host</strong> &#8211; Host used for this HTTP Connection (e.g. &#8220;localhost&#8221;), passed into
-<tt class="xref py py-class docutils literal"><span class="pre">httplib.HTTPConnection</span></tt>.</li>
-<li><strong>port</strong> &#8211; Port used for this HTTP Connection (None is equivalent to 80), passed
-into <tt class="xref py py-class docutils literal"><span class="pre">httplib.HTTPConnection</span></tt>.</li>
-<li><strong>strict</strong> &#8211; Causes BadStatusLine to be raised if the status line can&#8217;t be parsed
-as a valid HTTP/1.0 or 1.1 status line, passed into
-<tt class="xref py py-class docutils literal"><span class="pre">httplib.HTTPConnection</span></tt>.</li>
-<li><strong>timeout</strong> &#8211; Socket timeout for each individual connection, can be a float. None
-disables timeout.</li>
-<li><strong>maxsize</strong> &#8211; Number of connections to save that can be reused. More than 1 is useful
-in multithreaded situations. If <tt class="docutils literal"><span class="pre">block</span></tt> is set to false, more
-connections will be created but they will not be saved once they&#8217;ve
-been used.</li>
-<li><strong>block</strong> &#8211; If set to True, no more than <tt class="docutils literal"><span class="pre">maxsize</span></tt> connections will be used at
-a time. When no free connections are available, the call will block
-until a connection has been released. This is a useful side effect for
-particular multithreaded situations where one does not want to use more
-than maxsize connections per host to prevent flooding.</li>
-<li><strong>headers</strong> &#8211; Headers to include with all requests, unless other headers are given
-explicitly.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._get_conn">
-<tt class="descname">_get_conn</tt><big>(</big><em>timeout=None</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._get_conn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a connection. Will return a pooled connection if one is available.</p>
-<p>If no connections are available and <a href="#id1"><span class="problematic" id="id2">:prop:`.block`</span></a> is <tt class="docutils literal"><span class="pre">False</span></tt>, then a
-fresh connection is returned.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout</strong> &#8211; Seconds to wait before giving up and raising
-<tt class="xref py py-class docutils literal"><span class="pre">urllib3.exceptions.EmptyPoolError</span></tt> if the pool is empty and
-<a href="#id3"><span class="problematic" id="id4">:prop:`.block`</span></a> is <tt class="docutils literal"><span class="pre">True</span></tt>.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._make_request">
-<tt class="descname">_make_request</tt><big>(</big><em>conn</em>, <em>method</em>, <em>url</em>, <em>timeout=&lt;object object at 0x2bb7b60&gt;</em>, <em>**httplib_request_kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._make_request" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform a request on a given httplib connection object taken from our
-pool.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._new_conn">
-<tt class="descname">_new_conn</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._new_conn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a fresh <tt class="xref py py-class docutils literal"><span class="pre">httplib.HTTPConnection</span></tt>.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._put_conn">
-<tt class="descname">_put_conn</tt><big>(</big><em>conn</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._put_conn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Put a connection back into the pool.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>conn</strong> &#8211; Connection object for the current host and port as returned by
-<a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._new_conn" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._new_conn"><tt class="xref py py-meth docutils literal"><span class="pre">_new_conn()</span></tt></a> or <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._get_conn" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._get_conn"><tt class="xref py py-meth docutils literal"><span class="pre">_get_conn()</span></tt></a>.</td>
-</tr>
-</tbody>
-</table>
-<p>If the pool is already full, the connection is closed and discarded
-because we exceeded maxsize. If connections are discarded frequently,
-then maxsize should be increased.</p>
-<p>If the pool is closed, then the connection will be closed and discarded.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool.close">
-<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool.close" title="Permalink to this definition">¶</a></dt>
-<dd><p>Close all pooled connections and disable the pool.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool.is_same_host">
-<tt class="descname">is_same_host</tt><big>(</big><em>url</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool.is_same_host" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if the given <tt class="docutils literal"><span class="pre">url</span></tt> is a member of the same host as this
-connection pool.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool.scheme">
-<tt class="descname">scheme</tt><em class="property"> = 'http'</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool.scheme" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool.urlopen">
-<tt class="descname">urlopen</tt><big>(</big><em>method</em>, <em>url</em>, <em>body=None</em>, <em>headers=None</em>, <em>retries=3</em>, <em>redirect=True</em>, <em>assert_same_host=True</em>, <em>timeout=&lt;object object at 0x2bb7b60&gt;</em>, <em>pool_timeout=None</em>, <em>release_conn=None</em>, <em>**response_kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool.urlopen" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a connection from the pool and perform an HTTP request. This is the
-lowest level call for making a request, so you&#8217;ll need to specify all
-the raw details.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">More commonly, it&#8217;s appropriate to use a convenience method provided
-by <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods"><tt class="xref py py-class docutils literal"><span class="pre">RequestMethods</span></tt></a>, such as <tt class="xref py py-meth docutils literal"><span class="pre">request()</span></tt>.</p>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last"><cite>release_conn</cite> will only behave as expected if
-<cite>preload_content=False</cite> because we want to make
-<cite>preload_content=False</cite> the default behaviour someday soon without
-breaking backwards compatibility.</p>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>method</strong> &#8211; HTTP request method (such as GET, POST, PUT, etc.)</li>
-<li><strong>body</strong> &#8211; Data to send in the request body (useful for creating
-POST requests, see HTTPConnectionPool.post_url for
-more convenience).</li>
-<li><strong>headers</strong> &#8211; Dictionary of custom headers to send, such as User-Agent,
-If-None-Match, etc. If None, pool headers are used. If provided,
-these headers completely replace any pool-specific headers.</li>
-<li><strong>retries</strong> &#8211; Number of retries to allow before raising a MaxRetryError exception.</li>
-<li><strong>redirect</strong> &#8211; If True, automatically handle redirects (status codes 301, 302,
-303, 307). Each redirect counts as a retry.</li>
-<li><strong>assert_same_host</strong> &#8211; If <tt class="docutils literal"><span class="pre">True</span></tt>, will make sure that the host of the pool requests is
-consistent else will raise HostChangedError. When False, you can
-use the pool on an HTTP proxy and request foreign hosts.</li>
-<li><strong>timeout</strong> &#8211; If specified, overrides the default timeout for this one request.</li>
-<li><strong>pool_timeout</strong> &#8211; If set and the pool is set to block=True, then this method will
-block for <tt class="docutils literal"><span class="pre">pool_timeout</span></tt> seconds and raise EmptyPoolError if no
-connection is available within the time period.</li>
-<li><strong>release_conn</strong> &#8211; If False, then the urlopen call will not release the connection
-back into the pool once a response is received (but will release if
-you read the entire contents of the response such as when
-<cite>preload_content=True</cite>). This is useful if you&#8217;re not preloading
-the response&#8217;s content immediately. You will need to call
-<tt class="docutils literal"><span class="pre">r.release_conn()</span></tt> on the response <tt class="docutils literal"><span class="pre">r</span></tt> to return the connection
-back into the pool. If None, it takes the value of
-<tt class="docutils literal"><span class="pre">response_kw.get('preload_content',</span> <span class="pre">True)</span></tt>.</li>
-<li><strong>**response_kw</strong> &#8211; Additional parameters are passed to
-<tt class="xref py py-meth docutils literal"><span class="pre">urllib3.response.HTTPResponse.from_httplib()</span></tt></li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPSConnectionPool">
-<em class="property">class </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.</tt><tt class="descname">HTTPSConnectionPool</tt><big>(</big><em>host</em>, <em>port=None</em>, <em>strict=False</em>, <em>timeout=None</em>, <em>maxsize=1</em>, <em>block=False</em>, <em>headers=None</em>, <em>key_file=None</em>, <em>cert_file=None</em>, <em>cert_reqs=None</em>, <em>ca_certs=None</em>, <em>ssl_version=None</em>, <em>assert_hostname=None</em>, <em>assert_fingerprint=None</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPSConnectionPool" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool</span></tt></a></p>
-<p>Same as <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool"><tt class="xref py py-class docutils literal"><span class="pre">HTTPConnectionPool</span></tt></a>, but HTTPS.</p>
-<p>When Python is compiled with the <tt class="xref py py-mod docutils literal"><span class="pre">ssl</span></tt> module, then
-<a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection"><tt class="xref py py-class docutils literal"><span class="pre">VerifiedHTTPSConnection</span></tt></a> is used, which <em>can</em> verify certificates,
-instead of <tt class="xref py py-class docutils literal"><span class="pre">httplib.HTTPSConnection</span></tt>.</p>
-<p><a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection"><tt class="xref py py-class docutils literal"><span class="pre">VerifiedHTTPSConnection</span></tt></a> uses one of <tt class="docutils literal"><span class="pre">assert_fingerprint</span></tt>,
-<tt class="docutils literal"><span class="pre">assert_hostname</span></tt> and <tt class="docutils literal"><span class="pre">host</span></tt> in this order to verify connections.</p>
-<p>The <tt class="docutils literal"><span class="pre">key_file</span></tt>, <tt class="docutils literal"><span class="pre">cert_file</span></tt>, <tt class="docutils literal"><span class="pre">cert_reqs</span></tt>, <tt class="docutils literal"><span class="pre">ca_certs</span></tt> and
-<tt class="docutils literal"><span class="pre">ssl_version</span></tt> are only used if <tt class="xref py py-mod docutils literal"><span class="pre">ssl</span></tt> is available and are fed into
-<tt class="xref py py-meth docutils literal"><span class="pre">urllib3.util.ssl_wrap_socket()</span></tt> to upgrade the connection socket
-into an SSL socket.</p>
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPSConnectionPool._new_conn">
-<tt class="descname">_new_conn</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPSConnectionPool._new_conn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a fresh <tt class="xref py py-class docutils literal"><span class="pre">httplib.HTTPSConnection</span></tt>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPSConnectionPool.scheme">
-<tt class="descname">scheme</tt><em class="property"> = 'https'</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPSConnectionPool.scheme" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection">
-<em class="property">class </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.</tt><tt class="descname">VerifiedHTTPSConnection</tt><big>(</big><em>host</em>, <em>port=None</em>, <em>key_file=None</em>, <em>cert_file=None</em>, <em>strict=None</em>, <em>timeout=&lt;object object at 0x2ab4ec5a0240&gt;</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">httplib.HTTPSConnection</span></tt></p>
-<p>Based on httplib.HTTPSConnection but wraps the socket with
-SSL certification.</p>
-<dl class="attribute">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection.ca_certs">
-<tt class="descname">ca_certs</tt><em class="property"> = None</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection.ca_certs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection.cert_reqs">
-<tt class="descname">cert_reqs</tt><em class="property"> = None</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection.cert_reqs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection.connect">
-<tt class="descname">connect</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection.connect" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection.set_cert">
-<tt class="descname">set_cert</tt><big>(</big><em>key_file=None</em>, <em>cert_file=None</em>, <em>cert_reqs=None</em>, <em>ca_certs=None</em>, <em>assert_hostname=None</em>, <em>assert_fingerprint=None</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection.set_cert" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection.ssl_version">
-<tt class="descname">ssl_version</tt><em class="property"> = None</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection.ssl_version" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.connection_from_url">
-<tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.</tt><tt class="descname">connection_from_url</tt><big>(</big><em>url</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.connection_from_url" title="Permalink to this definition">¶</a></dt>
-<dd><p>Given a url, return an <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool"><tt class="xref py py-class docutils literal"><span class="pre">ConnectionPool</span></tt></a> instance of its host.</p>
-<p>This is a shortcut for not having to parse out the scheme, host, and port
-of the url before creating an <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool"><tt class="xref py py-class docutils literal"><span class="pre">ConnectionPool</span></tt></a> instance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>url</strong> &#8211; Absolute URL string that must include the scheme. Port is optional.</li>
-<li><strong>**kw</strong> &#8211; Passes additional parameters to the constructor of the appropriate
-<a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool"><tt class="xref py py-class docutils literal"><span class="pre">ConnectionPool</span></tt></a>. Useful for specifying things like
-timeout, maxsize, headers, etc.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">connection_from_url</span><span class="p">(</span><span class="s">&#39;http://google.com/&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;/&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost">
-<span id="the-filepost-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">filepost</span></tt> Module<a class="headerlink" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.choose_boundary">
-<tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.</tt><tt class="descname">choose_boundary</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.choose_boundary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Our embarassingly-simple replacement for mimetools.choose_boundary.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.encode_multipart_formdata">
-<tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.</tt><tt class="descname">encode_multipart_formdata</tt><big>(</big><em>fields</em>, <em>boundary=None</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.encode_multipart_formdata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Encode a dictionary of <tt class="docutils literal"><span class="pre">fields</span></tt> using the multipart/form-data MIME format.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>fields</strong> &#8211; <p>Dictionary of fields or list of (key, value) or (key, value, MIME type)
-field tuples.  The key is treated as the field name, and the value as
-the body of the form-data bytes. If the value is a tuple of two
-elements, then the first element is treated as the filename of the
-form-data section and a suitable MIME type is guessed based on the
-filename. If the value is a tuple of three elements, then the third
-element is treated as an explicit MIME type of the form-data section.</p>
-<p>Field names and filenames must be unicode.</p>
-</li>
-<li><strong>boundary</strong> &#8211; If not specified, then a random boundary will be generated using
-<tt class="xref py py-func docutils literal"><span class="pre">mimetools.choose_boundary()</span></tt>.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.get_content_type">
-<tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.</tt><tt class="descname">get_content_type</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.get_content_type" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.iter_fields">
-<tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.</tt><tt class="descname">iter_fields</tt><big>(</big><em>fields</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.iter_fields" title="Permalink to this definition">¶</a></dt>
-<dd><p>Iterate over fields.</p>
-<p>Supports list of (k, v) tuples and dicts.</p>
-</dd></dl>
-
 </div>
 <div class="section" id="module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.util">
 <span id="the-util-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">util</span></tt> Module<a class="headerlink" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.util" title="Permalink to this headline">¶</a></h1>
@@ -650,6 +230,687 @@ delimiter. Return two split parts and the matched delimiter.</p>
 <dd></dd></dl>
 
 </div>
+<div class="section" id="module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3">
+<span id="the-urllib3-package"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">urllib3</span></tt> Package<a class="headerlink" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3" title="Permalink to this headline">¶</a></h1>
+<p>urllib3 - Thread-safe connection pooling and re-using.</p>
+<dl class="function">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.add_stderr_logger">
+<tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.</tt><tt class="descname">add_stderr_logger</tt><big>(</big><em>level=10</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.add_stderr_logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper for quickly adding a StreamHandler to the logger. Useful for
+debugging.</p>
+<p>Returns the handler after adding it.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections">
+<span id="the-collections-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">_collections</span></tt> Module<a class="headerlink" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer">
+<em class="property">class </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.</tt><tt class="descname">RecentlyUsedContainer</tt><big>(</big><em>maxsize=10</em>, <em>dispose_func=None</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">_abcoll.MutableMapping</span></tt></p>
+<p>Provides a thread-safe dict-like container which maintains up to
+<tt class="docutils literal"><span class="pre">maxsize</span></tt> keys while throwing away the least-recently-used keys beyond
+<tt class="docutils literal"><span class="pre">maxsize</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>maxsize</strong> &#8211; Maximum number of recent elements to retain.</li>
+<li><strong>dispose_func</strong> &#8211; Every time an item is evicted from the container,
+<tt class="docutils literal"><span class="pre">dispose_func(value)</span></tt> is called.  Callback which will get called</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer.ContainerCls">
+<tt class="descname">ContainerCls</tt><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer.ContainerCls" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">OrderedDict</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer._abc_cache">
+<tt class="descname">_abc_cache</tt><em class="property"> = set([])</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer._abc_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer._abc_negative_cache">
+<tt class="descname">_abc_negative_cache</tt><em class="property"> = set([])</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer._abc_negative_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer._abc_negative_cache_version">
+<tt class="descname">_abc_negative_cache_version</tt><em class="property"> = 17</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer._abc_negative_cache_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer._abc_registry">
+<tt class="descname">_abc_registry</tt><em class="property"> = set([])</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer._abc_registry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer.clear">
+<tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer.clear" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer.keys">
+<tt class="descname">keys</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer.keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request">
+<span id="the-request-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">request</span></tt> Module<a class="headerlink" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods">
+<em class="property">class </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.</tt><tt class="descname">RequestMethods</tt><big>(</big><em>headers=None</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Convenience mixin for classes who implement a <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen"><tt class="xref py py-meth docutils literal"><span class="pre">urlopen()</span></tt></a> method, such
+as <tt class="xref py py-class docutils literal"><span class="pre">HTTPConnectionPool</span></tt> and
+<tt class="xref py py-class docutils literal"><span class="pre">PoolManager</span></tt>.</p>
+<p>Provides behavior for making common types of HTTP request methods and
+decides which type of request field encoding to use.</p>
+<p>Specifically,</p>
+<p><a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_url" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_url"><tt class="xref py py-meth docutils literal"><span class="pre">request_encode_url()</span></tt></a> is for sending requests whose fields are encoded
+in the URL (such as GET, HEAD, DELETE).</p>
+<p><a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_body" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_body"><tt class="xref py py-meth docutils literal"><span class="pre">request_encode_body()</span></tt></a> is for sending requests whose fields are
+encoded in the <em>body</em> of the request using multipart or www-orm-urlencoded
+(such as for POST, PUT, PATCH).</p>
+<p><a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request"><tt class="xref py py-meth docutils literal"><span class="pre">request()</span></tt></a> is for making any kind of request, it will look up the
+appropriate encoding format and use one of the above two methods to make
+the request.</p>
+<p>Initializer parameters:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>headers</strong> &#8211; Headers to include with all requests, unless other headers are given
+explicitly.</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods._encode_body_methods">
+<tt class="descname">_encode_body_methods</tt><em class="property"> = set(['PUT', 'POST', 'TRACE', 'PATCH'])</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods._encode_body_methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods._encode_url_methods">
+<tt class="descname">_encode_url_methods</tt><em class="property"> = set(['HEAD', 'GET', 'OPTIONS', 'DELETE'])</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods._encode_url_methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request">
+<tt class="descname">request</tt><big>(</big><em>method</em>, <em>url</em>, <em>fields=None</em>, <em>headers=None</em>, <em>**urlopen_kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a request using <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen"><tt class="xref py py-meth docutils literal"><span class="pre">urlopen()</span></tt></a> with the appropriate encoding of
+<tt class="docutils literal"><span class="pre">fields</span></tt> based on the <tt class="docutils literal"><span class="pre">method</span></tt> used.</p>
+<p>This is a convenience method that requires the least amount of manual
+effort. It can be used in most situations, while still having the option
+to drop down to more specific methods when necessary, such as
+<a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_url" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_url"><tt class="xref py py-meth docutils literal"><span class="pre">request_encode_url()</span></tt></a>, <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_body" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_body"><tt class="xref py py-meth docutils literal"><span class="pre">request_encode_body()</span></tt></a>,
+or even the lowest level <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen"><tt class="xref py py-meth docutils literal"><span class="pre">urlopen()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_body">
+<tt class="descname">request_encode_body</tt><big>(</big><em>method</em>, <em>url</em>, <em>fields=None</em>, <em>headers=None</em>, <em>encode_multipart=True</em>, <em>multipart_boundary=None</em>, <em>**urlopen_kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_body" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a request using <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen"><tt class="xref py py-meth docutils literal"><span class="pre">urlopen()</span></tt></a> with the <tt class="docutils literal"><span class="pre">fields</span></tt> encoded in
+the body. This is useful for request methods like POST, PUT, PATCH, etc.</p>
+<p>When <tt class="docutils literal"><span class="pre">encode_multipart=True</span></tt> (default), then
+<tt class="xref py py-meth docutils literal"><span class="pre">urllib3.filepost.encode_multipart_formdata()</span></tt> is used to encode the
+payload with the appropriate content type. Otherwise
+<tt class="xref py py-meth docutils literal"><span class="pre">urllib.urlencode()</span></tt> is used with the
+&#8216;application/x-www-form-urlencoded&#8217; content type.</p>
+<p>Multipart encoding must be used when posting files, and it&#8217;s reasonably
+safe to use it in other times too. However, it may break request signing,
+such as with OAuth.</p>
+<p>Supports an optional <tt class="docutils literal"><span class="pre">fields</span></tt> parameter of key/value strings AND
+key/filetuple. A filetuple is a (filename, data, MIME type) tuple where
+the MIME type is optional. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fields</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;foo&#39;</span><span class="p">:</span> <span class="s">&#39;bar&#39;</span><span class="p">,</span>
+    <span class="s">&#39;fakefile&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;foofile.txt&#39;</span><span class="p">,</span> <span class="s">&#39;contents of foofile&#39;</span><span class="p">),</span>
+    <span class="s">&#39;realfile&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;barfile.txt&#39;</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;realfile&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()),</span>
+    <span class="s">&#39;typedfile&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;bazfile.bin&#39;</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;bazfile&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span>
+                  <span class="s">&#39;image/jpeg&#39;</span><span class="p">),</span>
+    <span class="s">&#39;nonamefile&#39;</span><span class="p">:</span> <span class="s">&#39;contents of nonamefile field&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>When uploading a file, providing a filename (the first parameter of the
+tuple) is optional but recommended to best mimick behavior of browsers.</p>
+<p>Note that if <tt class="docutils literal"><span class="pre">headers</span></tt> are supplied, the &#8216;Content-Type&#8217; header will be
+overwritten because it depends on the dynamic random boundary string
+which is used to compose the body of the request. The random boundary
+string can be explicitly set with the <tt class="docutils literal"><span class="pre">multipart_boundary</span></tt> parameter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_url">
+<tt class="descname">request_encode_url</tt><big>(</big><em>method</em>, <em>url</em>, <em>fields=None</em>, <em>**urlopen_kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.request_encode_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a request using <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen"><tt class="xref py py-meth docutils literal"><span class="pre">urlopen()</span></tt></a> with the <tt class="docutils literal"><span class="pre">fields</span></tt> encoded in
+the url. This is useful for request methods like GET, HEAD, DELETE, etc.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen">
+<tt class="descname">urlopen</tt><big>(</big><em>method</em>, <em>url</em>, <em>body=None</em>, <em>headers=None</em>, <em>encode_multipart=True</em>, <em>multipart_boundary=None</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods.urlopen" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost">
+<span id="the-filepost-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">filepost</span></tt> Module<a class="headerlink" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.choose_boundary">
+<tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.</tt><tt class="descname">choose_boundary</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.choose_boundary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Our embarassingly-simple replacement for mimetools.choose_boundary.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.encode_multipart_formdata">
+<tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.</tt><tt class="descname">encode_multipart_formdata</tt><big>(</big><em>fields</em>, <em>boundary=None</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.encode_multipart_formdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode a dictionary of <tt class="docutils literal"><span class="pre">fields</span></tt> using the multipart/form-data MIME format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fields</strong> &#8211; <p>Dictionary of fields or list of (key, value) or (key, value, MIME type)
+field tuples.  The key is treated as the field name, and the value as
+the body of the form-data bytes. If the value is a tuple of two
+elements, then the first element is treated as the filename of the
+form-data section and a suitable MIME type is guessed based on the
+filename. If the value is a tuple of three elements, then the third
+element is treated as an explicit MIME type of the form-data section.</p>
+<p>Field names and filenames must be unicode.</p>
+</li>
+<li><strong>boundary</strong> &#8211; If not specified, then a random boundary will be generated using
+<tt class="xref py py-func docutils literal"><span class="pre">mimetools.choose_boundary()</span></tt>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.get_content_type">
+<tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.</tt><tt class="descname">get_content_type</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.get_content_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.iter_fields">
+<tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.</tt><tt class="descname">iter_fields</tt><big>(</big><em>fields</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost.iter_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over fields.</p>
+<p>Supports list of (k, v) tuples and dicts.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions">
+<span id="the-exceptions-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">exceptions</span></tt> Module<a class="headerlink" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions" title="Permalink to this headline">¶</a></h1>
+<dl class="exception">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.ClosedPoolError">
+<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">ClosedPoolError</tt><big>(</big><em>pool</em>, <em>message</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.ClosedPoolError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError</span></tt></a></p>
+<p>Raised when a request enters a pool after the pool has been closed.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.DecodeError">
+<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">DecodeError</tt><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.DecodeError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError</span></tt></a></p>
+<p>Raised when automatic decoding based on Content-Type fails.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.EmptyPoolError">
+<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">EmptyPoolError</tt><big>(</big><em>pool</em>, <em>message</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.EmptyPoolError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError</span></tt></a></p>
+<p>Raised when a pool runs out of connections and no more are allowed.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError">
+<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">HTTPError</tt><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+<p>Base exception used by this module.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HostChangedError">
+<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">HostChangedError</tt><big>(</big><em>pool</em>, <em>url</em>, <em>retries=3</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HostChangedError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError</span></tt></a></p>
+<p>Raised when an existing pool gets a request for a foreign host.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.LocationParseError">
+<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">LocationParseError</tt><big>(</big><em>location</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.LocationParseError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.ValueError</span></tt>, <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError</span></tt></a></p>
+<p>Raised when get_host or similar fails to parse the URL input.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.MaxRetryError">
+<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">MaxRetryError</tt><big>(</big><em>pool</em>, <em>url</em>, <em>reason=None</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.MaxRetryError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError</span></tt></a></p>
+<p>Raised when the maximum number of retries is exceeded.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError">
+<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">PoolError</tt><big>(</big><em>pool</em>, <em>message</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError</span></tt></a></p>
+<p>Base exception for errors caused within a pool.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError">
+<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">RequestError</tt><big>(</big><em>pool</em>, <em>url</em>, <em>message</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError</span></tt></a></p>
+<p>Base exception for PoolErrors that have associated URLs.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.SSLError">
+<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">SSLError</tt><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.SSLError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError</span></tt></a></p>
+<p>Raised when SSL certificate fails in an HTTPS connection.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.TimeoutError">
+<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">TimeoutError</tt><big>(</big><em>pool</em>, <em>url</em>, <em>message</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.TimeoutError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError</span></tt></a></p>
+<p>Raised when a socket timeout occurs.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool">
+<span id="the-connectionpool-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">connectionpool</span></tt> Module<a class="headerlink" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool">
+<em class="property">class </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.</tt><tt class="descname">ConnectionPool</tt><big>(</big><em>host</em>, <em>port=None</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Base class for all connection pools, such as
+<a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool"><tt class="xref py py-class docutils literal"><span class="pre">HTTPConnectionPool</span></tt></a> and <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPSConnectionPool" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPSConnectionPool"><tt class="xref py py-class docutils literal"><span class="pre">HTTPSConnectionPool</span></tt></a>.</p>
+<dl class="attribute">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool.QueueCls">
+<tt class="descname">QueueCls</tt><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool.QueueCls" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">LifoQueue</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool.scheme">
+<tt class="descname">scheme</tt><em class="property"> = None</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool.scheme" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool">
+<em class="property">class </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.</tt><tt class="descname">HTTPConnectionPool</tt><big>(</big><em>host</em>, <em>port=None</em>, <em>strict=False</em>, <em>timeout=None</em>, <em>maxsize=1</em>, <em>block=False</em>, <em>headers=None</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool</span></tt></a>, <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods</span></tt></a></p>
+<p>Thread-safe connection pool for one host.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>host</strong> &#8211; Host used for this HTTP Connection (e.g. &#8220;localhost&#8221;), passed into
+<tt class="xref py py-class docutils literal"><span class="pre">httplib.HTTPConnection</span></tt>.</li>
+<li><strong>port</strong> &#8211; Port used for this HTTP Connection (None is equivalent to 80), passed
+into <tt class="xref py py-class docutils literal"><span class="pre">httplib.HTTPConnection</span></tt>.</li>
+<li><strong>strict</strong> &#8211; Causes BadStatusLine to be raised if the status line can&#8217;t be parsed
+as a valid HTTP/1.0 or 1.1 status line, passed into
+<tt class="xref py py-class docutils literal"><span class="pre">httplib.HTTPConnection</span></tt>.</li>
+<li><strong>timeout</strong> &#8211; Socket timeout for each individual connection, can be a float. None
+disables timeout.</li>
+<li><strong>maxsize</strong> &#8211; Number of connections to save that can be reused. More than 1 is useful
+in multithreaded situations. If <tt class="docutils literal"><span class="pre">block</span></tt> is set to false, more
+connections will be created but they will not be saved once they&#8217;ve
+been used.</li>
+<li><strong>block</strong> &#8211; If set to True, no more than <tt class="docutils literal"><span class="pre">maxsize</span></tt> connections will be used at
+a time. When no free connections are available, the call will block
+until a connection has been released. This is a useful side effect for
+particular multithreaded situations where one does not want to use more
+than maxsize connections per host to prevent flooding.</li>
+<li><strong>headers</strong> &#8211; Headers to include with all requests, unless other headers are given
+explicitly.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._get_conn">
+<tt class="descname">_get_conn</tt><big>(</big><em>timeout=None</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._get_conn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a connection. Will return a pooled connection if one is available.</p>
+<p>If no connections are available and <a href="#id1"><span class="problematic" id="id2">:prop:`.block`</span></a> is <tt class="docutils literal"><span class="pre">False</span></tt>, then a
+fresh connection is returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout</strong> &#8211; Seconds to wait before giving up and raising
+<tt class="xref py py-class docutils literal"><span class="pre">urllib3.exceptions.EmptyPoolError</span></tt> if the pool is empty and
+<a href="#id3"><span class="problematic" id="id4">:prop:`.block`</span></a> is <tt class="docutils literal"><span class="pre">True</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._make_request">
+<tt class="descname">_make_request</tt><big>(</big><em>conn</em>, <em>method</em>, <em>url</em>, <em>timeout=&lt;object object at 0x3c5ab30&gt;</em>, <em>**httplib_request_kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._make_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a request on a given httplib connection object taken from our
+pool.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._new_conn">
+<tt class="descname">_new_conn</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._new_conn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a fresh <tt class="xref py py-class docutils literal"><span class="pre">httplib.HTTPConnection</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._put_conn">
+<tt class="descname">_put_conn</tt><big>(</big><em>conn</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._put_conn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Put a connection back into the pool.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>conn</strong> &#8211; Connection object for the current host and port as returned by
+<a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._new_conn" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._new_conn"><tt class="xref py py-meth docutils literal"><span class="pre">_new_conn()</span></tt></a> or <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._get_conn" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool._get_conn"><tt class="xref py py-meth docutils literal"><span class="pre">_get_conn()</span></tt></a>.</td>
+</tr>
+</tbody>
+</table>
+<p>If the pool is already full, the connection is closed and discarded
+because we exceeded maxsize. If connections are discarded frequently,
+then maxsize should be increased.</p>
+<p>If the pool is closed, then the connection will be closed and discarded.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool.close">
+<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close all pooled connections and disable the pool.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool.is_same_host">
+<tt class="descname">is_same_host</tt><big>(</big><em>url</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool.is_same_host" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the given <tt class="docutils literal"><span class="pre">url</span></tt> is a member of the same host as this
+connection pool.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool.scheme">
+<tt class="descname">scheme</tt><em class="property"> = 'http'</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool.scheme" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool.urlopen">
+<tt class="descname">urlopen</tt><big>(</big><em>method</em>, <em>url</em>, <em>body=None</em>, <em>headers=None</em>, <em>retries=3</em>, <em>redirect=True</em>, <em>assert_same_host=True</em>, <em>timeout=&lt;object object at 0x3c5ab30&gt;</em>, <em>pool_timeout=None</em>, <em>release_conn=None</em>, <em>**response_kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool.urlopen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a connection from the pool and perform an HTTP request. This is the
+lowest level call for making a request, so you&#8217;ll need to specify all
+the raw details.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">More commonly, it&#8217;s appropriate to use a convenience method provided
+by <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods"><tt class="xref py py-class docutils literal"><span class="pre">RequestMethods</span></tt></a>, such as <tt class="xref py py-meth docutils literal"><span class="pre">request()</span></tt>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><cite>release_conn</cite> will only behave as expected if
+<cite>preload_content=False</cite> because we want to make
+<cite>preload_content=False</cite> the default behaviour someday soon without
+breaking backwards compatibility.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>method</strong> &#8211; HTTP request method (such as GET, POST, PUT, etc.)</li>
+<li><strong>body</strong> &#8211; Data to send in the request body (useful for creating
+POST requests, see HTTPConnectionPool.post_url for
+more convenience).</li>
+<li><strong>headers</strong> &#8211; Dictionary of custom headers to send, such as User-Agent,
+If-None-Match, etc. If None, pool headers are used. If provided,
+these headers completely replace any pool-specific headers.</li>
+<li><strong>retries</strong> &#8211; Number of retries to allow before raising a MaxRetryError exception.</li>
+<li><strong>redirect</strong> &#8211; If True, automatically handle redirects (status codes 301, 302,
+303, 307). Each redirect counts as a retry.</li>
+<li><strong>assert_same_host</strong> &#8211; If <tt class="docutils literal"><span class="pre">True</span></tt>, will make sure that the host of the pool requests is
+consistent else will raise HostChangedError. When False, you can
+use the pool on an HTTP proxy and request foreign hosts.</li>
+<li><strong>timeout</strong> &#8211; If specified, overrides the default timeout for this one request.</li>
+<li><strong>pool_timeout</strong> &#8211; If set and the pool is set to block=True, then this method will
+block for <tt class="docutils literal"><span class="pre">pool_timeout</span></tt> seconds and raise EmptyPoolError if no
+connection is available within the time period.</li>
+<li><strong>release_conn</strong> &#8211; If False, then the urlopen call will not release the connection
+back into the pool once a response is received (but will release if
+you read the entire contents of the response such as when
+<cite>preload_content=True</cite>). This is useful if you&#8217;re not preloading
+the response&#8217;s content immediately. You will need to call
+<tt class="docutils literal"><span class="pre">r.release_conn()</span></tt> on the response <tt class="docutils literal"><span class="pre">r</span></tt> to return the connection
+back into the pool. If None, it takes the value of
+<tt class="docutils literal"><span class="pre">response_kw.get('preload_content',</span> <span class="pre">True)</span></tt>.</li>
+<li><strong>**response_kw</strong> &#8211; Additional parameters are passed to
+<tt class="xref py py-meth docutils literal"><span class="pre">urllib3.response.HTTPResponse.from_httplib()</span></tt></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPSConnectionPool">
+<em class="property">class </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.</tt><tt class="descname">HTTPSConnectionPool</tt><big>(</big><em>host</em>, <em>port=None</em>, <em>strict=False</em>, <em>timeout=None</em>, <em>maxsize=1</em>, <em>block=False</em>, <em>headers=None</em>, <em>key_file=None</em>, <em>cert_file=None</em>, <em>cert_reqs=None</em>, <em>ca_certs=None</em>, <em>ssl_version=None</em>, <em>assert_hostname=None</em>, <em>assert_fingerprint=None</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPSConnectionPool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool</span></tt></a></p>
+<p>Same as <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPConnectionPool"><tt class="xref py py-class docutils literal"><span class="pre">HTTPConnectionPool</span></tt></a>, but HTTPS.</p>
+<p>When Python is compiled with the <tt class="xref py py-mod docutils literal"><span class="pre">ssl</span></tt> module, then
+<a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection"><tt class="xref py py-class docutils literal"><span class="pre">VerifiedHTTPSConnection</span></tt></a> is used, which <em>can</em> verify certificates,
+instead of <tt class="xref py py-class docutils literal"><span class="pre">httplib.HTTPSConnection</span></tt>.</p>
+<p><a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection"><tt class="xref py py-class docutils literal"><span class="pre">VerifiedHTTPSConnection</span></tt></a> uses one of <tt class="docutils literal"><span class="pre">assert_fingerprint</span></tt>,
+<tt class="docutils literal"><span class="pre">assert_hostname</span></tt> and <tt class="docutils literal"><span class="pre">host</span></tt> in this order to verify connections.</p>
+<p>The <tt class="docutils literal"><span class="pre">key_file</span></tt>, <tt class="docutils literal"><span class="pre">cert_file</span></tt>, <tt class="docutils literal"><span class="pre">cert_reqs</span></tt>, <tt class="docutils literal"><span class="pre">ca_certs</span></tt> and
+<tt class="docutils literal"><span class="pre">ssl_version</span></tt> are only used if <tt class="xref py py-mod docutils literal"><span class="pre">ssl</span></tt> is available and are fed into
+<tt class="xref py py-meth docutils literal"><span class="pre">urllib3.util.ssl_wrap_socket()</span></tt> to upgrade the connection socket
+into an SSL socket.</p>
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPSConnectionPool._new_conn">
+<tt class="descname">_new_conn</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPSConnectionPool._new_conn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a fresh <tt class="xref py py-class docutils literal"><span class="pre">httplib.HTTPSConnection</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPSConnectionPool.scheme">
+<tt class="descname">scheme</tt><em class="property"> = 'https'</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.HTTPSConnectionPool.scheme" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection">
+<em class="property">class </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.</tt><tt class="descname">VerifiedHTTPSConnection</tt><big>(</big><em>host</em>, <em>port=None</em>, <em>key_file=None</em>, <em>cert_file=None</em>, <em>strict=None</em>, <em>timeout=&lt;object object at 0x2b9abfb78240&gt;</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">httplib.HTTPSConnection</span></tt></p>
+<p>Based on httplib.HTTPSConnection but wraps the socket with
+SSL certification.</p>
+<dl class="attribute">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection.ca_certs">
+<tt class="descname">ca_certs</tt><em class="property"> = None</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection.ca_certs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection.cert_reqs">
+<tt class="descname">cert_reqs</tt><em class="property"> = None</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection.cert_reqs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection.connect">
+<tt class="descname">connect</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection.connect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection.set_cert">
+<tt class="descname">set_cert</tt><big>(</big><em>key_file=None</em>, <em>cert_file=None</em>, <em>cert_reqs=None</em>, <em>ca_certs=None</em>, <em>assert_hostname=None</em>, <em>assert_fingerprint=None</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection.set_cert" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection.ssl_version">
+<tt class="descname">ssl_version</tt><em class="property"> = None</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.VerifiedHTTPSConnection.ssl_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.connection_from_url">
+<tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.</tt><tt class="descname">connection_from_url</tt><big>(</big><em>url</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.connection_from_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a url, return an <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool"><tt class="xref py py-class docutils literal"><span class="pre">ConnectionPool</span></tt></a> instance of its host.</p>
+<p>This is a shortcut for not having to parse out the scheme, host, and port
+of the url before creating an <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool"><tt class="xref py py-class docutils literal"><span class="pre">ConnectionPool</span></tt></a> instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>url</strong> &#8211; Absolute URL string that must include the scheme. Port is optional.</li>
+<li><strong>**kw</strong> &#8211; Passes additional parameters to the constructor of the appropriate
+<a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool.ConnectionPool"><tt class="xref py py-class docutils literal"><span class="pre">ConnectionPool</span></tt></a>. Useful for specifying things like
+timeout, maxsize, headers, etc.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">connection_from_url</span><span class="p">(</span><span class="s">&#39;http://google.com/&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;/&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager">
+<span id="the-poolmanager-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">poolmanager</span></tt> Module<a class="headerlink" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager">
+<em class="property">class </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.</tt><tt class="descname">PoolManager</tt><big>(</big><em>num_pools=10</em>, <em>headers=None</em>, <em>**connection_pool_kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods</span></tt></a></p>
+<p>Allows for arbitrary requests while transparently keeping track of
+necessary connection pools for you.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>num_pools</strong> &#8211; Number of connection pools to cache before discarding the least
+recently used pool.</li>
+<li><strong>headers</strong> &#8211; Headers to include with all requests, unless other headers are given
+explicitly.</li>
+<li><strong>**connection_pool_kw</strong> &#8211; Additional parameters are used to create fresh
+<tt class="xref py py-class docutils literal"><span class="pre">urllib3.connectionpool.ConnectionPool</span></tt> instances.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span> <span class="o">=</span> <span class="n">PoolManager</span><span class="p">(</span><span class="n">num_pools</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;http://google.com/&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;http://google.com/mail&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;http://yahoo.com/&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">manager</span><span class="o">.</span><span class="n">pools</span><span class="p">)</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager._new_pool">
+<tt class="descname">_new_pool</tt><big>(</big><em>scheme</em>, <em>host</em>, <em>port</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager._new_pool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new <tt class="xref py py-class docutils literal"><span class="pre">ConnectionPool</span></tt> based on host, port and scheme.</p>
+<p>This method is used to actually create the connection pools handed out
+by <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager.connection_from_url" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager.connection_from_url"><tt class="xref py py-meth docutils literal"><span class="pre">connection_from_url()</span></tt></a> and companion methods. It is intended
+to be overridden for customization.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager.clear">
+<tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Empty our store of pools and direct them all to close.</p>
+<p>This will not affect in-flight connections, but they will not be
+re-used after completion.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager.connection_from_host">
+<tt class="descname">connection_from_host</tt><big>(</big><em>host</em>, <em>port=None</em>, <em>scheme='http'</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager.connection_from_host" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a <tt class="xref py py-class docutils literal"><span class="pre">ConnectionPool</span></tt> based on the host, port, and scheme.</p>
+<p>If <tt class="docutils literal"><span class="pre">port</span></tt> isn&#8217;t given, it will be derived from the <tt class="docutils literal"><span class="pre">scheme</span></tt> using
+<tt class="docutils literal"><span class="pre">urllib3.connectionpool.port_by_scheme</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager.connection_from_url">
+<tt class="descname">connection_from_url</tt><big>(</big><em>url</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager.connection_from_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Similar to <tt class="xref py py-func docutils literal"><span class="pre">urllib3.connectionpool.connection_from_url()</span></tt> but
+doesn&#8217;t pass any additional parameters to the
+<tt class="xref py py-class docutils literal"><span class="pre">urllib3.connectionpool.ConnectionPool</span></tt> constructor.</p>
+<p>Additional parameters are taken from the <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager"><tt class="xref py py-class docutils literal"><span class="pre">PoolManager</span></tt></a>
+constructor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager.urlopen">
+<tt class="descname">urlopen</tt><big>(</big><em>method</em>, <em>url</em>, <em>redirect=True</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager.urlopen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <tt class="xref py py-meth docutils literal"><span class="pre">urllib3.connectionpool.HTTPConnectionPool.urlopen()</span></tt>
+with custom cross-host redirect logic and only sends the request-uri
+portion of the <tt class="docutils literal"><span class="pre">url</span></tt>.</p>
+<p>The given <tt class="docutils literal"><span class="pre">url</span></tt> parameter must be absolute, such that an appropriate
+<tt class="xref py py-class docutils literal"><span class="pre">urllib3.connectionpool.ConnectionPool</span></tt> can be chosen for it.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.ProxyManager">
+<em class="property">class </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.</tt><tt class="descname">ProxyManager</tt><big>(</big><em>proxy_pool</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.ProxyManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods</span></tt></a></p>
+<p>Given a ConnectionPool to a proxy, the ProxyManager&#8217;s <tt class="docutils literal"><span class="pre">urlopen</span></tt> method
+will make requests to any url through the defined proxy. The ProxyManager
+class will automatically set the &#8216;Host&#8217; header if it is not provided.</p>
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.ProxyManager._set_proxy_headers">
+<tt class="descname">_set_proxy_headers</tt><big>(</big><em>url</em>, <em>headers=None</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.ProxyManager._set_proxy_headers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets headers needed by proxies: specifically, the Accept and Host
+headers. Only sets headers not provided by the user.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.ProxyManager.urlopen">
+<tt class="descname">urlopen</tt><big>(</big><em>method</em>, <em>url</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.ProxyManager.urlopen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as HTTP(S)ConnectionPool.urlopen, <tt class="docutils literal"><span class="pre">url</span></tt> must be absolute.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.proxy_from_url">
+<tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.</tt><tt class="descname">proxy_from_url</tt><big>(</big><em>url</em>, <em>**pool_kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.proxy_from_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
 <div class="section" id="module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.response">
 <span id="the-response-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">response</span></tt> Module<a class="headerlink" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.response" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
@@ -773,267 +1034,6 @@ set.)</li>
 <dd></dd></dl>
 
 </div>
-<div class="section" id="module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions">
-<span id="the-exceptions-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">exceptions</span></tt> Module<a class="headerlink" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions" title="Permalink to this headline">¶</a></h1>
-<dl class="exception">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.ClosedPoolError">
-<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">ClosedPoolError</tt><big>(</big><em>pool</em>, <em>message</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.ClosedPoolError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError</span></tt></a></p>
-<p>Raised when a request enters a pool after the pool has been closed.</p>
-</dd></dl>
-
-<dl class="exception">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.DecodeError">
-<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">DecodeError</tt><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.DecodeError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError</span></tt></a></p>
-<p>Raised when automatic decoding based on Content-Type fails.</p>
-</dd></dl>
-
-<dl class="exception">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.EmptyPoolError">
-<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">EmptyPoolError</tt><big>(</big><em>pool</em>, <em>message</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.EmptyPoolError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError</span></tt></a></p>
-<p>Raised when a pool runs out of connections and no more are allowed.</p>
-</dd></dl>
-
-<dl class="exception">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError">
-<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">HTTPError</tt><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
-<p>Base exception used by this module.</p>
-</dd></dl>
-
-<dl class="exception">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HostChangedError">
-<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">HostChangedError</tt><big>(</big><em>pool</em>, <em>url</em>, <em>retries=3</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HostChangedError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError</span></tt></a></p>
-<p>Raised when an existing pool gets a request for a foreign host.</p>
-</dd></dl>
-
-<dl class="exception">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.LocationParseError">
-<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">LocationParseError</tt><big>(</big><em>location</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.LocationParseError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.ValueError</span></tt>, <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError</span></tt></a></p>
-<p>Raised when get_host or similar fails to parse the URL input.</p>
-</dd></dl>
-
-<dl class="exception">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.MaxRetryError">
-<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">MaxRetryError</tt><big>(</big><em>pool</em>, <em>url</em>, <em>reason=None</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.MaxRetryError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError</span></tt></a></p>
-<p>Raised when the maximum number of retries is exceeded.</p>
-</dd></dl>
-
-<dl class="exception">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError">
-<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">PoolError</tt><big>(</big><em>pool</em>, <em>message</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError</span></tt></a></p>
-<p>Base exception for errors caused within a pool.</p>
-</dd></dl>
-
-<dl class="exception">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError">
-<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">RequestError</tt><big>(</big><em>pool</em>, <em>url</em>, <em>message</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.PoolError</span></tt></a></p>
-<p>Base exception for PoolErrors that have associated URLs.</p>
-</dd></dl>
-
-<dl class="exception">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.SSLError">
-<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">SSLError</tt><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.SSLError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.HTTPError</span></tt></a></p>
-<p>Raised when SSL certificate fails in an HTTPS connection.</p>
-</dd></dl>
-
-<dl class="exception">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.TimeoutError">
-<em class="property">exception </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.</tt><tt class="descname">TimeoutError</tt><big>(</big><em>pool</em>, <em>url</em>, <em>message</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.TimeoutError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions.RequestError</span></tt></a></p>
-<p>Raised when a socket timeout occurs.</p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3">
-<span id="the-urllib3-package"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">urllib3</span></tt> Package<a class="headerlink" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3" title="Permalink to this headline">¶</a></h1>
-<p>urllib3 - Thread-safe connection pooling and re-using.</p>
-<dl class="function">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.add_stderr_logger">
-<tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.</tt><tt class="descname">add_stderr_logger</tt><big>(</big><em>level=10</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.add_stderr_logger" title="Permalink to this definition">¶</a></dt>
-<dd><p>Helper for quickly adding a StreamHandler to the logger. Useful for
-debugging.</p>
-<p>Returns the handler after adding it.</p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections">
-<span id="the-collections-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">_collections</span></tt> Module<a class="headerlink" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer">
-<em class="property">class </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.</tt><tt class="descname">RecentlyUsedContainer</tt><big>(</big><em>maxsize=10</em>, <em>dispose_func=None</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">_abcoll.MutableMapping</span></tt></p>
-<p>Provides a thread-safe dict-like container which maintains up to
-<tt class="docutils literal"><span class="pre">maxsize</span></tt> keys while throwing away the least-recently-used keys beyond
-<tt class="docutils literal"><span class="pre">maxsize</span></tt>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>maxsize</strong> &#8211; Maximum number of recent elements to retain.</li>
-<li><strong>dispose_func</strong> &#8211; Every time an item is evicted from the container,
-<tt class="docutils literal"><span class="pre">dispose_func(value)</span></tt> is called.  Callback which will get called</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="attribute">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer.ContainerCls">
-<tt class="descname">ContainerCls</tt><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer.ContainerCls" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">OrderedDict</span></tt></p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer._abc_cache">
-<tt class="descname">_abc_cache</tt><em class="property"> = set([])</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer._abc_cache" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer._abc_negative_cache">
-<tt class="descname">_abc_negative_cache</tt><em class="property"> = set([])</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer._abc_negative_cache" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer._abc_negative_cache_version">
-<tt class="descname">_abc_negative_cache_version</tt><em class="property"> = 17</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer._abc_negative_cache_version" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer._abc_registry">
-<tt class="descname">_abc_registry</tt><em class="property"> = set([])</em><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer._abc_registry" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer.clear">
-<tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer.clear" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer.keys">
-<tt class="descname">keys</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections.RecentlyUsedContainer.keys" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager">
-<span id="the-poolmanager-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">poolmanager</span></tt> Module<a class="headerlink" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager">
-<em class="property">class </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.</tt><tt class="descname">PoolManager</tt><big>(</big><em>num_pools=10</em>, <em>headers=None</em>, <em>**connection_pool_kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods</span></tt></a></p>
-<p>Allows for arbitrary requests while transparently keeping track of
-necessary connection pools for you.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>num_pools</strong> &#8211; Number of connection pools to cache before discarding the least
-recently used pool.</li>
-<li><strong>headers</strong> &#8211; Headers to include with all requests, unless other headers are given
-explicitly.</li>
-<li><strong>**connection_pool_kw</strong> &#8211; Additional parameters are used to create fresh
-<tt class="xref py py-class docutils literal"><span class="pre">urllib3.connectionpool.ConnectionPool</span></tt> instances.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span> <span class="o">=</span> <span class="n">PoolManager</span><span class="p">(</span><span class="n">num_pools</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;http://google.com/&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;http://google.com/mail&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;http://yahoo.com/&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">manager</span><span class="o">.</span><span class="n">pools</span><span class="p">)</span>
-<span class="go">2</span>
-</pre></div>
-</div>
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager._new_pool">
-<tt class="descname">_new_pool</tt><big>(</big><em>scheme</em>, <em>host</em>, <em>port</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager._new_pool" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a new <tt class="xref py py-class docutils literal"><span class="pre">ConnectionPool</span></tt> based on host, port and scheme.</p>
-<p>This method is used to actually create the connection pools handed out
-by <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager.connection_from_url" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager.connection_from_url"><tt class="xref py py-meth docutils literal"><span class="pre">connection_from_url()</span></tt></a> and companion methods. It is intended
-to be overridden for customization.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager.clear">
-<tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager.clear" title="Permalink to this definition">¶</a></dt>
-<dd><p>Empty our store of pools and direct them all to close.</p>
-<p>This will not affect in-flight connections, but they will not be
-re-used after completion.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager.connection_from_host">
-<tt class="descname">connection_from_host</tt><big>(</big><em>host</em>, <em>port=None</em>, <em>scheme='http'</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager.connection_from_host" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a <tt class="xref py py-class docutils literal"><span class="pre">ConnectionPool</span></tt> based on the host, port, and scheme.</p>
-<p>If <tt class="docutils literal"><span class="pre">port</span></tt> isn&#8217;t given, it will be derived from the <tt class="docutils literal"><span class="pre">scheme</span></tt> using
-<tt class="docutils literal"><span class="pre">urllib3.connectionpool.port_by_scheme</span></tt>.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager.connection_from_url">
-<tt class="descname">connection_from_url</tt><big>(</big><em>url</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager.connection_from_url" title="Permalink to this definition">¶</a></dt>
-<dd><p>Similar to <tt class="xref py py-func docutils literal"><span class="pre">urllib3.connectionpool.connection_from_url()</span></tt> but
-doesn&#8217;t pass any additional parameters to the
-<tt class="xref py py-class docutils literal"><span class="pre">urllib3.connectionpool.ConnectionPool</span></tt> constructor.</p>
-<p>Additional parameters are taken from the <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager"><tt class="xref py py-class docutils literal"><span class="pre">PoolManager</span></tt></a>
-constructor.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager.urlopen">
-<tt class="descname">urlopen</tt><big>(</big><em>method</em>, <em>url</em>, <em>redirect=True</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.PoolManager.urlopen" title="Permalink to this definition">¶</a></dt>
-<dd><p>Same as <tt class="xref py py-meth docutils literal"><span class="pre">urllib3.connectionpool.HTTPConnectionPool.urlopen()</span></tt>
-with custom cross-host redirect logic and only sends the request-uri
-portion of the <tt class="docutils literal"><span class="pre">url</span></tt>.</p>
-<p>The given <tt class="docutils literal"><span class="pre">url</span></tt> parameter must be absolute, such that an appropriate
-<tt class="xref py py-class docutils literal"><span class="pre">urllib3.connectionpool.ConnectionPool</span></tt> can be chosen for it.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.ProxyManager">
-<em class="property">class </em><tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.</tt><tt class="descname">ProxyManager</tt><big>(</big><em>proxy_pool</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.ProxyManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods" title="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request.RequestMethods</span></tt></a></p>
-<p>Given a ConnectionPool to a proxy, the ProxyManager&#8217;s <tt class="docutils literal"><span class="pre">urlopen</span></tt> method
-will make requests to any url through the defined proxy. The ProxyManager
-class will automatically set the &#8216;Host&#8217; header if it is not provided.</p>
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.ProxyManager._set_proxy_headers">
-<tt class="descname">_set_proxy_headers</tt><big>(</big><em>url</em>, <em>headers=None</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.ProxyManager._set_proxy_headers" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets headers needed by proxies: specifically, the Accept and Host
-headers. Only sets headers not provided by the user.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.ProxyManager.urlopen">
-<tt class="descname">urlopen</tt><big>(</big><em>method</em>, <em>url</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.ProxyManager.urlopen" title="Permalink to this definition">¶</a></dt>
-<dd><p>Same as HTTP(S)ConnectionPool.urlopen, <tt class="docutils literal"><span class="pre">url</span></tt> must be absolute.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.proxy_from_url">
-<tt class="descclassname">cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.</tt><tt class="descname">proxy_from_url</tt><big>(</big><em>url</em>, <em>**pool_kw</em><big>)</big><a class="headerlink" href="#cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager.proxy_from_url" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
 
 
           </div>
@@ -1044,20 +1044,20 @@ headers. Only sets headers not provided by the user.</p>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Subpackages</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request">The <tt class="docutils literal"><span class="pre">request</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool">The <tt class="docutils literal"><span class="pre">connectionpool</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost">The <tt class="docutils literal"><span class="pre">filepost</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.util">The <tt class="docutils literal"><span class="pre">util</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.response">The <tt class="docutils literal"><span class="pre">response</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions">The <tt class="docutils literal"><span class="pre">exceptions</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3">The <tt class="docutils literal"><span class="pre">urllib3</span></tt> Package</a></li>
 <li><a class="reference internal" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections">The <tt class="docutils literal"><span class="pre">_collections</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request">The <tt class="docutils literal"><span class="pre">request</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost">The <tt class="docutils literal"><span class="pre">filepost</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions">The <tt class="docutils literal"><span class="pre">exceptions</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool">The <tt class="docutils literal"><span class="pre">connectionpool</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager">The <tt class="docutils literal"><span class="pre">poolmanager</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.response">The <tt class="docutils literal"><span class="pre">response</span></tt> Module</a></li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="third_party.requests_1_2_3.requests.packages.charade.html"
-                        title="previous chapter">The <tt class="docutils literal"><span class="pre">latin1prober</span></tt> Module</a></p>
+                        title="previous chapter">The <tt class="docutils literal"><span class="pre">mbcharsetprober</span></tt> Module</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="third_party.requests_1_2_3.requests.packages.urllib3.packages.html"
                         title="next chapter">Subpackages</a></p>
@@ -1096,7 +1096,7 @@ headers. Only sets headers not provided by the user.</p>
           <a href="third_party.requests_1_2_3.requests.packages.urllib3.packages.html" title="Subpackages"
              >next</a> |</li>
         <li class="right" >
-          <a href="third_party.requests_1_2_3.requests.packages.charade.html" title="The latin1prober Module"
+          <a href="third_party.requests_1_2_3.requests.packages.charade.html" title="The mbcharsetprober Module"
              >previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li>

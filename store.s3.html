@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The amazon_store Module &mdash; CloudFusion 0.01 documentation</title>
+    <title>The bulk_get_metadata_amazon_store Module &mdash; CloudFusion 0.01 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -25,8 +25,8 @@
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
     <link rel="up" title="Subpackages" href="store.html" />
-    <link rel="next" title="The dropbox_store Module" href="store.dropbox.html" />
-    <link rel="prev" title="The bulk_get_metadata_webdav_store Module" href="store.webdav.html" /> 
+    <link rel="next" title="The google_store Module" href="store.gs.html" />
+    <link rel="prev" title="Subpackages" href="store.html" /> 
   </head>
   <body>
     <div class="related">
@@ -39,10 +39,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="store.dropbox.html" title="The dropbox_store Module"
+          <a href="store.gs.html" title="The google_store Module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="store.webdav.html" title="The bulk_get_metadata_webdav_store Module"
+          <a href="store.html" title="Subpackages"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li>
@@ -55,7 +55,41 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-cloudfusion.store.s3.amazon_store">
+  <div class="section" id="module-cloudfusion.store.s3.bulk_get_metadata_amazon_store">
+<span id="the-bulk-get-metadata-amazon-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">bulk_get_metadata_amazon_store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.s3.bulk_get_metadata_amazon_store" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="cloudfusion.store.s3.bulk_get_metadata_amazon_store.BulkGetMetadataAmazonStore">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.s3.bulk_get_metadata_amazon_store.</tt><tt class="descname">BulkGetMetadataAmazonStore</tt><big>(</big><em>config</em><big>)</big><a class="headerlink" href="#cloudfusion.store.s3.bulk_get_metadata_amazon_store.BulkGetMetadataAmazonStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.store.s3.amazon_store.AmazonStore" title="cloudfusion.store.s3.amazon_store.AmazonStore"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.s3.amazon_store.AmazonStore</span></tt></a>, <a class="reference internal" href="store.html#cloudfusion.store.bulk_get_metadata.BulkGetMetadata" title="cloudfusion.store.bulk_get_metadata.BulkGetMetadata"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.bulk_get_metadata.BulkGetMetadata</span></tt></a></p>
+<p>Subclass of AmazonStore, extending it by implementing the BulkGetMetadata interface for quick directory lising.</p>
+<dl class="method">
+<dt id="cloudfusion.store.s3.bulk_get_metadata_amazon_store.BulkGetMetadataAmazonStore.get_bulk_metadata">
+<tt class="descname">get_bulk_metadata</tt><big>(</big><em>directory</em><big>)</big><a class="headerlink" href="#cloudfusion.store.s3.bulk_get_metadata_amazon_store.BulkGetMetadataAmazonStore.get_bulk_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictionary mapping the path of every file object in <em>directory</em> to a dictionary with the keys        &#8216;modified&#8217;, &#8216;bytes&#8217; and &#8216;is_dir&#8217; containing the corresponding metadata for the file object.</td>
+</tr>
+</tbody>
+</table>
+<p>The value for &#8216;modified&#8217; is a date in seconds, stating when the file object was last modified.  
+The value for &#8216;bytes&#8217; is the number of bytes of the file object. It is 0 if the object is a directory.
+The value for &#8216;is_dir&#8217; is True if the file object is a directory and False otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">NoSuchFilesytemObjectError if the directory does not exist</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.store.s3.amazon_store">
 <span id="the-amazon-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">amazon_store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.s3.amazon_store" title="Permalink to this headline">¶</a></h1>
 <p>Created on 08.04.2011</p>
 <p>&#64;author: joe</p>
@@ -203,40 +237,6 @@ Key and Secret can be obtained from the console.aws.amazon.com/s3/home
 </dd></dl>
 
 </div>
-<div class="section" id="module-cloudfusion.store.s3.bulk_get_metadata_amazon_store">
-<span id="the-bulk-get-metadata-amazon-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">bulk_get_metadata_amazon_store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.s3.bulk_get_metadata_amazon_store" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="cloudfusion.store.s3.bulk_get_metadata_amazon_store.BulkGetMetadataAmazonStore">
-<em class="property">class </em><tt class="descclassname">cloudfusion.store.s3.bulk_get_metadata_amazon_store.</tt><tt class="descname">BulkGetMetadataAmazonStore</tt><big>(</big><em>config</em><big>)</big><a class="headerlink" href="#cloudfusion.store.s3.bulk_get_metadata_amazon_store.BulkGetMetadataAmazonStore" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cloudfusion.store.s3.amazon_store.AmazonStore" title="cloudfusion.store.s3.amazon_store.AmazonStore"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.s3.amazon_store.AmazonStore</span></tt></a>, <a class="reference internal" href="store.html#cloudfusion.store.bulk_get_metadata.BulkGetMetadata" title="cloudfusion.store.bulk_get_metadata.BulkGetMetadata"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.bulk_get_metadata.BulkGetMetadata</span></tt></a></p>
-<p>Subclass of AmazonStore, extending it by implementing the BulkGetMetadata interface for quick directory lising.</p>
-<dl class="method">
-<dt id="cloudfusion.store.s3.bulk_get_metadata_amazon_store.BulkGetMetadataAmazonStore.get_bulk_metadata">
-<tt class="descname">get_bulk_metadata</tt><big>(</big><em>directory</em><big>)</big><a class="headerlink" href="#cloudfusion.store.s3.bulk_get_metadata_amazon_store.BulkGetMetadataAmazonStore.get_bulk_metadata" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictionary mapping the path of every file object in <em>directory</em> to a dictionary with the keys        &#8216;modified&#8217;, &#8216;bytes&#8217; and &#8216;is_dir&#8217; containing the corresponding metadata for the file object.</td>
-</tr>
-</tbody>
-</table>
-<p>The value for &#8216;modified&#8217; is a date in seconds, stating when the file object was last modified.  
-The value for &#8216;bytes&#8217; is the number of bytes of the file object. It is 0 if the object is a directory.
-The value for &#8216;is_dir&#8217; is True if the file object is a directory and False otherwise.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">NoSuchFilesytemObjectError if the directory does not exist</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-</div>
 
 
           </div>
@@ -246,16 +246,16 @@ The value for &#8216;is_dir&#8217; is True if the file object is a directory and
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">amazon_store</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.store.s3.bulk_get_metadata_amazon_store">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_amazon_store</span></tt> Module</a></li>
+<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_amazon_store</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.store.s3.amazon_store">The <tt class="docutils literal"><span class="pre">amazon_store</span></tt> Module</a></li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="store.webdav.html"
-                        title="previous chapter">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_webdav_store</span></tt> Module</a></p>
+  <p class="topless"><a href="store.html"
+                        title="previous chapter">Subpackages</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="store.dropbox.html"
-                        title="next chapter">The <tt class="docutils literal"><span class="pre">dropbox_store</span></tt> Module</a></p>
+  <p class="topless"><a href="store.gs.html"
+                        title="next chapter">The <tt class="docutils literal"><span class="pre">google_store</span></tt> Module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/store.s3.txt"
@@ -288,10 +288,10 @@ The value for &#8216;is_dir&#8217; is True if the file object is a directory and
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="store.dropbox.html" title="The dropbox_store Module"
+          <a href="store.gs.html" title="The google_store Module"
              >next</a> |</li>
         <li class="right" >
-          <a href="store.webdav.html" title="The bulk_get_metadata_webdav_store Module"
+          <a href="store.html" title="Subpackages"
              >previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li>

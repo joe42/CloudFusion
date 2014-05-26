@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The db_handler Module &mdash; CloudFusion 0.01 documentation</title>
+    <title>The nullhandler Module &mdash; CloudFusion 0.01 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -54,37 +54,7 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-cloudfusion.mylogging.db_handler">
-<span id="the-db-handler-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">db_handler</span></tt> Module<a class="headerlink" href="#module-cloudfusion.mylogging.db_handler" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="cloudfusion.mylogging.db_handler.DBHandler">
-<em class="property">class </em><tt class="descclassname">cloudfusion.mylogging.db_handler.</tt><tt class="descname">DBHandler</tt><big>(</big><em>db_identifier</em><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.db_handler.DBHandler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">logging.Handler</span></tt></p>
-<p>This logging handler sends events to <a class="reference internal" href="#module-cloudfusion.mylogging.db_logging_thread" title="cloudfusion.mylogging.db_logging_thread"><tt class="xref py py-mod docutils literal"><span class="pre">cloudfusion.mylogging.db_logging_thread</span></tt></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>db_identifier</strong> &#8211; identifier from <a class="reference internal" href="#cloudfusion.mylogging.db_logging_thread.get_logging_db_identifier" title="cloudfusion.mylogging.db_logging_thread.get_logging_db_identifier"><tt class="xref py py-func docutils literal"><span class="pre">cloudfusion.mylogging.db_logging_thread.get_logging_db_identifier()</span></tt></a></td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="cloudfusion.mylogging.db_handler.DBHandler.emit">
-<tt class="descname">emit</tt><big>(</big><em>record</em><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.db_handler.DBHandler.emit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Emit a record.</p>
-<p>Writes the LogRecord to the database.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.mylogging.db_handler.DBHandler.reconnect">
-<tt class="descname">reconnect</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.db_handler.DBHandler.reconnect" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.mylogging.nullhandler">
+  <div class="section" id="module-cloudfusion.mylogging.nullhandler">
 <span id="the-nullhandler-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">nullhandler</span></tt> Module<a class="headerlink" href="#module-cloudfusion.mylogging.nullhandler" title="Permalink to this headline">¶</a></h1>
 <p>Created on May 7, 2013</p>
 <p>&#64;author: joe</p>
@@ -113,6 +83,36 @@ and the filter list to empty.</p>
 <dl class="attribute">
 <dt id="cloudfusion.mylogging.nullhandler.NullHandler.lock">
 <tt class="descname">lock</tt><em class="property"> = None</em><a class="headerlink" href="#cloudfusion.mylogging.nullhandler.NullHandler.lock" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.mylogging.db_handler">
+<span id="the-db-handler-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">db_handler</span></tt> Module<a class="headerlink" href="#module-cloudfusion.mylogging.db_handler" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="cloudfusion.mylogging.db_handler.DBHandler">
+<em class="property">class </em><tt class="descclassname">cloudfusion.mylogging.db_handler.</tt><tt class="descname">DBHandler</tt><big>(</big><em>db_identifier</em><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.db_handler.DBHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">logging.Handler</span></tt></p>
+<p>This logging handler sends events to <a class="reference internal" href="#module-cloudfusion.mylogging.db_logging_thread" title="cloudfusion.mylogging.db_logging_thread"><tt class="xref py py-mod docutils literal"><span class="pre">cloudfusion.mylogging.db_logging_thread</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>db_identifier</strong> &#8211; identifier from <a class="reference internal" href="#cloudfusion.mylogging.db_logging_thread.get_logging_db_identifier" title="cloudfusion.mylogging.db_logging_thread.get_logging_db_identifier"><tt class="xref py py-func docutils literal"><span class="pre">cloudfusion.mylogging.db_logging_thread.get_logging_db_identifier()</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cloudfusion.mylogging.db_handler.DBHandler.emit">
+<tt class="descname">emit</tt><big>(</big><em>record</em><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.db_handler.DBHandler.emit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Emit a record.</p>
+<p>Writes the LogRecord to the database.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.mylogging.db_handler.DBHandler.reconnect">
+<tt class="descname">reconnect</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.db_handler.DBHandler.reconnect" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -190,8 +190,8 @@ Only call this method after calling <a class="reference internal" href="#cloudfu
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">db_handler</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.mylogging.nullhandler">The <tt class="docutils literal"><span class="pre">nullhandler</span></tt> Module</a></li>
+<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">nullhandler</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.mylogging.db_handler">The <tt class="docutils literal"><span class="pre">db_handler</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-cloudfusion.mylogging.db_logging_thread">The <tt class="docutils literal"><span class="pre">db_logging_thread</span></tt> Module</a></li>
 </ul>
 
