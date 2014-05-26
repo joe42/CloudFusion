@@ -33,7 +33,7 @@ On Debian though, you also need to install fuse, and set permissions to use it a
 
 
 Create a Configuration File
-...........................
+-----------------------------
 
 Sugarsync
 +++++++++
