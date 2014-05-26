@@ -185,7 +185,12 @@ Advanced options can be set in the configuration file in order to set limits to 
    cache_id = dropboxacc1
 
 
+Documentation
+--------------
 
+More documentation can be found here: 
+
+http://joe42.github.com/CloudFusion/
 
 
 Notes
