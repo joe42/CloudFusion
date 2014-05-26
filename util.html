@@ -25,7 +25,7 @@
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
     <link rel="up" title="Developers documentation" href="develop.html" />
-    <link rel="prev" title="The parsedatetime Package" href="third_party.parsedatetime.parsedatetime.html" /> 
+    <link rel="prev" title="The pdt_locales Module" href="third_party.parsedatetime.parsedatetime.html" /> 
   </head>
   <body>
     <div class="related">
@@ -38,7 +38,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="third_party.parsedatetime.parsedatetime.html" title="The parsedatetime Package"
+          <a href="third_party.parsedatetime.parsedatetime.html" title="The pdt_locales Module"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" accesskey="U">Developers documentation</a> &raquo;</li> 
@@ -199,139 +199,50 @@ It can be set to <em>0</em>, if you want to make sure that clean entries are rem
 </dd></dl>
 
 </div>
-<div class="section" id="module-cloudfusion.util.xmlparser">
-<span id="the-xmlparser-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">xmlparser</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.xmlparser" title="Permalink to this headline">¶</a></h1>
-<p>Parses an XML file or string, populating a dictionary containing the keys with the desired values.</p>
-<p>The keys of the dictionary are either the names of Tags contained in the XML data or again dictionaries.
-The values can either be dictionaries again or simple strings, but ultimately the leaf values will be strings.</p>
+<div class="section" id="module-cloudfusion.util.mp_synchronize_proxy">
+<span id="the-mp-synchronize-proxy-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">mp_synchronize_proxy</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.mp_synchronize_proxy" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="cloudfusion.util.xmlparser.DictXMLParser">
-<em class="property">class </em><tt class="descclassname">cloudfusion.util.xmlparser.</tt><tt class="descname">DictXMLParser</tt><a class="headerlink" href="#cloudfusion.util.xmlparser.DictXMLParser" title="Permalink to this definition">¶</a></dt>
+<dt id="cloudfusion.util.mp_synchronize_proxy.MPSynchronizeProxy">
+<em class="property">class </em><tt class="descclassname">cloudfusion.util.mp_synchronize_proxy.</tt><tt class="descname">MPSynchronizeProxy</tt><big>(</big><em>core</em>, <em>private_methods_to_synchronize=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_synchronize_proxy.MPSynchronizeProxy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<dl class="method">
-<dt id="cloudfusion.util.xmlparser.DictXMLParser._DictXMLParser__populate_dict">
-<tt class="descname">_DictXMLParser__populate_dict</tt><big>(</big><em>dom_tree</em>, <em>dict_tree</em><big>)</big><a class="headerlink" href="#cloudfusion.util.xmlparser.DictXMLParser._DictXMLParser__populate_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Does the work for <a class="reference internal" href="#cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_leaf_textnodes" title="cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_leaf_textnodes"><tt class="xref py py-meth docutils literal"><span class="pre">populate_dict_with_XML_leaf_textnodes()</span></tt></a></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>dom_tree</strong> &#8211; An XML element</li>
-<li><strong>dict_tree</strong> &#8211; A dictionary of keys/values matching the first XML subtree in <em>dom_tree</em></li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
+<p>Proxy object that synchronizes access to a core object methods and attributes that don&#8217;t start with _ for multiple processes.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="cloudfusion.util.xmlparser.DictXMLParser._DictXMLParser__populate_dict_with_collections">
-<tt class="descname">_DictXMLParser__populate_dict_with_collections</tt><big>(</big><em>dom_tree</em>, <em>dict_tree</em><big>)</big><a class="headerlink" href="#cloudfusion.util.xmlparser.DictXMLParser._DictXMLParser__populate_dict_with_collections" title="Permalink to this definition">¶</a></dt>
-<dd><p>Does the work for <a class="reference internal" href="#cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_collection_leaf_textnodes" title="cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_collection_leaf_textnodes"><tt class="xref py py-meth docutils literal"><span class="pre">populate_dict_with_XML_collection_leaf_textnodes()</span></tt></a></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>dom_tree</strong> &#8211; An XML element</li>
-<li><strong>dict_tree</strong> &#8211; A dictionary of keys/values matching the first XML subtree in <em>dom_tree</em></li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="class">
+<dt id="cloudfusion.util.mp_synchronize_proxy.SynchronizeMethodWrapper">
+<em class="property">class </em><tt class="descclassname">cloudfusion.util.mp_synchronize_proxy.</tt><tt class="descname">SynchronizeMethodWrapper</tt><big>(</big><em>obj</em>, <em>func</em>, <em>name</em>, <em>rlock</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_synchronize_proxy.SynchronizeMethodWrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper object for a method to be called.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="cloudfusion.util.xmlparser.DictXMLParser.getText">
-<tt class="descname">getText</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#cloudfusion.util.xmlparser.DictXMLParser.getText" title="Permalink to this definition">¶</a></dt>
+</div>
+<div class="section" id="module-cloudfusion.util.synchronize_proxy">
+<span id="the-synchronize-proxy-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">synchronize_proxy</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.synchronize_proxy" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="cloudfusion.util.synchronize_proxy.SynchronizeMethodWrapper">
+<em class="property">class </em><tt class="descclassname">cloudfusion.util.synchronize_proxy.</tt><tt class="descname">SynchronizeMethodWrapper</tt><big>(</big><em>obj</em>, <em>func</em>, <em>name</em>, <em>rlock</em><big>)</big><a class="headerlink" href="#cloudfusion.util.synchronize_proxy.SynchronizeMethodWrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper object for a method to be called.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.util.synchronize_proxy.SynchronizeProxy">
+<em class="property">class </em><tt class="descclassname">cloudfusion.util.synchronize_proxy.</tt><tt class="descname">SynchronizeProxy</tt><big>(</big><em>core</em>, <em>private_methods_to_synchronize=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#cloudfusion.util.synchronize_proxy.SynchronizeProxy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Proxy object that synchronizes access to a core object methods and attributes that don&#8217;t start with _.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.util.pickle_methods">
+<span id="the-pickle-methods-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">pickle_methods</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.pickle_methods" title="Permalink to this headline">¶</a></h1>
+<p>This module can be imported to allow pickling of methods.</p>
+<dl class="function">
+<dt id="cloudfusion.util.pickle_methods._pickle_method">
+<tt class="descclassname">cloudfusion.util.pickle_methods.</tt><tt class="descname">_pickle_method</tt><big>(</big><em>method</em><big>)</big><a class="headerlink" href="#cloudfusion.util.pickle_methods._pickle_method" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="cloudfusion.util.xmlparser.DictXMLParser.get_elements_by_tag_name">
-<tt class="descname">get_elements_by_tag_name</tt><big>(</big><em>dom_tree</em>, <em>tag_name</em><big>)</big><a class="headerlink" href="#cloudfusion.util.xmlparser.DictXMLParser.get_elements_by_tag_name" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">elem a list of elements matching the tags with the name <em>tag_name</em> on the first level of  <em>dom_tree</em>.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_collection_leaf_textnodes">
-<tt class="descname">populate_dict_with_XML_collection_leaf_textnodes</tt><big>(</big><em>xml_tree</em>, <em>dict_tree</em><big>)</big><a class="headerlink" href="#cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_collection_leaf_textnodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Puts the text of the XML tags of <em>xml_tree</em> specified by <em>dict_tree</em> into <em>dict_tree</em> .</p>
-<p>The <em>dict_tree</em> is a dictionary describing a subtree of <em>xml_data</em>. 
-The dictionarie&#8217;s keys correspond to the first XML tags with the same name on the same nesting level of the dictionary.
-Additionally, keys with the name surrounded by brackets are seen as a list of such XML tags.
-Therefore the keys in the dictionary {&#8220;root&#8221;: {&#8220;[element]&#8221;: &#8220;&#8221;}} match the root tag &lt;root&gt; 
-as well as the subelements of root &lt;element&gt; and &lt;element&gt;.
-The dictionarie&#8217;s most deeply nested elements must be empty strings. 
-This value is replaced by the text of the corresponding key&#8217;s XML tag.
-Given the previous dictionary and the following XML structure:</p>
-<blockquote>
-<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
-    <span class="nt">&lt;element&gt;</span>text1<span class="nt">&lt;/element&gt;</span>
-    <span class="nt">&lt;element&gt;</span>text2<span class="nt">&lt;/element&gt;</span>
-<span class="nt">&lt;/root&gt;</span>
-</pre></div>
-</div>
-</div></blockquote>
-<p>The resulting dictionary would be {&#8220;root&#8221;: {&#8220;[element]&#8221;: [&#8220;text1&#8221;, &#8220;text2&#8221;]}}</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>xml_tree</strong> &#8211; An XML string or an XML file</li>
-<li><strong>dict_tree</strong> &#8211; A dictionary of keys/values matching the first XML subtree in <em>xml_tree</em></li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_leaf_textnodes">
-<tt class="descname">populate_dict_with_XML_leaf_textnodes</tt><big>(</big><em>xml_data</em>, <em>dict_tree</em><big>)</big><a class="headerlink" href="#cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_leaf_textnodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Puts the text of the XML tags of <em>xml_data</em> specified by <em>dict_tree</em> into <em>dict_tree</em>.
-The <em>dict_tree</em> is a dictionary describing a subtree of <em>xml_data</em>. 
-The dictionarie&#8217;s keys correspond to the first XML tags with the same name on the same nesting level of the dictionary.
-Therefore the keys in the dictionary {&#8220;root&#8221;: {&#8220;element1&#8221;: &#8220;&#8221;, &#8220;element2&#8221;: &#8220;&#8221;}} match the root tag &lt;root&gt; 
-as well as the subelements of root &lt;element1&gt; and &lt;element2&gt;.
-The dictionarie&#8217;s most deeply nested elements must be empty strings. 
-This value is replaced by the text of the corresponding key&#8217;s XML tag.
-Given the previous dictionary and the following XML structure:</p>
-<blockquote>
-<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
-    <span class="nt">&lt;element1&gt;</span>text1<span class="nt">&lt;/element1&gt;</span>
-    <span class="nt">&lt;element2&gt;</span>text2<span class="nt">&lt;/element2&gt;</span>
-<span class="nt">&lt;/root&gt;</span>
-</pre></div>
-</div>
-</div></blockquote>
-<p>The resulting dictionary would be {&#8220;root&#8221;: {&#8220;element1&#8221;: &#8220;text1&#8221;, &#8220;element2&#8221;: &#8220;text2&#8221;}}</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>xml_data</strong> &#8211; An XML string or an XML file</li>
-<li><strong>dict_tree</strong> &#8211; A dictionary of keys/values matching the first XML subtree in <em>xml_tree</em></li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
+<dl class="function">
+<dt id="cloudfusion.util.pickle_methods._unpickle_method">
+<tt class="descclassname">cloudfusion.util.pickle_methods.</tt><tt class="descname">_unpickle_method</tt><big>(</big><em>func_name</em>, <em>obj</em>, <em>cls</em><big>)</big><a class="headerlink" href="#cloudfusion.util.pickle_methods._unpickle_method" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="module-cloudfusion.util.string">
@@ -362,50 +273,6 @@ Does not indent empty strings.</p>
 <dt id="cloudfusion.util.string.to_unicode">
 <tt class="descclassname">cloudfusion.util.string.</tt><tt class="descname">to_unicode</tt><big>(</big><em>text</em>, <em>encoding</em><big>)</big><a class="headerlink" href="#cloudfusion.util.string.to_unicode" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.util.pickle_methods">
-<span id="the-pickle-methods-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">pickle_methods</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.pickle_methods" title="Permalink to this headline">¶</a></h1>
-<p>This module can be imported to allow pickling of methods.</p>
-<dl class="function">
-<dt id="cloudfusion.util.pickle_methods._pickle_method">
-<tt class="descclassname">cloudfusion.util.pickle_methods.</tt><tt class="descname">_pickle_method</tt><big>(</big><em>method</em><big>)</big><a class="headerlink" href="#cloudfusion.util.pickle_methods._pickle_method" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.util.pickle_methods._unpickle_method">
-<tt class="descclassname">cloudfusion.util.pickle_methods.</tt><tt class="descname">_unpickle_method</tt><big>(</big><em>func_name</em>, <em>obj</em>, <em>cls</em><big>)</big><a class="headerlink" href="#cloudfusion.util.pickle_methods._unpickle_method" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.util.exponential_retry">
-<span id="the-exponential-retry-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">exponential_retry</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.exponential_retry" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="cloudfusion.util.exponential_retry.retry">
-<tt class="descclassname">cloudfusion.util.exponential_retry.</tt><tt class="descname">retry</tt><big>(</big><em>ExceptionToCheck</em>, <em>tries=20</em>, <em>delay=0.10000000000000001</em>, <em>backoff=2</em><big>)</big><a class="headerlink" href="#cloudfusion.util.exponential_retry.retry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retry calling the decorated function using an exponential backoff.
-The decorated method&#8217;s object may define the _handle_error method.
-The parameters for _handle_error are the exception object, 
-the wrapped methods&#8217; name, the number of tries remaining, 
-and finally the original parameters.
-If _handle_error returns True, retrying is aborted.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ExceptionToCheck</strong> (<em>Exception or tuple</em>) &#8211; the exception to check. may be a tuple of
-exceptions to check</li>
-<li><strong>tries</strong> (<em>int</em>) &#8211; number of times to try (not retry) before giving up</li>
-<li><strong>delay</strong> (<em>int</em>) &#8211; initial delay between retries in seconds</li>
-<li><strong>backoff</strong> (<em>int</em>) &#8211; backoff multiplier e.g. value of 2 will double the delay
-each retry</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
 
 </div>
 <div class="section" id="module-cloudfusion.util.mp_lru_cache">
@@ -569,102 +436,138 @@ It can be set to <em>0</em>, if you want to make sure that clean entries are rem
 </dd></dl>
 
 </div>
-<div class="section" id="module-cloudfusion.util.cache">
-<span id="the-cache-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">cache</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.cache" title="Permalink to this headline">¶</a></h1>
-<p>Created on 03.06.2011</p>
+<div class="section" id="module-cloudfusion.util.xmlparser">
+<span id="the-xmlparser-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">xmlparser</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.xmlparser" title="Permalink to this headline">¶</a></h1>
+<p>Parses an XML file or string, populating a dictionary containing the keys with the desired values.</p>
+<p>The keys of the dictionary are either the names of Tags contained in the XML data or again dictionaries.
+The values can either be dictionaries again or simple strings, but ultimately the leaf values will be strings.</p>
 <dl class="class">
-<dt id="cloudfusion.util.cache.Cache">
-<em class="property">class </em><tt class="descclassname">cloudfusion.util.cache.</tt><tt class="descname">Cache</tt><big>(</big><em>expiration_time</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache" title="Permalink to this definition">¶</a></dt>
+<dt id="cloudfusion.util.xmlparser.DictXMLParser">
+<em class="property">class </em><tt class="descclassname">cloudfusion.util.xmlparser.</tt><tt class="descname">DictXMLParser</tt><a class="headerlink" href="#cloudfusion.util.xmlparser.DictXMLParser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Return a Cache instance with entries expiring after <em>expiration_time</em> seconds.</p>
 <dl class="method">
-<dt id="cloudfusion.util.cache.Cache._get_size_of_entry">
-<tt class="descname">_get_size_of_entry</tt><big>(</big><em>entry</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache._get_size_of_entry" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.delete">
-<tt class="descname">delete</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.delete" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.exists">
-<tt class="descname">exists</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.exists" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.flush">
-<tt class="descname">flush</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.flush" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.get_keys">
-<tt class="descname">get_keys</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.get_keys" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.get_modified">
-<tt class="descname">get_modified</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.get_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.get_size_of_cached_data">
-<tt class="descname">get_size_of_cached_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.get_size_of_cached_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.get_size_of_dirty_data">
-<tt class="descname">get_size_of_dirty_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.get_size_of_dirty_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.get_value">
-<tt class="descname">get_value</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.get_value" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.is_dirty">
-<tt class="descname">is_dirty</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.is_dirty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.is_expired">
-<tt class="descname">is_expired</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.is_expired" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.refresh">
-<tt class="descname">refresh</tt><big>(</big><em>key</em>, <em>disk_value</em>, <em>modified</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.refresh" title="Permalink to this definition">¶</a></dt>
-<dd><p>Refreshes an entry with <em>disk_value</em>, if <em>modified</em> is bigger than the entry&#8217;s modified date.</p>
+<dt id="cloudfusion.util.xmlparser.DictXMLParser._DictXMLParser__populate_dict">
+<tt class="descname">_DictXMLParser__populate_dict</tt><big>(</big><em>dom_tree</em>, <em>dict_tree</em><big>)</big><a class="headerlink" href="#cloudfusion.util.xmlparser.DictXMLParser._DictXMLParser__populate_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does the work for <a class="reference internal" href="#cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_leaf_textnodes" title="cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_leaf_textnodes"><tt class="xref py py-meth docutils literal"><span class="pre">populate_dict_with_XML_leaf_textnodes()</span></tt></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dom_tree</strong> &#8211; An XML element</li>
+<li><strong>dict_tree</strong> &#8211; A dictionary of keys/values matching the first XML subtree in <em>dom_tree</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
-<dt id="cloudfusion.util.cache.Cache.set_dirty">
-<tt class="descname">set_dirty</tt><big>(</big><em>key</em>, <em>is_dirty</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.set_dirty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.set_modified">
-<tt class="descname">set_modified</tt><big>(</big><em>key</em>, <em>modified</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.set_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.update">
-<tt class="descname">update</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.update" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.write">
-<tt class="descname">write</tt><big>(</big><em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.write" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<dt id="cloudfusion.util.xmlparser.DictXMLParser._DictXMLParser__populate_dict_with_collections">
+<tt class="descname">_DictXMLParser__populate_dict_with_collections</tt><big>(</big><em>dom_tree</em>, <em>dict_tree</em><big>)</big><a class="headerlink" href="#cloudfusion.util.xmlparser.DictXMLParser._DictXMLParser__populate_dict_with_collections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does the work for <a class="reference internal" href="#cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_collection_leaf_textnodes" title="cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_collection_leaf_textnodes"><tt class="xref py py-meth docutils literal"><span class="pre">populate_dict_with_XML_collection_leaf_textnodes()</span></tt></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dom_tree</strong> &#8211; An XML element</li>
+<li><strong>dict_tree</strong> &#8211; A dictionary of keys/values matching the first XML subtree in <em>dom_tree</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="class">
-<dt id="cloudfusion.util.cache.Entry">
-<em class="property">class </em><tt class="descclassname">cloudfusion.util.cache.</tt><tt class="descname">Entry</tt><big>(</big><em>value</em>, <em>dirty</em>, <em>modified=None</em>, <em>updated=None</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Entry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Cache entry.</p>
+<dl class="method">
+<dt id="cloudfusion.util.xmlparser.DictXMLParser.getText">
+<tt class="descname">getText</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#cloudfusion.util.xmlparser.DictXMLParser.getText" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.xmlparser.DictXMLParser.get_elements_by_tag_name">
+<tt class="descname">get_elements_by_tag_name</tt><big>(</big><em>dom_tree</em>, <em>tag_name</em><big>)</big><a class="headerlink" href="#cloudfusion.util.xmlparser.DictXMLParser.get_elements_by_tag_name" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">elem a list of elements matching the tags with the name <em>tag_name</em> on the first level of  <em>dom_tree</em>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_collection_leaf_textnodes">
+<tt class="descname">populate_dict_with_XML_collection_leaf_textnodes</tt><big>(</big><em>xml_tree</em>, <em>dict_tree</em><big>)</big><a class="headerlink" href="#cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_collection_leaf_textnodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Puts the text of the XML tags of <em>xml_tree</em> specified by <em>dict_tree</em> into <em>dict_tree</em> .</p>
+<p>The <em>dict_tree</em> is a dictionary describing a subtree of <em>xml_data</em>. 
+The dictionarie&#8217;s keys correspond to the first XML tags with the same name on the same nesting level of the dictionary.
+Additionally, keys with the name surrounded by brackets are seen as a list of such XML tags.
+Therefore the keys in the dictionary {&#8220;root&#8221;: {&#8220;[element]&#8221;: &#8220;&#8221;}} match the root tag &lt;root&gt; 
+as well as the subelements of root &lt;element&gt; and &lt;element&gt;.
+The dictionarie&#8217;s most deeply nested elements must be empty strings. 
+This value is replaced by the text of the corresponding key&#8217;s XML tag.
+Given the previous dictionary and the following XML structure:</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;element&gt;</span>text1<span class="nt">&lt;/element&gt;</span>
+    <span class="nt">&lt;element&gt;</span>text2<span class="nt">&lt;/element&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The resulting dictionary would be {&#8220;root&#8221;: {&#8220;[element]&#8221;: [&#8220;text1&#8221;, &#8220;text2&#8221;]}}</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>xml_tree</strong> &#8211; An XML string or an XML file</li>
+<li><strong>dict_tree</strong> &#8211; A dictionary of keys/values matching the first XML subtree in <em>xml_tree</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_leaf_textnodes">
+<tt class="descname">populate_dict_with_XML_leaf_textnodes</tt><big>(</big><em>xml_data</em>, <em>dict_tree</em><big>)</big><a class="headerlink" href="#cloudfusion.util.xmlparser.DictXMLParser.populate_dict_with_XML_leaf_textnodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Puts the text of the XML tags of <em>xml_data</em> specified by <em>dict_tree</em> into <em>dict_tree</em>.
+The <em>dict_tree</em> is a dictionary describing a subtree of <em>xml_data</em>. 
+The dictionarie&#8217;s keys correspond to the first XML tags with the same name on the same nesting level of the dictionary.
+Therefore the keys in the dictionary {&#8220;root&#8221;: {&#8220;element1&#8221;: &#8220;&#8221;, &#8220;element2&#8221;: &#8220;&#8221;}} match the root tag &lt;root&gt; 
+as well as the subelements of root &lt;element1&gt; and &lt;element2&gt;.
+The dictionarie&#8217;s most deeply nested elements must be empty strings. 
+This value is replaced by the text of the corresponding key&#8217;s XML tag.
+Given the previous dictionary and the following XML structure:</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;element1&gt;</span>text1<span class="nt">&lt;/element1&gt;</span>
+    <span class="nt">&lt;element2&gt;</span>text2<span class="nt">&lt;/element2&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The resulting dictionary would be {&#8220;root&#8221;: {&#8220;element1&#8221;: &#8220;text1&#8221;, &#8220;element2&#8221;: &#8220;text2&#8221;}}</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>xml_data</strong> &#8211; An XML string or an XML file</li>
+<li><strong>dict_tree</strong> &#8211; A dictionary of keys/values matching the first XML subtree in <em>xml_tree</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -769,35 +672,132 @@ The temporary file needs to be closed if it is not used anymore
 </dd></dl>
 
 </div>
-<div class="section" id="module-cloudfusion.util.mp_synchronize_proxy">
-<span id="the-mp-synchronize-proxy-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">mp_synchronize_proxy</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.mp_synchronize_proxy" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-cloudfusion.util.cache">
+<span id="the-cache-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">cache</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.cache" title="Permalink to this headline">¶</a></h1>
+<p>Created on 03.06.2011</p>
 <dl class="class">
-<dt id="cloudfusion.util.mp_synchronize_proxy.MPSynchronizeProxy">
-<em class="property">class </em><tt class="descclassname">cloudfusion.util.mp_synchronize_proxy.</tt><tt class="descname">MPSynchronizeProxy</tt><big>(</big><em>core</em>, <em>private_methods_to_synchronize=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_synchronize_proxy.MPSynchronizeProxy" title="Permalink to this definition">¶</a></dt>
+<dt id="cloudfusion.util.cache.Cache">
+<em class="property">class </em><tt class="descclassname">cloudfusion.util.cache.</tt><tt class="descname">Cache</tt><big>(</big><em>expiration_time</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Proxy object that synchronizes access to a core object methods and attributes that don&#8217;t start with _ for multiple processes.</p>
+<p>Return a Cache instance with entries expiring after <em>expiration_time</em> seconds.</p>
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache._get_size_of_entry">
+<tt class="descname">_get_size_of_entry</tt><big>(</big><em>entry</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache._get_size_of_entry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.delete">
+<tt class="descname">delete</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.exists">
+<tt class="descname">exists</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.flush">
+<tt class="descname">flush</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.flush" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.get_keys">
+<tt class="descname">get_keys</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.get_keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.get_modified">
+<tt class="descname">get_modified</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.get_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.get_size_of_cached_data">
+<tt class="descname">get_size_of_cached_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.get_size_of_cached_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.get_size_of_dirty_data">
+<tt class="descname">get_size_of_dirty_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.get_size_of_dirty_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.get_value">
+<tt class="descname">get_value</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.get_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.is_dirty">
+<tt class="descname">is_dirty</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.is_dirty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.is_expired">
+<tt class="descname">is_expired</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.is_expired" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.refresh">
+<tt class="descname">refresh</tt><big>(</big><em>key</em>, <em>disk_value</em>, <em>modified</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refreshes an entry with <em>disk_value</em>, if <em>modified</em> is bigger than the entry&#8217;s modified date.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.set_dirty">
+<tt class="descname">set_dirty</tt><big>(</big><em>key</em>, <em>is_dirty</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.set_dirty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.set_modified">
+<tt class="descname">set_modified</tt><big>(</big><em>key</em>, <em>modified</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.set_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.update">
+<tt class="descname">update</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.write">
+<tt class="descname">write</tt><big>(</big><em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
-<dt id="cloudfusion.util.mp_synchronize_proxy.SynchronizeMethodWrapper">
-<em class="property">class </em><tt class="descclassname">cloudfusion.util.mp_synchronize_proxy.</tt><tt class="descname">SynchronizeMethodWrapper</tt><big>(</big><em>obj</em>, <em>func</em>, <em>name</em>, <em>rlock</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_synchronize_proxy.SynchronizeMethodWrapper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper object for a method to be called.</p>
+<dt id="cloudfusion.util.cache.Entry">
+<em class="property">class </em><tt class="descclassname">cloudfusion.util.cache.</tt><tt class="descname">Entry</tt><big>(</big><em>value</em>, <em>dirty</em>, <em>modified=None</em>, <em>updated=None</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Entry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Cache entry.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-cloudfusion.util.synchronize_proxy">
-<span id="the-synchronize-proxy-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">synchronize_proxy</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.synchronize_proxy" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="cloudfusion.util.synchronize_proxy.SynchronizeMethodWrapper">
-<em class="property">class </em><tt class="descclassname">cloudfusion.util.synchronize_proxy.</tt><tt class="descname">SynchronizeMethodWrapper</tt><big>(</big><em>obj</em>, <em>func</em>, <em>name</em>, <em>rlock</em><big>)</big><a class="headerlink" href="#cloudfusion.util.synchronize_proxy.SynchronizeMethodWrapper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper object for a method to be called.</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="cloudfusion.util.synchronize_proxy.SynchronizeProxy">
-<em class="property">class </em><tt class="descclassname">cloudfusion.util.synchronize_proxy.</tt><tt class="descname">SynchronizeProxy</tt><big>(</big><em>core</em>, <em>private_methods_to_synchronize=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#cloudfusion.util.synchronize_proxy.SynchronizeProxy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Proxy object that synchronizes access to a core object methods and attributes that don&#8217;t start with _.</p>
+<div class="section" id="module-cloudfusion.util.exponential_retry">
+<span id="the-exponential-retry-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">exponential_retry</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.exponential_retry" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="cloudfusion.util.exponential_retry.retry">
+<tt class="descclassname">cloudfusion.util.exponential_retry.</tt><tt class="descname">retry</tt><big>(</big><em>ExceptionToCheck</em>, <em>tries=20</em>, <em>delay=0.10000000000000001</em>, <em>backoff=2</em><big>)</big><a class="headerlink" href="#cloudfusion.util.exponential_retry.retry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retry calling the decorated function using an exponential backoff.
+The decorated method&#8217;s object may define the _handle_error method.
+The parameters for _handle_error are the exception object, 
+the wrapped methods&#8217; name, the number of tries remaining, 
+and finally the original parameters.
+If _handle_error returns True, retrying is aborted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ExceptionToCheck</strong> (<em>Exception or tuple</em>) &#8211; the exception to check. may be a tuple of
+exceptions to check</li>
+<li><strong>tries</strong> (<em>int</em>) &#8211; number of times to try (not retry) before giving up</li>
+<li><strong>delay</strong> (<em>int</em>) &#8211; initial delay between retries in seconds</li>
+<li><strong>backoff</strong> (<em>int</em>) &#8211; backoff multiplier e.g. value of 2 will double the delay
+each retry</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -811,20 +811,20 @@ The temporary file needs to be closed if it is not used anymore
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">lru_cache</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.util.xmlparser">The <tt class="docutils literal"><span class="pre">xmlparser</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.util.string">The <tt class="docutils literal"><span class="pre">string</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.util.pickle_methods">The <tt class="docutils literal"><span class="pre">pickle_methods</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.util.exponential_retry">The <tt class="docutils literal"><span class="pre">exponential_retry</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.util.mp_lru_cache">The <tt class="docutils literal"><span class="pre">mp_lru_cache</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.util.cache">The <tt class="docutils literal"><span class="pre">cache</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.util.persistent_lru_cache">The <tt class="docutils literal"><span class="pre">persistent_lru_cache</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-cloudfusion.util.mp_synchronize_proxy">The <tt class="docutils literal"><span class="pre">mp_synchronize_proxy</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-cloudfusion.util.synchronize_proxy">The <tt class="docutils literal"><span class="pre">synchronize_proxy</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.util.pickle_methods">The <tt class="docutils literal"><span class="pre">pickle_methods</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.util.string">The <tt class="docutils literal"><span class="pre">string</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.util.mp_lru_cache">The <tt class="docutils literal"><span class="pre">mp_lru_cache</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.util.xmlparser">The <tt class="docutils literal"><span class="pre">xmlparser</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.util.persistent_lru_cache">The <tt class="docutils literal"><span class="pre">persistent_lru_cache</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.util.cache">The <tt class="docutils literal"><span class="pre">cache</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.util.exponential_retry">The <tt class="docutils literal"><span class="pre">exponential_retry</span></tt> Module</a></li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="third_party.parsedatetime.parsedatetime.html"
-                        title="previous chapter">The <tt class="docutils literal"><span class="pre">parsedatetime</span></tt> Package</a></p>
+                        title="previous chapter">The <tt class="docutils literal"><span class="pre">pdt_locales</span></tt> Module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/util.txt"
@@ -857,7 +857,7 @@ The temporary file needs to be closed if it is not used anymore
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="third_party.parsedatetime.parsedatetime.html" title="The parsedatetime Package"
+          <a href="third_party.parsedatetime.parsedatetime.html" title="The pdt_locales Module"
              >previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li> 

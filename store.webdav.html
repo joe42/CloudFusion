@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The bulk_get_metadata_webdav_store Module &mdash; CloudFusion 0.01 documentation</title>
+    <title>The tinydav_client Module &mdash; CloudFusion 0.01 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -25,8 +25,8 @@
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
     <link rel="up" title="Subpackages" href="store.html" />
-    <link rel="next" title="The cache_test Module" href="tests.html" />
-    <link rel="prev" title="The file_decorator Module" href="store.dropbox.html" /> 
+    <link rel="next" title="The mp_lru_cache_test Module" href="tests.html" />
+    <link rel="prev" title="The google_store Module" href="store.gs.html" /> 
   </head>
   <body>
     <div class="related">
@@ -39,10 +39,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tests.html" title="The cache_test Module"
+          <a href="tests.html" title="The mp_lru_cache_test Module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="store.dropbox.html" title="The file_decorator Module"
+          <a href="store.gs.html" title="The google_store Module"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li>
@@ -55,179 +55,7 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-cloudfusion.store.webdav.bulk_get_metadata_webdav_store">
-<span id="the-bulk-get-metadata-webdav-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">bulk_get_metadata_webdav_store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.webdav.bulk_get_metadata_webdav_store" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="cloudfusion.store.webdav.bulk_get_metadata_webdav_store.BulkGetMetadataWebdavStore">
-<em class="property">class </em><tt class="descclassname">cloudfusion.store.webdav.bulk_get_metadata_webdav_store.</tt><tt class="descname">BulkGetMetadataWebdavStore</tt><big>(</big><em>config</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.bulk_get_metadata_webdav_store.BulkGetMetadataWebdavStore" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cloudfusion.store.webdav.webdav_store.WebdavStore" title="cloudfusion.store.webdav.webdav_store.WebdavStore"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.webdav.webdav_store.WebdavStore</span></tt></a>, <a class="reference internal" href="store.html#cloudfusion.store.bulk_get_metadata.BulkGetMetadata" title="cloudfusion.store.bulk_get_metadata.BulkGetMetadata"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.bulk_get_metadata.BulkGetMetadata</span></tt></a></p>
-<p>Subclass of GoogleStore, extending it by implementing the BulkGetMetadata interface for quick directory lising.</p>
-<dl class="method">
-<dt id="cloudfusion.store.webdav.bulk_get_metadata_webdav_store.BulkGetMetadataWebdavStore.get_bulk_metadata">
-<tt class="descname">get_bulk_metadata</tt><big>(</big><em>directory</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.bulk_get_metadata_webdav_store.BulkGetMetadataWebdavStore.get_bulk_metadata" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictionary mapping the path of every file object in <em>directory</em> to a dictionary with the keys        &#8216;modified&#8217;, &#8216;bytes&#8217; and &#8216;is_dir&#8217; containing the corresponding metadata for the file object.</td>
-</tr>
-</tbody>
-</table>
-<p>The value for &#8216;modified&#8217; is a date in seconds, stating when the file object was last modified.  
-The value for &#8216;bytes&#8217; is the number of bytes of the file object. It is 0 if the object is a directory.
-The value for &#8216;is_dir&#8217; is True if the file object is a directory and False otherwise.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">NoSuchFilesytemObjectError if the directory does not exist</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.store.webdav.cadaver_client">
-<span id="the-cadaver-client-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">cadaver_client</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.webdav.cadaver_client" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient">
-<em class="property">class </em><tt class="descclassname">cloudfusion.store.webdav.cadaver_client.</tt><tt class="descname">CadaverWebDAVClient</tt><big>(</big><em>url</em>, <em>user</em>, <em>pwd</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>WebDav client implemented using the Debian package cadaver.
-.. warning:</p>
-<div class="highlight-python"><div class="highlight"><pre>This class is deprecated, since cadaver v0.23.3 cannot handle the response of https://webdav.4shared.com, 
-which sends properties without a namespace, and due to bad error handling.
-use :class:`cloudfusion.store.webdav.tinydav_clien.TinyDAVClient` instead.
-</pre></div>
-</div>
-<p>Create a WebDAV client connecting to the WebDAV server at <em>url</em> with the credentials username and a password.
-:param url: the WebDAV server url; i.e. <a class="reference external" href="https://dav.box.com/dav">https://dav.box.com/dav</a>
-:param user: the username
-:param pwd: the password</p>
-<dl class="method">
-<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient._remove_first_slash">
-<tt class="descname">_remove_first_slash</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient._remove_first_slash" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient._webdav_cmd">
-<tt class="descname">_webdav_cmd</tt><big>(</big><em>cmd</em>, <em>arg1=None</em>, <em>arg2=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient._webdav_cmd" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.copy">
-<tt class="descname">copy</tt><big>(</big><em>source</em>, <em>target</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.copy" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">NoSuchFilesytemObjectError if source does not exist</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.get_directory_listing">
-<tt class="descname">get_directory_listing</tt><big>(</big><em>directory</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.get_directory_listing" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">StoreAccessError if the directory cannot be listed</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body">NoSuchFilesytemObjectError if path does not exist</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.get_file">
-<tt class="descname">get_file</tt><big>(</big><em>path_to_file</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.get_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.get_metadata">
-<tt class="descname">get_metadata</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.get_metadata" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">StoreAccessError if propfind does not return getcontentlength or getlastmodified property</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body">NoSuchFilesytemObjectError if path does not exist</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.get_overall_space">
-<tt class="descname">get_overall_space</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.get_overall_space" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.get_used_space">
-<tt class="descname">get_used_space</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.get_used_space" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.mkdir">
-<tt class="descname">mkdir</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.mkdir" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.move">
-<tt class="descname">move</tt><big>(</big><em>source</em>, <em>target</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.move" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">NoSuchFilesytemObjectError if source does not exist</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.rm">
-<tt class="descname">rm</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.rm" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">NoSuchFilesytemObjectError if path does not exist</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.rmdir">
-<tt class="descname">rmdir</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.rmdir" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">NoSuchFilesytemObjectError if path does not exist</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.upload">
-<tt class="descname">upload</tt><big>(</big><em>local_file_path</em>, <em>remote_file_path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.upload" title="Permalink to this definition">¶</a></dt>
-<dd><p>Upload the file at <em>local_file_path</em> to the path <em>remote_file_path</em> at the remote server</p>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.store.webdav.tinydav_client">
+  <div class="section" id="module-cloudfusion.store.webdav.tinydav_client">
 <span id="the-tinydav-client-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">tinydav_client</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.webdav.tinydav_client" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="cloudfusion.store.webdav.tinydav_client.TinyDAVClient">
@@ -509,6 +337,178 @@ The value for &#8216;is_dir&#8217; is True if the file object is a directory and
 </dd></dl>
 
 </div>
+<div class="section" id="module-cloudfusion.store.webdav.bulk_get_metadata_webdav_store">
+<span id="the-bulk-get-metadata-webdav-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">bulk_get_metadata_webdav_store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.webdav.bulk_get_metadata_webdav_store" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="cloudfusion.store.webdav.bulk_get_metadata_webdav_store.BulkGetMetadataWebdavStore">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.webdav.bulk_get_metadata_webdav_store.</tt><tt class="descname">BulkGetMetadataWebdavStore</tt><big>(</big><em>config</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.bulk_get_metadata_webdav_store.BulkGetMetadataWebdavStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.store.webdav.webdav_store.WebdavStore" title="cloudfusion.store.webdav.webdav_store.WebdavStore"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.webdav.webdav_store.WebdavStore</span></tt></a>, <a class="reference internal" href="store.html#cloudfusion.store.bulk_get_metadata.BulkGetMetadata" title="cloudfusion.store.bulk_get_metadata.BulkGetMetadata"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.bulk_get_metadata.BulkGetMetadata</span></tt></a></p>
+<p>Subclass of GoogleStore, extending it by implementing the BulkGetMetadata interface for quick directory lising.</p>
+<dl class="method">
+<dt id="cloudfusion.store.webdav.bulk_get_metadata_webdav_store.BulkGetMetadataWebdavStore.get_bulk_metadata">
+<tt class="descname">get_bulk_metadata</tt><big>(</big><em>directory</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.bulk_get_metadata_webdav_store.BulkGetMetadataWebdavStore.get_bulk_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictionary mapping the path of every file object in <em>directory</em> to a dictionary with the keys        &#8216;modified&#8217;, &#8216;bytes&#8217; and &#8216;is_dir&#8217; containing the corresponding metadata for the file object.</td>
+</tr>
+</tbody>
+</table>
+<p>The value for &#8216;modified&#8217; is a date in seconds, stating when the file object was last modified.  
+The value for &#8216;bytes&#8217; is the number of bytes of the file object. It is 0 if the object is a directory.
+The value for &#8216;is_dir&#8217; is True if the file object is a directory and False otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">NoSuchFilesytemObjectError if the directory does not exist</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.store.webdav.cadaver_client">
+<span id="the-cadaver-client-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">cadaver_client</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.webdav.cadaver_client" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.webdav.cadaver_client.</tt><tt class="descname">CadaverWebDAVClient</tt><big>(</big><em>url</em>, <em>user</em>, <em>pwd</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>WebDav client implemented using the Debian package cadaver.
+.. warning:</p>
+<div class="highlight-python"><div class="highlight"><pre>This class is deprecated, since cadaver v0.23.3 cannot handle the response of https://webdav.4shared.com, 
+which sends properties without a namespace, and due to bad error handling.
+use :class:`cloudfusion.store.webdav.tinydav_clien.TinyDAVClient` instead.
+</pre></div>
+</div>
+<p>Create a WebDAV client connecting to the WebDAV server at <em>url</em> with the credentials username and a password.
+:param url: the WebDAV server url; i.e. <a class="reference external" href="https://dav.box.com/dav">https://dav.box.com/dav</a>
+:param user: the username
+:param pwd: the password</p>
+<dl class="method">
+<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient._remove_first_slash">
+<tt class="descname">_remove_first_slash</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient._remove_first_slash" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient._webdav_cmd">
+<tt class="descname">_webdav_cmd</tt><big>(</big><em>cmd</em>, <em>arg1=None</em>, <em>arg2=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient._webdav_cmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.copy">
+<tt class="descname">copy</tt><big>(</big><em>source</em>, <em>target</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.copy" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">NoSuchFilesytemObjectError if source does not exist</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.get_directory_listing">
+<tt class="descname">get_directory_listing</tt><big>(</big><em>directory</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.get_directory_listing" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">StoreAccessError if the directory cannot be listed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body">NoSuchFilesytemObjectError if path does not exist</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.get_file">
+<tt class="descname">get_file</tt><big>(</big><em>path_to_file</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.get_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.get_metadata">
+<tt class="descname">get_metadata</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.get_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">StoreAccessError if propfind does not return getcontentlength or getlastmodified property</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body">NoSuchFilesytemObjectError if path does not exist</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.get_overall_space">
+<tt class="descname">get_overall_space</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.get_overall_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.get_used_space">
+<tt class="descname">get_used_space</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.get_used_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.mkdir">
+<tt class="descname">mkdir</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.mkdir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.move">
+<tt class="descname">move</tt><big>(</big><em>source</em>, <em>target</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.move" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">NoSuchFilesytemObjectError if source does not exist</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.rm">
+<tt class="descname">rm</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.rm" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">NoSuchFilesytemObjectError if path does not exist</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.rmdir">
+<tt class="descname">rmdir</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.rmdir" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">NoSuchFilesytemObjectError if path does not exist</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.upload">
+<tt class="descname">upload</tt><big>(</big><em>local_file_path</em>, <em>remote_file_path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.cadaver_client.CadaverWebDAVClient.upload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload the file at <em>local_file_path</em> to the path <em>remote_file_path</em> at the remote server</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 
 
           </div>
@@ -518,18 +518,18 @@ The value for &#8216;is_dir&#8217; is True if the file object is a directory and
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_webdav_store</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.store.webdav.cadaver_client">The <tt class="docutils literal"><span class="pre">cadaver_client</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.store.webdav.tinydav_client">The <tt class="docutils literal"><span class="pre">tinydav_client</span></tt> Module</a></li>
+<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">tinydav_client</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-cloudfusion.store.webdav.webdav_store">The <tt class="docutils literal"><span class="pre">webdav_store</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.store.webdav.bulk_get_metadata_webdav_store">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_webdav_store</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.store.webdav.cadaver_client">The <tt class="docutils literal"><span class="pre">cadaver_client</span></tt> Module</a></li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="store.dropbox.html"
-                        title="previous chapter">The <tt class="docutils literal"><span class="pre">file_decorator</span></tt> Module</a></p>
+  <p class="topless"><a href="store.gs.html"
+                        title="previous chapter">The <tt class="docutils literal"><span class="pre">google_store</span></tt> Module</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="tests.html"
-                        title="next chapter">The <tt class="docutils literal"><span class="pre">cache_test</span></tt> Module</a></p>
+                        title="next chapter">The <tt class="docutils literal"><span class="pre">mp_lru_cache_test</span></tt> Module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/store.webdav.txt"
@@ -562,10 +562,10 @@ The value for &#8216;is_dir&#8217; is True if the file object is a directory and
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tests.html" title="The cache_test Module"
+          <a href="tests.html" title="The mp_lru_cache_test Module"
              >next</a> |</li>
         <li class="right" >
-          <a href="store.dropbox.html" title="The file_decorator Module"
+          <a href="store.gs.html" title="The google_store Module"
              >previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li>

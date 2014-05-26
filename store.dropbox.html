@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The file_decorator Module &mdash; CloudFusion 0.01 documentation</title>
+    <title>The dropbox_store Module &mdash; CloudFusion 0.01 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -25,8 +25,8 @@
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
     <link rel="up" title="Subpackages" href="store.html" />
-    <link rel="next" title="The bulk_get_metadata_webdav_store Module" href="store.webdav.html" />
-    <link rel="prev" title="The sugarsync_store Module" href="store.sugarsync.html" /> 
+    <link rel="next" title="The bulk_get_metadata_amazon_store Module" href="store.s3.html" />
+    <link rel="prev" title="Subpackages" href="store.html" /> 
   </head>
   <body>
     <div class="related">
@@ -39,10 +39,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="store.webdav.html" title="The bulk_get_metadata_webdav_store Module"
+          <a href="store.s3.html" title="The bulk_get_metadata_amazon_store Module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="store.sugarsync.html" title="The sugarsync_store Module"
+          <a href="store.html" title="Subpackages"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li>
@@ -55,242 +55,7 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-cloudfusion.store.dropbox.file_decorator">
-<span id="the-file-decorator-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">file_decorator</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.dropbox.file_decorator" title="Permalink to this headline">¶</a></h1>
-<p>Created on 23.04.2011</p>
-<p>&#64;author: joe</p>
-<dl class="class">
-<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper">
-<em class="property">class </em><tt class="descclassname">cloudfusion.store.dropbox.file_decorator.</tt><tt class="descname">DataFileWrapper</tt><big>(</big><em>data</em>, <em>mem_size=1000000</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">file</span></tt></p>
-<p>Create a file like object with data. 
-:param mem_size: Data is written to disk if it is bigger than <em>mem_size</em> bytes</p>
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.close">
-<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.close" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.fileno">
-<tt class="descname">fileno</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.fileno" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.flush">
-<tt class="descname">flush</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.flush" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.isatty">
-<tt class="descname">isatty</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.isatty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.next">
-<tt class="descname">next</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.next" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.read">
-<tt class="descname">read</tt><big>(</big><em>size=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.read" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.readline">
-<tt class="descname">readline</tt><big>(</big><em>size=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.readline" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.readlines">
-<tt class="descname">readlines</tt><big>(</big><em>sizehint=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.readlines" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.seek">
-<tt class="descname">seek</tt><big>(</big><em>offset</em>, <em>whence=0</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.seek" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.tell">
-<tt class="descname">tell</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.tell" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.truncate">
-<tt class="descname">truncate</tt><big>(</big><em>size</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.truncate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.write">
-<tt class="descname">write</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.write" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.writelines">
-<tt class="descname">writelines</tt><big>(</big><em>sequence</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.writelines" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.xreadlines">
-<tt class="descname">xreadlines</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.xreadlines" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile">
-<em class="property">class </em><tt class="descclassname">cloudfusion.store.dropbox.file_decorator.</tt><tt class="descname">NameableFile</tt><big>(</big><em>file_object</em>, <em>name</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.close">
-<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.close" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.fileno">
-<tt class="descname">fileno</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.fileno" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.flush">
-<tt class="descname">flush</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.flush" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.isatty">
-<tt class="descname">isatty</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.isatty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.next">
-<tt class="descname">next</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.next" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.read">
-<tt class="descname">read</tt><big>(</big><em>size=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.read" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.readline">
-<tt class="descname">readline</tt><big>(</big><em>size=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.readline" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.readlines">
-<tt class="descname">readlines</tt><big>(</big><em>sizehint=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.readlines" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.seek">
-<tt class="descname">seek</tt><big>(</big><em>offset</em>, <em>whence=0</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.seek" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.tell">
-<tt class="descname">tell</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.tell" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.truncate">
-<tt class="descname">truncate</tt><big>(</big><em>size</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.truncate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.write">
-<tt class="descname">write</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.write" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.writelines">
-<tt class="descname">writelines</tt><big>(</big><em>sequence</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.writelines" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.xreadlines">
-<tt class="descname">xreadlines</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.xreadlines" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile">
-<em class="property">class </em><tt class="descclassname">cloudfusion.store.dropbox.file_decorator.</tt><tt class="descname">NonclosingFile</tt><big>(</big><em>file_object</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.close">
-<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.close" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.fileno">
-<tt class="descname">fileno</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.fileno" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.flush">
-<tt class="descname">flush</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.flush" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.isatty">
-<tt class="descname">isatty</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.isatty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.next">
-<tt class="descname">next</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.next" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.read">
-<tt class="descname">read</tt><big>(</big><em>size=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.read" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.readline">
-<tt class="descname">readline</tt><big>(</big><em>size=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.readline" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.readlines">
-<tt class="descname">readlines</tt><big>(</big><em>sizehint=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.readlines" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.seek">
-<tt class="descname">seek</tt><big>(</big><em>offset</em>, <em>whence=0</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.seek" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.tell">
-<tt class="descname">tell</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.tell" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.truncate">
-<tt class="descname">truncate</tt><big>(</big><em>size</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.truncate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.write">
-<tt class="descname">write</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.write" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.writelines">
-<tt class="descname">writelines</tt><big>(</big><em>sequence</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.writelines" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.xreadlines">
-<tt class="descname">xreadlines</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.xreadlines" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.store.dropbox.dropbox_store">
+  <div class="section" id="module-cloudfusion.store.dropbox.dropbox_store">
 <span id="the-dropbox-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">dropbox_store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.dropbox.dropbox_store" title="Permalink to this headline">¶</a></h1>
 <p>Created on 08.04.2011</p>
 <p>&#64;author: joe</p>
@@ -564,6 +329,241 @@ This means there has already been a file stored to path and instead of overwriti
 </dd></dl>
 
 </div>
+<div class="section" id="module-cloudfusion.store.dropbox.file_decorator">
+<span id="the-file-decorator-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">file_decorator</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.dropbox.file_decorator" title="Permalink to this headline">¶</a></h1>
+<p>Created on 23.04.2011</p>
+<p>&#64;author: joe</p>
+<dl class="class">
+<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.dropbox.file_decorator.</tt><tt class="descname">DataFileWrapper</tt><big>(</big><em>data</em>, <em>mem_size=1000000</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">file</span></tt></p>
+<p>Create a file like object with data. 
+:param mem_size: Data is written to disk if it is bigger than <em>mem_size</em> bytes</p>
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.close">
+<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.fileno">
+<tt class="descname">fileno</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.fileno" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.flush">
+<tt class="descname">flush</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.flush" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.isatty">
+<tt class="descname">isatty</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.isatty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.next">
+<tt class="descname">next</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.next" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.read">
+<tt class="descname">read</tt><big>(</big><em>size=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.read" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.readline">
+<tt class="descname">readline</tt><big>(</big><em>size=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.readline" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.readlines">
+<tt class="descname">readlines</tt><big>(</big><em>sizehint=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.readlines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.seek">
+<tt class="descname">seek</tt><big>(</big><em>offset</em>, <em>whence=0</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.seek" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.tell">
+<tt class="descname">tell</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.tell" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.truncate">
+<tt class="descname">truncate</tt><big>(</big><em>size</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.truncate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.write">
+<tt class="descname">write</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.writelines">
+<tt class="descname">writelines</tt><big>(</big><em>sequence</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.writelines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.xreadlines">
+<tt class="descname">xreadlines</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.xreadlines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.dropbox.file_decorator.</tt><tt class="descname">NameableFile</tt><big>(</big><em>file_object</em>, <em>name</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.close">
+<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.fileno">
+<tt class="descname">fileno</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.fileno" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.flush">
+<tt class="descname">flush</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.flush" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.isatty">
+<tt class="descname">isatty</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.isatty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.next">
+<tt class="descname">next</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.next" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.read">
+<tt class="descname">read</tt><big>(</big><em>size=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.read" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.readline">
+<tt class="descname">readline</tt><big>(</big><em>size=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.readline" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.readlines">
+<tt class="descname">readlines</tt><big>(</big><em>sizehint=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.readlines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.seek">
+<tt class="descname">seek</tt><big>(</big><em>offset</em>, <em>whence=0</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.seek" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.tell">
+<tt class="descname">tell</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.tell" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.truncate">
+<tt class="descname">truncate</tt><big>(</big><em>size</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.truncate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.write">
+<tt class="descname">write</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.writelines">
+<tt class="descname">writelines</tt><big>(</big><em>sequence</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.writelines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.xreadlines">
+<tt class="descname">xreadlines</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.xreadlines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.dropbox.file_decorator.</tt><tt class="descname">NonclosingFile</tt><big>(</big><em>file_object</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.close">
+<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.fileno">
+<tt class="descname">fileno</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.fileno" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.flush">
+<tt class="descname">flush</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.flush" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.isatty">
+<tt class="descname">isatty</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.isatty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.next">
+<tt class="descname">next</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.next" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.read">
+<tt class="descname">read</tt><big>(</big><em>size=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.read" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.readline">
+<tt class="descname">readline</tt><big>(</big><em>size=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.readline" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.readlines">
+<tt class="descname">readlines</tt><big>(</big><em>sizehint=None</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.readlines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.seek">
+<tt class="descname">seek</tt><big>(</big><em>offset</em>, <em>whence=0</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.seek" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.tell">
+<tt class="descname">tell</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.tell" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.truncate">
+<tt class="descname">truncate</tt><big>(</big><em>size</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.truncate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.write">
+<tt class="descname">write</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.writelines">
+<tt class="descname">writelines</tt><big>(</big><em>sequence</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.writelines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.xreadlines">
+<tt class="descname">xreadlines</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.xreadlines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 
 
           </div>
@@ -573,16 +573,16 @@ This means there has already been a file stored to path and instead of overwriti
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">file_decorator</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.store.dropbox.dropbox_store">The <tt class="docutils literal"><span class="pre">dropbox_store</span></tt> Module</a></li>
+<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">dropbox_store</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.store.dropbox.file_decorator">The <tt class="docutils literal"><span class="pre">file_decorator</span></tt> Module</a></li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="store.sugarsync.html"
-                        title="previous chapter">The <tt class="docutils literal"><span class="pre">sugarsync_store</span></tt> Module</a></p>
+  <p class="topless"><a href="store.html"
+                        title="previous chapter">Subpackages</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="store.webdav.html"
-                        title="next chapter">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_webdav_store</span></tt> Module</a></p>
+  <p class="topless"><a href="store.s3.html"
+                        title="next chapter">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_amazon_store</span></tt> Module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/store.dropbox.txt"
@@ -615,10 +615,10 @@ This means there has already been a file stored to path and instead of overwriti
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="store.webdav.html" title="The bulk_get_metadata_webdav_store Module"
+          <a href="store.s3.html" title="The bulk_get_metadata_amazon_store Module"
              >next</a> |</li>
         <li class="right" >
-          <a href="store.sugarsync.html" title="The sugarsync_store Module"
+          <a href="store.html" title="Subpackages"
              >previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li>
