@@ -4,6 +4,8 @@ B: Added Features
 C: Bugfixes
 _stable means that the changes were successfully tested with all tests in the test suite, and a stress test for at least 24h
 
+v.6.2.16:
+    * Add error handling for Feature Fast Directory Listing 
 v.6.2.15:
     * Bugfix file system; add exception EISDIR (old is file, new is directory) - introduced in last stable release
 v.6.2.14_stable:

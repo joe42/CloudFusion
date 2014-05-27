@@ -9,7 +9,7 @@ setuptools.setup(
     packages = setuptools.find_packages(),
     include_package_data = True,
     install_requires = ['requests', 'nose', 'simplejson', 'httplib2>=0.8', 'beautifulsoup4', 'argparse', 'ntplib', 'gsutil', 'sh', 'tinydav'],
-    version = "6.2.15",
+    version = "6.2.16",
     description = "Filesystem interface to cloud storage services",
     author = "Johannes Mueller",
     author_email = "johannes.mueller1@mail.inf.tu-dresden.de",
