@@ -1,5 +1,6 @@
 from cloudfusion.store.bulk_get_metadata import BulkGetMetadata
 from cloudfusion.store.webdav.webdav_store import WebdavStore
+from cloudfusion.util.exponential_retry import retry
 
 
 class BulkGetMetadataWebdavStore(WebdavStore, BulkGetMetadata):
@@ -7,7 +8,8 @@ class BulkGetMetadataWebdavStore(WebdavStore, BulkGetMetadata):
     
     def __init__(self, config):
         super(BulkGetMetadataWebdavStore, self).__init__(config)
-        
+    
+    @retry(Exception)
     def get_bulk_metadata(self, directory):
         """:returns: A dictionary mapping the path of every file object in *directory* to a dictionary with the keys\
         'modified', 'bytes' and 'is_dir' containing the corresponding metadata for the file object.

@@ -2,6 +2,7 @@ from cloudfusion.store.s3.amazon_store import AmazonStore
 from cloudfusion.store.bulk_get_metadata import BulkGetMetadata
 import time
 import cloudfusion.third_party.parsedatetime.parsedatetime as pdt
+from cloudfusion.util.exponential_retry import retry
 
 
 class BulkGetMetadataAmazonStore(AmazonStore, BulkGetMetadata):
@@ -10,6 +11,7 @@ class BulkGetMetadataAmazonStore(AmazonStore, BulkGetMetadata):
     def __init__(self, config):
         super(BulkGetMetadataAmazonStore, self).__init__(config)
         
+    @retry(Exception)
     def get_bulk_metadata(self, directory):
         """:returns: A dictionary mapping the path of every file object in *directory* to a dictionary with the keys\
         'modified', 'bytes' and 'is_dir' containing the corresponding metadata for the file object.

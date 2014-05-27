@@ -2,6 +2,7 @@ from cloudfusion.store.bulk_get_metadata import BulkGetMetadata
 import time
 import cloudfusion.third_party.parsedatetime.parsedatetime as pdt
 from cloudfusion.store.gs.google_store import GoogleStore
+from cloudfusion.util.exponential_retry import retry
 
 
 class BulkGetMetadataGoogleStore(GoogleStore, BulkGetMetadata):
@@ -9,7 +10,8 @@ class BulkGetMetadataGoogleStore(GoogleStore, BulkGetMetadata):
     
     def __init__(self, config):
         super(BulkGetMetadataGoogleStore, self).__init__(config)
-        
+    
+    @retry(Exception)
     def get_bulk_metadata(self, directory):
         """:returns: A dictionary mapping the path of every file object in *directory* to a dictionary with the keys\
         'modified', 'bytes' and 'is_dir' containing the corresponding metadata for the file object.
