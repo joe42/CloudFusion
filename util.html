@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The pickle_methods Module &mdash; CloudFusion 0.01 documentation</title>
+    <title>The xmlparser Module &mdash; CloudFusion 0.01 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
     <link rel="up" title="Developers documentation" href="develop.html" />
-    <link rel="prev" title="The ntlmpool Module" href="third_party.requests_1_2_3.requests.packages.urllib3.contrib.html" /> 
+    <link rel="prev" title="The cp949prober Module" href="third_party.requests_1_2_3.requests.packages.charade.html" /> 
   </head>
   <body>
     <div class="related">
@@ -38,7 +38,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="third_party.requests_1_2_3.requests.packages.urllib3.contrib.html" title="The ntlmpool Module"
+          <a href="third_party.requests_1_2_3.requests.packages.charade.html" title="The cp949prober Module"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" accesskey="U">Developers documentation</a> &raquo;</li> 
@@ -50,228 +50,7 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-cloudfusion.util.pickle_methods">
-<span id="the-pickle-methods-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">pickle_methods</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.pickle_methods" title="Permalink to this headline">¶</a></h1>
-<p>This module can be imported to allow pickling of methods.</p>
-<dl class="function">
-<dt id="cloudfusion.util.pickle_methods._pickle_method">
-<tt class="descclassname">cloudfusion.util.pickle_methods.</tt><tt class="descname">_pickle_method</tt><big>(</big><em>method</em><big>)</big><a class="headerlink" href="#cloudfusion.util.pickle_methods._pickle_method" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.util.pickle_methods._unpickle_method">
-<tt class="descclassname">cloudfusion.util.pickle_methods.</tt><tt class="descname">_unpickle_method</tt><big>(</big><em>func_name</em>, <em>obj</em>, <em>cls</em><big>)</big><a class="headerlink" href="#cloudfusion.util.pickle_methods._unpickle_method" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.util.mp_lru_cache">
-<span id="the-mp-lru-cache-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">mp_lru_cache</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.mp_lru_cache" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="cloudfusion.util.mp_lru_cache.LinkedEntry">
-<em class="property">class </em><tt class="descclassname">cloudfusion.util.mp_lru_cache.</tt><tt class="descname">LinkedEntry</tt><big>(</big><em>value</em>, <em>dirty</em>, <em>modified=None</em>, <em>updated=None</em>, <em>key=None</em>, <em>next=None</em>, <em>prev=None</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.LinkedEntry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cloudfusion.util.cache.Entry" title="cloudfusion.util.cache.Entry"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.util.cache.Entry</span></tt></a></p>
-<p>Cache entry with next and previous links for chaining into a doubly linked list and a key for direct reference.</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache">
-<em class="property">class </em><tt class="descclassname">cloudfusion.util.mp_lru_cache.</tt><tt class="descname">MPLRUCache</tt><big>(</big><em>expiration_time=60</em>, <em>maxsize_in_MB=200</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cloudfusion.util.cache.Cache" title="cloudfusion.util.cache.Cache"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.util.cache.Cache</span></tt></a></p>
-<p>Multiprocessing save Least Recently Used cache. When adding an entry to the cache exceeds its size limit,
-the cache discards dirty entries starting with the least recently used.
-However, dirty entries or the last entry in the cache are not deleted.</p>
-<p>Return an LRUCache instance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expiration_time</strong> &#8211; Time in seconds until entries are expired.</li>
-<li><strong>maxsize_in_MB</strong> &#8211; Approximate limit of the cache in MB.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache._get_listhead_entry">
-<tt class="descname">_get_listhead_entry</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache._get_listhead_entry" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache._get_listtail_entry">
-<tt class="descname">_get_listtail_entry</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache._get_listtail_entry" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache._move_used_entry_to_head">
-<tt class="descname">_move_used_entry_to_head</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache._move_used_entry_to_head" title="Permalink to this definition">¶</a></dt>
-<dd><p>Put existing entry associated with <em>key</em> in front of the LRU queue.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache._resize">
-<tt class="descname">_resize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache._resize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resize cache to maxsize.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache._store_to_dict">
-<tt class="descname">_store_to_dict</tt><big>(</big><em>linkedEntry</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache._store_to_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is only important for subclasses using shelve with writeback=False as a dictionary.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache._unlink">
-<tt class="descname">_unlink</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache._unlink" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.bulk_write">
-<tt class="descname">bulk_write</tt><big>(</big><em>dict</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.bulk_write" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dict</strong> &#8211; dictionary with key value mapping</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.delete">
-<tt class="descname">delete</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove current entry associated with key from the LRU queue.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.flush">
-<tt class="descname">flush</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.flush" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.get_dirty_lru_entries">
-<tt class="descname">get_dirty_lru_entries</tt><big>(</big><em>num</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.get_dirty_lru_entries" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get list of <em>num</em> dirty least recently used entries.
-returns: list of keys of the <em>num</em> least recently used entries</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.get_keys">
-<tt class="descname">get_keys</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.get_keys" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.get_resize_intervall">
-<tt class="descname">get_resize_intervall</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.get_resize_intervall" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The minimal interval between consecutive calls to reduce cache size as a float in seconds.        The default is one second.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.get_size_of_cached_data">
-<tt class="descname">get_size_of_cached_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.get_size_of_cached_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.get_size_of_dirty_data">
-<tt class="descname">get_size_of_dirty_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.get_size_of_dirty_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.get_value">
-<tt class="descname">get_value</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.get_value" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.peek">
-<tt class="descname">peek</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.peek" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get value associated with <em>key</em>. 
-This does not count as the entry being used.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.refresh">
-<tt class="descname">refresh</tt><big>(</big><em>key</em>, <em>disk_value</em>, <em>modified</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.refresh" title="Permalink to this definition">¶</a></dt>
-<dd><p>Refreshes an entry with <em>disk_value</em>, if <em>modified</em> is bigger than the entry&#8217;s modified date.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.set_dirty">
-<tt class="descname">set_dirty</tt><big>(</big><em>key</em>, <em>is_dirty</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.set_dirty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.set_resize_intervall">
-<tt class="descname">set_resize_intervall</tt><big>(</big><em>seconds</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.set_resize_intervall" title="Permalink to this definition">¶</a></dt>
-<dd><p>Do not try to reduce the cache size again before <em>seconds</em> have passed.
-Resize operations are slow, especially when the cache has many elements.
-It can be set to <em>0</em>, if you want to make sure that clean entries are removed as fast as possible.
-:param seconds: float stating how much time in seconds must pass before a cache size reduction is tried again</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.write">
-<tt class="descname">write</tt><big>(</big><em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.write" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.util.exponential_retry">
-<span id="the-exponential-retry-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">exponential_retry</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.exponential_retry" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="cloudfusion.util.exponential_retry.retry">
-<tt class="descclassname">cloudfusion.util.exponential_retry.</tt><tt class="descname">retry</tt><big>(</big><em>ExceptionToCheck</em>, <em>tries=20</em>, <em>delay=0.10000000000000001</em>, <em>backoff=2</em><big>)</big><a class="headerlink" href="#cloudfusion.util.exponential_retry.retry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retry calling the decorated function using an exponential backoff.
-The decorated method&#8217;s object may define the _handle_error method.
-The parameters for _handle_error are the exception object, 
-the wrapped methods&#8217; name, the number of tries remaining, 
-and finally the original parameters.
-If _handle_error returns True, retrying is aborted.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ExceptionToCheck</strong> (<em>Exception or tuple</em>) &#8211; the exception to check. may be a tuple of
-exceptions to check</li>
-<li><strong>tries</strong> (<em>int</em>) &#8211; number of times to try (not retry) before giving up</li>
-<li><strong>delay</strong> (<em>int</em>) &#8211; initial delay between retries in seconds</li>
-<li><strong>backoff</strong> (<em>int</em>) &#8211; backoff multiplier e.g. value of 2 will double the delay
-each retry</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.util.mp_synchronize_proxy">
-<span id="the-mp-synchronize-proxy-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">mp_synchronize_proxy</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.mp_synchronize_proxy" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="cloudfusion.util.mp_synchronize_proxy.MPSynchronizeProxy">
-<em class="property">class </em><tt class="descclassname">cloudfusion.util.mp_synchronize_proxy.</tt><tt class="descname">MPSynchronizeProxy</tt><big>(</big><em>core</em>, <em>private_methods_to_synchronize=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_synchronize_proxy.MPSynchronizeProxy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Proxy object that synchronizes access to a core object methods and attributes that don&#8217;t start with _ for multiple processes.</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="cloudfusion.util.mp_synchronize_proxy.SynchronizeMethodWrapper">
-<em class="property">class </em><tt class="descclassname">cloudfusion.util.mp_synchronize_proxy.</tt><tt class="descname">SynchronizeMethodWrapper</tt><big>(</big><em>obj</em>, <em>func</em>, <em>name</em>, <em>rlock</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_synchronize_proxy.SynchronizeMethodWrapper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper object for a method to be called.</p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.util.xmlparser">
+  <div class="section" id="module-cloudfusion.util.xmlparser">
 <span id="the-xmlparser-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">xmlparser</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.xmlparser" title="Permalink to this headline">¶</a></h1>
 <p>Parses an XML file or string, populating a dictionary containing the keys with the desired values.</p>
 <p>The keys of the dictionary are either the names of Tags contained in the XML data or again dictionaries.
@@ -436,15 +215,22 @@ Does not indent empty strings.</p>
 <dd></dd></dl>
 
 </div>
-<div class="section" id="module-cloudfusion.util.persistent_lru_cache">
-<span id="the-persistent-lru-cache-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">persistent_lru_cache</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.persistent_lru_cache" title="Permalink to this headline">¶</a></h1>
-<p>Created on Feb 5, 2013</p>
+<div class="section" id="module-cloudfusion.util.mp_lru_cache">
+<span id="the-mp-lru-cache-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">mp_lru_cache</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.mp_lru_cache" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache">
-<em class="property">class </em><tt class="descclassname">cloudfusion.util.persistent_lru_cache.</tt><tt class="descname">PersistentLRUCache</tt><big>(</big><em>directory</em>, <em>expiration_time=60</em>, <em>maxsize_in_MB=2000</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cloudfusion.util.lru_cache.LRUCache" title="cloudfusion.util.lru_cache.LRUCache"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.util.lru_cache.LRUCache</span></tt></a></p>
-<p>A persistent LRU cache for restricting memory usage to a minimum and 
-carrying the cache information over several sessions even after application crashes.</p>
+<dt id="cloudfusion.util.mp_lru_cache.LinkedEntry">
+<em class="property">class </em><tt class="descclassname">cloudfusion.util.mp_lru_cache.</tt><tt class="descname">LinkedEntry</tt><big>(</big><em>value</em>, <em>dirty</em>, <em>modified=None</em>, <em>updated=None</em>, <em>key=None</em>, <em>next=None</em>, <em>prev=None</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.LinkedEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.util.cache.Entry" title="cloudfusion.util.cache.Entry"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.util.cache.Entry</span></tt></a></p>
+<p>Cache entry with next and previous links for chaining into a doubly linked list and a key for direct reference.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache">
+<em class="property">class </em><tt class="descclassname">cloudfusion.util.mp_lru_cache.</tt><tt class="descname">MPLRUCache</tt><big>(</big><em>expiration_time=60</em>, <em>maxsize_in_MB=200</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.util.cache.Cache" title="cloudfusion.util.cache.Cache"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.util.cache.Cache</span></tt></a></p>
+<p>Multiprocessing save Least Recently Used cache. When adding an entry to the cache exceeds its size limit,
+the cache discards dirty entries starting with the least recently used.
+However, dirty entries or the last entry in the cache are not deleted.</p>
 <p>Return an LRUCache instance.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -453,186 +239,170 @@ carrying the cache information over several sessions even after application cras
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>expiration_time</strong> &#8211; Time in seconds until entries are expired.</li>
 <li><strong>maxsize_in_MB</strong> &#8211; Approximate limit of the cache in MB.</li>
-<li><strong>directory</strong> &#8211; Directory to store persistent data, also serves as identifier for a persistent cache instance.</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
-<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache._close">
-<tt class="descname">_close</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache._close" title="Permalink to this definition">¶</a></dt>
+<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache._get_listhead_entry">
+<tt class="descname">_get_listhead_entry</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache._get_listhead_entry" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache._get_file_content">
-<tt class="descname">_get_file_content</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache._get_file_content" title="Permalink to this definition">¶</a></dt>
+<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache._get_listtail_entry">
+<tt class="descname">_get_listtail_entry</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache._get_listtail_entry" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache._get_persistent_size">
-<tt class="descname">_get_persistent_size</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache._get_persistent_size" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache._get_size_of_entry">
-<tt class="descname">_get_size_of_entry</tt><big>(</big><em>entry</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache._get_size_of_entry" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache._write_to_file">
-<tt class="descname">_write_to_file</tt><big>(</big><em>filename</em>, <em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache._write_to_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.delete">
-<tt class="descname">delete</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove current entry associated with key from the LRU queue and delete its persistent representation.</p>
+<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache._move_used_entry_to_head">
+<tt class="descname">_move_used_entry_to_head</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache._move_used_entry_to_head" title="Permalink to this definition">¶</a></dt>
+<dd><p>Put existing entry associated with <em>key</em> in front of the LRU queue.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.get_keys">
-<tt class="descname">get_keys</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.get_keys" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.get_size_of_dirty_data">
-<tt class="descname">get_size_of_dirty_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.get_size_of_dirty_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.get_value">
-<tt class="descname">get_value</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.get_value" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.peek">
-<tt class="descname">peek</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.peek" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.peek_file">
-<tt class="descname">peek_file</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.peek_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Like peek, but memory efficient
-The temporary file needs to be closed if it is not used anymore
-:returns: temporary file object with the value</p>
+<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache._resize">
+<tt class="descname">_resize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache._resize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resize cache to maxsize.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.refresh">
-<tt class="descname">refresh</tt><big>(</big><em>key</em>, <em>disk_value</em>, <em>modified</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.refresh" title="Permalink to this definition">¶</a></dt>
+<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache._store_to_dict">
+<tt class="descname">_store_to_dict</tt><big>(</big><em>linkedEntry</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache._store_to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is only important for subclasses using shelve with writeback=False as a dictionary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache._unlink">
+<tt class="descname">_unlink</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache._unlink" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.bulk_write">
+<tt class="descname">bulk_write</tt><big>(</big><em>dict</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.bulk_write" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dict</strong> &#8211; dictionary with key value mapping</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.delete">
+<tt class="descname">delete</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove current entry associated with key from the LRU queue.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.flush">
+<tt class="descname">flush</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.flush" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.get_dirty_lru_entries">
+<tt class="descname">get_dirty_lru_entries</tt><big>(</big><em>num</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.get_dirty_lru_entries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of <em>num</em> dirty least recently used entries.
+returns: list of keys of the <em>num</em> least recently used entries</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.get_keys">
+<tt class="descname">get_keys</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.get_keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.get_resize_intervall">
+<tt class="descname">get_resize_intervall</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.get_resize_intervall" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The minimal interval between consecutive calls to reduce cache size as a float in seconds.        The default is one second.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.get_size_of_cached_data">
+<tt class="descname">get_size_of_cached_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.get_size_of_cached_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.get_size_of_dirty_data">
+<tt class="descname">get_size_of_dirty_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.get_size_of_dirty_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.get_value">
+<tt class="descname">get_value</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.get_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.peek">
+<tt class="descname">peek</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.peek" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get value associated with <em>key</em>. 
+This does not count as the entry being used.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.refresh">
+<tt class="descname">refresh</tt><big>(</big><em>key</em>, <em>disk_value</em>, <em>modified</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.refresh" title="Permalink to this definition">¶</a></dt>
 <dd><p>Refreshes an entry with <em>disk_value</em>, if <em>modified</em> is bigger than the entry&#8217;s modified date.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.set_modified">
-<tt class="descname">set_modified</tt><big>(</big><em>key</em>, <em>modified</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.set_modified" title="Permalink to this definition">¶</a></dt>
+<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.set_dirty">
+<tt class="descname">set_dirty</tt><big>(</big><em>key</em>, <em>is_dirty</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.set_dirty" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.write">
-<tt class="descname">write</tt><big>(</big><em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.write" title="Permalink to this definition">¶</a></dt>
+<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.set_resize_intervall">
+<tt class="descname">set_resize_intervall</tt><big>(</big><em>seconds</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.set_resize_intervall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do not try to reduce the cache size again before <em>seconds</em> have passed.
+Resize operations are slow, especially when the cache has many elements.
+It can be set to <em>0</em>, if you want to make sure that clean entries are removed as fast as possible.
+:param seconds: float stating how much time in seconds must pass before a cache size reduction is tried again</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.mp_lru_cache.MPLRUCache.write">
+<tt class="descname">write</tt><big>(</big><em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_lru_cache.MPLRUCache.write" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 </div>
-<div class="section" id="module-cloudfusion.util.cache">
-<span id="the-cache-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">cache</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.cache" title="Permalink to this headline">¶</a></h1>
-<p>Created on 03.06.2011</p>
+<div class="section" id="module-cloudfusion.util.pickle_methods">
+<span id="the-pickle-methods-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">pickle_methods</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.pickle_methods" title="Permalink to this headline">¶</a></h1>
+<p>This module can be imported to allow pickling of methods.</p>
+<dl class="function">
+<dt id="cloudfusion.util.pickle_methods._pickle_method">
+<tt class="descclassname">cloudfusion.util.pickle_methods.</tt><tt class="descname">_pickle_method</tt><big>(</big><em>method</em><big>)</big><a class="headerlink" href="#cloudfusion.util.pickle_methods._pickle_method" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.util.pickle_methods._unpickle_method">
+<tt class="descclassname">cloudfusion.util.pickle_methods.</tt><tt class="descname">_unpickle_method</tt><big>(</big><em>func_name</em>, <em>obj</em>, <em>cls</em><big>)</big><a class="headerlink" href="#cloudfusion.util.pickle_methods._unpickle_method" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.util.synchronize_proxy">
+<span id="the-synchronize-proxy-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">synchronize_proxy</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.synchronize_proxy" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="cloudfusion.util.cache.Cache">
-<em class="property">class </em><tt class="descclassname">cloudfusion.util.cache.</tt><tt class="descname">Cache</tt><big>(</big><em>expiration_time</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Return a Cache instance with entries expiring after <em>expiration_time</em> seconds.</p>
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache._get_size_of_entry">
-<tt class="descname">_get_size_of_entry</tt><big>(</big><em>entry</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache._get_size_of_entry" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.delete">
-<tt class="descname">delete</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.delete" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.exists">
-<tt class="descname">exists</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.exists" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.flush">
-<tt class="descname">flush</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.flush" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.get_keys">
-<tt class="descname">get_keys</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.get_keys" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.get_modified">
-<tt class="descname">get_modified</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.get_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.get_size_of_cached_data">
-<tt class="descname">get_size_of_cached_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.get_size_of_cached_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.get_size_of_dirty_data">
-<tt class="descname">get_size_of_dirty_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.get_size_of_dirty_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.get_value">
-<tt class="descname">get_value</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.get_value" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.is_dirty">
-<tt class="descname">is_dirty</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.is_dirty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.is_expired">
-<tt class="descname">is_expired</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.is_expired" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.refresh">
-<tt class="descname">refresh</tt><big>(</big><em>key</em>, <em>disk_value</em>, <em>modified</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.refresh" title="Permalink to this definition">¶</a></dt>
-<dd><p>Refreshes an entry with <em>disk_value</em>, if <em>modified</em> is bigger than the entry&#8217;s modified date.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.set_dirty">
-<tt class="descname">set_dirty</tt><big>(</big><em>key</em>, <em>is_dirty</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.set_dirty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.set_modified">
-<tt class="descname">set_modified</tt><big>(</big><em>key</em>, <em>modified</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.set_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.update">
-<tt class="descname">update</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.update" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.util.cache.Cache.write">
-<tt class="descname">write</tt><big>(</big><em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.write" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<dt id="cloudfusion.util.synchronize_proxy.SynchronizeMethodWrapper">
+<em class="property">class </em><tt class="descclassname">cloudfusion.util.synchronize_proxy.</tt><tt class="descname">SynchronizeMethodWrapper</tt><big>(</big><em>obj</em>, <em>func</em>, <em>name</em>, <em>rlock</em><big>)</big><a class="headerlink" href="#cloudfusion.util.synchronize_proxy.SynchronizeMethodWrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper object for a method to be called.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="cloudfusion.util.cache.Entry">
-<em class="property">class </em><tt class="descclassname">cloudfusion.util.cache.</tt><tt class="descname">Entry</tt><big>(</big><em>value</em>, <em>dirty</em>, <em>modified=None</em>, <em>updated=None</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Entry" title="Permalink to this definition">¶</a></dt>
+<dt id="cloudfusion.util.synchronize_proxy.SynchronizeProxy">
+<em class="property">class </em><tt class="descclassname">cloudfusion.util.synchronize_proxy.</tt><tt class="descname">SynchronizeProxy</tt><big>(</big><em>core</em>, <em>private_methods_to_synchronize=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#cloudfusion.util.synchronize_proxy.SynchronizeProxy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Cache entry.</p>
+<p>Proxy object that synchronizes access to a core object methods and attributes that don&#8217;t start with _.</p>
 </dd></dl>
 
 </div>
@@ -785,19 +555,249 @@ It can be set to <em>0</em>, if you want to make sure that clean entries are rem
 </dd></dl>
 
 </div>
-<div class="section" id="module-cloudfusion.util.synchronize_proxy">
-<span id="the-synchronize-proxy-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">synchronize_proxy</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.synchronize_proxy" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-cloudfusion.util.mp_synchronize_proxy">
+<span id="the-mp-synchronize-proxy-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">mp_synchronize_proxy</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.mp_synchronize_proxy" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="cloudfusion.util.synchronize_proxy.SynchronizeMethodWrapper">
-<em class="property">class </em><tt class="descclassname">cloudfusion.util.synchronize_proxy.</tt><tt class="descname">SynchronizeMethodWrapper</tt><big>(</big><em>obj</em>, <em>func</em>, <em>name</em>, <em>rlock</em><big>)</big><a class="headerlink" href="#cloudfusion.util.synchronize_proxy.SynchronizeMethodWrapper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper object for a method to be called.</p>
+<dt id="cloudfusion.util.mp_synchronize_proxy.MPSynchronizeProxy">
+<em class="property">class </em><tt class="descclassname">cloudfusion.util.mp_synchronize_proxy.</tt><tt class="descname">MPSynchronizeProxy</tt><big>(</big><em>core</em>, <em>private_methods_to_synchronize=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_synchronize_proxy.MPSynchronizeProxy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Proxy object that synchronizes access to a core object methods and attributes that don&#8217;t start with _ for multiple processes.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="cloudfusion.util.synchronize_proxy.SynchronizeProxy">
-<em class="property">class </em><tt class="descclassname">cloudfusion.util.synchronize_proxy.</tt><tt class="descname">SynchronizeProxy</tt><big>(</big><em>core</em>, <em>private_methods_to_synchronize=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#cloudfusion.util.synchronize_proxy.SynchronizeProxy" title="Permalink to this definition">¶</a></dt>
+<dt id="cloudfusion.util.mp_synchronize_proxy.SynchronizeMethodWrapper">
+<em class="property">class </em><tt class="descclassname">cloudfusion.util.mp_synchronize_proxy.</tt><tt class="descname">SynchronizeMethodWrapper</tt><big>(</big><em>obj</em>, <em>func</em>, <em>name</em>, <em>rlock</em><big>)</big><a class="headerlink" href="#cloudfusion.util.mp_synchronize_proxy.SynchronizeMethodWrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper object for a method to be called.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.util.persistent_lru_cache">
+<span id="the-persistent-lru-cache-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">persistent_lru_cache</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.persistent_lru_cache" title="Permalink to this headline">¶</a></h1>
+<p>Created on Feb 5, 2013</p>
+<dl class="class">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache">
+<em class="property">class </em><tt class="descclassname">cloudfusion.util.persistent_lru_cache.</tt><tt class="descname">PersistentLRUCache</tt><big>(</big><em>directory</em>, <em>expiration_time=60</em>, <em>maxsize_in_MB=2000</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.util.lru_cache.LRUCache" title="cloudfusion.util.lru_cache.LRUCache"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.util.lru_cache.LRUCache</span></tt></a></p>
+<p>A persistent LRU cache for restricting memory usage to a minimum and 
+carrying the cache information over several sessions even after application crashes.</p>
+<p>Return an LRUCache instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>expiration_time</strong> &#8211; Time in seconds until entries are expired.</li>
+<li><strong>maxsize_in_MB</strong> &#8211; Approximate limit of the cache in MB.</li>
+<li><strong>directory</strong> &#8211; Directory to store persistent data, also serves as identifier for a persistent cache instance.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache._close">
+<tt class="descname">_close</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache._close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache._get_file_content">
+<tt class="descname">_get_file_content</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache._get_file_content" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache._get_persistent_size">
+<tt class="descname">_get_persistent_size</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache._get_persistent_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache._get_size_of_entry">
+<tt class="descname">_get_size_of_entry</tt><big>(</big><em>entry</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache._get_size_of_entry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache._write_to_file">
+<tt class="descname">_write_to_file</tt><big>(</big><em>filename</em>, <em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache._write_to_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.delete">
+<tt class="descname">delete</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove current entry associated with key from the LRU queue and delete its persistent representation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.get_keys">
+<tt class="descname">get_keys</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.get_keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.get_size_of_dirty_data">
+<tt class="descname">get_size_of_dirty_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.get_size_of_dirty_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.get_value">
+<tt class="descname">get_value</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.get_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.peek">
+<tt class="descname">peek</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.peek" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.peek_file">
+<tt class="descname">peek_file</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.peek_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Like peek, but memory efficient
+The temporary file needs to be closed if it is not used anymore
+:returns: temporary file object with the value</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.refresh">
+<tt class="descname">refresh</tt><big>(</big><em>key</em>, <em>disk_value</em>, <em>modified</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refreshes an entry with <em>disk_value</em>, if <em>modified</em> is bigger than the entry&#8217;s modified date.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.set_modified">
+<tt class="descname">set_modified</tt><big>(</big><em>key</em>, <em>modified</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.set_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.persistent_lru_cache.PersistentLRUCache.write">
+<tt class="descname">write</tt><big>(</big><em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#cloudfusion.util.persistent_lru_cache.PersistentLRUCache.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.util.exponential_retry">
+<span id="the-exponential-retry-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">exponential_retry</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.exponential_retry" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="cloudfusion.util.exponential_retry.retry">
+<tt class="descclassname">cloudfusion.util.exponential_retry.</tt><tt class="descname">retry</tt><big>(</big><em>ExceptionToCheck</em>, <em>tries=20</em>, <em>delay=0.10000000000000001</em>, <em>backoff=2</em><big>)</big><a class="headerlink" href="#cloudfusion.util.exponential_retry.retry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retry calling the decorated function using an exponential backoff.
+The decorated method&#8217;s object may define the _handle_error method.
+The parameters for _handle_error are the exception object, 
+the wrapped methods&#8217; name, the number of tries remaining, 
+and finally the original parameters.
+If _handle_error returns True, retrying is aborted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ExceptionToCheck</strong> (<em>Exception or tuple</em>) &#8211; the exception to check. may be a tuple of
+exceptions to check</li>
+<li><strong>tries</strong> (<em>int</em>) &#8211; number of times to try (not retry) before giving up</li>
+<li><strong>delay</strong> (<em>int</em>) &#8211; initial delay between retries in seconds</li>
+<li><strong>backoff</strong> (<em>int</em>) &#8211; backoff multiplier e.g. value of 2 will double the delay
+each retry</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.util.cache">
+<span id="the-cache-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">cache</span></tt> Module<a class="headerlink" href="#module-cloudfusion.util.cache" title="Permalink to this headline">¶</a></h1>
+<p>Created on 03.06.2011</p>
+<dl class="class">
+<dt id="cloudfusion.util.cache.Cache">
+<em class="property">class </em><tt class="descclassname">cloudfusion.util.cache.</tt><tt class="descname">Cache</tt><big>(</big><em>expiration_time</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Proxy object that synchronizes access to a core object methods and attributes that don&#8217;t start with _.</p>
+<p>Return a Cache instance with entries expiring after <em>expiration_time</em> seconds.</p>
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache._get_size_of_entry">
+<tt class="descname">_get_size_of_entry</tt><big>(</big><em>entry</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache._get_size_of_entry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.delete">
+<tt class="descname">delete</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.exists">
+<tt class="descname">exists</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.flush">
+<tt class="descname">flush</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.flush" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.get_keys">
+<tt class="descname">get_keys</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.get_keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.get_modified">
+<tt class="descname">get_modified</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.get_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.get_size_of_cached_data">
+<tt class="descname">get_size_of_cached_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.get_size_of_cached_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.get_size_of_dirty_data">
+<tt class="descname">get_size_of_dirty_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.get_size_of_dirty_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.get_value">
+<tt class="descname">get_value</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.get_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.is_dirty">
+<tt class="descname">is_dirty</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.is_dirty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.is_expired">
+<tt class="descname">is_expired</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.is_expired" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.refresh">
+<tt class="descname">refresh</tt><big>(</big><em>key</em>, <em>disk_value</em>, <em>modified</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refreshes an entry with <em>disk_value</em>, if <em>modified</em> is bigger than the entry&#8217;s modified date.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.set_dirty">
+<tt class="descname">set_dirty</tt><big>(</big><em>key</em>, <em>is_dirty</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.set_dirty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.set_modified">
+<tt class="descname">set_modified</tt><big>(</big><em>key</em>, <em>modified</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.set_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.update">
+<tt class="descname">update</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.util.cache.Cache.write">
+<tt class="descname">write</tt><big>(</big><em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Cache.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.util.cache.Entry">
+<em class="property">class </em><tt class="descclassname">cloudfusion.util.cache.</tt><tt class="descname">Entry</tt><big>(</big><em>value</em>, <em>dirty</em>, <em>modified=None</em>, <em>updated=None</em><big>)</big><a class="headerlink" href="#cloudfusion.util.cache.Entry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Cache entry.</p>
 </dd></dl>
 
 </div>
@@ -810,21 +810,21 @@ It can be set to <em>0</em>, if you want to make sure that clean entries are rem
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">pickle_methods</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.util.mp_lru_cache">The <tt class="docutils literal"><span class="pre">mp_lru_cache</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.util.exponential_retry">The <tt class="docutils literal"><span class="pre">exponential_retry</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.util.mp_synchronize_proxy">The <tt class="docutils literal"><span class="pre">mp_synchronize_proxy</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.util.xmlparser">The <tt class="docutils literal"><span class="pre">xmlparser</span></tt> Module</a></li>
+<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">xmlparser</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-cloudfusion.util.string">The <tt class="docutils literal"><span class="pre">string</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.util.persistent_lru_cache">The <tt class="docutils literal"><span class="pre">persistent_lru_cache</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.util.cache">The <tt class="docutils literal"><span class="pre">cache</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.util.lru_cache">The <tt class="docutils literal"><span class="pre">lru_cache</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.util.mp_lru_cache">The <tt class="docutils literal"><span class="pre">mp_lru_cache</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.util.pickle_methods">The <tt class="docutils literal"><span class="pre">pickle_methods</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-cloudfusion.util.synchronize_proxy">The <tt class="docutils literal"><span class="pre">synchronize_proxy</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.util.lru_cache">The <tt class="docutils literal"><span class="pre">lru_cache</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.util.mp_synchronize_proxy">The <tt class="docutils literal"><span class="pre">mp_synchronize_proxy</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.util.persistent_lru_cache">The <tt class="docutils literal"><span class="pre">persistent_lru_cache</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.util.exponential_retry">The <tt class="docutils literal"><span class="pre">exponential_retry</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.util.cache">The <tt class="docutils literal"><span class="pre">cache</span></tt> Module</a></li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="third_party.requests_1_2_3.requests.packages.urllib3.contrib.html"
-                        title="previous chapter">The <tt class="docutils literal"><span class="pre">ntlmpool</span></tt> Module</a></p>
+  <p class="topless"><a href="third_party.requests_1_2_3.requests.packages.charade.html"
+                        title="previous chapter">The <tt class="docutils literal"><span class="pre">cp949prober</span></tt> Module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/util.txt"
@@ -857,7 +857,7 @@ It can be set to <em>0</em>, if you want to make sure that clean entries are rem
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="third_party.requests_1_2_3.requests.packages.urllib3.contrib.html" title="The ntlmpool Module"
+          <a href="third_party.requests_1_2_3.requests.packages.charade.html" title="The cp949prober Module"
              >previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li> 

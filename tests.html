@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The store_test_webdav Module &mdash; CloudFusion 0.01 documentation</title>
+    <title>The cache_test Module &mdash; CloudFusion 0.01 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -26,7 +26,7 @@
     <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
     <link rel="up" title="Developers documentation" href="develop.html" />
     <link rel="next" title="Subpackages" href="third_party.html" />
-    <link rel="prev" title="The client Module" href="store.sugarsync.html" /> 
+    <link rel="prev" title="The bulk_get_metadata_amazon_store Module" href="store.s3.html" /> 
   </head>
   <body>
     <div class="related">
@@ -42,7 +42,7 @@
           <a href="third_party.html" title="Subpackages"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="store.sugarsync.html" title="The client Module"
+          <a href="store.s3.html" title="The bulk_get_metadata_amazon_store Module"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" accesskey="U">Developers documentation</a> &raquo;</li> 
@@ -54,7 +54,845 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-cloudfusion.tests.store_test_webdav">
+  <div class="section" id="module-cloudfusion.tests.cache_test">
+<span id="the-cache-test-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">cache_test</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.cache_test" title="Permalink to this headline">¶</a></h1>
+<p>Created on 04.06.2011</p>
+<p>&#64;author: joe</p>
+<dl class="function">
+<dt id="cloudfusion.tests.cache_test.test_delete">
+<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_delete</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.cache_test.test_exists">
+<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_exists</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.cache_test.test_get_keys">
+<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_get_keys</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_get_keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.cache_test.test_get_modified">
+<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_get_modified</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_get_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.cache_test.test_get_size_of_cached_data">
+<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_get_size_of_cached_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_get_size_of_cached_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.cache_test.test_get_size_of_dirty_data">
+<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_get_size_of_dirty_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_get_size_of_dirty_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.cache_test.test_get_value">
+<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_get_value</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_get_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.cache_test.test_is_dirty">
+<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_is_dirty</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_is_dirty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.cache_test.test_is_expired">
+<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_is_expired</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_is_expired" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.cache_test.test_refresh">
+<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_refresh</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_refresh" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.cache_test.test_set_modified">
+<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_set_modified</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_set_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.cache_test.test_update">
+<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_update</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.cache_test.test_write">
+<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_write</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.tests.xmlparser_test">
+<span id="the-xmlparser-test-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">xmlparser_test</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.xmlparser_test" title="Permalink to this headline">¶</a></h1>
+<p>Created on 06.05.2011</p>
+<p>&#64;author: joe</p>
+<dl class="function">
+<dt id="cloudfusion.tests.xmlparser_test.test_populate_dict_with_XML_collection_leaf_textnodes1">
+<tt class="descclassname">cloudfusion.tests.xmlparser_test.</tt><tt class="descname">test_populate_dict_with_XML_collection_leaf_textnodes1</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.xmlparser_test.test_populate_dict_with_XML_collection_leaf_textnodes1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.xmlparser_test.test_populate_dict_with_XML_collection_leaf_textnodes2">
+<tt class="descclassname">cloudfusion.tests.xmlparser_test.</tt><tt class="descname">test_populate_dict_with_XML_collection_leaf_textnodes2</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.xmlparser_test.test_populate_dict_with_XML_collection_leaf_textnodes2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.xmlparser_test.test_populate_dict_with_XML_leaf_textnodes">
+<tt class="descclassname">cloudfusion.tests.xmlparser_test.</tt><tt class="descname">test_populate_dict_with_XML_leaf_textnodes</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.xmlparser_test.test_populate_dict_with_XML_leaf_textnodes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.tests.db_logging_thread_test">
+<span id="the-db-logging-thread-test-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">db_logging_thread_test</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.db_logging_thread_test" title="Permalink to this headline">¶</a></h1>
+<p>Created on Oct 27, 2013</p>
+<p>&#64;author: joe</p>
+<dl class="class">
+<dt id="cloudfusion.tests.db_logging_thread_test.TestingProcess">
+<em class="property">class </em><tt class="descclassname">cloudfusion.tests.db_logging_thread_test.</tt><tt class="descname">TestingProcess</tt><a class="headerlink" href="#cloudfusion.tests.db_logging_thread_test.TestingProcess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="cloudfusion.tests.db_logging_thread_test.TestingProcess.join">
+<tt class="descname">join</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.db_logging_thread_test.TestingProcess.join" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.tests.db_logging_thread_test.TestingProcess.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.db_logging_thread_test.TestingProcess.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.tests.db_logging_thread_test.TestingProcess.start">
+<tt class="descname">start</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.db_logging_thread_test.TestingProcess.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.tests.db_logging_thread_test.TestingThread">
+<em class="property">class </em><tt class="descclassname">cloudfusion.tests.db_logging_thread_test.</tt><tt class="descname">TestingThread</tt><a class="headerlink" href="#cloudfusion.tests.db_logging_thread_test.TestingThread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></tt></p>
+<dl class="method">
+<dt id="cloudfusion.tests.db_logging_thread_test.TestingThread.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.db_logging_thread_test.TestingThread.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.db_logging_thread_test.random">
+<tt class="descclassname">cloudfusion.tests.db_logging_thread_test.</tt><tt class="descname">random</tt><big>(</big><big>)</big> &rarr; x in the interval [0, 1).<a class="headerlink" href="#cloudfusion.tests.db_logging_thread_test.random" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.db_logging_thread_test.test">
+<tt class="descclassname">cloudfusion.tests.db_logging_thread_test.</tt><tt class="descname">test</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.db_logging_thread_test.test" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.tests.persistent_lru_cache_test">
+<span id="the-persistent-lru-cache-test-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">persistent_lru_cache_test</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.persistent_lru_cache_test" title="Permalink to this headline">¶</a></h1>
+<p>Created on 04.06.2011</p>
+<p>&#64;author: joe</p>
+<dl class="function">
+<dt id="cloudfusion.tests.persistent_lru_cache_test.set_up">
+<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">set_up</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.set_up" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.persistent_lru_cache_test.tear_down">
+<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">tear_down</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.tear_down" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.persistent_lru_cache_test.test_delete">
+<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_delete</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.persistent_lru_cache_test.test_exists">
+<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_exists</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.persistent_lru_cache_test.test_get_keys">
+<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_get_keys</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_get_keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.persistent_lru_cache_test.test_get_modified">
+<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_get_modified</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_get_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.persistent_lru_cache_test.test_get_size_of_cached_data">
+<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_get_size_of_cached_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_get_size_of_cached_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.persistent_lru_cache_test.test_get_size_of_dirty_data">
+<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_get_size_of_dirty_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_get_size_of_dirty_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.persistent_lru_cache_test.test_get_value">
+<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_get_value</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_get_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.persistent_lru_cache_test.test_is_dirty">
+<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_is_dirty</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_is_dirty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.persistent_lru_cache_test.test_is_expired">
+<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_is_expired</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_is_expired" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.persistent_lru_cache_test.test_persistence">
+<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_persistence</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_persistence" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.persistent_lru_cache_test.test_refresh">
+<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_refresh</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_refresh" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.persistent_lru_cache_test.test_reorder">
+<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_reorder</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_reorder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.persistent_lru_cache_test.test_resize">
+<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_resize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_resize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.persistent_lru_cache_test.test_resize_dirty">
+<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_resize_dirty</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_resize_dirty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.persistent_lru_cache_test.test_resize_zerosize">
+<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_resize_zerosize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_resize_zerosize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.persistent_lru_cache_test.test_set_modified">
+<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_set_modified</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_set_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.persistent_lru_cache_test.test_update">
+<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_update</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.persistent_lru_cache_test.test_write">
+<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_write</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.tests.lru_cache_test">
+<span id="the-lru-cache-test-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">lru_cache_test</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.lru_cache_test" title="Permalink to this headline">¶</a></h1>
+<p>Created on 04.06.2011</p>
+<p>&#64;author: joe</p>
+<dl class="function">
+<dt id="cloudfusion.tests.lru_cache_test.test_delete">
+<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_delete</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.lru_cache_test.test_exists">
+<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_exists</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.lru_cache_test.test_get_keys">
+<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_get_keys</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_get_keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.lru_cache_test.test_get_modified">
+<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_get_modified</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_get_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.lru_cache_test.test_get_size_of_cached_data">
+<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_get_size_of_cached_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_get_size_of_cached_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.lru_cache_test.test_get_size_of_dirty_data">
+<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_get_size_of_dirty_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_get_size_of_dirty_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.lru_cache_test.test_get_value">
+<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_get_value</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_get_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.lru_cache_test.test_is_dirty">
+<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_is_dirty</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_is_dirty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.lru_cache_test.test_is_expired">
+<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_is_expired</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_is_expired" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.lru_cache_test.test_refresh">
+<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_refresh</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_refresh" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.lru_cache_test.test_resize">
+<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_resize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_resize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.lru_cache_test.test_resize_dirty">
+<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_resize_dirty</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_resize_dirty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.lru_cache_test.test_resize_zerosize">
+<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_resize_zerosize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_resize_zerosize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.lru_cache_test.test_set_modified">
+<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_set_modified</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_set_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.lru_cache_test.test_update">
+<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_update</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.lru_cache_test.test_write">
+<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_write</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.tests.store_test2">
+<span id="the-store-test2-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">store_test2</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.store_test2" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._assert_all_in">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_assert_all_in</tt><big>(</big><em>in_list</em>, <em>all_list</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._assert_all_in" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._assert_equal_with_variance">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_assert_equal_with_variance</tt><big>(</big><em>val1</em>, <em>val2</em>, <em>variance</em>, <em>msg=''</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._assert_equal_with_variance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._create_directories">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_create_directories</tt><big>(</big><em>io_api</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._create_directories" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._delete_directories">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_delete_directories</tt><big>(</big><em>io_api</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._delete_directories" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._delete_file">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_delete_file</tt><big>(</big><em>io_api</em>, <em>filename</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._delete_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._dir_exists">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_dir_exists</tt><big>(</big><em>io_api</em>, <em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._dir_exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._test_account_info">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_account_info</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_account_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._test_bulk_get_metadata">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_bulk_get_metadata</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_bulk_get_metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._test_create_delete_directory">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_create_delete_directory</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_create_delete_directory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._test_duplicate">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_duplicate</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_duplicate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._test_exists">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_exists</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._test_fail_on_get_bytes">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_fail_on_get_bytes</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_fail_on_get_bytes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._test_fail_on_get_modified">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_fail_on_get_modified</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_fail_on_get_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._test_fail_on_is_dir">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_fail_on_is_dir</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_fail_on_is_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._test_get_bytes">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_get_bytes</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_get_bytes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._test_get_directory_listing">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_get_directory_listing</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_get_directory_listing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._test_get_file">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_get_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_get_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._test_get_free_space">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_get_free_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_get_free_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._test_get_modified">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_get_modified</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_get_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._test_get_overall_space">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_get_overall_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_get_overall_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._test_get_used_space">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_get_used_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_get_used_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._test_is_dir">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_is_dir</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_is_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._test_move_directory">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_move_directory</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_move_directory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._test_move_file">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_move_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_move_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2._test_store_delete_file">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_store_delete_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_store_delete_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2.get_amazon_config">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">get_amazon_config</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2.get_amazon_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2.get_google_config">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">get_google_config</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2.get_google_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2.setUp">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">setUp</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2.setUp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2.tearDown">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">tearDown</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2.tearDown" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test2.test_io_apis">
+<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">test_io_apis</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2.test_io_apis" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.tests.store_test">
+<span id="the-store-test-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">store_test</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.store_test" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._assert_all_in">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_assert_all_in</tt><big>(</big><em>in_list</em>, <em>all_list</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._assert_all_in" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._assert_equal_with_variance">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_assert_equal_with_variance</tt><big>(</big><em>val1</em>, <em>val2</em>, <em>variance</em>, <em>msg=''</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._assert_equal_with_variance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._create_directories">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_create_directories</tt><big>(</big><em>io_api</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._create_directories" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._delete_directories">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_delete_directories</tt><big>(</big><em>io_api</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._delete_directories" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._delete_file">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_delete_file</tt><big>(</big><em>io_api</em>, <em>filename</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._delete_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._dir_exists">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_dir_exists</tt><big>(</big><em>io_api</em>, <em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._dir_exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._test_account_info">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_account_info</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_account_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._test_bulk_get_metadata">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_bulk_get_metadata</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_bulk_get_metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._test_create_delete_directory">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_create_delete_directory</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_create_delete_directory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._test_duplicate">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_duplicate</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_duplicate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._test_exists">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_exists</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._test_fail_on_get_bytes">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_fail_on_get_bytes</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_fail_on_get_bytes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._test_fail_on_get_modified">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_fail_on_get_modified</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_fail_on_get_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._test_fail_on_is_dir">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_fail_on_is_dir</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_fail_on_is_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._test_get_bytes">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_get_bytes</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_get_bytes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._test_get_directory_listing">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_get_directory_listing</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_get_directory_listing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._test_get_file">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_get_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_get_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._test_get_free_space">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_get_free_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_get_free_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._test_get_modified">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_get_modified</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_get_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._test_get_overall_space">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_get_overall_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_get_overall_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._test_get_used_space">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_get_used_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_get_used_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._test_is_dir">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_is_dir</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_is_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._test_move_directory">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_move_directory</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_move_directory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._test_move_file">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_move_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_move_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test._test_store_delete_file">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_store_delete_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_store_delete_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test.get_dropbox_config">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">get_dropbox_config</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test.get_dropbox_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test.get_sugarsync_config">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">get_sugarsync_config</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test.get_sugarsync_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test.setUp">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">setUp</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test.setUp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test.tearDown">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">tearDown</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test.tearDown" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test.test_io_apis">
+<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">test_io_apis</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test.test_io_apis" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.tests.store_test_webdav2">
+<span id="the-store-test-webdav2-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">store_test_webdav2</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.store_test_webdav2" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._assert_all_in">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_assert_all_in</tt><big>(</big><em>in_list</em>, <em>all_list</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._assert_all_in" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._assert_equal_with_variance">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_assert_equal_with_variance</tt><big>(</big><em>val1</em>, <em>val2</em>, <em>variance</em>, <em>msg=''</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._assert_equal_with_variance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._create_directories">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_create_directories</tt><big>(</big><em>io_api</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._create_directories" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._delete_directories">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_delete_directories</tt><big>(</big><em>io_api</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._delete_directories" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._delete_file">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_delete_file</tt><big>(</big><em>io_api</em>, <em>filename</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._delete_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._dir_exists">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_dir_exists</tt><big>(</big><em>io_api</em>, <em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._dir_exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._test_account_info">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_account_info</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_account_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._test_bulk_get_metadata">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_bulk_get_metadata</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_bulk_get_metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._test_create_delete_directory">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_create_delete_directory</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_create_delete_directory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._test_duplicate">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_duplicate</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_duplicate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._test_exists">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_exists</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._test_fail_on_get_bytes">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_fail_on_get_bytes</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_fail_on_get_bytes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._test_fail_on_get_modified">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_fail_on_get_modified</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_fail_on_get_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._test_fail_on_is_dir">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_fail_on_is_dir</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_fail_on_is_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._test_get_bytes">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_get_bytes</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_get_bytes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._test_get_directory_listing">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_get_directory_listing</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_get_directory_listing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._test_get_file">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_get_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_get_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._test_get_free_space">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_get_free_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_get_free_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._test_get_modified">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_get_modified</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_get_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._test_get_overall_space">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_get_overall_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_get_overall_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._test_get_used_space">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_get_used_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_get_used_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._test_is_dir">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_is_dir</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_is_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._test_move_directory">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_move_directory</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_move_directory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._test_move_file">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_move_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_move_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2._test_store_delete_file">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_store_delete_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_store_delete_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2.get_webdav_box_config">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">get_webdav_box_config</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2.get_webdav_box_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2.get_webdav_yandex_config">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">get_webdav_yandex_config</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2.get_webdav_yandex_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2.setUp">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">setUp</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2.setUp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2.tearDown">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">tearDown</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2.tearDown" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.store_test_webdav2.test_io_apis">
+<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">test_io_apis</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2.test_io_apis" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.tests.synchronize_proxy_test">
+<span id="the-synchronize-proxy-test-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">synchronize_proxy_test</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.synchronize_proxy_test" title="Permalink to this headline">¶</a></h1>
+<p>Created on Jun 11, 2013</p>
+<p>&#64;author: joe</p>
+<dl class="class">
+<dt id="cloudfusion.tests.synchronize_proxy_test.TestSubject">
+<em class="property">class </em><tt class="descclassname">cloudfusion.tests.synchronize_proxy_test.</tt><tt class="descname">TestSubject</tt><a class="headerlink" href="#cloudfusion.tests.synchronize_proxy_test.TestSubject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="cloudfusion.tests.synchronize_proxy_test.TestSubject._TestSubject__change">
+<tt class="descname">_TestSubject__change</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.synchronize_proxy_test.TestSubject._TestSubject__change" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.tests.synchronize_proxy_test.TestSubject._TestSubject__unchange">
+<tt class="descname">_TestSubject__unchange</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.synchronize_proxy_test.TestSubject._TestSubject__unchange" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.tests.synchronize_proxy_test.TestSubject.get_value">
+<tt class="descname">get_value</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.synchronize_proxy_test.TestSubject.get_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.tests.synchronize_proxy_test.TestSubject.temporarily_change_value">
+<tt class="descname">temporarily_change_value</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.synchronize_proxy_test.TestSubject.temporarily_change_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cloudfusion.tests.synchronize_proxy_test.TestingThread">
+<em class="property">class </em><tt class="descclassname">cloudfusion.tests.synchronize_proxy_test.</tt><tt class="descname">TestingThread</tt><big>(</big><em>test_obj</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.synchronize_proxy_test.TestingThread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></tt></p>
+<dl class="method">
+<dt id="cloudfusion.tests.synchronize_proxy_test.TestingThread.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.synchronize_proxy_test.TestingThread.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.synchronize_proxy_test.random">
+<tt class="descclassname">cloudfusion.tests.synchronize_proxy_test.</tt><tt class="descname">random</tt><big>(</big><big>)</big> &rarr; x in the interval [0, 1).<a class="headerlink" href="#cloudfusion.tests.synchronize_proxy_test.random" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.synchronize_proxy_test.test">
+<tt class="descclassname">cloudfusion.tests.synchronize_proxy_test.</tt><tt class="descname">test</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.synchronize_proxy_test.test" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.tests.store_test_webdav">
 <span id="the-store-test-webdav-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">store_test_webdav</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.store_test_webdav" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="cloudfusion.tests.store_test_webdav._assert_all_in">
@@ -212,6 +1050,239 @@
 <dd></dd></dl>
 
 </div>
+<div class="section" id="module-cloudfusion.tests.transparent_store_test_no_sync">
+<span id="the-transparent-store-test-no-sync-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">transparent_store_test_no_sync</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.transparent_store_test_no_sync" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._assert_all_in">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_assert_all_in</tt><big>(</big><em>in_list</em>, <em>all_list</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._assert_all_in" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._assert_equal_with_variance">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_assert_equal_with_variance</tt><big>(</big><em>val1</em>, <em>val2</em>, <em>variance</em>, <em>msg=''</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._assert_equal_with_variance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._create_directories">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_create_directories</tt><big>(</big><em>io_api</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._create_directories" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._delete_directories">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_delete_directories</tt><big>(</big><em>io_api</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._delete_directories" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._delete_file">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_delete_file</tt><big>(</big><em>io_api</em>, <em>filename</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._delete_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._dir_exists">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_dir_exists</tt><big>(</big><em>io_api</em>, <em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._dir_exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_account_info">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_account_info</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_account_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_create_delete_directory">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_create_delete_directory</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_create_delete_directory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_duplicate">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_duplicate</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_duplicate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_exists">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_exists</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_fail_on_get_bytes">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_fail_on_get_bytes</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_fail_on_get_bytes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_fail_on_get_modified">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_fail_on_get_modified</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_fail_on_get_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_fail_on_is_dir">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_fail_on_is_dir</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_fail_on_is_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_get_bytes">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_get_bytes</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_get_bytes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_get_directory_listing">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_get_directory_listing</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_get_directory_listing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_get_file">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_get_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_get_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_get_free_space">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_get_free_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_get_free_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_get_modified">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_get_modified</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_get_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_get_overall_space">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_get_overall_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_get_overall_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_get_used_space">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_get_used_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_get_used_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_is_dir">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_is_dir</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_is_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_move_directory">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_move_directory</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_move_directory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_move_file">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_move_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_move_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_store_delete_file">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_store_delete_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_store_delete_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync.get_webdav_box_config">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">get_webdav_box_config</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync.get_webdav_box_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync.get_webdav_yandex_config">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">get_webdav_yandex_config</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync.get_webdav_yandex_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync.setUp">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">setUp</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync.setUp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync.tearDown">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">tearDown</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync.tearDown" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.transparent_store_test_no_sync.test_io_apis">
+<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">test_io_apis</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync.test_io_apis" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-cloudfusion.tests.mp_lru_cache_test">
+<span id="the-mp-lru-cache-test-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">mp_lru_cache_test</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.mp_lru_cache_test" title="Permalink to this headline">¶</a></h1>
+<p>Created on 04.06.2011</p>
+<p>&#64;author: joe</p>
+<dl class="function">
+<dt id="cloudfusion.tests.mp_lru_cache_test.test_delete">
+<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_delete</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.mp_lru_cache_test.test_exists">
+<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_exists</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.mp_lru_cache_test.test_get_keys">
+<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_get_keys</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_get_keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.mp_lru_cache_test.test_get_modified">
+<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_get_modified</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_get_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.mp_lru_cache_test.test_get_size_of_cached_data">
+<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_get_size_of_cached_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_get_size_of_cached_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.mp_lru_cache_test.test_get_size_of_dirty_data">
+<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_get_size_of_dirty_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_get_size_of_dirty_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.mp_lru_cache_test.test_get_value">
+<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_get_value</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_get_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.mp_lru_cache_test.test_is_dirty">
+<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_is_dirty</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_is_dirty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.mp_lru_cache_test.test_is_expired">
+<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_is_expired</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_is_expired" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.mp_lru_cache_test.test_refresh">
+<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_refresh</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_refresh" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.mp_lru_cache_test.test_resize">
+<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_resize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_resize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.mp_lru_cache_test.test_resize_dirty">
+<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_resize_dirty</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_resize_dirty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.mp_lru_cache_test.test_resize_zerosize">
+<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_resize_zerosize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_resize_zerosize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.mp_lru_cache_test.test_set_modified">
+<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_set_modified</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_set_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.mp_lru_cache_test.test_update">
+<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_update</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="cloudfusion.tests.mp_lru_cache_test.test_write">
+<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_write</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
 <div class="section" id="module-cloudfusion.tests.transparent_store_test_with_sync">
 <span id="the-transparent-store-test-with-sync-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">transparent_store_test_with_sync</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.transparent_store_test_with_sync" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
@@ -365,1077 +1436,6 @@
 <dd></dd></dl>
 
 </div>
-<div class="section" id="module-cloudfusion.tests.transparent_store_test_no_sync">
-<span id="the-transparent-store-test-no-sync-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">transparent_store_test_no_sync</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.transparent_store_test_no_sync" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._assert_all_in">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_assert_all_in</tt><big>(</big><em>in_list</em>, <em>all_list</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._assert_all_in" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._assert_equal_with_variance">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_assert_equal_with_variance</tt><big>(</big><em>val1</em>, <em>val2</em>, <em>variance</em>, <em>msg=''</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._assert_equal_with_variance" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._create_directories">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_create_directories</tt><big>(</big><em>io_api</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._create_directories" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._delete_directories">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_delete_directories</tt><big>(</big><em>io_api</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._delete_directories" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._delete_file">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_delete_file</tt><big>(</big><em>io_api</em>, <em>filename</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._delete_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._dir_exists">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_dir_exists</tt><big>(</big><em>io_api</em>, <em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._dir_exists" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_account_info">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_account_info</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_account_info" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_create_delete_directory">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_create_delete_directory</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_create_delete_directory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_duplicate">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_duplicate</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_duplicate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_exists">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_exists</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_exists" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_fail_on_get_bytes">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_fail_on_get_bytes</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_fail_on_get_bytes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_fail_on_get_modified">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_fail_on_get_modified</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_fail_on_get_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_fail_on_is_dir">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_fail_on_is_dir</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_fail_on_is_dir" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_get_bytes">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_get_bytes</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_get_bytes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_get_directory_listing">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_get_directory_listing</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_get_directory_listing" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_get_file">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_get_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_get_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_get_free_space">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_get_free_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_get_free_space" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_get_modified">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_get_modified</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_get_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_get_overall_space">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_get_overall_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_get_overall_space" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_get_used_space">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_get_used_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_get_used_space" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_is_dir">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_is_dir</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_is_dir" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_move_directory">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_move_directory</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_move_directory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_move_file">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_move_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_move_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync._test_store_delete_file">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">_test_store_delete_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync._test_store_delete_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync.get_webdav_box_config">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">get_webdav_box_config</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync.get_webdav_box_config" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync.get_webdav_yandex_config">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">get_webdav_yandex_config</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync.get_webdav_yandex_config" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync.setUp">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">setUp</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync.setUp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync.tearDown">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">tearDown</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync.tearDown" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.transparent_store_test_no_sync.test_io_apis">
-<tt class="descclassname">cloudfusion.tests.transparent_store_test_no_sync.</tt><tt class="descname">test_io_apis</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.transparent_store_test_no_sync.test_io_apis" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.tests.db_logging_thread_test">
-<span id="the-db-logging-thread-test-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">db_logging_thread_test</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.db_logging_thread_test" title="Permalink to this headline">¶</a></h1>
-<p>Created on Oct 27, 2013</p>
-<p>&#64;author: joe</p>
-<dl class="class">
-<dt id="cloudfusion.tests.db_logging_thread_test.TestingProcess">
-<em class="property">class </em><tt class="descclassname">cloudfusion.tests.db_logging_thread_test.</tt><tt class="descname">TestingProcess</tt><a class="headerlink" href="#cloudfusion.tests.db_logging_thread_test.TestingProcess" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<dl class="method">
-<dt id="cloudfusion.tests.db_logging_thread_test.TestingProcess.join">
-<tt class="descname">join</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.db_logging_thread_test.TestingProcess.join" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.tests.db_logging_thread_test.TestingProcess.run">
-<tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.db_logging_thread_test.TestingProcess.run" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.tests.db_logging_thread_test.TestingProcess.start">
-<tt class="descname">start</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.db_logging_thread_test.TestingProcess.start" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="cloudfusion.tests.db_logging_thread_test.TestingThread">
-<em class="property">class </em><tt class="descclassname">cloudfusion.tests.db_logging_thread_test.</tt><tt class="descname">TestingThread</tt><a class="headerlink" href="#cloudfusion.tests.db_logging_thread_test.TestingThread" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></tt></p>
-<dl class="method">
-<dt id="cloudfusion.tests.db_logging_thread_test.TestingThread.run">
-<tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.db_logging_thread_test.TestingThread.run" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.db_logging_thread_test.random">
-<tt class="descclassname">cloudfusion.tests.db_logging_thread_test.</tt><tt class="descname">random</tt><big>(</big><big>)</big> &rarr; x in the interval [0, 1).<a class="headerlink" href="#cloudfusion.tests.db_logging_thread_test.random" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.db_logging_thread_test.test">
-<tt class="descclassname">cloudfusion.tests.db_logging_thread_test.</tt><tt class="descname">test</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.db_logging_thread_test.test" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.tests.cache_test">
-<span id="the-cache-test-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">cache_test</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.cache_test" title="Permalink to this headline">¶</a></h1>
-<p>Created on 04.06.2011</p>
-<p>&#64;author: joe</p>
-<dl class="function">
-<dt id="cloudfusion.tests.cache_test.test_delete">
-<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_delete</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_delete" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.cache_test.test_exists">
-<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_exists</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_exists" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.cache_test.test_get_keys">
-<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_get_keys</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_get_keys" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.cache_test.test_get_modified">
-<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_get_modified</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_get_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.cache_test.test_get_size_of_cached_data">
-<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_get_size_of_cached_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_get_size_of_cached_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.cache_test.test_get_size_of_dirty_data">
-<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_get_size_of_dirty_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_get_size_of_dirty_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.cache_test.test_get_value">
-<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_get_value</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_get_value" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.cache_test.test_is_dirty">
-<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_is_dirty</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_is_dirty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.cache_test.test_is_expired">
-<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_is_expired</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_is_expired" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.cache_test.test_refresh">
-<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_refresh</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_refresh" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.cache_test.test_set_modified">
-<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_set_modified</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_set_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.cache_test.test_update">
-<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_update</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_update" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.cache_test.test_write">
-<tt class="descclassname">cloudfusion.tests.cache_test.</tt><tt class="descname">test_write</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.cache_test.test_write" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.tests.store_test2">
-<span id="the-store-test2-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">store_test2</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.store_test2" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._assert_all_in">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_assert_all_in</tt><big>(</big><em>in_list</em>, <em>all_list</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._assert_all_in" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._assert_equal_with_variance">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_assert_equal_with_variance</tt><big>(</big><em>val1</em>, <em>val2</em>, <em>variance</em>, <em>msg=''</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._assert_equal_with_variance" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._create_directories">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_create_directories</tt><big>(</big><em>io_api</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._create_directories" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._delete_directories">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_delete_directories</tt><big>(</big><em>io_api</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._delete_directories" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._delete_file">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_delete_file</tt><big>(</big><em>io_api</em>, <em>filename</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._delete_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._dir_exists">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_dir_exists</tt><big>(</big><em>io_api</em>, <em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._dir_exists" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._test_account_info">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_account_info</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_account_info" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._test_bulk_get_metadata">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_bulk_get_metadata</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_bulk_get_metadata" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._test_create_delete_directory">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_create_delete_directory</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_create_delete_directory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._test_duplicate">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_duplicate</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_duplicate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._test_exists">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_exists</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_exists" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._test_fail_on_get_bytes">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_fail_on_get_bytes</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_fail_on_get_bytes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._test_fail_on_get_modified">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_fail_on_get_modified</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_fail_on_get_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._test_fail_on_is_dir">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_fail_on_is_dir</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_fail_on_is_dir" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._test_get_bytes">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_get_bytes</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_get_bytes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._test_get_directory_listing">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_get_directory_listing</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_get_directory_listing" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._test_get_file">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_get_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_get_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._test_get_free_space">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_get_free_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_get_free_space" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._test_get_modified">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_get_modified</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_get_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._test_get_overall_space">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_get_overall_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_get_overall_space" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._test_get_used_space">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_get_used_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_get_used_space" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._test_is_dir">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_is_dir</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_is_dir" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._test_move_directory">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_move_directory</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_move_directory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._test_move_file">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_move_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_move_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2._test_store_delete_file">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">_test_store_delete_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2._test_store_delete_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2.get_amazon_config">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">get_amazon_config</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2.get_amazon_config" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2.get_google_config">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">get_google_config</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2.get_google_config" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2.setUp">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">setUp</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2.setUp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2.tearDown">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">tearDown</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2.tearDown" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test2.test_io_apis">
-<tt class="descclassname">cloudfusion.tests.store_test2.</tt><tt class="descname">test_io_apis</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test2.test_io_apis" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.tests.xmlparser_test">
-<span id="the-xmlparser-test-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">xmlparser_test</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.xmlparser_test" title="Permalink to this headline">¶</a></h1>
-<p>Created on 06.05.2011</p>
-<p>&#64;author: joe</p>
-<dl class="function">
-<dt id="cloudfusion.tests.xmlparser_test.test_populate_dict_with_XML_collection_leaf_textnodes1">
-<tt class="descclassname">cloudfusion.tests.xmlparser_test.</tt><tt class="descname">test_populate_dict_with_XML_collection_leaf_textnodes1</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.xmlparser_test.test_populate_dict_with_XML_collection_leaf_textnodes1" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.xmlparser_test.test_populate_dict_with_XML_collection_leaf_textnodes2">
-<tt class="descclassname">cloudfusion.tests.xmlparser_test.</tt><tt class="descname">test_populate_dict_with_XML_collection_leaf_textnodes2</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.xmlparser_test.test_populate_dict_with_XML_collection_leaf_textnodes2" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.xmlparser_test.test_populate_dict_with_XML_leaf_textnodes">
-<tt class="descclassname">cloudfusion.tests.xmlparser_test.</tt><tt class="descname">test_populate_dict_with_XML_leaf_textnodes</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.xmlparser_test.test_populate_dict_with_XML_leaf_textnodes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.tests.store_test_webdav2">
-<span id="the-store-test-webdav2-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">store_test_webdav2</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.store_test_webdav2" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._assert_all_in">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_assert_all_in</tt><big>(</big><em>in_list</em>, <em>all_list</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._assert_all_in" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._assert_equal_with_variance">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_assert_equal_with_variance</tt><big>(</big><em>val1</em>, <em>val2</em>, <em>variance</em>, <em>msg=''</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._assert_equal_with_variance" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._create_directories">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_create_directories</tt><big>(</big><em>io_api</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._create_directories" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._delete_directories">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_delete_directories</tt><big>(</big><em>io_api</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._delete_directories" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._delete_file">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_delete_file</tt><big>(</big><em>io_api</em>, <em>filename</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._delete_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._dir_exists">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_dir_exists</tt><big>(</big><em>io_api</em>, <em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._dir_exists" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._test_account_info">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_account_info</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_account_info" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._test_bulk_get_metadata">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_bulk_get_metadata</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_bulk_get_metadata" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._test_create_delete_directory">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_create_delete_directory</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_create_delete_directory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._test_duplicate">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_duplicate</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_duplicate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._test_exists">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_exists</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_exists" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._test_fail_on_get_bytes">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_fail_on_get_bytes</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_fail_on_get_bytes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._test_fail_on_get_modified">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_fail_on_get_modified</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_fail_on_get_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._test_fail_on_is_dir">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_fail_on_is_dir</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_fail_on_is_dir" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._test_get_bytes">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_get_bytes</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_get_bytes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._test_get_directory_listing">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_get_directory_listing</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_get_directory_listing" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._test_get_file">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_get_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_get_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._test_get_free_space">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_get_free_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_get_free_space" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._test_get_modified">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_get_modified</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_get_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._test_get_overall_space">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_get_overall_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_get_overall_space" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._test_get_used_space">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_get_used_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_get_used_space" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._test_is_dir">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_is_dir</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_is_dir" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._test_move_directory">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_move_directory</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_move_directory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._test_move_file">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_move_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_move_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2._test_store_delete_file">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">_test_store_delete_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2._test_store_delete_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2.get_webdav_box_config">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">get_webdav_box_config</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2.get_webdav_box_config" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2.get_webdav_yandex_config">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">get_webdav_yandex_config</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2.get_webdav_yandex_config" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2.setUp">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">setUp</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2.setUp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2.tearDown">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">tearDown</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2.tearDown" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test_webdav2.test_io_apis">
-<tt class="descclassname">cloudfusion.tests.store_test_webdav2.</tt><tt class="descname">test_io_apis</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test_webdav2.test_io_apis" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.tests.persistent_lru_cache_test">
-<span id="the-persistent-lru-cache-test-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">persistent_lru_cache_test</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.persistent_lru_cache_test" title="Permalink to this headline">¶</a></h1>
-<p>Created on 04.06.2011</p>
-<p>&#64;author: joe</p>
-<dl class="function">
-<dt id="cloudfusion.tests.persistent_lru_cache_test.set_up">
-<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">set_up</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.set_up" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.persistent_lru_cache_test.tear_down">
-<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">tear_down</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.tear_down" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.persistent_lru_cache_test.test_delete">
-<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_delete</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_delete" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.persistent_lru_cache_test.test_exists">
-<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_exists</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_exists" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.persistent_lru_cache_test.test_get_keys">
-<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_get_keys</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_get_keys" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.persistent_lru_cache_test.test_get_modified">
-<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_get_modified</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_get_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.persistent_lru_cache_test.test_get_size_of_cached_data">
-<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_get_size_of_cached_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_get_size_of_cached_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.persistent_lru_cache_test.test_get_size_of_dirty_data">
-<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_get_size_of_dirty_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_get_size_of_dirty_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.persistent_lru_cache_test.test_get_value">
-<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_get_value</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_get_value" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.persistent_lru_cache_test.test_is_dirty">
-<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_is_dirty</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_is_dirty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.persistent_lru_cache_test.test_is_expired">
-<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_is_expired</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_is_expired" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.persistent_lru_cache_test.test_persistence">
-<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_persistence</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_persistence" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.persistent_lru_cache_test.test_refresh">
-<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_refresh</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_refresh" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.persistent_lru_cache_test.test_reorder">
-<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_reorder</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_reorder" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.persistent_lru_cache_test.test_resize">
-<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_resize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_resize" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.persistent_lru_cache_test.test_resize_dirty">
-<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_resize_dirty</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_resize_dirty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.persistent_lru_cache_test.test_resize_zerosize">
-<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_resize_zerosize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_resize_zerosize" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.persistent_lru_cache_test.test_set_modified">
-<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_set_modified</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_set_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.persistent_lru_cache_test.test_update">
-<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_update</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_update" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.persistent_lru_cache_test.test_write">
-<tt class="descclassname">cloudfusion.tests.persistent_lru_cache_test.</tt><tt class="descname">test_write</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.persistent_lru_cache_test.test_write" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.tests.mp_lru_cache_test">
-<span id="the-mp-lru-cache-test-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">mp_lru_cache_test</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.mp_lru_cache_test" title="Permalink to this headline">¶</a></h1>
-<p>Created on 04.06.2011</p>
-<p>&#64;author: joe</p>
-<dl class="function">
-<dt id="cloudfusion.tests.mp_lru_cache_test.test_delete">
-<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_delete</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_delete" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.mp_lru_cache_test.test_exists">
-<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_exists</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_exists" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.mp_lru_cache_test.test_get_keys">
-<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_get_keys</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_get_keys" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.mp_lru_cache_test.test_get_modified">
-<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_get_modified</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_get_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.mp_lru_cache_test.test_get_size_of_cached_data">
-<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_get_size_of_cached_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_get_size_of_cached_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.mp_lru_cache_test.test_get_size_of_dirty_data">
-<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_get_size_of_dirty_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_get_size_of_dirty_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.mp_lru_cache_test.test_get_value">
-<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_get_value</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_get_value" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.mp_lru_cache_test.test_is_dirty">
-<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_is_dirty</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_is_dirty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.mp_lru_cache_test.test_is_expired">
-<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_is_expired</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_is_expired" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.mp_lru_cache_test.test_refresh">
-<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_refresh</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_refresh" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.mp_lru_cache_test.test_resize">
-<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_resize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_resize" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.mp_lru_cache_test.test_resize_dirty">
-<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_resize_dirty</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_resize_dirty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.mp_lru_cache_test.test_resize_zerosize">
-<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_resize_zerosize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_resize_zerosize" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.mp_lru_cache_test.test_set_modified">
-<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_set_modified</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_set_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.mp_lru_cache_test.test_update">
-<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_update</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_update" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.mp_lru_cache_test.test_write">
-<tt class="descclassname">cloudfusion.tests.mp_lru_cache_test.</tt><tt class="descname">test_write</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.mp_lru_cache_test.test_write" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.tests.store_test">
-<span id="the-store-test-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">store_test</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.store_test" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._assert_all_in">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_assert_all_in</tt><big>(</big><em>in_list</em>, <em>all_list</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._assert_all_in" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._assert_equal_with_variance">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_assert_equal_with_variance</tt><big>(</big><em>val1</em>, <em>val2</em>, <em>variance</em>, <em>msg=''</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._assert_equal_with_variance" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._create_directories">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_create_directories</tt><big>(</big><em>io_api</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._create_directories" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._delete_directories">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_delete_directories</tt><big>(</big><em>io_api</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._delete_directories" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._delete_file">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_delete_file</tt><big>(</big><em>io_api</em>, <em>filename</em>, <em>root_dir='/'</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._delete_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._dir_exists">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_dir_exists</tt><big>(</big><em>io_api</em>, <em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._dir_exists" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._test_account_info">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_account_info</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_account_info" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._test_bulk_get_metadata">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_bulk_get_metadata</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_bulk_get_metadata" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._test_create_delete_directory">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_create_delete_directory</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_create_delete_directory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._test_duplicate">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_duplicate</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_duplicate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._test_exists">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_exists</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_exists" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._test_fail_on_get_bytes">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_fail_on_get_bytes</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_fail_on_get_bytes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._test_fail_on_get_modified">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_fail_on_get_modified</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_fail_on_get_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._test_fail_on_is_dir">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_fail_on_is_dir</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_fail_on_is_dir" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._test_get_bytes">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_get_bytes</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_get_bytes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._test_get_directory_listing">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_get_directory_listing</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_get_directory_listing" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._test_get_file">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_get_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_get_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._test_get_free_space">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_get_free_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_get_free_space" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._test_get_modified">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_get_modified</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_get_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._test_get_overall_space">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_get_overall_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_get_overall_space" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._test_get_used_space">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_get_used_space</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_get_used_space" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._test_is_dir">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_is_dir</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_is_dir" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._test_move_directory">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_move_directory</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_move_directory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._test_move_file">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_move_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_move_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test._test_store_delete_file">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">_test_store_delete_file</tt><big>(</big><em>io_api</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test._test_store_delete_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test.get_dropbox_config">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">get_dropbox_config</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test.get_dropbox_config" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test.get_sugarsync_config">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">get_sugarsync_config</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test.get_sugarsync_config" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test.setUp">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">setUp</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test.setUp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test.tearDown">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">tearDown</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test.tearDown" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.store_test.test_io_apis">
-<tt class="descclassname">cloudfusion.tests.store_test.</tt><tt class="descname">test_io_apis</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.store_test.test_io_apis" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.tests.synchronize_proxy_test">
-<span id="the-synchronize-proxy-test-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">synchronize_proxy_test</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.synchronize_proxy_test" title="Permalink to this headline">¶</a></h1>
-<p>Created on Jun 11, 2013</p>
-<p>&#64;author: joe</p>
-<dl class="class">
-<dt id="cloudfusion.tests.synchronize_proxy_test.TestSubject">
-<em class="property">class </em><tt class="descclassname">cloudfusion.tests.synchronize_proxy_test.</tt><tt class="descname">TestSubject</tt><a class="headerlink" href="#cloudfusion.tests.synchronize_proxy_test.TestSubject" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<dl class="method">
-<dt id="cloudfusion.tests.synchronize_proxy_test.TestSubject._TestSubject__change">
-<tt class="descname">_TestSubject__change</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.synchronize_proxy_test.TestSubject._TestSubject__change" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.tests.synchronize_proxy_test.TestSubject._TestSubject__unchange">
-<tt class="descname">_TestSubject__unchange</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.synchronize_proxy_test.TestSubject._TestSubject__unchange" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.tests.synchronize_proxy_test.TestSubject.get_value">
-<tt class="descname">get_value</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.synchronize_proxy_test.TestSubject.get_value" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.tests.synchronize_proxy_test.TestSubject.temporarily_change_value">
-<tt class="descname">temporarily_change_value</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.synchronize_proxy_test.TestSubject.temporarily_change_value" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="cloudfusion.tests.synchronize_proxy_test.TestingThread">
-<em class="property">class </em><tt class="descclassname">cloudfusion.tests.synchronize_proxy_test.</tt><tt class="descname">TestingThread</tt><big>(</big><em>test_obj</em><big>)</big><a class="headerlink" href="#cloudfusion.tests.synchronize_proxy_test.TestingThread" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></tt></p>
-<dl class="method">
-<dt id="cloudfusion.tests.synchronize_proxy_test.TestingThread.run">
-<tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.synchronize_proxy_test.TestingThread.run" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.synchronize_proxy_test.random">
-<tt class="descclassname">cloudfusion.tests.synchronize_proxy_test.</tt><tt class="descname">random</tt><big>(</big><big>)</big> &rarr; x in the interval [0, 1).<a class="headerlink" href="#cloudfusion.tests.synchronize_proxy_test.random" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.synchronize_proxy_test.test">
-<tt class="descclassname">cloudfusion.tests.synchronize_proxy_test.</tt><tt class="descname">test</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.synchronize_proxy_test.test" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.tests.lru_cache_test">
-<span id="the-lru-cache-test-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">lru_cache_test</span></tt> Module<a class="headerlink" href="#module-cloudfusion.tests.lru_cache_test" title="Permalink to this headline">¶</a></h1>
-<p>Created on 04.06.2011</p>
-<p>&#64;author: joe</p>
-<dl class="function">
-<dt id="cloudfusion.tests.lru_cache_test.test_delete">
-<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_delete</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_delete" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.lru_cache_test.test_exists">
-<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_exists</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_exists" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.lru_cache_test.test_get_keys">
-<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_get_keys</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_get_keys" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.lru_cache_test.test_get_modified">
-<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_get_modified</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_get_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.lru_cache_test.test_get_size_of_cached_data">
-<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_get_size_of_cached_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_get_size_of_cached_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.lru_cache_test.test_get_size_of_dirty_data">
-<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_get_size_of_dirty_data</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_get_size_of_dirty_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.lru_cache_test.test_get_value">
-<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_get_value</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_get_value" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.lru_cache_test.test_is_dirty">
-<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_is_dirty</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_is_dirty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.lru_cache_test.test_is_expired">
-<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_is_expired</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_is_expired" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.lru_cache_test.test_refresh">
-<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_refresh</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_refresh" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.lru_cache_test.test_resize">
-<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_resize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_resize" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.lru_cache_test.test_resize_dirty">
-<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_resize_dirty</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_resize_dirty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.lru_cache_test.test_resize_zerosize">
-<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_resize_zerosize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_resize_zerosize" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.lru_cache_test.test_set_modified">
-<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_set_modified</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_set_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.lru_cache_test.test_update">
-<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_update</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_update" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.tests.lru_cache_test.test_write">
-<tt class="descclassname">cloudfusion.tests.lru_cache_test.</tt><tt class="descname">test_write</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.tests.lru_cache_test.test_write" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
 
 
           </div>
@@ -1445,24 +1445,24 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">store_test_webdav</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.tests.transparent_store_test_with_sync">The <tt class="docutils literal"><span class="pre">transparent_store_test_with_sync</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.tests.transparent_store_test_no_sync">The <tt class="docutils literal"><span class="pre">transparent_store_test_no_sync</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.tests.db_logging_thread_test">The <tt class="docutils literal"><span class="pre">db_logging_thread_test</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.tests.cache_test">The <tt class="docutils literal"><span class="pre">cache_test</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.tests.store_test2">The <tt class="docutils literal"><span class="pre">store_test2</span></tt> Module</a></li>
+<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">cache_test</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-cloudfusion.tests.xmlparser_test">The <tt class="docutils literal"><span class="pre">xmlparser_test</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.tests.store_test_webdav2">The <tt class="docutils literal"><span class="pre">store_test_webdav2</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.tests.db_logging_thread_test">The <tt class="docutils literal"><span class="pre">db_logging_thread_test</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-cloudfusion.tests.persistent_lru_cache_test">The <tt class="docutils literal"><span class="pre">persistent_lru_cache_test</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.tests.mp_lru_cache_test">The <tt class="docutils literal"><span class="pre">mp_lru_cache_test</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.tests.store_test">The <tt class="docutils literal"><span class="pre">store_test</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.tests.synchronize_proxy_test">The <tt class="docutils literal"><span class="pre">synchronize_proxy_test</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-cloudfusion.tests.lru_cache_test">The <tt class="docutils literal"><span class="pre">lru_cache_test</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.tests.store_test2">The <tt class="docutils literal"><span class="pre">store_test2</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.tests.store_test">The <tt class="docutils literal"><span class="pre">store_test</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.tests.store_test_webdav2">The <tt class="docutils literal"><span class="pre">store_test_webdav2</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.tests.synchronize_proxy_test">The <tt class="docutils literal"><span class="pre">synchronize_proxy_test</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.tests.store_test_webdav">The <tt class="docutils literal"><span class="pre">store_test_webdav</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.tests.transparent_store_test_no_sync">The <tt class="docutils literal"><span class="pre">transparent_store_test_no_sync</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.tests.mp_lru_cache_test">The <tt class="docutils literal"><span class="pre">mp_lru_cache_test</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.tests.transparent_store_test_with_sync">The <tt class="docutils literal"><span class="pre">transparent_store_test_with_sync</span></tt> Module</a></li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="store.sugarsync.html"
-                        title="previous chapter">The <tt class="docutils literal"><span class="pre">client</span></tt> Module</a></p>
+  <p class="topless"><a href="store.s3.html"
+                        title="previous chapter">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_amazon_store</span></tt> Module</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="third_party.html"
                         title="next chapter">Subpackages</a></p>
@@ -1501,7 +1501,7 @@
           <a href="third_party.html" title="Subpackages"
              >next</a> |</li>
         <li class="right" >
-          <a href="store.sugarsync.html" title="The client Module"
+          <a href="store.s3.html" title="The bulk_get_metadata_amazon_store Module"
              >previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li> 
