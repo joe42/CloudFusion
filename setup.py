@@ -8,7 +8,7 @@ setuptools.setup(
     name = "CloudFusion",
     packages = setuptools.find_packages(),
     include_package_data = True,
-    install_requires = ['mechanize', 'requests', 'nose', 'oauth', 'poster', 'simplejson', 'httplib2>=0.8', 'beautifulsoup4', 'argparse', 'ntplib', 'gsutil', 'sh', 'pexpect', 'tinydav'],
+    install_requires = ['requests', 'nose', 'simplejson', 'httplib2>=0.8', 'beautifulsoup4', 'argparse', 'ntplib', 'gsutil', 'sh', 'tinydav'],
     version = "6.2.15",
     description = "Filesystem interface to cloud storage services",
     author = "Johannes Mueller",
