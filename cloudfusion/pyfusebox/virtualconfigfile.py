@@ -92,7 +92,18 @@ class VirtualConfigFile(VirtualFile):
                 p.stdin.write(auth['password']+"\n")
                 p.communicate() #wait for process to exit
             self._recently_registered_name = auth['user'] #store if you are already registered
-    
+	
+    def _unify_auth(self, auth):
+        '''Add keys user, and password to auth, which are synonymous to consumer_key and consumer_secret.
+        Also consumer_key and consumer_secret are added if possible as synonyms for access_key_id and secret_access_key.'''
+        if 'access_key_id' in auth:
+            auth['consumer_key'] = auth['access_key_id']
+            auth['consumer_secret'] = auth['secret_access_key']
+        if 'consumer_key' in auth:
+            auth['user'] = auth['consumer_key']
+        if 'consumer_secret' in auth:
+            auth['password'] = auth['consumer_secret']    
+
     def _initialize_store(self):
         '''Parametrize the store implementation with the settings in the configuration file
         Also, it is determined which wrappers should envelope the store for caching,
@@ -111,6 +122,7 @@ class VirtualConfigFile(VirtualFile):
         cache_dir = str(conf.get('cache_dir', '/tmp/cloudfusion'))
         self.logger.debug("got cache parameter")
         auth = self.get_service_auth_data()
+        self._unify_auth(auth)
         auth['cache_id'] = cache_id # workaround; Dropbox needs access to cache_id to create a temporary directory with its name, to distinguish sessions
         # user convenience: use either of the parameter names usual for Dropbox/Amazon&Google
         if 'access_key_id' in auth and 'secret_access_key' in auth: 
