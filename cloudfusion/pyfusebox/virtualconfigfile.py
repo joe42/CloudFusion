@@ -146,6 +146,9 @@ class VirtualConfigFile(VirtualFile):
             if service.lower() == "sugarsync":
                 from cloudfusion.store.sugarsync.sugarsync_store import SugarsyncStore
                 store = SugarsyncStore(auth)
+            elif service.find('rive') >= 0:
+                from cloudfusion.store.gdrive.google_drive import GoogleDrive
+                store = GoogleDrive(auth)
             elif service.lower() == "gs" or service.find('oogle') >= 0:
                 from cloudfusion.store.gs.bulk_get_metadata_google_store import BulkGetMetadataGoogleStore
                 store = BulkGetMetadataGoogleStore(auth)
