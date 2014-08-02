@@ -1,1 +1,4 @@
 *.pyc
+/build/
+/CloudFusion.egg-info/
+/dist/
