@@ -26,7 +26,16 @@ def zstat():
     return st
 
 class PyFuseBox(Operations):
+    '''This is the application entry point for file system requests, for instance to handle 
+    read and write requests to files within the mount directory. PyFuseBox delegates
+    these requests to an implementation of the interface :class:`cloudfusion.store.Store`.
+    For instance to :class:`cloudfusion.store.dropbox.dropbox_store.DropboxStore`,
+    which would then retrieve the accessed file from Dropbox, or store the modified file to Dropbox.'''
+    
     def __init__(self, path, store):
+        '''Create an instance of :class:`cloudfusion.pyfusebox.PyFuseBox`.
+        :param path: the path to the mount point
+        :param store: an instance of the implementation of the interface :class:`cloudfusion.store.Store` or None for later configuration '''
         self.root = path
         self.temp_file = {}
         self.read_temp_file = {}

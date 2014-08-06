@@ -11,9 +11,16 @@ import sys
 
 
 class ConfigurablePyFuseBox(PyFuseBox):
+    '''Offers a virtual configuration file, to configure Cloudfusion at runtime.
+    To better separate the data from the configuration directory, data can be accessed in the 
+    top level directory data, and the configuration file can be accessed in the top level
+    directory config.  
+    '''
     VIRTUAL_CONFIG_FILE = '/config/config'
     DATA_FOLDER_PATH = "/data"
+    
     def __init__(self, root):
+        ''''''
         self.virtual_file = VirtualConfigFile(self.VIRTUAL_CONFIG_FILE, self)
         self.store_initialized = False
         self.logger = logging.getLogger('pyfusebox')

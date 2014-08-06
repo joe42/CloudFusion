@@ -10,7 +10,11 @@ from cloudfusion.store.transparent_caching_store import TransparentMultiprocessi
 import os.path
 
 class TransparentConfigurablePyFuseBox(ConfigurablePyFuseBox):
-    '''
+    '''Offers a virtual statistics directory stats, to monitor Cloudfusion at runtime.
+    The three files are stats, notuploaded, and errors.
+    stats shows runtime statistics like throughput, cache hits, or cache size.
+    notuploaded shows a list of files that is not yet synchronized with the provider.
+    errors shows a list of recent errors.
     '''
     STATS_DIR = '/stats'
     VIRTUAL_DIRTY_FILELIST_FILE = STATS_DIR+'/notuploaded'

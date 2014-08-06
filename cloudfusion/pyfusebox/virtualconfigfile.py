@@ -10,6 +10,8 @@ import random
 from cloudfusion.store.transparent_chunk_caching_store import TransparentChunkMultiprocessingCachingStore
 
 class VirtualConfigFile(VirtualFile):
+    '''Responsible for the (re)configuration of :class:`cloudfusion.pyfusebox.ConfigurablePyFuseBox`,
+    everytime it contents is written to it.'''
     INITIAL_TEXT="""
 #explanation of config parameter 1
 #explanation of config parameter 2
