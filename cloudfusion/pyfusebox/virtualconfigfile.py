@@ -8,6 +8,11 @@ from cloudfusion.store.transparent_caching_store import TransparentMultiprocessi
 from cloudfusion.store.metadata_caching_store import MetadataCachingStore
 import random
 from cloudfusion.store.transparent_chunk_caching_store import TransparentChunkMultiprocessingCachingStore
+import subprocess
+from subprocess import PIPE
+import os
+from os.path import expanduser
+
 
 class VirtualConfigFile(VirtualFile):
     '''Responsible for the (re)configuration of :class:`cloudfusion.pyfusebox.ConfigurablePyFuseBox`,
@@ -21,6 +26,7 @@ class VirtualConfigFile(VirtualFile):
     def __init__(self, path, pyfusebox):
         super( VirtualConfigFile, self ).__init__(path)
         self.pyfusebox = pyfusebox
+        self._recently_registered_name = ''
         
     def get_service_auth_data(self):
         vtf = file_decorator.DataFileWrapper(self.get_text())
@@ -37,8 +43,43 @@ class VirtualConfigFile(VirtualFile):
     def write(self, buf, offset):
         written_bytes = super(VirtualConfigFile, self).write(buf, offset)
         if written_bytes >0: # configuration changed
+            self.auto_register()
             self._initialize_store()
         return written_bytes
+    
+    def auto_register(self):
+        conf = self.get_store_config_data()
+        service = conf['name']
+        auth = self.get_service_auth_data()
+        if self._recently_registered_name != auth['user'] and 'autoregister' in conf and conf['autoregister'].lower() == "true" and service.lower() == "dropbox" or service.lower() == "db":
+            self.logger.debug("auto registration")
+            ABS_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            SCRIPT_PATH = ABS_PATH + '/autoregistration/dropbox_autoregistration.py'
+            JAVA = '/usr/bin/java'
+            HOME = expanduser("~")
+            CLASSPATH = ['/usr/share/java/jna.jar',
+                         '/usr/share/java/asm3.jar',
+                         '/usr/share/java/asm3-commons.jar',
+                         '/usr/share/java/antlr3-runtime.jar',
+                         '/usr/share/java/libconstantine-java.jar',
+                         '/usr/share/java/jython.jar',
+                         '/usr/share/java/sikuli-script.jar',
+                         '/usr/share/maven-repo/com/google/guava/guava/debian/guava-debian.jar',
+                         '/usr/share/maven-repo/org/jruby/ext/posix/jnr-posix/debian/jnr-posix-debian.jar',
+                         '/usr/share/java/jaffl.jar:/usr/share/java/jna.jar',
+                         '/usr/share/maven-repo/jline/jline/1.0/jline-1.0.jar',
+                         ]
+            PARAMETERS = ['-Dfile.encoding=UTF-8',
+                          '-Dpython.home=/usr/share/jython',
+                          '-Dpython.path="/usr/share/sikuli/Lib"',
+                          "-Dpython.cachedir=\"%s/.jython-cache\"" % HOME,
+                          ]
+            JYTHON = '%s -cp "%s" %s org.python.util.jython ' % (JAVA, ':'.join(CLASSPATH), ' '.join(PARAMETERS))
+            p = subprocess.Popen(['%s "%s"' % (JYTHON, SCRIPT_PATH)], stdin=PIPE, shell=True)
+            p.stdin.write(auth['user']+"\n")
+            p.stdin.write(auth['password']+"\n")
+            p.communicate() #wait for process to exit
+            self._recently_registered_name = auth['user']
     
     def _initialize_store(self):
         '''Parametrize the store implementation with the settings in the configuration file
