@@ -12,6 +12,7 @@ from sikuli.Sikuli import Screen, App, Key, addImagePath, Settings, popup
 import time
 import sys
 import os
+import webbrowser
 
 Settings.MoveMouseDelay = 0
 SUPPORTED_LANGUAGES = ['english','german']
@@ -41,7 +42,7 @@ if __name__ == '__main__':
     ABS_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     addImagePath(ABS_PATH+"/images/dropbox")
     # Start browser
-    App.open("firefox www.dropbox.com")
+    webbrowser.open("firefox www.dropbox.com")
     screen = Screen()
     successful = configure_language()
     if not successful:
@@ -73,4 +74,4 @@ if __name__ == '__main__':
               "Error")
     screen.wait()
     screen.click(continueBtnFreeAccount)
-    App.open("firefox www.dropbox.com")
+    webbrowser.open("firefox www.dropbox.com")
