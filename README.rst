@@ -15,7 +15,10 @@ To install CloudFusion do the following::
 
     sudo apt-get install git
     git clone git://github.com/joe42/CloudFusion.git
-    sudo apt-get install python-setuptools gcc libssl-dev libffi-dev python-dev fuse-utils opencv-dev libhighgui2.4 libcvaux2.4 sikuli-ide
+    # For using automatic registration with Sikuli: opencv-dev libhighgui2.4 libcvaux2.4 sikuli-ide
+    # For using Google Storage: gcc libssl-dev libffi-dev python-dev
+    # For automatic handling of captchas in the registration process: python-pycurl python-libxml2 python-imaging tesseract-ocr
+    sudo apt-get install python-setuptools gcc libssl-dev libffi-dev python-dev fuse-utils opencv-dev libhighgui2.4 libcvaux2.4 sikuli-ide python-pycurl python-libxml2 python-imaging  tesseract-ocr
     cd CloudFusion
     sudo python setup.py install
     
@@ -39,7 +42,7 @@ Sugarsync
 +++++++++
 Copy the Sugarsync configuration file located at **cloudfusion/cloudfusion/config/Sugarsync.ini** to your home directory.
 Edit the configuration file by adding your e-mail address as your username and a password.
-Your account will expire after a month, except if you change to a payed account.
+Your account will expire after a month, except if you change to a paid account.
 
 
 Dropbox
