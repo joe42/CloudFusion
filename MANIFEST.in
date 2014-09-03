@@ -1,3 +1,5 @@
-recursive-include cloudfusion/config *.conf *.ini *.cfg *.png *.jpg
+recursive-include cloudfusion/config *.conf *.ini *.cfg
+recursive-include cloudfusion/images *
+recursive-include cloudfusion *.py
 include cloudfusion/dropbox/LICENSE cloudfusion/dropbox/trusted-certs.crt
 include cloudfusion/third_party/requests_1_2_3/requests/cacert.pem
