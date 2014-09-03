@@ -3,23 +3,23 @@
 Auto registration script for dropbox.
 Takes username and password from stdin. The parameters must each end in newlines ("\n").
 Opens firefox, navigates to dropbox.com, enters registration details, and selects the Free Plan Option.
+Works for English and German interface.
 
 Created on Aug 5, 2014
 
 @author: joe
 '''
+from time import sleep
 from sikuli.Sikuli import Screen, App, Key, addImagePath, Settings, popup
 import time
 import sys
 import os
-import webbrowser
-
+import subprocess
 Settings.MoveMouseDelay = 0
 SUPPORTED_LANGUAGES = ['english','german']
 dbRegistrationBtn = "Registration_Btn.png"
 firstNameInput = "First_Name_Input.png"
 continueBtnFreeAccount = "Continue_Btn_Free_Account.png"
-
 def configure_language():
     '''Set the correct images according to the language of the website in the current browser window.
     :return: True iff successful'''
@@ -33,6 +33,12 @@ def configure_language():
                 return True
     return False
 
+def start_browser(url):
+    try:
+        subprocess.Popen(['xdg-open', url])
+    except OSError:
+        print 'Opening the browser failed'
+
 if __name__ == '__main__':
     #read username and password from stdin
     time.sleep(1) #wait 
@@ -42,7 +48,7 @@ if __name__ == '__main__':
     ABS_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     addImagePath(ABS_PATH+"/images/dropbox")
     # Start browser
-    webbrowser.open("firefox www.dropbox.com")
+    start_browser("http://www.dropbox.com")
     screen = Screen()
     successful = configure_language()
     if not successful:
@@ -74,4 +80,4 @@ if __name__ == '__main__':
               "Error")
     screen.wait()
     screen.click(continueBtnFreeAccount)
-    webbrowser.open("firefox www.dropbox.com")
+    start_browser("http://www.dropbox.com")
