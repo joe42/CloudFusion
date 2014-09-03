@@ -4,6 +4,9 @@ B: Added Features
 C: Bugfixes
 _stable means that the changes were successfully tested with all tests in the test suite, and a stress test for at least 24h
 
+v.6.4_16:
+    * Add automatic registration for Dropbox (set autoregister = true in the configuration file in the section [store])
+    * Add automatic registration for T-Online
 v.6.2.16:
     * Add error handling for Feature Fast Directory Listing 
 v.6.2.15:
