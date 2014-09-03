@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The bulk_get_metadata_google_store Module &mdash; CloudFusion 0.01 documentation</title>
+    <title>The google_store Module &mdash; CloudFusion 0.01 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -25,8 +25,8 @@
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
     <link rel="up" title="Subpackages" href="store.html" />
-    <link rel="next" title="The tinydav_client Module" href="store.webdav.html" />
-    <link rel="prev" title="The file_decorator Module" href="store.dropbox.html" /> 
+    <link rel="next" title="The file_decorator Module" href="store.dropbox.html" />
+    <link rel="prev" title="The bulk_get_metadata_amazon_store Module" href="store.s3.html" /> 
   </head>
   <body>
     <div class="related">
@@ -39,10 +39,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="store.webdav.html" title="The tinydav_client Module"
+          <a href="store.dropbox.html" title="The file_decorator Module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="store.dropbox.html" title="The file_decorator Module"
+          <a href="store.s3.html" title="The bulk_get_metadata_amazon_store Module"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li>
@@ -55,41 +55,7 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-cloudfusion.store.gs.bulk_get_metadata_google_store">
-<span id="the-bulk-get-metadata-google-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">bulk_get_metadata_google_store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.gs.bulk_get_metadata_google_store" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="cloudfusion.store.gs.bulk_get_metadata_google_store.BulkGetMetadataGoogleStore">
-<em class="property">class </em><tt class="descclassname">cloudfusion.store.gs.bulk_get_metadata_google_store.</tt><tt class="descname">BulkGetMetadataGoogleStore</tt><big>(</big><em>config</em><big>)</big><a class="headerlink" href="#cloudfusion.store.gs.bulk_get_metadata_google_store.BulkGetMetadataGoogleStore" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#cloudfusion.store.gs.google_store.GoogleStore" title="cloudfusion.store.gs.google_store.GoogleStore"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.gs.google_store.GoogleStore</span></tt></a>, <a class="reference internal" href="store.html#cloudfusion.store.bulk_get_metadata.BulkGetMetadata" title="cloudfusion.store.bulk_get_metadata.BulkGetMetadata"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.bulk_get_metadata.BulkGetMetadata</span></tt></a></p>
-<p>Subclass of GoogleStore, extending it by implementing the BulkGetMetadata interface for quick directory lising.</p>
-<dl class="method">
-<dt id="cloudfusion.store.gs.bulk_get_metadata_google_store.BulkGetMetadataGoogleStore.get_bulk_metadata">
-<tt class="descname">get_bulk_metadata</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.gs.bulk_get_metadata_google_store.BulkGetMetadataGoogleStore.get_bulk_metadata" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictionary mapping the path of every file object in <em>directory</em> to a dictionary with the keys        &#8216;modified&#8217;, &#8216;bytes&#8217; and &#8216;is_dir&#8217; containing the corresponding metadata for the file object.</td>
-</tr>
-</tbody>
-</table>
-<p>The value for &#8216;modified&#8217; is a date in seconds, stating when the file object was last modified.  
-The value for &#8216;bytes&#8217; is the number of bytes of the file object. It is 0 if the object is a directory.
-The value for &#8216;is_dir&#8217; is True if the file object is a directory and False otherwise.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">NoSuchFilesytemObjectError if the directory does not exist</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.store.gs.google_store">
+  <div class="section" id="module-cloudfusion.store.gs.google_store">
 <span id="the-google-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">google_store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.gs.google_store" title="Permalink to this headline">¶</a></h1>
 <p>Created on 08.04.2011</p>
 <p>&#64;author: joe</p>
@@ -250,6 +216,40 @@ Key and secret can be obtained from the developer&#39;s console:
 </dd></dl>
 
 </div>
+<div class="section" id="module-cloudfusion.store.gs.bulk_get_metadata_google_store">
+<span id="the-bulk-get-metadata-google-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">bulk_get_metadata_google_store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.gs.bulk_get_metadata_google_store" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="cloudfusion.store.gs.bulk_get_metadata_google_store.BulkGetMetadataGoogleStore">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.gs.bulk_get_metadata_google_store.</tt><tt class="descname">BulkGetMetadataGoogleStore</tt><big>(</big><em>config</em><big>)</big><a class="headerlink" href="#cloudfusion.store.gs.bulk_get_metadata_google_store.BulkGetMetadataGoogleStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cloudfusion.store.gs.google_store.GoogleStore" title="cloudfusion.store.gs.google_store.GoogleStore"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.gs.google_store.GoogleStore</span></tt></a>, <a class="reference internal" href="store.html#cloudfusion.store.bulk_get_metadata.BulkGetMetadata" title="cloudfusion.store.bulk_get_metadata.BulkGetMetadata"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.bulk_get_metadata.BulkGetMetadata</span></tt></a></p>
+<p>Subclass of GoogleStore, extending it by implementing the BulkGetMetadata interface for quick directory lising.</p>
+<dl class="method">
+<dt id="cloudfusion.store.gs.bulk_get_metadata_google_store.BulkGetMetadataGoogleStore.get_bulk_metadata">
+<tt class="descname">get_bulk_metadata</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.gs.bulk_get_metadata_google_store.BulkGetMetadataGoogleStore.get_bulk_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictionary mapping the path of every file object in <em>directory</em> to a dictionary with the keys        &#8216;modified&#8217;, &#8216;bytes&#8217; and &#8216;is_dir&#8217; containing the corresponding metadata for the file object.</td>
+</tr>
+</tbody>
+</table>
+<p>The value for &#8216;modified&#8217; is a date in seconds, stating when the file object was last modified.  
+The value for &#8216;bytes&#8217; is the number of bytes of the file object. It is 0 if the object is a directory.
+The value for &#8216;is_dir&#8217; is True if the file object is a directory and False otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">NoSuchFilesytemObjectError if the directory does not exist</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 
 
           </div>
@@ -259,16 +259,16 @@ Key and secret can be obtained from the developer&#39;s console:
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_google_store</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.store.gs.google_store">The <tt class="docutils literal"><span class="pre">google_store</span></tt> Module</a></li>
+<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">google_store</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.store.gs.bulk_get_metadata_google_store">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_google_store</span></tt> Module</a></li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="store.dropbox.html"
-                        title="previous chapter">The <tt class="docutils literal"><span class="pre">file_decorator</span></tt> Module</a></p>
+  <p class="topless"><a href="store.s3.html"
+                        title="previous chapter">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_amazon_store</span></tt> Module</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="store.webdav.html"
-                        title="next chapter">The <tt class="docutils literal"><span class="pre">tinydav_client</span></tt> Module</a></p>
+  <p class="topless"><a href="store.dropbox.html"
+                        title="next chapter">The <tt class="docutils literal"><span class="pre">file_decorator</span></tt> Module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/store.gs.txt"
@@ -301,10 +301,10 @@ Key and secret can be obtained from the developer&#39;s console:
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="store.webdav.html" title="The tinydav_client Module"
+          <a href="store.dropbox.html" title="The file_decorator Module"
              >next</a> |</li>
         <li class="right" >
-          <a href="store.dropbox.html" title="The file_decorator Module"
+          <a href="store.s3.html" title="The bulk_get_metadata_amazon_store Module"
              >previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li>
@@ -313,7 +313,7 @@ Key and secret can be obtained from the developer&#39;s console:
     </div>
     <div class="footer">
         &copy; Copyright 2011, Johannes Müller.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>
