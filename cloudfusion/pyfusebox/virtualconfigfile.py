@@ -51,10 +51,9 @@ class VirtualConfigFile(VirtualFile):
         conf = self.get_store_config_data()
         service = conf['name']
         auth = self.get_service_auth_data()
-        if self._recently_registered_name != auth['user'] and 'autoregister' in conf and conf['autoregister'].lower() == "true" and service.lower() == "dropbox" or service.lower() == "db":
-            self.logger.debug("auto registration")
+        if self._recently_registered_name != auth['user'] and 'autoregister' in conf and conf['autoregister'].lower() == "true":
             ABS_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            SCRIPT_PATH = ABS_PATH + '/autoregistration/dropbox_autoregistration.py'
+            
             JAVA = '/usr/bin/java'
             HOME = expanduser("~")
             CLASSPATH = ['/usr/share/java/jna.jar',
@@ -66,19 +65,31 @@ class VirtualConfigFile(VirtualFile):
                          '/usr/share/java/sikuli-script.jar',
                          '/usr/share/maven-repo/com/google/guava/guava/debian/guava-debian.jar',
                          '/usr/share/maven-repo/org/jruby/ext/posix/jnr-posix/debian/jnr-posix-debian.jar',
-                         '/usr/share/java/jaffl.jar:/usr/share/java/jna.jar',
+                         '/usr/share/java/jaffl.jar',
+                         '/usr/share/java/jna.jar',
                          '/usr/share/maven-repo/jline/jline/1.0/jline-1.0.jar',
                          ]
             PARAMETERS = ['-Dfile.encoding=UTF-8',
                           '-Dpython.home=/usr/share/jython',
+                          '-Dsikuli.console=true',
                           '-Dpython.path="/usr/share/sikuli/Lib"',
                           "-Dpython.cachedir=\"%s/.jython-cache\"" % HOME,
                           ]
             JYTHON = '%s -cp "%s" %s org.python.util.jython ' % (JAVA, ':'.join(CLASSPATH), ' '.join(PARAMETERS))
-            p = subprocess.Popen(['%s "%s"' % (JYTHON, SCRIPT_PATH)], stdin=PIPE, shell=True)
-            p.stdin.write(auth['user']+"\n")
-            p.stdin.write(auth['password']+"\n")
-            p.communicate() #wait for process to exit
+            if service.lower() == "dropbox" or service.lower() == "db":
+                self.logger.debug("auto registration")
+                SCRIPT_PATH = ABS_PATH + '/autoregistration/dropbox_autoregistration.py'
+                p = subprocess.Popen(['%s "%s"' % (JYTHON, SCRIPT_PATH)], stdin=PIPE, shell=True)
+                p.stdin.write(auth['user']+"\n")
+                p.stdin.write(auth['password']+"\n")
+                p.communicate() #wait for process to exit
+            elif auth['url'].find('t-online') != -1: #url = https://webdav.mediencenter.t-online.de:443
+                self.logger.debug("auto registration")
+                SCRIPT_PATH = ABS_PATH + '/autoregistration/tonline_autoregistration.py'
+                p = subprocess.Popen(['%s "%s"' % (JYTHON, SCRIPT_PATH)], stdin=PIPE, shell=True)
+                p.stdin.write(auth['user']+"\n")
+                p.stdin.write(auth['password']+"\n")
+                p.communicate() #wait for process to exit
             self._recently_registered_name = auth['user']
     
     def _initialize_store(self):
