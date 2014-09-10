@@ -51,7 +51,8 @@ class VirtualConfigFile(VirtualFile):
         conf = self.get_store_config_data()
         service = conf['name']
         auth = self.get_service_auth_data()
-        if self._recently_registered_name != auth['user'] and 'autoregister' in conf and conf['autoregister'].lower() == "true":
+        if 'user' in auth and self._recently_registered_name != auth['user'] and \
+                'autoregister' in conf and conf['autoregister'].lower() == "true":
             ABS_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
             
             JAVA = '/usr/bin/java'
@@ -83,14 +84,14 @@ class VirtualConfigFile(VirtualFile):
                 p.stdin.write(auth['user']+"\n")
                 p.stdin.write(auth['password']+"\n")
                 p.communicate() #wait for process to exit
-            elif auth['url'].find('t-online') != -1: #url = https://webdav.mediencenter.t-online.de:443
+            elif 'url' in auth and auth['url'].find('t-online') != -1: #url = https://webdav.mediencenter.t-online.de:443
                 self.logger.debug("auto registration")
                 SCRIPT_PATH = ABS_PATH + '/autoregistration/tonline_autoregistration.py'
                 p = subprocess.Popen(['%s "%s"' % (JYTHON, SCRIPT_PATH)], stdin=PIPE, shell=True)
                 p.stdin.write(auth['user']+"\n")
                 p.stdin.write(auth['password']+"\n")
                 p.communicate() #wait for process to exit
-            self._recently_registered_name = auth['user']
+            self._recently_registered_name = auth['user'] #store if you are already registered
     
     def _initialize_store(self):
         '''Parametrize the store implementation with the settings in the configuration file
