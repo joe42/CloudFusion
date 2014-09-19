@@ -112,7 +112,8 @@ class VirtualConfigFile(VirtualFile):
         self.logger.debug("got cache parameter")
         auth = self.get_service_auth_data()
         auth['cache_id'] = cache_id # workaround; Dropbox needs access to cache_id to create a temporary directory with its name, to distinguish sessions
-        if 'access_key_id' in auth:
+        # user convenience: use either of the parameter names usual for Dropbox/Amazon&Google
+        if 'access_key_id' in auth and 'secret_access_key' in auth: 
             auth['consumer_key'] = auth['access_key_id']
             auth['consumer_secret'] = auth['secret_access_key']
         bucket_name = auth.get('bucket_name', 'cloudfusion') 
