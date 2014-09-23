@@ -15,6 +15,7 @@ import types
 from cloudfusion.store.dropbox.file_decorator import DataFileWrapper
 from contextlib import closing
 import atexit
+from cloudfusion.util import file_util
 
 def get_parent_dir(path): # helper function to get parent directory ending with '/'
     ret = os.path.dirname(path)
@@ -117,6 +118,17 @@ class ChunkFactory(object):
                 filepaths = map(lambda x: path+x, archive.files.keys()) 
                 return Chunk(path, chunk, filepaths)
         return None
+    
+    def get_size_of_next_chunk(self):
+        ''':returns: size in bytes of the next chunk returned by :meth:`get_new_chunk` or 0 if there is none.'''
+        self._swap_out_completed_archives()
+        ret = 0
+        for path, archives in self.completed_archives.iteritems():
+            for archive in archives:
+                for fname, filepath in archive.files.iteritems():
+                    ret += file_util.get_file_size_in_mb(filepath)
+                return ret
+        return 0
     
     def _create_archive(self, archive):
         '''Create an actual tar archive in the file system.
@@ -344,7 +356,7 @@ class PersistentChunkMapper(object):
         
 class ChunkStoreSyncThread(object):
     """Synchronizes between cache and store"""
-    def __init__(self, cache, store, temp_dir, logger, max_writer_threads=3):
+    def __init__(self, cache, store, temp_dir, logger, max_writer_threads=30):
         self.temp_dir = temp_dir
         self.logger = logger
         self.stats = WorkerStats()
@@ -371,6 +383,20 @@ class ChunkStoreSyncThread(object):
         self.skip_starting_new_writers_for_next_x_cycles = 0
         self.logger.debug("initialized ChunkStoreSyncThread")
         self.chunk_factory = ChunkFactory(self.logger) 
+    
+    def _get_max_threads(self, size_in_mb):
+        if size_in_mb == 0:
+            return self.max_writer_threads
+        max_throughput_for_files_smaller_1MB_in_KBps =  self.max_writer_threads * 100
+        if size_in_mb > 5: # 25 MBps
+            ret = 5 
+        elif size_in_mb >= 1: # 10 MBps
+            ret = 10
+        else:
+            ret = max_throughput_for_files_smaller_1MB_in_KBps / size_in_mb * 1000.0
+        if ret > self.max_writer_threads:
+            ret = self.max_writer_threads
+        return ret
     
     def restart(self):
         self.stop()
@@ -520,13 +546,24 @@ class ChunkStoreSyncThread(object):
         last_heartbeat = self._heartbeat
         return time.time()-last_heartbeat
 
+    def __sleep(self, seconds):
+        '''Sleep until *seconds* have passed since last call'''
+        if not hasattr(self.__sleep.im_func, 'last_call'):
+            self.__sleep.im_func.last_call = time.time()
+        last_call = self.__sleep.im_func.last_call
+        time_since_last_call = time.time() - last_call
+        time_to_sleep_in_s = 1 - time_since_last_call
+        if time_to_sleep_in_s > 0:
+            time.sleep( time_to_sleep_in_s )
+        self.__sleep.im_func.last_call = time.time()
+        
     def run(self): 
         #TODO: check if the cached entries have changed remotely (delta request) and update asynchronously
         #TODO: check if entries being transferred have changed and stop transfer
         while not self._stop:
             self.logger.debug("StoreSyncThread run")
             self._heartbeat = time.time()
-            time.sleep( 15 )
+            self.__sleep( 1 )
             self._reconnect()
             self.tidy_up()
             if self.skip_starting_new_writers_for_next_x_cycles > 0:
@@ -600,12 +637,13 @@ class ChunkStoreSyncThread(object):
         self._acquire_two_locks() #otherwise, fuse thread could delete current cache entry
         dirty_entry_keys = self.cache.get_dirty_lru_entries(800)##KeyError: '########################## ######## list_tail ###### #############################' lru_cache.py return self.entries[self.entries[LISTTAIL]] if self.entries[LISTTAIL] else None
         for path in dirty_entry_keys:
-            if len(self.writers) >= self.max_writer_threads:
-                break
             if not self.cache.is_expired(path): ##KeyError: '/fstest.7548/d010/66334873' cache.py return time.time() > self.entries[key].updated + self.expire
                 break
             if self.is_in_progress(path):
                 continue
+            size_in_mb = self.chunk_factory.get_size_of_next_chunk()
+            if len(self.writers) >= self._get_max_threads(size_in_mb):
+                return
             expired_file_entry = self.cache.peek_file(path)
             self.chunk_factory.add(expired_file_entry, path)
             self.logger.debug("add old modified path: "+path)
@@ -616,6 +654,10 @@ class ChunkStoreSyncThread(object):
                 new_worker = ChunkWriteWorker(self.store, chunk.parent_dir, chunk_uuid, chunk.fileobject, chunk.filepaths, self.logger)
                 new_worker.start()
                 self.writers.append(new_worker)
+        
+        size_in_mb = self.chunk_factory.get_size_of_next_chunk()
+        if len(self.writers) >= self._get_max_threads(size_in_mb):
+            return
         chunk = self.chunk_factory.get_new_chunk()
         if chunk:
             chunk_uuid = self.chunk_mapper.get_next_chunk_uuid()
@@ -629,10 +671,11 @@ class ChunkStoreSyncThread(object):
         self._acquire_two_locks() #otherwise, fuse thread could delete current cache entry
         dirty_entry_keys = self.cache.get_dirty_lru_entries(self.max_writer_threads)
         for path in dirty_entry_keys:
-            if len(self.writers) >= self.max_writer_threads:
-                break
             if self.is_in_progress(path):
                 continue
+            size_in_mb = self.chunk_factory.get_size_of_next_chunk()
+            if len(self.writers) >= self._get_max_threads(size_in_mb):
+                return
             expired_file_entry = self.cache.peek_file(path)
             self.chunk_factory.add(expired_file_entry, path)
             self.oldest_modified_date[path] = self.cache.get_modified(path) #might change during upload, if new file contents is written to the cache entry

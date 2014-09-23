@@ -4,10 +4,14 @@ from threading import Thread, RLock
 import time
 from cloudfusion.store.store import StoreSpaceLimitError, StoreAccessError, NoSuchFilesytemObjectError,\
     StoreAutorizationError
+import os
 
 class StoreSyncThread(object):
     """Synchronizes between cache and store"""
-    def __init__(self, cache, store, logger, max_writer_threads=3):
+    def __init__(self, cache, store, logger, max_writer_threads=30):
+        '''Max. throughput for files < 1MB is max_writer_threads * 100KB per second.
+        :param max_writer_threads: Max. number of writer threads to use.
+        '''
         self.logger = logger
         self.stats = WorkerStats()
         self.cache = cache
@@ -27,6 +31,20 @@ class StoreSyncThread(object):
         #used for waiting when quota errors occur
         self.skip_starting_new_writers_for_next_x_cycles = 0
         self.logger.debug("initialized StoreSyncThread")
+    
+    def _get_max_threads(self, size_in_mb):
+        if size_in_mb == 0:
+            return self.max_writer_threads
+        max_throughput_for_files_smaller_1MB_in_KBps =  self.max_writer_threads * 100
+        if size_in_mb > 5: # 25 MBps
+            ret = 5 
+        elif size_in_mb >= 1: # 10 MBps
+            ret = 10
+        else:
+            ret = max_throughput_for_files_smaller_1MB_in_KBps / size_in_mb * 1000.0
+        if ret > self.max_writer_threads:
+            ret = self.max_writer_threads
+        return ret
     
     def restart(self):
         self.stop()
@@ -82,7 +100,7 @@ class StoreSyncThread(object):
                 del self.oldest_modified_date[writer.path]
         for writer in writers_to_be_removed:
             self.writers.remove(writer)
-            
+    
     def _remove_slow_writers(self):
         for writer in self.writers:
             if not writer.is_finished(): 
@@ -155,13 +173,24 @@ class StoreSyncThread(object):
         last_heartbeat = self._heartbeat
         return time.time()-last_heartbeat
 
+    def __sleep(self, seconds):
+        '''Sleep until *seconds* have passed since last call'''
+        if not hasattr(self.__sleep.im_func, 'last_call'):
+            self.__sleep.im_func.last_call = time.time()
+        last_call = self.__sleep.im_func.last_call
+        time_since_last_call = time.time() - last_call
+        time_to_sleep_in_s = 1 - time_since_last_call
+        if time_to_sleep_in_s > 0:
+            time.sleep( time_to_sleep_in_s )
+        self.__sleep.im_func.last_call = time.time()
+
     def run(self): 
         #TODO: check if the cached entries have changed remotely (delta request) and update asynchronously
         #TODO: check if entries being transferred have changed and stop transfer
         while not self._stop:
             self.logger.debug("StoreSyncThread run")
             self._heartbeat = time.time()
-            time.sleep( 15 )
+            self.__sleep(1)
             self._reconnect()
             self.tidy_up()
             if self.skip_starting_new_writers_for_next_x_cycles > 0:
@@ -194,14 +223,15 @@ class StoreSyncThread(object):
         self._acquire_two_locks() #otherwise, fuse thread could delete current cache entry
         dirty_entry_keys = self.cache.get_dirty_lru_entries(self.max_writer_threads)##KeyError: '########################## ######## list_tail ###### #############################' lru_cache.py return self.entries[self.entries[LISTTAIL]] if self.entries[LISTTAIL] else None
         for path in dirty_entry_keys:
-            if len(self.writers) >= self.max_writer_threads:
-                break
             if not self.cache.is_expired(path): ##KeyError: '/fstest.7548/d010/66334873' cache.py return time.time() > self.entries[key].updated + self.expire
                 break
             if self.is_in_progress(path):
                 continue
-            self.oldest_modified_date[path] = self.cache.get_modified(path) #might change during upload, if new file contents is written to the cache entry
             file = self.cache.peek_file(path)
+            size_in_mb = self.__get_file_size_in_mb(file)
+            if len(self.writers) >= self._get_max_threads(size_in_mb):
+                break
+            self.oldest_modified_date[path] = self.cache.get_modified(path) #might change during upload, if new file contents is written to the cache entry
             new_worker = WriteWorker(self.store, path, file, self.logger)
             new_worker.start()
             self.writers.append(new_worker)
@@ -213,22 +243,29 @@ class StoreSyncThread(object):
         self._acquire_two_locks() #otherwise, fuse thread could delete current cache entry
         dirty_entry_keys = self.cache.get_dirty_lru_entries(self.max_writer_threads)
         for path in dirty_entry_keys:
-            if len(self.writers) >= self.max_writer_threads:
-                break
             if self.is_in_progress(path):
                 continue
-            self.oldest_modified_date[path] = self.cache.get_modified(path) #might change during upload, if new file contents is written to the cache entry
             file = self.cache.peek_file(path)
+            size_in_mb = self.__get_file_size_in_mb(file)
+            if len(self.writers) >= self._get_max_threads(size_in_mb):
+                break
+            self.oldest_modified_date[path] = self.cache.get_modified(path) #might change during upload, if new file contents is written to the cache entry
             new_worker = WriteWorker(self.store, path, file, self.logger)
             new_worker.start()
             self.writers.append(new_worker)
         self._release_two_locks()
     
+    def __get_file_size_in_mb(self, fileobject):
+        fileobject.seek(0, os.SEEK_END)
+        size_in_mb = fileobject.tell() / 1000.0 / 1000  
+        fileobject.seek(0)
+        return size_in_mb
+    
     def sync(self):
         with self.lock: # does not block writing..
             self.logger.debug("StoreSyncThread sync")
             while True:
-                time.sleep(3)
+                time.sleep(1)
                 self.tidy_up()
                 self.enqueue_dirty_entries()
                 if not self.cache.get_dirty_lru_entries(1):  
