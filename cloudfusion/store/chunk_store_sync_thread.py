@@ -53,7 +53,8 @@ class ChunkFactory(object):
         self.completed_archives = {} #dictionary mapping parent directory to list of archives
     
     def _swap_out_completed_archives(self):
-        '''Checks for all archives if they are completed, and swap them to self.completed_archives'''
+        '''Checks for all archives if they are ready to be uploaded, 
+           and swap them to self.completed_archives'''
         archives_to_delete = []
         for path, archive in self.archives.iteritems():
             if self._is_complete(archive):
@@ -64,7 +65,7 @@ class ChunkFactory(object):
             del self.archives[path]    
             
     def _is_complete(self, archive):
-        ''':returns: True iff the archive is complete'''
+        ''':returns: True iff the archive is ready to be uploaded'''
         return archive.size_in_bytes > self.max_chunk_size \
                     or time.time() > self.max_time_to_upload + archive.first_access 
         
@@ -102,8 +103,9 @@ class ChunkFactory(object):
         local_file.close()
         
     def get_new_chunk(self):
-        '''Get a chunk, if one is available according to max_time_to_upload, and max_chunk_size.
-        The chunk file returned needs to be deleted if it is not used anymore. It is stored in chunk.name       
+        '''Get a chunk, if one is ready for upload according to max_time_to_upload, and max_chunk_size.
+        The chunk file returned needs to be deleted if it is not used anymore. It is stored in chunk.name
+        The list is removed from the list of archives that are ready to be uploaded.       
         :returns: Instance of Chunk or None if no chunk is available.'''
         self._swap_out_completed_archives()
         for path, archives in self.completed_archives.iteritems():
