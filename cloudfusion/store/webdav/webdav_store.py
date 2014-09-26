@@ -55,7 +55,7 @@ class WebdavStore(Store):
     
     @retry((Exception), tries=14, delay=0.1, backoff=2)
     def get_file(self, path_to_file): 
-        self.logger.debug("getting file: %s", path_to_file)
+        self.logger.info("getting file: %s", path_to_file)
         self._raise_error_if_invalid_path(path_to_file)
         return self.tinyclient.get_file(path_to_file) 
         
@@ -69,7 +69,7 @@ class WebdavStore(Store):
     @retry((Exception), tries=2, delay=0) 
     def store_fileobject(self, fileobject, path, interrupt_event=None):
         size = self.__get_size(fileobject)
-        self.logger.debug("Storing file object of size %s to %s", size, path)
+        self.logger.info("Storing file object of size %s to %s", size, path)
         if hasattr(fileobject, 'name'):
             file_name = fileobject.name
         else:
@@ -86,7 +86,7 @@ class WebdavStore(Store):
     # with caching_store, the entry in cache is deleted anyways 
     @retry((Exception), tries=5, delay=0) 
     def delete(self, path, is_dir=False):
-        self.logger.debug("deleting %s", path)
+        self.logger.info("deleting %s", path)
         self._raise_error_if_invalid_path(path)
         if is_dir:
             self.tinyclient.rmdir(path)
@@ -99,17 +99,17 @@ class WebdavStore(Store):
 
     @retry((Exception), tries=14, delay=0.1, backoff=2)
     def create_directory(self, directory):
-        self.logger.debug("creating directory %s", directory)
+        self.logger.info("creating directory %s", directory)
         self.tinyclient.mkdir(directory)
         
     @retry((Exception), tries=1)
     def duplicate(self, path_to_src, path_to_dest):
-        self.logger.debug("duplicating %s to %s", path_to_src, path_to_dest)
+        self.logger.info("duplicating %s to %s", path_to_src, path_to_dest)
         self.tinyclient.copy(path_to_src, path_to_dest)
     
     @retry((Exception), tries=1)
     def move(self, path_to_src, path_to_dest):
-        self.logger.debug("moving %s to %s", path_to_src, path_to_dest)
+        self.logger.info("moving %s to %s", path_to_src, path_to_dest)
         self.tinyclient.move(path_to_src, path_to_dest)
     
     @retry((Exception), tries=4, delay=0.1, backoff=2) 

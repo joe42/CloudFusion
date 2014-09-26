@@ -122,12 +122,12 @@ class DropboxStore(Store):
         self.logger = logging.getLogger(self._logging_handler)
         self.logger = db_logging_thread.make_logger_multiprocessingsave(self.logger)
         self.dir_listing_cache = {}
-        self.logger.debug("get Dropbox session")
+        self.logger.info("get Dropbox session")
         if not config['root'] in ['dropbox', 'app_folder']:
             raise StoreAccessError("Configuration error: root must be one of dropbox or app_folder, check your configuration file", 0)
         self._cache_dir = self._get_cachedir_name(config)
         self.create_session(config, self._cache_dir)
-        self.logger.debug("get DropboxClient")
+        self.logger.info("get DropboxClient")
         self.client = client.DropboxClient(self.sess)
         self.root = config['root']
         self.time_difference = self._get_time_difference()
@@ -319,7 +319,7 @@ class DropboxStore(Store):
     
     @retry((Exception,RESTSocketError))
     def get_file(self, path_to_file): 
-        self.logger.debug("getting file: %s", path_to_file)
+        self.logger.info("getting file: %s", path_to_file)
         self._raise_error_if_invalid_path(path_to_file)
         try:
             data, metadata = self.client.get_file_and_metadata(path_to_file)
@@ -378,7 +378,7 @@ class DropboxStore(Store):
     @retry((Exception,RESTSocketError), tries=2, delay=0) 
     def store_fileobject(self, fileobject, path, interrupt_event=None):
         size = self.__get_size(fileobject)
-        self.logger.debug("Storing file object of size %s to %s", size, path)
+        self.logger.info("Storing file object of size %s to %s", size, path)
         remote_file_name = os.path.basename(path)
         if size < 6000000:
             return self.store_small_fileobject(fileobject, path)
@@ -415,7 +415,7 @@ class DropboxStore(Store):
     # with caching_store, the entry in cache is deleted anyways 
     @retry((Exception,RESTSocketError), tries=5, delay=0) 
     def delete(self, path, is_dir=False): #is_dir parameter does not matter to dropbox
-        self.logger.debug("deleting %s", path)
+        self.logger.info("deleting %s", path)
         self._raise_error_if_invalid_path(path)
         try:
             resp = self.client.file_delete(path)
@@ -439,7 +439,7 @@ class DropboxStore(Store):
 
     @retry((Exception,RESTSocketError))
     def create_directory(self, directory):
-        self.logger.debug("creating directory %s", directory)
+        self.logger.info("creating directory %s", directory)
         self._raise_error_if_invalid_path(directory)
         if directory == "/":
             return
@@ -453,7 +453,7 @@ class DropboxStore(Store):
     # worst case: should happen mostly with user interaction, so fast feedback is more important
     @retry((Exception,RESTSocketError), tries=2, delay=0)
     def duplicate(self, path_to_src, path_to_dest):
-        self.logger.debug("duplicating %s to %s", path_to_src, path_to_dest)
+        self.logger.info("duplicating %s to %s", path_to_src, path_to_dest)
         self._raise_error_if_invalid_path(path_to_src)
         self._raise_error_if_invalid_path(path_to_dest)
         try:
@@ -467,7 +467,7 @@ class DropboxStore(Store):
     # worst case: should happen mostly with user interaction, so fast feedback is more important
     @retry((Exception,RESTSocketError), tries=2, delay=0)
     def move(self, path_to_src, path_to_dest):
-        self.logger.debug("moving %s to %s", path_to_src, path_to_dest)
+        self.logger.info("moving %s to %s", path_to_src, path_to_dest)
         self._raise_error_if_invalid_path(path_to_src)
         self._raise_error_if_invalid_path(path_to_dest)
         try:

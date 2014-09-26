@@ -381,7 +381,7 @@ class ChunkStoreSyncThread(object):
         self._heartbeat = time.time()
         #used for waiting when quota errors occur
         self.skip_starting_new_writers_for_next_x_cycles = 0
-        self.logger.debug("initialized ChunkStoreSyncThread")
+        self.logger.info("initialized ChunkStoreSyncThread")
         self.chunk_factory = ChunkFactory(self.logger) 
     
     def _get_max_threads(self, size_in_mb):
@@ -696,7 +696,7 @@ class ChunkStoreSyncThread(object):
     def sync(self):
         with self.lock: # does not block writing..
             #print "sync"
-            self.logger.debug("StoreSyncThread sync")
+            self.logger.info("StoreSyncThread sync")
             while True:
                 time.sleep(3)
                 self.tidy_up()
@@ -704,7 +704,7 @@ class ChunkStoreSyncThread(object):
                 #print "sync dirty entries:"+repr(self.cache.get_dirty_lru_entries(10))
                 if not self.cache.get_dirty_lru_entries(1):  
                     return
-            self.logger.debug("StoreSyncThread endsync")
+            self.logger.info("StoreSyncThread endsync")
         
     
     def delete(self, path, is_dir): 

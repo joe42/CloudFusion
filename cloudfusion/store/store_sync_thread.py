@@ -30,7 +30,7 @@ class StoreSyncThread(object):
         self._heartbeat = time.time()
         #used for waiting when quota errors occur
         self.skip_starting_new_writers_for_next_x_cycles = 0
-        self.logger.debug("initialized StoreSyncThread")
+        self.logger.info("initialized StoreSyncThread")
     
     def _get_max_threads(self, size_in_mb):
         if size_in_mb == 0:
@@ -263,14 +263,14 @@ class StoreSyncThread(object):
     
     def sync(self):
         with self.lock: # does not block writing..
-            self.logger.debug("StoreSyncThread sync")
+            self.logger.info("StoreSyncThread sync")
             while True:
                 time.sleep(1)
                 self.tidy_up()
                 self.enqueue_dirty_entries()
                 if not self.cache.get_dirty_lru_entries(1):  
                     return
-            self.logger.debug("StoreSyncThread endsync")
+            self.logger.info("StoreSyncThread endsync")
         
     
     def delete(self, path, is_dir):

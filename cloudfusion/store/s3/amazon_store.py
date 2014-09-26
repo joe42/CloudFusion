@@ -66,9 +66,9 @@ class AmazonStore(Store):
         if not self.bucket_name in buckets:
             try:
                 self.conn.create_bucket(self.bucket_name)
-                self.logger.debug('Successfully created bucket "%s"' % self.bucket_name)
+                self.logger.info('Successfully created bucket "%s"' % self.bucket_name)
             except boto.exception.StorageCreateError, e:
-                self.logger.debug('Failed to create bucket:'+ repr(e))
+                self.logger.error('Failed to create bucket:'+ repr(e))
                 sys.exit()
         self.bucket = self.conn.get_bucket('cloudfusion')
 
@@ -92,7 +92,7 @@ class AmazonStore(Store):
         return self.name
     
     def get_file(self, path_to_file): 
-        self.logger.debug("getting file: %s", path_to_file)
+        self.logger.info("getting file: %s", path_to_file)
         #self._raise_error_if_invalid_path(path_to_file)
         k = Key(self.bucket)
         k.key = path_to_file[1:]
@@ -109,7 +109,7 @@ class AmazonStore(Store):
     @retry((Exception), tries=2, delay=0) 
     def store_fileobject(self, fileobject, path, interrupt_event=None):
         size = self.__get_size(fileobject)
-        self.logger.debug("Storing file object of size %s to %s", size, path)
+        self.logger.info("Storing file object of size %s to %s", size, path)
         k = Key(self.bucket)
         k.key = path[1:]
         k.set_contents_from_file(fileobject) # does not return bytes written
@@ -120,7 +120,7 @@ class AmazonStore(Store):
     # with caching_store, the entry in cache is deleted anyways 
     @retry((Exception), tries=5, delay=0) 
     def delete(self, path, is_dir=False): 
-        self.logger.debug("deleting %s", path)
+        self.logger.info("deleting %s", path)
         self._raise_error_if_invalid_path(path)
         delete_list = []
         delete_list.append(path[1:])
@@ -136,7 +136,7 @@ class AmazonStore(Store):
 
     @retry((Exception))
     def create_directory(self, directory):
-        self.logger.debug("creating directory %s", directory)
+        self.logger.info("creating directory %s", directory)
         k = Key(self.bucket)
         k.key = directory[1:]+'/'
         k.set_metadata('Content-Type', 'application/x-directory')
@@ -145,7 +145,7 @@ class AmazonStore(Store):
         
     @retry((Exception), tries=1)
     def duplicate(self, path_to_src, path_to_dest):
-        self.logger.debug("duplicating %s to %s", path_to_src, path_to_dest)
+        self.logger.info("duplicating %s to %s", path_to_src, path_to_dest)
         path_to_dest = path_to_dest[1:] #remove / from beginning
         path_to_src = path_to_src[1:]
         k = self.bucket.get_key(path_to_src)
@@ -167,7 +167,7 @@ class AmazonStore(Store):
     
     @retry((Exception), tries=1)
     def move(self, path_to_src, path_to_dest):
-        self.logger.debug("moving %s to %s", path_to_src, path_to_dest)
+        self.logger.info("moving %s to %s", path_to_src, path_to_dest)
         path_to_dest = path_to_dest[1:] #remove / from beginning
         path_to_src = path_to_src[1:]
         k = self.bucket.get_key(path_to_src)
@@ -216,7 +216,7 @@ class AmazonStore(Store):
     def _handle_error(self, error, stacktrace, method_name, remaining_tries, *args, **kwargs):
         """Used by retry decorator to react to errors."""
         if isinstance(error, AttributeError):
-            self.logger.debug("Retrying on funny socket error: %s", error)
+            self.logger.error("Retrying on funny socket error: %s", error)
             #funny socket error in httplib2: AttributeError 'NoneType' object has no attribute 'makefile'
         elif isinstance(error, NoSuchFilesytemObjectError):
                 self.logger.debug("Error could not be handled: %s", error)

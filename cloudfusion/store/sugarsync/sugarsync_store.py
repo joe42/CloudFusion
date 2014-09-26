@@ -139,7 +139,7 @@ class SugarsyncStore(Store):
         except Exception, e:
             raise StoreAutorizationError(repr(e), 0)
         self.time_difference = self._get_time_difference()
-        self.logger.debug("sugarsync store initialized")
+        self.logger.info("sugarsync store initialized")
         self.root_folders = {}
         syncfolders = self.client.get_syncfolders()
         for folder in syncfolders.keys():
@@ -273,7 +273,7 @@ class SugarsyncStore(Store):
     
     @retry((Exception,socket.error))
     def get_file(self, path_to_file): 
-        self.logger.debug("getting file: %s", path_to_file)
+        self.logger.info("getting file: %s", path_to_file)
         self._raise_error_if_invalid_path(path_to_file)
         resp = self.client.get_file( self._translate_path(path_to_file) )
         if not resp.status in HTTP_STATUS.OK:
@@ -325,7 +325,7 @@ class SugarsyncStore(Store):
             
     @retry((Exception,socket.error), tries=2, delay=0) 
     def store_fileobject(self, fileobject, path_to_file):
-        self.logger.debug("storing file object to %s", path_to_file)
+        self.logger.info("storing file object to %s", path_to_file)
         if not self.exists(path_to_file):
             self._create_file(path_to_file)
         resp = self.client.put_file( fileobject, self._translate_path(path_to_file) ) 
@@ -335,7 +335,7 @@ class SugarsyncStore(Store):
         return int(time.mktime( time.strptime(resp.headers['Date'], "%a, %d %b %Y %H:%M:%S GMT") ) - self.time_difference) 
             
     def _create_file(self, path, mime='text/x-cloudfusion'):
-        self.logger.debug("creating file object %s", path)
+        self.logger.info("creating file object %s", path)
         name = os.path.basename(path)
         directory = os.path.dirname(path)
         translated_dir = self._translate_path(directory)
@@ -348,7 +348,7 @@ class SugarsyncStore(Store):
     # with caching_store, the entry in cache is deleted anyways 
     @retry((Exception,socket.error), tries=5, delay=0) 
     def delete(self, path, is_dir):
-        self.logger.debug("deleting %s", path)
+        self.logger.info("deleting %s", path)
         if path == "/":
             return
         if path[-1] == "/":
@@ -368,7 +368,7 @@ class SugarsyncStore(Store):
     # worst case: would be annoying  when copying nested directory structure and failure occurs
     @retry((Exception,socket.error))
     def create_directory(self, path):
-        self.logger.debug("creating directory %s", path)
+        self.logger.info("creating directory %s", path)
         self._raise_error_if_invalid_path(path)
         if path == "/":
             return
@@ -403,7 +403,7 @@ class SugarsyncStore(Store):
     # worst case: should happen mostly with user interaction, so fast feedback is more important
     @retry((Exception,socket.error), tries=1, delay=0)
     def duplicate(self, path_to_src, path_to_dest): #src might be a directory
-        self.logger.debug("duplicating %s to %s", path_to_src, path_to_dest)
+        self.logger.info("duplicating %s to %s", path_to_src, path_to_dest)
         self._raise_error_if_invalid_path(path_to_src)
         self._raise_error_if_invalid_path(path_to_dest)
         if path_to_src[-1] == "/":
