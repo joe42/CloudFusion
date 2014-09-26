@@ -242,13 +242,13 @@ class DropboxStore(Store):
         res = requests.post('https://www.dropbox.com/1/oauth/authorize_submit', attr, headers=headers,cookies=cookies)
 
     
-    def _handle_error(self, error, method_name, remaining_tries, *args, **kwargs):
+    def _handle_error(self, error, stacktrace, method_name, remaining_tries, *args, **kwargs):
         """Used by retry decorator to react to errors."""
         if isinstance(error, AttributeError):
-            self.logger.debug("Retrying on funny socket error: %s", error)
+            self.logger.exception("Retrying on funny socket error: %s", error)
             #funny socket error in httplib2: AttributeError 'NoneType' object has no attribute 'makefile'
         elif isinstance(error, StoreAutorizationError):
-            self.logger.debug("Trying to handle authorization error by reconnecting: %s", error)
+            self.logger.exception("Trying to handle authorization error by reconnecting: %s", error)
             self.reconnect()
             if remaining_tries == 0: # throw error after last try
                 raise error 
@@ -259,12 +259,12 @@ class DropboxStore(Store):
                 error.status == HTTP_STATUS.FORBIDDEN or \
                 isinstance(error, AlreadyExistsError) or \
                 isinstance(error, NoSuchFilesytemObjectError):
-                self.logger.debug("Error could not be handled: %s", error)
+                self.logger.exception("Error could not be handled: %s", error)
                 raise error
         else:
             if isinstance(error, RESTSocketError):
                 error = Exception(str(error)) #wrap exception, as logger cannot handle socket.error exceptions
-            self.logger.debug("Error is not covered by _handle_error: %s", error)
+            self.logger.error("Error could not be handled: \n%s", stacktrace)
         if remaining_tries == 0: # throw error after last try
             raise StoreAccessError(str(error), 0) 
         return False

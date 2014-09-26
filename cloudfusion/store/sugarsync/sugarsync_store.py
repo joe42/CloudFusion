@@ -440,7 +440,7 @@ class SugarsyncStore(Store):
                 self.logger.warning("could not duplicate %s to %s\nstatus: %s reason: %s", path_to_src, path_to_dest, resp.status, resp.reason)
                 HTTP_STATUS.generate_exception(resp.status, str(resp))
     
-    def _handle_error(self, error, method_name, remaining_tries, *args, **kwargs):
+    def _handle_error(self, error, stacktrace, method_name, remaining_tries, *args, **kwargs):
         if isinstance(error, AttributeError):
             self.logger.error("Retrying on funny socket error: %s", error)
             #funny socket error in httplib2: AttributeError 'NoneType' object has no attribute 'makefile'
@@ -464,7 +464,7 @@ class SugarsyncStore(Store):
                 self.logger.error("Error could not be handled: %s", error)
                 raise error # do not retry (error cannot be handled)
         else:
-            self.logger.error("Error is not covered by _handle_error: %s", error)
+            self.logger.error("Error could not be handled: \n%s", stacktrace)
         if remaining_tries == 0: # throw error after last try 
             raise StoreAccessError(str(error), 0) 
         return False

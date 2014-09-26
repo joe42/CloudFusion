@@ -1,13 +1,13 @@
 import time
 from functools import wraps
-
+import traceback
 
 def retry(ExceptionToCheck, tries=20, delay=0.1, backoff=2):
     """Retry calling the decorated function using an exponential backoff.
     The decorated method's object may define the _handle_error method.
     The parameters for _handle_error are the exception object, 
-    the wrapped methods' name, the number of tries remaining, 
-    and finally the original parameters.
+    a formatted stack trace in the form of a string, the wrapped methods' name, 
+    the number of tries remaining, and finally the original parameters.
     If _handle_error returns True, retrying is aborted.
 
     :param ExceptionToCheck: the exception to check. may be a tuple of
@@ -32,7 +32,7 @@ def retry(ExceptionToCheck, tries=20, delay=0.1, backoff=2):
                     return f(self, *args, **kwargs)
                 except ExceptionToCheck, e:
                     if hasattr(self, '_handle_error'):
-                        if self._handle_error(e, f.__name__, remaining_tries, *args, **kwargs): #if error is handled, break
+                        if self._handle_error(e, traceback.format_exc(), f.__name__, remaining_tries, *args, **kwargs): #if error is handled, break
                             return f(self, *args, **kwargs)
                     time.sleep(mdelay)
                     mdelay *= mbackoff

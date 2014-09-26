@@ -52,7 +52,7 @@ class TinyDAVClient(object):
         self._logging_handler = self.name
         self.logger = logging.getLogger(self._logging_handler)
     
-    def _handle_error(self, error, method_name, remaining_tries, *args, **kwargs):
+    def _handle_error(self, error, stacktrace, method_name, remaining_tries, *args, **kwargs):
         if isinstance(error, HTTPUserError):
             if method_name == 'upload':
                 fname = args[1]  # position of fileobject name for error message depends on method
@@ -75,7 +75,7 @@ class TinyDAVClient(object):
                 self.logger.error(msg+'.')
             return False
         if isinstance(error, HTTPServerError):
-            self.logger.error("Error could not be handled: %s", error)
+            self.logger.error("Error could not be handled: \n%s", stacktrace)
             raise error # do not retry (error cannot be handled)
         if remaining_tries == 0: # throw error after last try 
             raise error

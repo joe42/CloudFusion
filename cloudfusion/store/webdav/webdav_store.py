@@ -127,14 +127,14 @@ class WebdavStore(Store):
         self.logger.debug("getting directory listing for %s", directory)
         return self.tinyclient.get_directory_listing(directory)
     
-    def _handle_error(self, error, method_name, remaining_tries, *args, **kwargs):
+    def _handle_error(self, error, stacktrace, method_name, remaining_tries, *args, **kwargs):
         if method_name == 'get_file': #box.com does not instantly see files that are written to it (eventual consistency)
             if isinstance(error, NoSuchFilesytemObjectError) and remaining_tries != 0:
                 return False
         if isinstance(error, NoSuchFilesytemObjectError) or \
             isinstance(error, AlreadyExistsError) or \
             isinstance(error, StoreAccessError):
-            self.logger.error("Error could not be handled: %s", error)
+            self.logger.error("Error could not be handled: \n%s", stacktrace)
             raise error
         if remaining_tries == 0: # throw error after last try 
             raise StoreAccessError(str(error), 0) 

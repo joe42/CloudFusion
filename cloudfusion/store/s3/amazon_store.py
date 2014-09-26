@@ -213,7 +213,7 @@ class AmazonStore(Store):
         listing = ['/'+o.name if o.name[-1] != '/' else '/'+o.name[:-1] for o in listing] #remove trailing slash and add preceding slash
         return listing
 
-    def _handle_error(self, error, method_name, remaining_tries, *args, **kwargs):
+    def _handle_error(self, error, stacktrace, method_name, remaining_tries, *args, **kwargs):
         """Used by retry decorator to react to errors."""
         if isinstance(error, AttributeError):
             self.logger.debug("Retrying on funny socket error: %s", error)
@@ -225,7 +225,7 @@ class AmazonStore(Store):
             self.logger.debug('file object does not exist in %s: %s' % (method_name, str(S3ResponseError)))
             raise NoSuchFilesytemObjectError('file object does not exist in %s: %s' % (method_name, str(S3ResponseError)))
         else:
-            self.logger.debug("Error is not covered by _handle_error: %s", error)
+            self.logger.error("Error could not be handled: \n%s", stacktrace)
         if remaining_tries == 0: # throw error after last try
             raise StoreAccessError(str(error), 0) 
         return False
