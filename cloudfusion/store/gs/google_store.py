@@ -32,8 +32,8 @@ class GoogleStore(Store):
     def __init__(self, config):
         '''*config* is a dictionary with the keys consumer_key (access_key_id), consumer_secret (secret_access_key), and bucket_name. For instance::
         
-                config['consumer_key'] = 'FDS54548SDF8D2S311DF' 
-                config['consumer_secret'] = 'D370JKD=564++873ZHFD9FDKDD'
+                config['client_id'] = 'FDS54548SDF8D2S311DF' 
+                config['client_secret'] = 'D370JKD=564++873ZHFD9FDKDD'
                 config['bucket_name'] = 'cloudfusion'
                 
             The bucket will be created if it does not exist. A bucket is similar to a subfolder,
@@ -58,6 +58,9 @@ class GoogleStore(Store):
         self.logger = db_logging_thread.make_logger_multiprocessingsave(self.logger)
         self.logger.info("creating %s store", self.name)
         self.bucket_name = config['bucket_name']
+        if 'client_id' in config and 'client_secret' in config:
+            config['consumer_key'] = config['client_id']
+            config['consumer_secret'] = config['client_secret']
         self.access_key_id = config['consumer_key']
         self.secret_access_key = config['consumer_secret']
         self.write_gsutil_config()
