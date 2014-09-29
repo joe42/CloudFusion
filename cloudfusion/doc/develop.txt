@@ -18,7 +18,8 @@ Here are some example scripts on how to use CloudFusion's internal API, if you d
 The implementations are interchangeable. If you want to use Amazon S3 instead of Dropbox,
 you only need to change the client and everything else stays the same. 
 The Amazon S3 example is a simple Hello World! example. 
-The WebDAV example shows how to use the BulkGetMetadata interface to quickly get the metadata of all file within a single directory.
+The WebDAV example shows how to use the BulkGetMetadata interface to quickly get the metadata of all files within a single directory.
+Every example has been tested before it was written. If you find any bug, please report it as an issue at github: https://github.com/joe42/CloudFusion/issues.
 
 
 
@@ -270,8 +271,8 @@ And here is the code::
     
     def main():
         config = {}
-        config['consumer_key'] = 'FDS54548SDF8D2S311DF' 
-        config['consumer_secret'] = 'D370JKD=564++873ZHFD9FDKDD'
+        config['client_id'] = 'FDS54548SDF8D2S311DF' 
+        config['client_secret'] = 'D370JKD=564++873ZHFD9FDKDD'
         config['bucket_name'] = 'cloudfusion'
         
         #Create the actual client
@@ -351,6 +352,36 @@ Here is an example for accessing Sugarsync::
         
         #Create the actual client
         client = SugarsyncStore(config)
+        
+        #Get directory listing (may take a few seconds)
+        client.get_directory_listing("/")
+        '''
+        [u'/ordner', u'/neuer ordner', u'/test_4', u'/My DB']
+        '''
+        #...
+        
+    if __name__ == '__main__':
+        main()
+
+
+
+Google Drive
+++++++++++++++++++++++++++++++++
+
+Here is an example for accessing Google Drive::
+
+    from cloudfusion.store.gdrive.google_drive import GoogleDrive 
+    from cloudfusion.store.metadata_caching_store import MetadataCachingStore
+    from cloudfusion.store.transparent_caching_store import TransparentMultiprocessingCachingStore
+    from StringIO import StringIO
+    
+    def main():
+        config = {}
+        config['client_id'] = 'FDS54548SDF8D2S311DF' 
+        config['client_secret'] = 'D370JKD=564++873ZHFD9FDKDD'
+        
+        #Create the actual client
+        client = GoogleDrive(config)
         
         #Get directory listing (may take a few seconds)
         client.get_directory_listing("/")

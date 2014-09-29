@@ -1,7 +1,8 @@
 CloudFusion
 ===========
 
-CloudFusion lets you access your Dropbox, Sugarsync, Amazon S3, Google Storage, and WebDAV storages from Linux like any file on your desktop.
+CloudFusion lets you access a multitude of cloud storages from Linux like any file on your desktop.
+Work with files from  Dropbox, Sugarsync, Amazon S3, Google Storage, Google Drive, and WebDAV storages like any other file on your desktop.
 
 
 .. contents:: Table of Contents:
@@ -51,6 +52,11 @@ Simply copy the Dropbox configuration file located at **cloudfusion/cloudfusion/
 If you do not have a Dropbox account already, you can create a new one at https://www.dropbox.com.
 Edit the configuration file by adding your username and a password.
 
+Google Drive
+++++++++++++++
+Copy the Google Drive configuration file located at **cloudfusion/cloudfusion/config/GDrive.ini** to your home directory.
+Add your client_id, and client_secret to the configuration file. Details on obtaining these are inside the configuration file.
+
 Google Storage
 ++++++++++++++
 Copy the Google Storage configuration file located at **cloudfusion/cloudfusion/config/Google.ini** to your home directory.
@@ -96,6 +102,8 @@ Start CloudFusion::
 
 This assumes that you saved the configuration file as **db.ini** to your home directory. 
 If you simply copied the configuration file as suggested, replace **db.ini** with the respective file; i.e. **Sugarsync.ini** or **Dropbox.ini**.
+If the login process is not yet fully automatized, as with Google Drive, a browser will open, 
+and you have to allow CloudFusion access to your account manually. 
 
 Enjoy accessing your files in the directory **mnt/data**.
 

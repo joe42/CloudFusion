@@ -21,6 +21,11 @@ Simply copy the Dropbox configuration file located at **cloudfusion/cloudfusion/
 If you do not have a Dropbox account already, you can create a new one at https://www.dropbox.com.
 Edit the configuration file by adding your username and a password.
 
+Google Drive
+++++++++++++++
+Copy the Google Drive configuration file located at **cloudfusion/cloudfusion/config/GDrive.ini** to your home directory.
+Add your client_id, and client_secret to the configuration file. Details on obtaining these are inside the configuration file.
+
 Google Storage
 ++++++++++++++
 Copy the Google Storage configuration file located at **cloudfusion/cloudfusion/config/Google.ini** to your home directory.

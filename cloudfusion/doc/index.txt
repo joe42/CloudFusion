@@ -10,7 +10,8 @@ Welcome to CloudFusion's documentation!
 Introduction
 ---------------------
 
-CloudFusion lets you access your Dropbox, Sugarsync, Amazon S3, Google Storage, and WebDAV storages from Linux like any file on your desktop.
+CloudFusion lets you access a multitude of cloud storages from Linux like any file on your desktop.
+Work with files from  Dropbox, Sugarsync, Amazon S3, Google Storage, Google Drive, and WebDAV storages like any other file on your desktop.
 
 
 Features
@@ -31,7 +32,6 @@ Further development
 
 * File attributes (modified timestamp, permissions)
 * Improved error handling for Amazon S3 and Google Storage
-* Integration of Google Drive
 * Integration of Mega
 * Integration of SFTP
 
