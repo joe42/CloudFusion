@@ -187,6 +187,9 @@ class VirtualConfigFile(VirtualFile):
             elif service.lower() == "webdav" or service.find('dav') >= 0:
                 from cloudfusion.store.webdav.bulk_get_metadata_webdav_store import BulkGetMetadataWebdavStore
                 store = BulkGetMetadataWebdavStore(auth)
+            elif service.lower() == "local" or service.lower() == "hdd" or service.lower() == "disk":
+                from cloudfusion.store.local_drive.local_hd_store import LocalHDStore
+                store = LocalHDStore(auth)
             else: # default
                 from cloudfusion.store.dropbox.dropbox_store import DropboxStore
                 store = DropboxStore(auth)
