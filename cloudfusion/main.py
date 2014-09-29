@@ -77,8 +77,12 @@ def start_stopping_thread(mountpoint):
     process.start()
     process.join()
             
+def set_umask():
+    '''Set umask to prevent cloudfusion to write files that are readable by all users.'''
+    os.umask(007)
 
 def main():
+    set_umask()
     check_arguments(sys.argv)
     parser = MyParser()
     parser.add_argument('mountpoint')
