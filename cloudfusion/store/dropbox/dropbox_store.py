@@ -166,8 +166,12 @@ class DropboxStore(Store):
             cache_dir = config['cache_dir']
             cache_dir = cache_dir[:-1] if cache_dir[-1:] == '/' else cache_dir # remove slash at the end
         else:
-            cache_dir = '/tmp/cloudfusion'
+            cache_dir = os.path.expanduser("~")+'/.cache/cloudfusion'
         cache_dir = cache_dir+"/cachingstore_" + cache_id
+        try:
+            os.makedirs(cache_dir)
+        except OSError,e: # exists
+            pass
         return cache_dir
         
     def create_session(self, config, cache_dir):
