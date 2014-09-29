@@ -119,7 +119,8 @@ class VirtualConfigFile(VirtualFile):
         cache_size = int(conf.get('cache_size', 2000))
         hard_cache_size_limit = int(conf.get('hard_cache_size_limit', 10000))
         cache_id = str(conf.get('cache_id', random.random()))
-        cache_dir = str(conf.get('cache_dir', '/tmp/cloudfusion'))
+        cache_dir = str(conf.get('cache_dir', os.path.expanduser("~")+'/.cache/cloudfusion'))
+        cache_dir = cache_dir[:-1] if cache_dir[-1] == '/' else cache_dir # remove slash at the end
         self.logger.debug("got cache parameter")
         auth = self.get_service_auth_data()
         self._unify_auth(auth)
