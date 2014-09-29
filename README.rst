@@ -145,6 +145,22 @@ Sugarsync has a maximum file upload size of 100MB. It does not allow Outlook .ps
 Advanced Features
 -----------------
 
+Auto Registration
++++++++++++++++++++
+
+Automatic account registration and storage allocation is a feature facilitating a semi-automatic or fully automatic registration process.
+Try putting the line::
+
+    autoregister = true
+
+into the [store] section of your configuration file. Also, fill in the required username and password variables as described in the 
+configuration file. The username/password combination will be used to register a new account.
+For Sugarsync the proccess is fully automatic, and invisible to the user, but the account is only valid for 30 days; Then the user
+needs to change to a payed plan.
+For Tonline, the process is semi automatic; CloudFusion will fill the form automatically, and try to solve the captcha automatically,
+but the user can change the automatic input if it is required before confirming the registration.
+For Dropbox, the registration process will automatically provide mouse and keyboard input for the forms to register for a free account. 
+
 Archiving Store
 +++++++++++++++
 
