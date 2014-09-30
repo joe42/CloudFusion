@@ -96,7 +96,7 @@ class VirtualConfigFile(VirtualFile):
     def _unify_auth(self, auth):
         '''Add keys user, and password to auth, which are synonymous to consumer_key and consumer_secret.
         Also consumer_key and consumer_secret are added if possible as synonyms for access_key_id and secret_access_key.'''
-        if 'access_key_id' in auth:
+        if 'access_key_id' in auth and 'secret_access_key' in auth:
             auth['consumer_key'] = auth['access_key_id']
             auth['consumer_secret'] = auth['secret_access_key']
         if 'consumer_key' in auth:
