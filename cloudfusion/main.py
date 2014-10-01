@@ -13,6 +13,7 @@ import shutil
 import argparse
 import time
 import multiprocessing
+import signal
 
 class MyParser(argparse.ArgumentParser):
     def error(self, message):
@@ -80,8 +81,15 @@ def start_stopping_thread(mountpoint):
 def set_umask():
     '''Set umask to prevent cloudfusion to write files that are readable by all users.'''
     os.umask(007)
+    
+def handle_ipdb(sig, frame):
+    import ipdb
+    ipdb.set_trace(frame)
+
+    
 
 def main():
+    signal.signal(signal.SIGUSR1, handle_ipdb)
     set_umask()
     check_arguments(sys.argv)
     parser = MyParser()
