@@ -5,6 +5,7 @@ import time
 from cloudfusion.store.store import StoreSpaceLimitError, StoreAccessError, NoSuchFilesytemObjectError,\
     StoreAutorizationError
 import os
+from profilehooks import profile
 
 class StoreSyncThread(object):
     """Synchronizes between cache and store"""
@@ -31,6 +32,7 @@ class StoreSyncThread(object):
         #used for waiting when quota errors occur
         self.skip_starting_new_writers_for_next_x_cycles = 0
         self._finished_writers_of_last_round = 0
+        self.do_profiling = False
         self.logger.info("initialized StoreSyncThread")
     
     def _get_max_threads(self, size_in_mb):
@@ -200,16 +202,36 @@ class StoreSyncThread(object):
     def run(self): 
         #TODO: check if the cached entries have changed remotely (delta request) and update asynchronously
         #TODO: check if entries being transferred have changed and stop transfer
+        
         while not self._stop:
-            self.logger.debug("StoreSyncThread run")
+            if self.do_profiling:
+                self._profiled_run()
+            else:
+                self._run()
+            
+    @profile(filename='/tmp/cloudfusion_profile_store_sync_thread')
+    def _profiled_run(self):
+        while not self._stop and self.do_profiling:
+            self.logger.debug("StoreSyncThread profiling run")
             self._heartbeat = time.time()
-            self.__sleep(self._get_time_to_sleep())
+            self.__sleep( self._get_time_to_sleep() )
             self._reconnect()
             self.tidy_up()
             if self.skip_starting_new_writers_for_next_x_cycles > 0:
                 self.skip_starting_new_writers_for_next_x_cycles -= 1
                 continue
             self.enqueue_lru_entries()
+            
+    def _run(self):
+        self.logger.debug("StoreSyncThread run")
+        self._heartbeat = time.time()
+        self.__sleep( self._get_time_to_sleep() )
+        self._reconnect()
+        self.tidy_up()
+        if self.skip_starting_new_writers_for_next_x_cycles > 0:
+            self.skip_starting_new_writers_for_next_x_cycles -= 1
+            return
+        self.enqueue_lru_entries()
     
     def _reconnect(self):
         if time.time() > self.last_reconnect + 60*60: #reconnect after 1h
@@ -315,6 +337,7 @@ class StoreSyncThread(object):
             if reader.get_error():
                 err = reader.get_error()
                 if not err in [StoreAccessError, NoSuchFilesytemObjectError, StoreAutorizationError]:
+                    self.readers.remove(reader)
                     err = StoreAccessError(str(err),0)
                 raise err
             self.refresh_cache_entry(path, content, self.store.get_metadata(path)['modified']) #[shares_resource: write self.entries]

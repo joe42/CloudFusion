@@ -56,7 +56,7 @@ class VirtualConfigFile(VirtualFile):
         conf = self.get_store_config_data()
         enable_logging = conf.get('enable_logging', None)
         if enable_logging != None:
-            enable_logging = bool(enable_logging)
+            enable_logging = enable_logging.lower() in ['true', '1', 'y', 'yes']
             if enable_logging:
                 self.logger.debug("enable logging")
                 self.pyfusebox.enable_logging()
@@ -65,12 +65,9 @@ class VirtualConfigFile(VirtualFile):
                 self.pyfusebox.disable_logging()
         enable_profiling = conf.get(ENABLE_PROFILING, None)
         if enable_profiling != None:
-            enable_profiling = bool(enable_profiling)
-            print enable_profiling + " = " + bool(enable_profiling)
-            config = {}
             enable_profiling = enable_profiling.lower() in ['true', '1', 'y', 'yes']
-            config[ENABLE_PROFILING] = enable_profiling
-            self.pyfusebox.store.set_configuration(config)
+            conf[ENABLE_PROFILING] = enable_profiling
+            self.pyfusebox.store.set_configuration(conf)
     
     def auto_register(self):
         conf = self.get_store_config_data()
