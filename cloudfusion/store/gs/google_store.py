@@ -17,6 +17,7 @@ from cloudfusion.util.exponential_retry import retry
 from cloudfusion.mylogging import db_logging_thread
 import sys
 from ConfigParser import DuplicateSectionError
+from cloudfusion.util.string import get_id_key, get_secret_key
 
 class GoogleStore(Store):
     '''Subclass of Store implementing an interface to the Google Storage storage.
@@ -30,15 +31,15 @@ class GoogleStore(Store):
     file objects with content type "application/x-directory" or file objects ending with _$folder$ are recognized as directories, too.'''
     
     def __init__(self, config):
-        '''*config* is a dictionary with the keys consumer_key (access_key_id), consumer_secret (secret_access_key), and bucket_name. For instance::
+        '''*config* is a dictionary with the keys id (access_key_id), secret (secret_access_key), and bucket_name. For instance::
         
-                config['client_id'] = 'FDS54548SDF8D2S311DF' 
-                config['client_secret'] = 'D370JKD=564++873ZHFD9FDKDD'
+                config['id'] = 'FDS54548SDF8D2S311DF' 
+                config['secret'] = 'D370JKD=564++873ZHFD9FDKDD'
                 config['bucket_name'] = 'cloudfusion'
                 
             The bucket will be created if it does not exist. A bucket is similar to a subfolder,
             to which access with CloudFusion is restricted.         
-            Key and secret can be obtained from the developer's console:
+            Id and secret can be obtained from the developer's console:
             
             * Go to console.developers.google.com/project
             * Create a new project
@@ -58,11 +59,10 @@ class GoogleStore(Store):
         self.logger = db_logging_thread.make_logger_multiprocessingsave(self.logger)
         self.logger.info("creating %s store", self.name)
         self.bucket_name = config['bucket_name']
-        if 'client_id' in config and 'client_secret' in config:
-            config['consumer_key'] = config['client_id']
-            config['consumer_secret'] = config['client_secret']
-        self.access_key_id = config['consumer_key']
-        self.secret_access_key = config['consumer_secret']
+        id_key = get_id_key(config)
+        secret_key = get_secret_key(config)
+        self.access_key_id = config[id_key]
+        self.secret_access_key = config[secret_key]
         self.write_gsutil_config()
         try:
             boto.config.add_section('Boto')
