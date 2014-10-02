@@ -12,6 +12,7 @@ import subprocess
 from subprocess import PIPE
 import os
 from os.path import expanduser
+from cloudfusion.store.caching_store import ENABLE_PROFILING
 
 
 class VirtualConfigFile(VirtualFile):
@@ -43,9 +44,33 @@ class VirtualConfigFile(VirtualFile):
     def write(self, buf, offset):
         written_bytes = super(VirtualConfigFile, self).write(buf, offset)
         if written_bytes >0: # configuration changed
-            self.auto_register()
-            self._initialize_store()
+            if not self.pyfusebox.store_initialized:
+                self.auto_register()
+                self._initialize_store()
+            else:
+                self._reconfigure_store()
         return written_bytes
+    
+    def _reconfigure_store(self):
+        self.logger.debug("change store configuration")
+        conf = self.get_store_config_data()
+        enable_logging = conf.get('enable_logging', None)
+        if enable_logging != None:
+            enable_logging = bool(enable_logging)
+            if enable_logging:
+                self.logger.debug("enable logging")
+                self.pyfusebox.enable_logging()
+            else:
+                self.logger.debug("disable logging")
+                self.pyfusebox.disable_logging()
+        enable_profiling = conf.get(ENABLE_PROFILING, None)
+        if enable_profiling != None:
+            enable_profiling = bool(enable_profiling)
+            print enable_profiling + " = " + bool(enable_profiling)
+            config = {}
+            enable_profiling = enable_profiling.lower() in ['true', '1', 'y', 'yes']
+            config[ENABLE_PROFILING] = enable_profiling
+            self.pyfusebox.store.set_configuration(config)
     
     def auto_register(self):
         conf = self.get_store_config_data()

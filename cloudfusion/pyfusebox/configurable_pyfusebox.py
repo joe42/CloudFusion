@@ -8,7 +8,9 @@ from cloudfusion.pyfusebox.pyfusebox import *
 from cloudfusion.pyfusebox.virtualconfigfile import VirtualConfigFile
 import os, signal
 import sys
-
+from cloudfusion.mylogging.nullhandler import NullHandler
+from cloudfusion.mylogging import db_logging_thread
+import cloudfusion
 
 class ConfigurablePyFuseBox(PyFuseBox):
     '''Offers a virtual configuration file, to configure Cloudfusion at runtime.
@@ -25,6 +27,19 @@ class ConfigurablePyFuseBox(PyFuseBox):
         self.virtual_file = VirtualConfigFile(self.VIRTUAL_CONFIG_FILE, self)
         self.store_initialized = False
         self.logger.debug("initialized configurable pyfusebox")
+        # public variable to trigger profiling in modules interactively (i.e. StoreSyncThread)
+        self.do_profiling = False  
+    
+    def enable_logging(self):
+        if not os.path.exists(".cloudfusion/logs"):
+            os.makedirs(".cloudfusion/logs")
+        logging.config.fileConfig(os.path.dirname(cloudfusion.__file__)+'/config/logging.conf')
+        db_logging_thread.start()    #.handlers = []
+        logging.disable(logging.NOTSET)
+        
+    def disable_logging(self):
+        logging.disable(logging.CRITICAL)
+        db_logging_thread.stop()
     
     def _getattr_for_folder_with_full_access(self):
         st = zstat()
