@@ -381,19 +381,20 @@ class ChunkStoreSyncThread(object):
         self._heartbeat = time.time()
         #used for waiting when quota errors occur
         self.skip_starting_new_writers_for_next_x_cycles = 0
+        self._finished_writers_of_last_round = 0
         self.logger.info("initialized ChunkStoreSyncThread")
         self.chunk_factory = ChunkFactory(self.logger) 
     
     def _get_max_threads(self, size_in_mb):
-        if size_in_mb == 0:
+        '''Tries to increase the number of threads so that only 25% of the threads finish
+        in every round.'''
+        if size_in_mb < 0.1:
             return self.max_writer_threads
-        max_throughput_for_files_smaller_1MB_in_KBps =  self.max_writer_threads * 100
         if size_in_mb > 5: # 25 MBps
-            ret = 5 
-        elif size_in_mb >= 1: # 10 MBps
-            ret = 10
-        else:
-            ret = max_throughput_for_files_smaller_1MB_in_KBps / size_in_mb * 1000.0
+            return 5 
+        ret = self._finished_writers_of_last_round * 4
+        if ret < 5:
+            ret = 5
         if ret > self.max_writer_threads:
             ret = self.max_writer_threads
         return ret
@@ -460,6 +461,7 @@ class ChunkStoreSyncThread(object):
                             else:
                                 self.logger.debug("remove old modified path: "+path)
                                 del self.oldest_modified_date[path]
+        self._finished_writers_of_last_round = len(writers_to_be_removed)
         for writer in writers_to_be_removed:
             self.writers.remove(writer)
             
@@ -557,13 +559,22 @@ class ChunkStoreSyncThread(object):
             time.sleep( time_to_sleep_in_s )
         self.__sleep.im_func.last_call = time.time()
         
+    def _get_time_to_sleep(self):
+        if len(self.writers) > 5:
+            return 0.5
+        if len(self.writers) > 2:
+            return 1
+        if len(self.writers) > 1:
+            return 2
+        return 60
+    
     def run(self): 
         #TODO: check if the cached entries have changed remotely (delta request) and update asynchronously
         #TODO: check if entries being transferred have changed and stop transfer
         while not self._stop:
             self.logger.debug("StoreSyncThread run")
             self._heartbeat = time.time()
-            self.__sleep( 1 )
+            self.__sleep( self._get_time_to_sleep() )
             self._reconnect()
             self.tidy_up()
             if self.skip_starting_new_writers_for_next_x_cycles > 0:
