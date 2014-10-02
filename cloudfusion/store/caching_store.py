@@ -13,6 +13,8 @@ import time
 import random
 import logging
 
+ENABLE_PROFILING = 'enable_profiling'
+
 class MultiprocessingCachingStore(Store):
     """Like CachingStore, but does not make guarantees as to the consistency of the wrapped store.
     Use of best effort strategy to synchronize the store.
@@ -43,7 +45,9 @@ class MultiprocessingCachingStore(Store):
     
     def set_configuration(self, config):
         self.store.set_configuration(config)
-        
+        if ENABLE_PROFILING in config:
+            self.sync_thread.do_profiling = config[ENABLE_PROFILING]
+    
     def get_configuration(self, config):
         return self.store.get_configuration()
     
