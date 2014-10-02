@@ -30,18 +30,19 @@ class StoreSyncThread(object):
         self._heartbeat = time.time()
         #used for waiting when quota errors occur
         self.skip_starting_new_writers_for_next_x_cycles = 0
+        self._finished_writers_of_last_round = 0
         self.logger.info("initialized StoreSyncThread")
     
     def _get_max_threads(self, size_in_mb):
-        if size_in_mb == 0:
+        '''Tries to increase the number of threads so that only 25% of the threads finish
+        in every round.'''
+        if size_in_mb <= 0.1:
             return self.max_writer_threads
-        max_throughput_for_files_smaller_1MB_in_KBps =  self.max_writer_threads * 100
         if size_in_mb > 5: # 25 MBps
-            ret = 5 
-        elif size_in_mb >= 1: # 10 MBps
-            ret = 10
-        else:
-            ret = max_throughput_for_files_smaller_1MB_in_KBps / size_in_mb * 1000.0
+            return 5 
+        ret = self._finished_writers_of_last_round * 4
+        if ret < 5:
+            ret = 5
         if ret > self.max_writer_threads:
             ret = self.max_writer_threads
         return ret
@@ -98,6 +99,7 @@ class StoreSyncThread(object):
                             if self.cache.exists(writer.path) and self.cache.get_modified(writer.path) < writer.get_updatetime(): 
                                 self.set_modified_cache_entry(writer.path, writer.get_updatetime()) #[shares_resource: write self.entries] #FIXME: stops here
                 del self.oldest_modified_date[writer.path]
+        self._finished_writers_of_last_round = len(writers_to_be_removed)
         for writer in writers_to_be_removed:
             self.writers.remove(writer)
     
@@ -179,18 +181,29 @@ class StoreSyncThread(object):
             self.__sleep.im_func.last_call = time.time()
         last_call = self.__sleep.im_func.last_call
         time_since_last_call = time.time() - last_call
-        time_to_sleep_in_s = 1 - time_since_last_call
+        time_to_sleep_in_s = seconds - time_since_last_call
         if time_to_sleep_in_s > 0:
             time.sleep( time_to_sleep_in_s )
         self.__sleep.im_func.last_call = time.time()
 
+    def _get_time_to_sleep(self):
+        if self._finished_writers_of_last_round > 1:
+            return 0.5
+        if self._finished_writers_of_last_round > 0:
+            return 1
+        if len(self.writers) > 3:
+            return 1
+        if len(self.writers) > 0:
+            return 15
+        return 60
+        
     def run(self): 
         #TODO: check if the cached entries have changed remotely (delta request) and update asynchronously
         #TODO: check if entries being transferred have changed and stop transfer
         while not self._stop:
             self.logger.debug("StoreSyncThread run")
             self._heartbeat = time.time()
-            self.__sleep(1)
+            self.__sleep(self._get_time_to_sleep())
             self._reconnect()
             self.tidy_up()
             if self.skip_starting_new_writers_for_next_x_cycles > 0:
@@ -333,6 +346,7 @@ class StoreSyncThread(object):
             
     def set_dirty_cache_entry(self, path, is_dirty): #may be called by this class
         with self.protect_cache_from_write_access:
+            #give it some time until deletion:
             self.cache.set_dirty(path, is_dirty)
     
     def set_modified_cache_entry(self, path, updatetime): #may be called by this class 
