@@ -21,11 +21,10 @@ class ConfigurablePyFuseBox(PyFuseBox):
     
     def __init__(self, root):
         ''''''
+        super( ConfigurablePyFuseBox, self ).__init__(root, None)
         self.virtual_file = VirtualConfigFile(self.VIRTUAL_CONFIG_FILE, self)
         self.store_initialized = False
-        self.logger = logging.getLogger('pyfusebox')
         self.logger.debug("initialized configurable pyfusebox")
-        super( ConfigurablePyFuseBox, self ).__init__(root, None)
     
     def _getattr_for_folder_with_full_access(self):
         st = zstat()
