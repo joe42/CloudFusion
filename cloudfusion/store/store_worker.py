@@ -174,6 +174,7 @@ class WriteWorker(object):
         self.end_time = multiprocessing.Value('d', 0.0)
         self._update_time = None
         self.process = multiprocessing.Process(target=self._run, args=(self._result_queue, self.interrupt_event, self.end_time))
+        self.process.daemon = True
         self._finished = False
         self._pid = 0
         self._is_successful = False
@@ -336,6 +337,7 @@ class ReadWorker(object):
         self.start_time = 0
         self.end_time = multiprocessing.Value('d', 0.0)
         self.process = multiprocessing.Process(target=self._run, args=(self._result_queue, self.end_time))
+        self.process.daemon = True
         self._finished = False
 
     def _clean_up(self):
