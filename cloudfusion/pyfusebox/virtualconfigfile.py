@@ -13,6 +13,7 @@ from subprocess import PIPE
 import os
 from os.path import expanduser
 from cloudfusion.store.caching_store import ENABLE_PROFILING
+from cloudfusion.util.string import get_id_key, get_secret_key
 
 
 class VirtualConfigFile(VirtualFile):
@@ -114,17 +115,14 @@ class VirtualConfigFile(VirtualFile):
                 p.stdin.write(auth['password']+"\n")
                 p.communicate() #wait for process to exit
             self._recently_registered_name = auth['user'] #store if you are already registered
-	
+    
     def _unify_auth(self, auth):
-        '''Add keys user, and password to auth, which are synonymous to consumer_key and consumer_secret.
-        Also consumer_key and consumer_secret are added if possible as synonyms for access_key_id and secret_access_key.'''
-        if 'access_key_id' in auth and 'secret_access_key' in auth:
-            auth['consumer_key'] = auth['access_key_id']
-            auth['consumer_secret'] = auth['secret_access_key']
-        if 'consumer_key' in auth:
-            auth['user'] = auth['consumer_key']
-        if 'consumer_secret' in auth:
-            auth['password'] = auth['consumer_secret']    
+        '''Add id and secret.'''
+        id_key = get_id_key(auth)
+        secret_key = get_secret_key(auth)
+        if id_key and secret_key:
+            auth['id'] = auth[id_key]
+            auth['secret'] = auth[secret_key] 
 
     def _initialize_store(self):
         '''Parametrize the store implementation with the settings in the configuration file
@@ -147,10 +145,6 @@ class VirtualConfigFile(VirtualFile):
         auth = self.get_service_auth_data()
         self._unify_auth(auth)
         auth['cache_id'] = cache_id # workaround; Dropbox needs access to cache_id to create a temporary directory with its name, to distinguish sessions
-        # user convenience: use either of the parameter names usual for Dropbox/Amazon&Google
-        if 'access_key_id' in auth and 'secret_access_key' in auth: 
-            auth['consumer_key'] = auth['access_key_id']
-            auth['consumer_secret'] = auth['secret_access_key']
         bucket_name = auth.get('bucket_name', 'cloudfusion') 
         auth['bucket_name'] = bucket_name 
         self.logger.debug("got auth data: %s" % auth)

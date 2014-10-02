@@ -17,8 +17,10 @@ class SugarsyncClient(object):
     def __init__(self, config):
         self.host = config["host"]
         self.server_url = config["server_url"]
-        self.access_key_id = config["access_key_id"]
-        self.private_access_key = config["private_access_key"] 
+        id_key = get_id_key(config)
+        secret_key = get_secret_key(config)
+        self.access_key_id = config[id_key]
+        self.private_access_key = config[secret_key] 
         self.username = config["user"]
         self.password = config["password"] 
         self.create_user(self.username, self.password)

@@ -19,6 +19,7 @@ import random
 from apiclient import errors
 import cloudfusion.third_party.parsedatetime.parsedatetime as pdt
 from string import Template
+from cloudfusion.util.string import get_id_key, get_secret_key
 
 class GoogleDrive(Store):
     '''Subclass of Store implementing an interface to the Google Drive.'''
@@ -33,15 +34,15 @@ class GoogleDrive(Store):
         https://console.developers.google.com/project, as described in https://developers.google.com/drive/web/quickstart/quickstart-python::
         
             config = GoogleDrive.get_config()
-            config['client_id'] = '4523154788555-kjsdfj87sdfjh44dfsdfj45kjj.apps.googleusercontent.com' #your id            
-            config['client_secret'] = 'sdfjk3h5j444jnjfo0' #your secret
+            config['id'] = '4523154788555-kjsdfj87sdfjh44dfsdfj45kjj.apps.googleusercontent.com' #your id            
+            config['secret'] = 'sdfjk3h5j444jnjfo0' #your secret
         
         You may add a cache id, so that you can continue previous sessions. If you use the same cache id in a later session, 
         the store will remember some metadata and won't need the id and secret for authentication (just use empty strings in this case)::
         
             config['cache_id'] = 'gdrive_db'
         
-        Or you can use a configuration file that already has consumer_key and consumer_secret set by specifying a path::
+        Or you can use a configuration file that already has id and secret set by specifying a path::
         
             path_to_my_config_file = '/home/joe/gdrive.ini'       
             config = GoogleDrive.get_config(path_to_my_config_file)
@@ -53,7 +54,9 @@ class GoogleDrive(Store):
         self.logger = logging.getLogger(self._logging_handler)
         self.logger = db_logging_thread.make_logger_multiprocessingsave(self.logger)
         self.logger.info("creating %s store", self.name)
-        self.client_auth = self.CLIENT_AUTH_TEMPLATE.substitute(SECRET=config['client_secret'], ID=config['client_id'])
+        id_key = get_id_key(config)
+        secret_key = get_secret_key(config)
+        self.client_auth = self.CLIENT_AUTH_TEMPLATE.substitute(SECRET=config[secret_key], ID=config[id_key])
         self.gauth = self._reconnect()
         
         self._credentials_db_path = self._get_credentials_db_path(config)

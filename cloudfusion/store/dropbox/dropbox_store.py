@@ -20,6 +20,7 @@ import atexit
 from cloudfusion.util.exponential_retry import retry
 import re
 import hashlib
+from cloudfusion.util.string import get_id_key, get_secret_key
 '''  requests bug with requests 2.0.1, so use local requests version 1.2.3:
 #    File "/usr/local/lib/python2.7/dist-packages/requests/cookies.py", line 311, in _find_no_duplicates
 #    raise KeyError('name=%r, domain=%r, path=%r' % (name, domain, path))
@@ -181,7 +182,9 @@ class DropboxStore(Store):
         except:
             self.logger.debug("Credentials database could not be loaded.")
             credentials_db = {}
-        self.sess = session.DropboxSession(base64.b64decode(config['consumer_key']), base64.b64decode(config['consumer_secret']), config['root'])
+        id_key = get_id_key(config)
+        secret_key = get_secret_key(config)
+        self.sess = session.DropboxSession(base64.b64decode(config[id_key]), base64.b64decode(config[secret_key]), config['root'])
         if key in credentials_db:
             self.sess.token = credentials_db[key]
             return self.sess
