@@ -202,13 +202,24 @@ class Store(object):
         :return: the name of the logging handler used by a subclass and its wrappers.'''
         raise NotImplementedError()
     
-    def flush(self):
-        '''Deprecated, do not overwrite this method.'''
-        pass
-    
     def reconnect(self):
         '''Try to reconnect to the service.'''
         pass
+    
+    def set_configuration(self, config):
+        '''Set configuration options during runtime.
+        The method is normally called by :class:`cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox`,
+        when the user changes CloudFusion's configuration file in /config/config. 
+        :param config: a dictionary with configuration options'''
+        pass
+    
+    def get_configuration(self, config):
+        '''Get configuration options during runtime.
+        The method is normally called by :class:`cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox`,
+        when the user reads CloudFusion's configuration file in /config/config.
+        It can return a dictionary with variables to display in /config/config. 
+        :returns: a dictionary with variable names and corresponsing values'''
+        return {}
     
     def get_max_filesize(self):
         """Return maximum number of bytes per file; Some cloud storages limit the size of files to be uploaded."""

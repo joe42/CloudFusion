@@ -40,6 +40,12 @@ class ChunkMultiprocessingCachingStore(Store):
         self.sync_thread.start()
         
     
+    def set_configuration(self, config):
+        self.store.set_configuration(config)
+    
+    def get_configuration(self, config):
+        return self.store.get_configuration()
+    
     def get_max_archive_size(self):
         """:returns: the maximum size of an archive in MB"""
         return self.max_archive_size_in_mb
@@ -203,10 +209,6 @@ class ChunkMultiprocessingCachingStore(Store):
         if self.entries.exists(path) or self.sync_thread.chunk_mapper.get_chunk_uuid(path):
             return False
         return self.get_metadata(path)['is_dir']# we could also assume that it is a directory, since it is not a file in the mapping or cache
-    
-    def flush(self):
-        self.logger.debug("flushing")
-        self.store.flush()
             
     def get_logging_handler(self):
         return self.store.get_logging_handler()

@@ -373,9 +373,12 @@ class MetadataCachingStore(Store):
     def get_logging_handler(self):
         return self.store.get_logging_handler()
     
-    def flush(self):
-        self.store.flush()
-        
+    def set_configuration(self, config):
+        self.store.set_configuration(config)
+    
+    def get_configuration(self, config):
+        return self.store.get_configuration()
+    
     def __deepcopy__(self, memo):
         cls = self.__class__
         result = cls.__new__(cls)

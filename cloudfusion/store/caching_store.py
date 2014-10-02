@@ -41,6 +41,12 @@ class MultiprocessingCachingStore(Store):
         self.sync_thread = StoreSyncThread(self.entries, self.store, self.logger)
         self.sync_thread.start()
     
+    def set_configuration(self, config):
+        self.store.set_configuration(config)
+        
+    def get_configuration(self, config):
+        return self.store.get_configuration()
+    
     def get_cache_expiration_time(self):
         """:returns: the time in seconds until any cache entry is expired"""
         return self.cache_expiration_time
@@ -226,10 +232,6 @@ class MultiprocessingCachingStore(Store):
         if self.entries.exists(path):
             return False
         return self.get_metadata(path)["is_dir"]
-    
-    def flush(self):
-        self.logger.debug("flushing")
-        self.store.flush()
             
     def get_logging_handler(self):
         return self.store.get_logging_handler()
