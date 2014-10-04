@@ -31,6 +31,9 @@ class ChunkMultiprocessingCachingStore(Store):
             cache_id = str(random.random()) 
         self.logger = logging.getLogger(self.get_logging_handler())
         self.logger.debug("creating ChunkTransparentMultiprocessingCachingStore object")
+        if cache_expiration_time < 240:
+            self.logger.warning("Be aware of the synchronization issue https://github.com/joe42/CloudFusion/issues/16 \
+                    or to avoid the issue set cache_expiration_time to more than 240 seconds.")
         self.cache_expiration_time = cache_expiration_time
         self.time_of_last_flush = time.time()
         self.cache_dir = cache_dir[:-1] if cache_dir[-1:] == '/' else cache_dir # remove slash at the end
