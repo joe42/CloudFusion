@@ -803,6 +803,8 @@ class ChunkStoreSyncThread(object):
             
     def set_dirty_cache_entry(self, path, is_dirty): #may be called by this class
         with self.protect_cache_from_write_access:
+            #give it some time until deletion:
+            self.cache.update(path)
             self.cache.set_dirty(path, is_dirty)
     
     def set_modified_cache_entry(self, path, updatetime): #may be called by this class 

@@ -47,6 +47,9 @@ class MetadataCachingStore(Store):
         self.logger = logging.getLogger(self.get_logging_handler())
         self.logger.debug("creating MetadataCachingStore object")
         self.entries = MPSynchronizeProxy( MPLRUCache(cache_expiration_time,2) )
+        if cache_expiration_time < 240:
+            self.logger.warning("Be aware of the synchronization issue https://github.com/joe42/CloudFusion/issues/16 \
+                    or to avoid the issue set cache_expiration_time to more than 240 seconds.")
         self.store_metadata = Cache(cache_expiration_time)
         self.free_space_worker = GetFreeSpaceWorker(deepcopy(store), self.logger)
         self.free_space_worker.start()
@@ -99,6 +102,7 @@ class MetadataCachingStore(Store):
             if entry.listing == None:
                 entry.listing = self.store.get_directory_listing(parent_dir)
             entry.set_is_dir()
+            self._add_existing_items(entry, parent_dir)
             self.entries.write(parent_dir, entry)
         
     def _does_not_exist_in_parent_dir_listing(self, path):
@@ -274,10 +278,19 @@ class MetadataCachingStore(Store):
             self.entries.write(directory, Entry())
             entry = self.entries.get_value(directory)
         entry.listing =  listing
+        self._add_existing_items(entry, directory)
         self.entries.write(directory, entry)
         self.logger.debug("asserted %s", repr(self.entries.get_value(directory).listing))
         assert self.entries.get_value(directory).listing == entry.listing
         return list(entry.listing)
+    
+    def _add_existing_items(self, dir_entry, dir_entry_path):
+        '''Add existing files or directories to *dir_entry* because they might have been 
+        uploaded recently and might not be retrievable by a directory listing from the storage provider.'''
+        for path in self.entries.get_keys():
+            if not self.entries.is_expired(path):
+                if os.path.dirname(path) == dir_entry_path:
+                    dir_entry.add_to_listing(path)
     
     def get_bytes(self, path):
         self.logger.debug("meta cache get_bytes %s", path)

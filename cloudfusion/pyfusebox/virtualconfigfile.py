@@ -132,7 +132,7 @@ class VirtualConfigFile(VirtualFile):
         conf = self.get_store_config_data()
         service = conf['name']
         self.logger.debug("got service name")
-        cache_time = int(conf.get('cache', 0))
+        cache_time = int(conf.get('cache', 240))
         type = conf.get('type', '') #chunk
         max_chunk_size = conf.get(('max_chunk_size', 4)) 
         metadata_cache_time = int(conf.get('metadata_cache', 0))
