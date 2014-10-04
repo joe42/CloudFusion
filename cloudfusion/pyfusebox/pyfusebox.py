@@ -1,5 +1,6 @@
 from cloudfusion.store.store import NoSuchFilesytemObjectError,\
     AlreadyExistsError, StoreAccessError, StoreAutorizationError
+from cloudfusion.util import file_util
 import os, stat,  time
 from errno import *
 from cloudfusion.fuse import FuseOSError, Operations
@@ -282,7 +283,7 @@ class PyFuseBox(Operations):
     def flush(self, path, fh):
         self.logger.debug("flush %s - fh: %s", path, fh)
         if path in self.temp_file: #after writes
-            if self.store.get_free_space() < self.temp_file[path].tell():
+            if self.store.get_free_space() < file_util.get_file_size_in_bytes(self.temp_file[path]):
                 self._release(path, 0)
                 return FuseOSError(ENOSPC)
             try:
