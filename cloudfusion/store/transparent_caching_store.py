@@ -53,9 +53,8 @@ class TransparentMultiprocessingCachingStore(MultiprocessingCachingStore, Transp
         
     def get_dirty_files(self):
         ret = []
-        for path in self.entries.get_keys():
-            if self.entries.is_dirty(path):
-                ret.append(path)
+        for path in self.entries.get_dirty_lru_entries(9999):
+            ret.append(path)
         return ret
 
     def get_downloaded(self):
