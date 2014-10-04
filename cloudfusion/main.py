@@ -53,7 +53,7 @@ def remove_configuration(mountpoint):
     virtual_configuration_file = mountpoint+'/config/config'
     if not os.path.exists(virtual_configuration_file):
         print "The mountpoint you specified is not correct, or Cloudfusion has been stopped, already."
-    print "Trying to stop Cloudfusion. This may take a while. \n    If it does not work try fusermount -zu mountpoint; pkill -9 -f \".*cloudfusion.*\"\n\
+    print "Trying to stop Cloudfusion. This may take a while. \n    If it does not work try fusermount -zu mountpoint; kill -9 "+str(os.getpid())+"\n\
 But take care, that no other process with a name including cloudfusion does run at the moment before executing pkill. Otherwise this process will die as well."
     try:
         os.remove(virtual_configuration_file)
