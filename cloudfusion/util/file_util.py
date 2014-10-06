@@ -15,7 +15,8 @@ def get_file_size_in_bytes(file):
     if isinstance(file, basestring):
         return os.path.getsize(file)
     #assume it is a fileobject
+    previous_pos = file.tell() 
     file.seek(0, os.SEEK_END)
     size_in_mb = file.tell()
-    file.seek(0)
+    file.seek(previous_pos)
     return size_in_mb
