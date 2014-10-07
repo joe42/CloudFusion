@@ -130,10 +130,10 @@ class Store(object):
         self.duplicate(path_to_src, path_to_dest)
         try:
             self.delete(path_to_src, is_dir=True)
-        except:
+        except Exception, e:
             try:
                 self.delete(path_to_src, is_dir=False)
-            except:
+            except Exception, e:
                 pass
  
     def get_modified(self, path):

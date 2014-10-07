@@ -63,7 +63,7 @@ class GoogleDrive(Store):
         key = self._credentials_db_path# use db path as database key to store credentials under
         try:
             credentials_db = shelve.open(self._credentials_db_path)
-        except:
+        except Exception, e:
             self.logger.debug("Credentials database could not be loaded.")
             credentials_db = {}
         if key in credentials_db: 
@@ -73,7 +73,7 @@ class GoogleDrive(Store):
         credentials_db[key] = self.gauth.credentials #store token for further sessions  
         try:
             credentials_db.close()
-        except:
+        except Exception, e:
             pass     
         self.gauth.Authorize()
         self.drive = Drive(self.gauth)
@@ -265,7 +265,7 @@ class GoogleDrive(Store):
             #if dest exists remove
             try:
                 meta = self.get_metadata(path_to_dest)
-            except:
+            except Exception, e:
                 meta = None
             if meta: #object exists
                 resp = self.delete(path_to_dest, meta["is_dir"])

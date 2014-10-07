@@ -139,7 +139,7 @@ class DropboxStore(Store):
         try:
             last_session_revisions = shelve.open(self._revision_db_path)
             self._revisions.update(last_session_revisions)
-        except:
+        except Exception, e:
             self.logger.debug("Revision database from last session could not be loaded.")
         self._is_copy = False
         atexit.register( lambda : self._close() )
@@ -179,7 +179,7 @@ class DropboxStore(Store):
         key = hashlib.sha224(config['user']+config['password']).hexdigest() #key for token from last session
         try:
             credentials_db = shelve.open(cache_dir+'/credentials', protocol=-1) # use protocol -1 since token defines slots
-        except:
+        except Exception, e:
             self.logger.debug("Credentials database could not be loaded.")
             credentials_db = {}
         id_key = get_id_key(config)
@@ -192,7 +192,7 @@ class DropboxStore(Store):
         url = self.sess.build_authorize_url(self.request_token)
         try:
             self._auto_connect(url, config['user'], config['password'])
-        except:
+        except Exception, e:
             self.logger.exception("Automatic login failed, falling back to manual login")
         access_token = self.reconnect(1)
         if not access_token:
@@ -207,7 +207,7 @@ class DropboxStore(Store):
         credentials_db[key] = self.sess.token #store token for further sessions  
         try:
             credentials_db.close()
-        except:
+        except Exception, e:
             pass     
         
     def _auto_connect(self, authorize_url, user, password):

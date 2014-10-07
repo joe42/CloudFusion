@@ -431,7 +431,7 @@ class SugarsyncStore(Store):
             #if dest exists remove
             try:
                 meta = self.get_metadata(path_to_dest)
-            except:
+            except Exception, e:
                 meta = None
             if meta: #object exists
                 resp = self.delete(path_to_dest, meta["is_dir"])

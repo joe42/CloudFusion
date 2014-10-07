@@ -57,7 +57,7 @@ class PyFuseBox(Operations):
             raise FuseOSError(EIO)
         except StoreAutorizationError:
             raise FuseOSError(EACCES) 
-        except:
+        except Exception, e:
             raise FuseOSError(ENOENT)
         st['st_atime']= metadata['modified']
         st['st_mtime']= metadata['modified']

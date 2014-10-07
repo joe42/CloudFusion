@@ -66,7 +66,7 @@ def __get_records(cursor, conn):
         record_blob = row[VALUE]
         try:
             ret.append(pickle.loads(str(record_blob)))
-        except:
+        except Exception, e:
             import sys, traceback
             sys.stderr.write("Failing to unpickle %s\n" % str(record_blob))
             traceback.print_exc(file=sys.stderr)

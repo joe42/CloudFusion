@@ -28,7 +28,7 @@ class PersistentLRUCache(LRUCache):
         self.directory = directory
         try:
             os.makedirs(directory)
-        except:
+        except Exception, e:
             pass
         self.entries = shelve.open(directory+"/"+self.filename)
         atexit.register( lambda : self._close() )
@@ -42,7 +42,7 @@ class PersistentLRUCache(LRUCache):
     def _close(self):
         try:
             self.entries.close()
-        except:
+        except Exception, e:
             pass
     
     def get_keys(self):
@@ -77,7 +77,7 @@ class PersistentLRUCache(LRUCache):
     def _get_persistent_size(self, filepath):
         try:
             return os.path.getsize(filepath)
-        except: # log error
+        except Exception, e: # log error
             return 0
     
     def _get_file_content(self, filepath):
