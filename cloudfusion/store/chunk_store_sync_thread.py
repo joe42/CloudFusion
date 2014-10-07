@@ -224,7 +224,7 @@ class PersistentChunkMapper(object):
             self.chunk_mapping.close()
             self.filepath_mapping.close()
             self.alias_mapping.close()
-        except:
+        except Exception, e:
             pass
         
     def __num_to_alpha(self, num):
@@ -240,7 +240,7 @@ class PersistentChunkMapper(object):
         if not self._session_id:
             try:
                 self._time_offset = ntplib.NTPClient().request('pool.ntp.org').offset
-            except:
+            except Exception, e:
                 self._time_offset = 0
             unique_num = int( 100 * (time.time() + self._time_offset) ) #get globally unique number
             self._session_id = self.__num_to_alpha(unique_num)
@@ -364,7 +364,7 @@ class ChunkStoreSyncThread(object):
         self.store = store
         try:
             os.makedirs(self.temp_dir)
-        except:
+        except Exception, e:
             pass
         self.chunk_mapper = PersistentChunkMapper(temp_dir,self.logger) 
         self.max_writer_threads = max_writer_threads

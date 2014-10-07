@@ -13,10 +13,10 @@ import logging
 import socket, errno
 try:
     from urllib3 import quote, unquote
-except:
+except Exception, e:
     try:
         from urllib2 import quote, unquote
-    except:
+    except Exception, e:
         from urllib import quote, unquote
 
 class TinyDAVClient(object):

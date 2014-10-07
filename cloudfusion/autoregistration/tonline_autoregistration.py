@@ -95,7 +95,7 @@ if __name__ == '__main__':
             if captcha_solution != None and len(captcha_solution) > 2:
                 captcha_solution = int(captcha_solution)
                 break
-        except:
+        except Exception, e:
             pass
         screen.click(retryCaptcha)
     

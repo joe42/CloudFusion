@@ -77,7 +77,7 @@ class MetadataCachingStore(Store):
         try:
             entry.size = len(ret)
             self.entries.write(path_to_file, entry)
-        except:
+        except Exception, e:
             self.entries.delete(path_to_file)
         self.logger.debug("meta cache returning %s", repr(ret)[:10])
         self._add_to_parent_dir_listing(path_to_file)

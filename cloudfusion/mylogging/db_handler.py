@@ -59,7 +59,7 @@ class DBHandler(logging.Handler):
                     if try_cnt > 2:
                         sys.stderr.write("Lost logging message: %s\n" % self.format(record))
                         return
-        except:
+        except Exception, e:
             import traceback
             traceback.print_exc()
             sys.stderr.write("Lost logging message: %s\n" % self.format(record))
