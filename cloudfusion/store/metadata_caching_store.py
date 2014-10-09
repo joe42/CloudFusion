@@ -282,7 +282,13 @@ class MetadataCachingStore(Store):
             entry = self.entries.get_value(path)
             if not entry.size == None:
                 return entry.size
-        size = self.store.get_bytes(path)
+        try:
+            size = self.store.get_bytes(path)
+        except NoSuchFilesytemObjectError, e:
+            if self.entries.exists(path):
+                self.entries.delete(path)
+                self._remove_from_parent_dir_listing(path)
+            raise
         if not self.entries.exists(path):
             self.entries.write(path, Entry())
             entry = self.entries.get_value(path)
@@ -295,6 +301,9 @@ class MetadataCachingStore(Store):
         if not self.entries.exists(path):
             if self.store.exists(path):
                 self.entries.write(path, Entry())
+            else:
+                self.entries.delete(path)
+                self._remove_from_parent_dir_listing(path)
         return self.entries.exists(path)
     
     def clean_expired_cache_entries(self):
@@ -326,7 +335,12 @@ class MetadataCachingStore(Store):
             if not None in [entry.is_dir, entry.modified, entry.size]:
                 return {'is_dir': entry.is_dir, 'modified': entry.modified, 'bytes': entry.size}
         self.logger.debug("meta cache get_metadata entry does not exist or is expired")
-        metadata = self.store.get_metadata(path)
+        try:
+            metadata = self.store.get_metadata(path)
+        except NoSuchFilesytemObjectError:
+            self.entries.delete(path) 
+            self._remove_from_parent_dir_listing(path)
+            raise
         entry = self._prepare_entry(path, metadata)
         self.entries.write(path, entry)
         if not entry.is_dir and isinstance(self.store, BulkGetMetadata):
