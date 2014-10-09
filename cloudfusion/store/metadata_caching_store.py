@@ -263,6 +263,7 @@ class MetadataCachingStore(Store):
             entry = self.entries.get_value(directory)
         entry.listing =  listing
         self._add_existing_items(entry, directory)
+        entry.set_is_dir()
         self.entries.write(directory, entry)
         self.logger.debug("asserted %s", repr(self.entries.get_value(directory).listing))
         assert self.entries.get_value(directory).listing == entry.listing
