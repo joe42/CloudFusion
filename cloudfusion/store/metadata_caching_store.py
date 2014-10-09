@@ -369,6 +369,7 @@ class MetadataCachingStore(Store):
         for path, metadata in bulk.items():
             e = Entry()
             self.entries.write(path, self._prepare_entry(path,metadata))
+            self._add_to_parent_dir_listing(path)
         self.logger.debug("prefetch succeeded %s", path)
 
     def is_dir(self, path):
