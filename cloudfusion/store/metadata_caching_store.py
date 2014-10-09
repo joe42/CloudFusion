@@ -111,7 +111,7 @@ class MetadataCachingStore(Store):
         if self.entries.exists(parent_dir):
             entry = self.entries.get_value(parent_dir)
             if entry.listing != None and (not unicode(path) in entry.listing and not path in entry.listing):
-                self.logger.debug("%s does not exist in parent directory: %s..."%(path, repr(entry.listing[0:5])))
+                self.logger.debug("%s does not exist in parent directory: %s...", path, repr(entry.listing[0:5]))
                 return True
         return False
     
