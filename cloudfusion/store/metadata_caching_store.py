@@ -283,7 +283,13 @@ class MetadataCachingStore(Store):
             entry = self.entries.get_value(path)
             if not entry.size == None:
                 return entry.size
-        size = self.store.get_bytes(path)
+        try:
+            size = self.store.get_bytes(path)
+        except NoSuchFilesytemObjectError, e:
+            if self.entries.exists(path):
+                self.entries.delete(path)
+                self._remove_from_parent_dir_listing(path)
+            raise
         if not self.entries.exists(path):
             self.entries.write(path, Entry())
             entry = self.entries.get_value(path)
@@ -296,6 +302,9 @@ class MetadataCachingStore(Store):
         if not self.entries.exists(path):
             if self.store.exists(path):
                 self.entries.write(path, Entry())
+            else:
+                self.entries.delete(path)
+                self._remove_from_parent_dir_listing(path)
         return self.entries.exists(path)
     
     def clean_expired_cache_entries(self):
@@ -328,7 +337,12 @@ class MetadataCachingStore(Store):
         # Get metadata for single item first, even if we then prefetch 
         # all item's metadata in the parent directory, 
         # for the sake of individual error handling
-        metadata = self.store.get_metadata(path)
+        try:
+            metadata = self.store.get_metadata(path)
+        except NoSuchFilesytemObjectError:
+            self.entries.delete(path) 
+            self._remove_from_parent_dir_listing(path)
+            raise
         entry = self._prepare_entry(path, metadata)
         self.entries.write(path, entry)
         if not entry.is_dir and isinstance(self.store, BulkGetMetadata):
