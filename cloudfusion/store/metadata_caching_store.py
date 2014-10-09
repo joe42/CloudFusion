@@ -1,4 +1,5 @@
-from cloudfusion.store.store import Store, NoSuchFilesytemObjectError
+from cloudfusion.store.store import Store, NoSuchFilesytemObjectError,\
+    AlreadyExistsError
 from cloudfusion.util import *
 import time
 from cloudfusion.util.cache import Cache
@@ -193,7 +194,10 @@ class MetadataCachingStore(Store):
 
     def create_directory(self, directory):
         self.logger.debug("meta cache create_directory %s", directory)
-        ret = self.store.create_directory(directory)
+        try:
+            ret = self.store.create_directory(directory)
+        except AlreadyExistsError:
+            raise 
         if not self.entries.exists(directory):
             self.entries.write(directory, Entry())
         entry = self.entries.get_value(directory)
