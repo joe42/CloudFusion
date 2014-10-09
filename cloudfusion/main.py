@@ -23,12 +23,13 @@ class MyParser(argparse.ArgumentParser):
 
 def print_help(args):
     print ''
-    print '  usage1: %s [--config path/to/config.ini] mountpoint [foreground] [log]' % args[0]
+    print '  usage1: %s [--config path/to/config.ini] mountpoint [foreground] [log] [profile]' % args[0]
     print '      This command will start Cloudfusion.'
     print '          --config configfile.ini: initialization file to automatically start Cloudfusion with a storage provider like Dropbox or Sugarsync'
     print '          mountpoint: empty folder in which the virtual file system is created'
     print '          foreground: run program in foreground'
     print '          log: write logs to the directory .cloudfusion/logs'
+    print '          profile: (for developers) create a performance profile file cloudfusion_profile'
     print '          big_write option of fuse is used automatically to optimize throughput if the system supports it (requires fuse 2.8 or higher)\n'
     print '  usage2: %s mountpoint stop' % args[0]
     print '      This command will stop Cloudfusion.'
@@ -97,6 +98,7 @@ def main():
     parser.add_argument('args', nargs=argparse.REMAINDER) #collect all arguments positioned after positional and optional parameters 
     args = parser.parse_args()
     foreground  = 'foreground' in args.args 
+    profiling_enabled = 'profile' in args.args
     mountpoint = args.mountpoint
     if "stop" in args.args:
         start_stopping_thread(mountpoint)
@@ -114,6 +116,14 @@ def main():
         start_configuration_thread(mountpoint, args.config)
     if not os.path.exists(mountpoint):
         os.makedirs(mountpoint)
+    if profiling_enabled:
+        import inspect
+        from profilehooks import profile
+        import types
+        for name, fn in inspect.getmembers(TransparentConfigurablePyFuseBox):
+            if isinstance(fn, types.UnboundMethodType):
+                if not name.startswith('_'):
+                    setattr(TransparentConfigurablePyFuseBox, name, profile(fn, filename='/tmp/cloudfusion_profile'))
     fuse_operations = TransparentConfigurablePyFuseBox(mountpoint)
     try:
         #first try to mount file system with big_writes option (more performant)
