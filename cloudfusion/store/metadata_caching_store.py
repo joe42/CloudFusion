@@ -227,7 +227,7 @@ class MetadataCachingStore(Store):
             self.entries.write(path_to_dest, entry)
         else:
             self.entries.write(path_to_dest, Entry())
-        entry = self.entries.get_value(path_to_src)
+        entry = self.entries.get_value(path_to_dest)
         entry.set_modified()
         self.entries.write(path_to_dest, entry)
         self.entries.delete(path_to_src)
