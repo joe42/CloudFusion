@@ -272,8 +272,8 @@ class MetadataCachingStore(Store):
         '''Add existing files or directories to *dir_entry* because they might have been 
         uploaded recently and might not be retrievable by a directory listing from the storage provider.'''
         for path in self.entries.get_keys():
-            if not self.entries.is_expired(path):
-                if os.path.dirname(path) == dir_entry_path:
+            if os.path.dirname(path) == dir_entry_path:
+                if not self.entries.is_expired(path):
                     dir_entry.add_to_listing(path)
     
     def get_bytes(self, path):
@@ -315,14 +315,18 @@ class MetadataCachingStore(Store):
         self.logger.debug("meta cache get_metadata %s", path)
         self.__clean_cache()
         self._add_parent_dir_listing(path)
-        if self._does_not_exist_in_parent_dir_listing(path):
-            raise NoSuchFilesytemObjectError(path,0)
-        if self.entries.exists(path):
+        if not self.entries.exists(path):
+            if self._does_not_exist_in_parent_dir_listing(path):
+                raise NoSuchFilesytemObjectError(path,0)
+        else:
             entry = self.entries.get_value(path)
             self.logger.debug("entry exists")
             if not None in [entry.is_dir, entry.modified, entry.size]:
                 return {'is_dir': entry.is_dir, 'modified': entry.modified, 'bytes': entry.size}
-        self.logger.debug("meta cache get_metadata entry does not exist or is expired")
+        self.logger.debug("meta cache get_metadata entry does not exist or does not contain all neccessary data")
+        # Get metadata for single item first, even if we then prefetch 
+        # all item's metadata in the parent directory, 
+        # for the sake of individual error handling
         metadata = self.store.get_metadata(path)
         entry = self._prepare_entry(path, metadata)
         self.entries.write(path, entry)
