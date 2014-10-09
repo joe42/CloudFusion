@@ -2,7 +2,6 @@ from cloudfusion.store.store import Store, NoSuchFilesytemObjectError
 from cloudfusion.util import *
 import time
 from cloudfusion.util.cache import Cache
-from cloudfusion.util.mp_lru_cache import MPLRUCache
 import os.path
 import logging
 from copy import deepcopy
@@ -46,7 +45,7 @@ class MetadataCachingStore(Store):
         self.store = store
         self.logger = logging.getLogger(self.get_logging_handler())
         self.logger.debug("creating MetadataCachingStore object")
-        self.entries = MPSynchronizeProxy( MPLRUCache(cache_expiration_time,2) )
+        self.entries = MPSynchronizeProxy( Cache(cache_expiration_time) ) 
         if cache_expiration_time < 240:
             self.logger.warning("Be aware of the synchronization issue https://github.com/joe42/CloudFusion/issues/16 \
                     or to avoid the issue set cache_expiration_time to more than 240 seconds.")
@@ -355,15 +354,9 @@ class MetadataCachingStore(Store):
         self.logger.debug("prefetch %s", path)
         bulk = self.store.get_bulk_metadata(path)
         bulk.items()
-        dict = {}
         for path, metadata in bulk.items():
             e = Entry()
-            dict[path] = self._prepare_entry(path,metadata)
-        try:
-            self.entries.bulk_write(dict)
-        except Exception,e:
-            import traceback
-            traceback.print_exc()
+            self.entries.write(path, self._prepare_entry(path,metadata))
         self.logger.debug("prefetch succeeded %s", path)
 
     def is_dir(self, path):
