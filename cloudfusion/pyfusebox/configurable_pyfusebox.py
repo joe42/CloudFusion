@@ -11,6 +11,7 @@ import sys
 from cloudfusion.mylogging.nullhandler import NullHandler
 from cloudfusion.mylogging import db_logging_thread
 import cloudfusion
+from time import sleep
 
 class ConfigurablePyFuseBox(PyFuseBox):
     '''Offers a virtual configuration file, to configure Cloudfusion at runtime.
@@ -116,6 +117,8 @@ class ConfigurablePyFuseBox(PyFuseBox):
                 args = ["fusermount", "-zu", self.root]
             import subprocess
             subprocess.Popen(args)
+            sleep(5) # Give CloudFusion some time to unmount.
+            # If it does not work terminate it the hard way.
             os.kill(os.getpid(), signal.SIGINT)
         """if new == self.virtual_file.get_path():
             buf = 
@@ -152,6 +155,8 @@ class ConfigurablePyFuseBox(PyFuseBox):
                 args = ["fusermount", "-zu", self.root]
             import subprocess
             subprocess.Popen(args)
+            sleep(5) # Give CloudFusion some time to unmount.
+            # If it does not work terminate it the hard way.
             os.kill(os.getpid(), signal.SIGINT)
         if self.store_initialized and path.startswith(self.DATA_FOLDER_PATH):
             path = self.remove_data_folder_prefix(path)
