@@ -271,8 +271,8 @@ class MetadataCachingStore(Store):
         '''Add existing files or directories to *dir_entry* because they might have been 
         uploaded recently and might not be retrievable by a directory listing from the storage provider.'''
         for path in self.entries.get_keys():
-            if not self.entries.is_expired(path):
-                if os.path.dirname(path) == dir_entry_path:
+            if os.path.dirname(path) == dir_entry_path:
+                if not self.entries.is_expired(path):
                     dir_entry.add_to_listing(path)
     
     def get_bytes(self, path):
@@ -315,7 +315,10 @@ class MetadataCachingStore(Store):
         self.__clean_cache()
         self._add_parent_dir_listing(path)
         if self._does_not_exist_in_parent_dir_listing(path):
-            raise NoSuchFilesytemObjectError(path,0)
+            if self.entries.exists(path):
+                self._add_to_parent_dir_listing(path)
+            else:
+                raise NoSuchFilesytemObjectError(path,0)
         if self.entries.exists(path):
             entry = self.entries.get_value(path)
             self.logger.debug("entry exists")
