@@ -344,6 +344,9 @@ class MetadataCachingStore(Store):
             if not None in [entry.is_dir, entry.modified, entry.size]:
                 return {'is_dir': entry.is_dir, 'modified': entry.modified, 'bytes': entry.size}
         self.logger.debug("meta cache get_metadata entry does not exist or is expired")
+        # Get metadata for single item first, even if we then prefetch 
+        # all item's metadata in the parent directory, 
+        # for the sake of for individual error handling
         try:
             metadata = self.store.get_metadata(path)
         except NoSuchFilesytemObjectError:
@@ -352,7 +355,7 @@ class MetadataCachingStore(Store):
             raise
         entry = self._prepare_entry(path, metadata)
         self.entries.write(path, entry)
-        if not entry.is_dir and isinstance(self.store, BulkGetMetadata):
+        if isinstance(self.store, BulkGetMetadata):
             self._prefetch_directory(os.path.dirname(path))
         return {'is_dir': entry.is_dir, 'modified': entry.modified, 'bytes': entry.size}
     
