@@ -332,6 +332,10 @@ class MetadataCachingStore(Store):
         if self._does_not_exist_in_parent_dir_listing(path):
             if self.entries.exists(path):
                 self._add_to_parent_dir_listing(path)
+                print "This should not happen; where does "+path+" come from? How is it not in the parent directory listing:"
+                parent_dir = os.path.dirname(path)
+                entry = self.entries.get_value(parent_dir)
+                print entry.listing
             else:
                 raise NoSuchFilesytemObjectError(path,0)
         if self.entries.exists(path):
