@@ -350,7 +350,7 @@ class MetadataCachingStore(Store):
             raise
         entry = self._prepare_entry(path, metadata)
         self.entries.write(path, entry)
-        if not entry.is_dir and isinstance(self.store, BulkGetMetadata):
+        if isinstance(self.store, BulkGetMetadata):
             self._prefetch_directory(os.path.dirname(path))
         return {'is_dir': entry.is_dir, 'modified': entry.modified, 'bytes': entry.size}
     
