@@ -108,9 +108,6 @@ exception UnimplementedDigestAuthOptionError
 
 exception UnimplementedHmacDigestAuthOptionError
     The server requested a type of HMACDigest authentication that we are unfamiliar with. """
-        
-def wait_for_event(event):
-    event.wait()
  
 class SugarsyncStore(Store):
     def __init__(self, config):
@@ -281,48 +278,6 @@ class SugarsyncStore(Store):
             HTTP_STATUS.generate_exception(resp.status, str(resp))
         return resp.data 
     
-    # retry does not really matter with caching_store
-    @retry((Exception,socket.error), tries=2, delay=0) 
-    def store_file(self, path_to_file, dest_dir="/", remote_file_name = None, interrupt_event=None):
-        if not remote_file_name:
-            remote_file_name = os.path.basename(path_to_file)
-        remote_path = dest_dir + "/" + remote_file_name
-        self.logger.debug("storing file to %s", remote_path)
-        if not self.exists(remote_path):
-            self._create_file(remote_path)
-            # file does not exist here
-        result_queue = multiprocessing.Queue()
-        write_process = multiprocessing.Process(target=self.client.put_file_async, args=(path_to_file, self._translate_path(remote_path), result_queue))
-        write_process.daemon = True
-        write_process.start()
-        interrupt_process = None
-        if interrupt_event:
-            interrupt_process = multiprocessing.Process(target=wait_for_event, args=(interrupt_event,))
-            interrupt_process.daemon = True
-            interrupt_process.start()
-        while True:
-            write_process.join(1)
-            if not write_process.is_alive():
-                if interrupt_process:
-                    interrupt_process.terminate()
-                break
-            if interrupt_process and not interrupt_process.is_alive():
-                self.logger.debug("terminating stale upload of %s in process %s", remote_path, write_process.pid)
-                write_process.terminate()
-                if interrupt_process:
-                    interrupt_process.terminate()
-                self.logger.debug("terminated stale upload of %s in process %s", remote_path, os.getpid())
-                raise InterruptedException("Stale upload has been interrupted.")
-        
-        resp = result_queue.get()   
-        if isinstance(resp, Exception):
-            raise resp
-        
-        if not resp.status in HTTP_STATUS.OK:
-            self.logger.warning("could not store file to %s\nstatus: %s reason: %s", remote_path, resp.status, resp.reason)
-            HTTP_STATUS.generate_exception(resp.status, str(resp))
-        return int(time.mktime( time.strptime(resp.headers['Date'], "%a, %d %b %Y %H:%M:%S GMT") ) - self.time_difference) 
-            
     @retry((Exception,socket.error), tries=2, delay=0) 
     def store_fileobject(self, fileobject, path_to_file):
         self.logger.info("storing file object to %s", path_to_file)
