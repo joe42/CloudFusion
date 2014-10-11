@@ -214,9 +214,9 @@ class StoreSyncThread(object):
         while not self._stop and self.do_profiling:
             self.logger.debug("StoreSyncThread profiling run")
             self._heartbeat = time.time()
-            self.__sleep( self._get_time_to_sleep() )
             self._reconnect()
             self.tidy_up()
+            self.__sleep( self._get_time_to_sleep() )
             if self.skip_starting_new_writers_for_next_x_cycles > 0:
                 self.skip_starting_new_writers_for_next_x_cycles -= 1
                 continue
