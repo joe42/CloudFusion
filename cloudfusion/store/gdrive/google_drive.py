@@ -145,7 +145,8 @@ class GoogleDrive(Store):
         and the GoogleDrive object for use by another thread.
         :returns: a tuple with the copies of the GoogleAuth and the GoogelDrive object'''
         gauth = GoogleAuth()
-        gauth.credentials= self.gauth.credentials
+        gauth.credentials = self.gauth.credentials
+        gauth.http = None
         gauth.Authorize()
         drive = Drive(gauth)
         return (gauth, drive)
