@@ -20,6 +20,7 @@ from apiclient import errors
 import cloudfusion.third_party.parsedatetime.parsedatetime as pdt
 from string import Template
 from cloudfusion.util.string import get_id_key, get_secret_key
+import httplib2
 
 class GoogleDrive(Store):
     '''Subclass of Store implementing an interface to the Google Drive.'''
