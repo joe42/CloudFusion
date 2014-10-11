@@ -57,8 +57,8 @@ class GoogleDrive(Store):
         id_key = get_id_key(config)
         secret_key = get_secret_key(config)
         self.client_auth = self.CLIENT_AUTH_TEMPLATE.substitute(SECRET=config[secret_key], ID=config[id_key])
-        self.gauth = self._reconnect()
-        
+        with open('client_secrets.json', 'w') as client_secrets:
+            client_secrets.write(self.client_auth)
         self._credentials_db_path = self._get_credentials_db_path(config)
         key = self._credentials_db_path# use db path as database key to store credentials under
         try:
@@ -68,14 +68,15 @@ class GoogleDrive(Store):
             credentials_db = {}
         if key in credentials_db: 
             self.gauth.credentials = credentials_db[key]
+            self.gauth.credentials.authorize(httplib2.Http())
         else: # get credentials manually
             self.gauth.LocalWebserverAuth()
+            self.gauth.Authorize()
         credentials_db[key] = self.gauth.credentials #store token for further sessions  
         try:
             credentials_db.close()
         except Exception, e:
             pass     
-        self.gauth.Authorize()
         self.drive = Drive(self.gauth)
         self.logger.info("api initialized")
         
@@ -97,12 +98,6 @@ class GoogleDrive(Store):
         ret = dir_name + "/credentials" 
         return ret 
 
-    def _reconnect(self):
-        with open('client_secrets.json', 'w') as client_secrets:
-            client_secrets.write(self.client_auth)
-        gauth = GoogleAuth()
-        return gauth
-    
     def _get_fileobject_id(self, path):
         if len(path)>0 and path[0] == '/':
             path = path[1:]
