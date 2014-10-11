@@ -225,9 +225,9 @@ class StoreSyncThread(object):
     def _run(self):
         self.logger.debug("StoreSyncThread run")
         self._heartbeat = time.time()
-        self.__sleep( self._get_time_to_sleep() )
         self._reconnect()
         self.tidy_up()
+        self.__sleep( self._get_time_to_sleep() )
         if self.skip_starting_new_writers_for_next_x_cycles > 0:
             self.skip_starting_new_writers_for_next_x_cycles -= 1
             return
