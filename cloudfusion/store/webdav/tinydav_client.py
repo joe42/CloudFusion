@@ -211,12 +211,12 @@ class TinyDAVClient(object):
         for response in multi_response:
             path = response.find(re.compile(r'(?i)[a-z0-9]:href')).text
             path = unquote(path)
-            if path == '/' or path == '':
-                continue
             if path.endswith('/'):
                 path = path[:-1]
             if path.startswith(self.root): #cut off root
                 path = path[len(self.root):]
+            if path == '/' or path == '':
+                continue
             if path != directory[:-1]:
                 ret.append( path )
         return ret 
@@ -243,14 +243,14 @@ class TinyDAVClient(object):
             path = response.find(re.compile(r'(?i)[a-z0-9]:href')).text
             path = unquote(path)
             item = {}
-            if path == '/' or path == '':
-                continue
             if path.endswith('/'):
                 path = path[:-1]
             if path == self.root + directory[:-1]:
                 continue
             if path.startswith(self.root): #cut off root
                 path = path[len(self.root):]
+            if path == '/' or path == '':
+                continue
             item["path"] = path
             mod_date = response.find(re.compile(r'(?i)[a-z0-9]:getlastmodified')).text
             cal = pdt.Calendar()
