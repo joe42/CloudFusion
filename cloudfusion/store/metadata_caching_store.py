@@ -277,7 +277,7 @@ class MetadataCachingStore(Store):
         '''Add existing files or directories to *dir_entry* because they might have been 
         uploaded recently and might not be retrievable by a directory listing from the storage provider.'''
         for path in self.entries.get_keys():
-            if os.path.dirname(path) == dir_entry_path:
+            if os.path.dirname(path) == dir_entry_path and os.path.dirname(path) != '/':
                 if not self.entries.is_expired(path):
                     dir_entry.add_to_listing(path)
     
