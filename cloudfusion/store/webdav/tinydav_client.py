@@ -85,7 +85,15 @@ class TinyDAVClient(object):
     def get_metadata(self, path):
         ''':raises: StoreAccessError if propfind does not return getcontentlength or getlastmodified property
         :raises: NoSuchFilesytemObjectError if path does not exist'''
+        # if path is a directory we need to append / or handle a redirect there
         response = self._get_client().propfind(self.root + path, depth=0)
+        # redirects can mean that this is a directory
+        if response.numerator == 301:
+            location = response.headers['location']
+            _, location_url = location.split('//',1) # remove protocol
+            _, location_path = location_url.split('/',1) # remove domain 
+            self.logger.debug("redirect to %s", location_path)
+            response = self._get_client().propfind(location_path, depth=0) 
         response_soup = BeautifulSoup(response.content)
         response = response_soup.find(re.compile(r'(?i)[a-z0-9]:response'))
         ret = {}
@@ -186,6 +194,8 @@ class TinyDAVClient(object):
     def get_directory_listing(self, directory):
         ''':raises: StoreAccessError if the directory cannot be listed
         :raises: NoSuchFilesytemObjectError if path does not exist'''
+        if not directory.endswith('/'):
+            directory += '/'
         response = self._get_client().propfind(self.root + directory, depth=1)
         if response.content == '':
             return []
@@ -201,7 +211,7 @@ class TinyDAVClient(object):
                 path = path[:-1]
             if path.startswith(self.root): #cut off root
                 path = path[len(self.root):]
-            if path != directory:
+            if path != directory[:-1]:
                 ret.append( path )
         return ret 
     
@@ -217,6 +227,8 @@ class TinyDAVClient(object):
         
         :raises: NoSuchFilesytemObjectError if the directory does not exist
         '''
+        if not directory.endswith('/'):
+            directory += '/'
         response = self._get_client().propfind(self.root + directory, depth=1)
         response_soup = BeautifulSoup(response.content)
         multi_response = response_soup.findAll(re.compile(r'(?i)[a-z0-9]:response'))
@@ -229,7 +241,7 @@ class TinyDAVClient(object):
                 continue
             if path.endswith('/'):
                 path = path[:-1]
-            if path == self.root + directory:
+            if path == self.root + directory[:-1]:
                 continue
             if path.startswith(self.root): #cut off root
                 path = path[len(self.root):]
