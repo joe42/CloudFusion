@@ -329,24 +329,18 @@ class MetadataCachingStore(Store):
         self.logger.debug("meta cache get_metadata %s", path)
         self.__clean_cache()
         self._add_parent_dir_listing(path)
-        if self._does_not_exist_in_parent_dir_listing(path):
-            if self.entries.exists(path):
-                self._add_to_parent_dir_listing(path)
-                print "This should not happen; where does "+path+" come from? How is it not in the parent directory listing:"
-                parent_dir = os.path.dirname(path)
-                entry = self.entries.get_value(parent_dir)
-                print entry.listing
-            else:
+        if not self.entries.exists(path):
+            if self._does_not_exist_in_parent_dir_listing(path):
                 raise NoSuchFilesytemObjectError(path,0)
-        if self.entries.exists(path):
+        else:
             entry = self.entries.get_value(path)
             self.logger.debug("entry exists")
             if not None in [entry.is_dir, entry.modified, entry.size]:
                 return {'is_dir': entry.is_dir, 'modified': entry.modified, 'bytes': entry.size}
-        self.logger.debug("meta cache get_metadata entry does not exist or is expired")
+        self.logger.debug("meta cache get_metadata entry does not exist or does not contain all neccessary data")
         # Get metadata for single item first, even if we then prefetch 
         # all item's metadata in the parent directory, 
-        # for the sake of for individual error handling
+        # for the sake of individual error handling
         try:
             metadata = self.store.get_metadata(path)
         except NoSuchFilesytemObjectError:
