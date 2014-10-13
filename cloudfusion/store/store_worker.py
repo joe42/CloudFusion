@@ -313,8 +313,7 @@ class RemoveWorker(object):
         self.thread = Thread(target=self._run)
         self.thread.setDaemon(True)
         self.thread.start()
-        time.sleep(0.1)
-        #self.thread.join()
+        self.thread.join()
     
     def _run(self):
         try:
