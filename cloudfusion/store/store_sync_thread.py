@@ -177,24 +177,13 @@ class StoreSyncThread(object):
         last_heartbeat = self._heartbeat
         return time.time()-last_heartbeat
 
-    def __sleep(self, seconds):
-        '''Sleep until *seconds* have passed since last call
-        sleeps at least one second.'''
-        if not hasattr(self.__sleep.im_func, 'last_call'):
-            self.__sleep.im_func.last_call = time.time()
-        last_call = self.__sleep.im_func.last_call
-        time_since_last_call = time.time() - last_call
-        time_to_sleep_in_s = seconds - time_since_last_call
-        if time_to_sleep_in_s <= 1:
-            time_to_sleep_in_s = 1
-        time.sleep( time_to_sleep_in_s )
-        self.__sleep.im_func.last_call = time.time()
-
     def _get_time_to_sleep(self):
-        if self._finished_writers_of_last_round > 0:
-            return 1
+        if self._finished_writers_of_last_round > 10:
+            return 0.1
+        if self._finished_writers_of_last_round > 1:
+            return 2
         if len(self.writers) > 3:
-            return 1
+            return 5
         if len(self.writers) > 0:
             return 15
         return 60
@@ -216,7 +205,7 @@ class StoreSyncThread(object):
             self._heartbeat = time.time()
             self._reconnect()
             self.tidy_up()
-            self.__sleep( self._get_time_to_sleep() )
+            time.sleep( self._get_time_to_sleep() )
             if self.skip_starting_new_writers_for_next_x_cycles > 0:
                 self.skip_starting_new_writers_for_next_x_cycles -= 1
                 continue
@@ -227,7 +216,7 @@ class StoreSyncThread(object):
         self._heartbeat = time.time()
         self._reconnect()
         self.tidy_up()
-        self.__sleep( self._get_time_to_sleep() )
+        time.sleep( self._get_time_to_sleep() )
         if self.skip_starting_new_writers_for_next_x_cycles > 0:
             self.skip_starting_new_writers_for_next_x_cycles -= 1
             return
