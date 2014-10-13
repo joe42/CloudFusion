@@ -549,7 +549,8 @@ class ChunkStoreSyncThread(object):
         return time.time()-last_heartbeat
 
     def __sleep(self, seconds):
-        '''Sleep until *seconds* have passed since last call'''
+        '''Sleep until *seconds* have passed since last call,
+        sleeps at least one second.'''
         if not hasattr(self.__sleep.im_func, 'last_call'):
             self.__sleep.im_func.last_call = time.time()
         last_call = self.__sleep.im_func.last_call
@@ -557,15 +558,17 @@ class ChunkStoreSyncThread(object):
         time_to_sleep_in_s = 1 - time_since_last_call
         if time_to_sleep_in_s > 0:
             time.sleep( time_to_sleep_in_s )
+        else:
+            time.sleep(1)
         self.__sleep.im_func.last_call = time.time()
         
     def _get_time_to_sleep(self):
-        if len(self.writers) > 5:
-            return 0.5
         if len(self.writers) > 2:
             return 1
         if len(self.writers) > 1:
-            return 2
+            return 5
+        if len(self.writers) > 0:
+            return 10
         return 60
     
     def run(self): 

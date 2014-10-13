@@ -178,19 +178,19 @@ class StoreSyncThread(object):
         return time.time()-last_heartbeat
 
     def __sleep(self, seconds):
-        '''Sleep until *seconds* have passed since last call'''
+        '''Sleep until *seconds* have passed since last call
+        sleeps at least one second.'''
         if not hasattr(self.__sleep.im_func, 'last_call'):
             self.__sleep.im_func.last_call = time.time()
         last_call = self.__sleep.im_func.last_call
         time_since_last_call = time.time() - last_call
         time_to_sleep_in_s = seconds - time_since_last_call
-        if time_to_sleep_in_s > 0:
-            time.sleep( time_to_sleep_in_s )
+        if time_to_sleep_in_s <= 1:
+            time_to_sleep_in_s = 1
+        time.sleep( time_to_sleep_in_s )
         self.__sleep.im_func.last_call = time.time()
 
     def _get_time_to_sleep(self):
-        if self._finished_writers_of_last_round > 1:
-            return 0.5
         if self._finished_writers_of_last_round > 0:
             return 1
         if len(self.writers) > 3:
