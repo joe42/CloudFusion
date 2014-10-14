@@ -549,8 +549,10 @@ class ChunkStoreSyncThread(object):
         return time.time()-last_heartbeat
         
     def _get_time_to_sleep(self):
-        if len(self.writers) > 4:
-            return 0.1
+        if len(self.writers) > 3:
+            return 1
+        if len(self.writers) > 2:
+            return 2
         if len(self.writers) > 1:
             return 5
         if len(self.writers) > 0:
