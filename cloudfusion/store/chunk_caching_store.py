@@ -171,7 +171,7 @@ class ChunkMultiprocessingCachingStore(Store):
             else:
                 store_item_list += files
         cache_listing = []
-        for path in self.entries.get_dirty_lru_entries(9999):
+        for path in self.entries.get_dirty_lru_entries(float("inf")):
             if os.path.dirname(path) == directory:
                 #print "listing dirty item: "+path 
                 cache_listing.append( path )

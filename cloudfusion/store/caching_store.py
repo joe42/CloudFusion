@@ -204,7 +204,7 @@ class MultiprocessingCachingStore(Store):
         #merge cached files and entries from store into set with unique entries
         store_listing = self.store.get_directory_listing(directory)
         cache_listing = []
-        for path in self.entries.get_dirty_lru_entries(9999):
+        for path in self.entries.get_dirty_lru_entries(float("inf")):
             if os.path.dirname(path) == directory:
                 cache_listing.append( path )
         ret = list(set( cache_listing + store_listing ))

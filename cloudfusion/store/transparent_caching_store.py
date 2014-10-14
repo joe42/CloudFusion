@@ -53,7 +53,7 @@ class TransparentMultiprocessingCachingStore(MultiprocessingCachingStore, Transp
         
     def get_dirty_files(self):
         ret = []
-        for path in self.entries.get_dirty_lru_entries(9999):
+        for path in self.entries.get_dirty_lru_entries(float("inf")):
             ret.append(path)
         return ret
 
