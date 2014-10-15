@@ -9,6 +9,8 @@ from copy import deepcopy
 from cloudfusion.store.store_worker import GetFreeSpaceWorker
 from cloudfusion.util.mp_synchronize_proxy import MPSynchronizeProxy
 from cloudfusion.store.bulk_get_metadata import BulkGetMetadata
+from multiprocessing import Manager, Lock
+from cloudfusion.util import file_util
 
 class Entry(object):
     def __init__(self):
@@ -54,6 +56,24 @@ class MetadataCachingStore(Store):
         self.free_space_worker = GetFreeSpaceWorker(deepcopy(store), self.logger)
         self.free_space_worker.start()
         self._last_cleaned = time.time()
+        manager = Manager()
+        self._is_cleaning_cache = Lock()
+        self._is_uploading_lock = Lock()
+        self._is_uploading = manager.Value('i', 0)
+    
+    def _acquire_uploading_lock(self):
+        '''This method needs to be called before uploading data.'''
+        with self._is_cleaning_cache:
+            # actually Value should support get_lock() but doesn't
+            with self._is_uploading_lock: 
+                self._is_uploading.value = self._is_uploading.value + 1
+                
+    def _release_uploading_lock(self):
+        '''This method needs to be called after uploading data.'''
+        with self._is_cleaning_cache:
+            with self._is_uploading_lock: 
+                self._is_uploading.value = self._is_uploading.value - 1
+    
     
     def _is_valid_path(self, path):
         return self.store._is_valid_path(path)
@@ -123,21 +143,34 @@ class MetadataCachingStore(Store):
             entry = self.entries.get_value(parent_dir)
             entry.remove_from_listing(path)
             self.entries.write(parent_dir, entry)
-        
+    '''entry deletion only while not uploading; use multithreading lock;at the beginning of the store methods
+    the entries should already be created; if it fails delete them, if it succeeds update them (eventual consistency 
+    '''        
     def store_file(self, path_to_file, dest_dir="/", remote_file_name = None, interrupt_event=None):
         if dest_dir == "/":
             dest_dir = ""
         if not remote_file_name:
             remote_file_name = os.path.basename(path_to_file)
-        self.logger.debug("meta cache store_file %s", dest_dir + "/" + remote_file_name)
-        with open(path_to_file) as fileobject:
-            fileobject.seek(0,2)
-            data_len = fileobject.tell()
+        data_len = file_util.get_file_size_in_bytes(path_to_file)
         path = dest_dir + "/" + remote_file_name
-        self.logger.debug("meta cache store_file %s", path)
-        ret = self.store.store_file(path_to_file, dest_dir, remote_file_name, interrupt_event)
+        self.logger.debug("meta cache store_file %s", dest_dir + "/" + remote_file_name)
         if not self.entries.exists(path):
             self.entries.write(path, Entry())
+        entry = self.entries.get_value(path)
+        entry.set_is_file()
+        entry.size = data_len
+        entry.set_modified()
+        self.entries.write(path, entry)
+        self.logger.debug("meta cache store_file %s", path)
+        try:
+            self._acquire_uploading_lock()
+            ret = self.store.store_file(path_to_file, dest_dir, remote_file_name, interrupt_event)
+        except:
+            # delete entry
+            self.entries.delete(path)
+            raise
+        finally:
+            self._release_uploading_lock()
         entry = self.entries.get_value(path)
         entry.set_is_file()
         entry.size = data_len
@@ -313,17 +346,23 @@ class MetadataCachingStore(Store):
         return self.entries.exists(path)
     
     def clean_expired_cache_entries(self):
-        '''Delete all expired cache entries.'''
-        for path in self.entries.get_keys():
-            if self.entries.is_expired(path):
-                self.entries.delete(path)
+        '''Delete all expired cache entries iff no upload is going on.
+        :returns: True iff the cache could be cleaned.'''
+        with self._is_cleaning_cache:
+            # do not clean cache during uploads
+            if self._is_uploading > 0:
+                return False
+            for path in self.entries.get_keys():
+                if self.entries.is_expired(path):
+                    self.entries.delete(path)
+        return True
     
     def __clean_cache(self):
         '''Delete all expired cache entries only if last called 
         after *cache_expiration_time* seconds as defined in the constructor.'''
         if self._last_cleaned + self.entries.expire < time.time():
-            self.clean_expired_cache_entries()
-            self._last_cleaned = time.time()
+            if self.clean_expired_cache_entries():
+                self._last_cleaned = time.time()
     
     def get_metadata(self, path):
         '''As a side effect cleans expired cache entries from time to time'''
@@ -411,6 +450,12 @@ class MetadataCachingStore(Store):
                 setattr(result, k, self._logging_handler)
             elif k == 'entries':
                 setattr(result, k, self.entries)
+            elif k == '_is_cleaning_cache':
+                setattr(result, k, self._is_cleaning_cache)
+            elif k == '_is_uploading':
+                setattr(result, k, self._is_uploading)
+            elif k == '_is_uploading_lock':
+                setattr(result, k, self._is_uploading_lock)
             else:
                 setattr(result, k, deepcopy(v, memo))
         return result
