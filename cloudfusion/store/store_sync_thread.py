@@ -268,23 +268,27 @@ class StoreSyncThread(object):
         #TODO: check for user quota error and pause or do exponential backoff
         #TODO: check for internet connection availability and pause or do exponential backoff
         #Entries can be deleted during this method!!!
-        #TODO: only access entries through store_sync_thread methods synchronized with self.lock
-        self._acquire_two_locks() #otherwise, fuse thread could delete current cache entry
         dirty_entry_keys = self.cache.get_dirty_lru_entries(self.max_writer_threads)##KeyError: '########################## ######## list_tail ###### #############################' lru_cache.py return self.entries[self.entries[LISTTAIL]] if self.entries[LISTTAIL] else None
+        new_writers = 0
         for path in dirty_entry_keys:
-            if not self.cache.is_expired(path): ##KeyError: '/fstest.7548/d010/66334873' cache.py return time.time() > self.entries[key].updated + self.expire
-                break
-            if self.is_in_progress(path):
+            try:
+                if not self.cache.is_expired(path): ##KeyError: '/fstest.7548/d010/66334873' cache.py return time.time() > self.entries[key].updated + self.expire
+                    break
+                if self.is_in_progress(path):
+                    continue
+                self.oldest_modified_date[path] = self.cache.get_modified(path)  # might change during upload, if new file contents is written to the cache entry
+                file = self.cache.peek_file(path)
+            except KeyError:
+                self.logger.exception("Key was deleted during synchronization")
                 continue
-            file = self.cache.peek_file(path)
             size_in_mb = self.__get_file_size_in_mb(file)
             if len(self.writers) >= self._get_max_threads(size_in_mb):
                 break
-            self.oldest_modified_date[path] = self.cache.get_modified(path) #might change during upload, if new file contents is written to the cache entry
+            new_writers += 1 
             new_worker = WriteWorker(self.store, path, file, self.logger)
-            new_worker.start()
             self.writers.append(new_worker)
-        self._release_two_locks()
+            new_worker.start()
+        self.logger.debug("enqueue_lru_entries dirty key: %s    writers: %s    new writers: %s" % (len(dirty_entry_keys), len(self.writers), new_writers))
     
     
     def enqueue_dirty_entries(self): 
@@ -332,6 +336,7 @@ class StoreSyncThread(object):
                 reader.stop()
             remover = RemoveWorker(self.store, path, is_dir, self.logger)
             remover.start()
+            self.removers.append(remover)
             
     def read(self, path):
         with self.lock:
