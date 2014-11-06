@@ -12,6 +12,7 @@ from cloudfusion.util.exponential_retry import retry
 from cloudfusion.mylogging import db_logging_thread
 import tempfile
 from cloudfusion.store.webdav.tinydav_client import TinyDAVClient
+from datetime import datetime
 
 class WebdavStore(Store):
     def __init__(self, config):
@@ -70,14 +71,18 @@ class WebdavStore(Store):
     def store_fileobject(self, fileobject, path, interrupt_event=None):
         size = self.__get_size(fileobject)
         self.logger.info("Storing file object of size %s to %s", size, path)
-        if hasattr(fileobject, 'name'):
+        if hasattr(fileobject, 'name') and fileobject.name is not None:
             file_name = fileobject.name
         else:
+            t1 = datetime.now()
             with tempfile.NamedTemporaryFile(delete=False) as fh:
                 for line in fileobject:
                     fh.write(line)
                 fh.flush()
                 file_name = fh.name
+            t2 = datetime.now()
+            diff = (t2-t1)
+            self.logger.info("Store file to disk in %s" % (diff.total_seconds()))
         self.tinyclient.upload(file_name, path)
         return int(time.time())
     
