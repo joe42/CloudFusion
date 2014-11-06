@@ -258,6 +258,24 @@ class WriteWorker(object):
         self._pid = 0
         self._is_successful = False
         self._error = None 
+        
+    def is_sleeping(self):
+        ''':returns: True iff the worker does nothing.'''
+        # Give the process some time after starting
+        if time.time() - self.start_time < 180:
+            return False 
+        try:
+            p = psutil.Process(self._pid)
+            return not self.is_finished() and p.status() == 'sleeping' and not p.connections()
+        except NoSuchProcess, e:
+            return False 
+
+    def kill(self):
+        '''Forcefully stop the upload process.'''
+        os.system('kill -9 {0}'.format(self.process.pid)) 
+        self._error = Exception("Forcefully terminated WriteWorker process %s to write %s", self.process.pid, self.path) 
+        self.end_time = time.time()
+        self._clean_up()
 
     def get_duration(self):
         """Get duration of upload in seconds"""
