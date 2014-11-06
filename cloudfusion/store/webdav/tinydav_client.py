@@ -123,9 +123,9 @@ class TinyDAVClient(object):
             path = '.'
         response = self._get_client().propfind(path, depth=0, properties=["quota-available-bytes"])
         response_soup = BeautifulSoup(response.content)
-        response = response_soup.find(re.compile(r'(?i)[a-z0-9]:response'))
-        ret = response.find(re.compile(r'(?i)[a-z0-9]:quota-available-bytes'))
         try:
+            response = response_soup.find(re.compile(r'(?i)[a-z0-9]:response'))
+            ret = response.find(re.compile(r'(?i)[a-z0-9]:quota-available-bytes'))
             return int(ret.text)
         except Exception, e:
             self.logger.error("Get overall space failed with: %s; instead returning default value of 1TB", str(e))
@@ -138,12 +138,15 @@ class TinyDAVClient(object):
         if self.root == '':
             path = '.'
         responses = self._get_client().propfind(path, depth=1)
-        for status in responses:
-            response_soup = BeautifulSoup(ElementTree.tostring(status.response, 'utf8'))
-            response = response_soup.find(re.compile(r'(?i)[a-z0-9]:response'))
-            size = response.find(re.compile(r'(?i)[a-z0-9]:getcontentlength'))
-            if size:
-                ret += int(size.text)
+        try:
+            for status in responses:
+                response_soup = BeautifulSoup(ElementTree.tostring(status.response, 'utf8'))
+                response = response_soup.find(re.compile(r'(?i)[a-z0-9]:response'))
+                size = response.find(re.compile(r'(?i)[a-z0-9]:getcontentlength'))
+                if size:
+                    ret += int(size.text)
+        except Exception, e:
+            self.logger.error("Get used space failed with: %s; instead returning default value of 0", str(e))
         return ret
     
     @retry((Exception), tries=2, delay=0)
