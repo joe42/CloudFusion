@@ -8,6 +8,8 @@ import os
 from cloudfusion.store.store import NoSuchFilesytemObjectError
 from cloudfusion.store.transparent_store import ExceptionStats
 from cloudfusion.mylogging import db_logging_thread
+import psutil
+from psutil import NoSuchProcess
 
 
 class LeightWeightValue(object):
@@ -151,30 +153,107 @@ class GetFreeSpaceWorker(object):
                 setattr(result, k, deepcopy(v, memo))
         return result
 
+class _WriteWorkerProcesses(object):
+    '''Process pool for WriteWorker.'''
+    END_TIME = 'end_time'
+    LOCAL_FILEPATH = 'local_filepath'
+    REMOTE_FILEPATH = 'remote_filepath'
+    def __init__(self, store, logger):
+        ''':param store: An implementation of the Store interface.'''
+        self.store = store
+        self.logger = logger
+        self.processes = []
+        self.manager = multiprocessing.Manager()
+    
+    def get_worker(self, local_filepath, remote_filepath):
+        ''':param local_filepath: The path of the local file.
+        :param remote_filepath: The remote path to store the local file.
+        :returns: a worker process from the pool.'''
+        if not self.processes:
+            interrupt_event = multiprocessing.Event()
+            result_queue = multiprocessing.Queue()
+            parameters = self.manager.dict()
+            parameters[self.END_TIME] = 0
+            parameters[self.LOCAL_FILEPATH] = local_filepath
+            parameters[self.REMOTE_FILEPATH] = remote_filepath
+            store = copy.deepcopy(self.store)
+            p = multiprocessing.Process(target=self._run, args=(result_queue, interrupt_event, parameters, store))
+            p.daemon = True
+            p.start()
+            p.start_time = time.time()
+            p.parameters = parameters
+            p.result_queue = result_queue
+            p.interrupt_event = interrupt_event
+            p.parameters = parameters
+        else:           
+            p = self.processes.pop(0)
+            p.parameters[self.END_TIME] = 0
+            p.parameters[self.LOCAL_FILEPATH] = local_filepath
+            p.parameters[self.REMOTE_FILEPATH] = remote_filepath
+            p.start_time = time.time()
+        return p
+    
+    def recycle_worker(self, worker):
+        '''Put the *worker* process back into the pool for reuse.'''
+        if worker.is_alive():
+            if not worker.result_queue.empty(): 
+                worker.result_queue.get()
+            self.processes.append(worker)            
+
+    def _run(self, result_queue, interrupt_event, parameters, store):
+        self.logger = db_logging_thread.make_logger_multiprocessingsave(self.logger)
+        while True:
+            while None in [parameters[self.LOCAL_FILEPATH], parameters[self.REMOTE_FILEPATH]]:
+                # wait for new upload task
+                time.sleep(0.1)
+            local_filepath = parameters[self.LOCAL_FILEPATH]
+            remote_filepath = parameters[self.REMOTE_FILEPATH]
+            self.logger.debug("Start WriteWorker process %s to write %s", os.getpid(), remote_filepath)
+            try:
+                update_time = store.store_file(local_filepath, os.path.dirname(remote_filepath), os.path.basename(remote_filepath), interrupt_event)
+                parameters[self.END_TIME] = time.time()
+                if not update_time:
+                    update_time = parameters[self.END_TIME]
+                result_queue.put(update_time)
+            except Exception, e:
+                self.logger.exception("Error on storing %s in WriteWorker", remote_filepath)
+                try:
+                    pickle.loads(pickle.dumps(e))  # check if exception can be de/serialized
+                    result_queue.put(e)
+                except Exception:
+                    self.logger.error("Error on serializing exception in WriteWorker: %s", repr(e))
+                    result_queue.put(Exception(repr(e)))
+            self.logger.debug("Finish WriteWorker process %s to write %s", os.getpid(), remote_filepath)
+            
+            parameters[self.LOCAL_FILEPATH], parameters[self.REMOTE_FILEPATH] = None, None
+            
+            
+        
+
 class WriteWorker(object):
     '''Uploads a single file in a separate process. 
     The start method is used to begin the upload. The method is_finished can be used to check
     if the worker is done. is_successful shows if it has been successful after it is done. If not successful, an error message can be retrieved with get_error.
     Other methods can be used to get upload statistics.'''
+    pool = None
     def __init__(self, store, path, file, logger):
         ''':param store: Store instance that will be deepcopied and used in a newly created process to upload file
         :param path: path that is used in the store as a reference to the uploaded file
         :param file: fileobject with a name attribute; file.name needs to be a file on the local harddrive; the file is removed after the worker is finished
         :param logger: a multiprocessing logger 
         '''
-        self.store = copy.deepcopy(store)
+        if not WriteWorker.pool:
+            WriteWorker.pool = _WriteWorkerProcesses(store, logger)
+        self.store = store
         self.path = path
         self._filename = file.name
         file.close()
         self._filesize = os.path.getsize(file.name)
         self.logger = logger
-        self.interrupt_event = multiprocessing.Event()
-        self._result_queue = multiprocessing.Queue()
         self.start_time = 0
-        self.end_time = multiprocessing.Value('d', 0.0)
+        self.end_time = 0
         self._update_time = None
-        self.process = multiprocessing.Process(target=self._run, args=(self._result_queue, self.interrupt_event, self.end_time))
-        self.process.daemon = True
+        self.process = None
         self._finished = False
         self._pid = 0
         self._is_successful = False
@@ -182,15 +261,15 @@ class WriteWorker(object):
 
     def get_duration(self):
         """Get duration of upload in seconds"""
-        if self.start_time == 0 or self.end_time.value == 0:
+        if self.start_time == 0 or self.end_time == 0:
             raise RuntimeError, 'Cannot obtain duration: the upload did not yet end'
-        return self.end_time.value-self.start_time
+        return self.end_time - self.start_time
     
     def get_endtime(self):
         """Get the end time of the upload in seconds from the epoche"""
-        if self.end_time.value == 0:
+        if self.end_time == 0:
             raise RuntimeError, 'Cannot obtain end time: the upload did not yet end'
-        return self.end_time.value
+        return self.end_time
     
     def get_starttime(self):
         """Get the start time of the upload in seconds from the epoche"""
@@ -209,7 +288,8 @@ class WriteWorker(object):
         return self._filesize
     
     def is_finished(self):
-        return (self._finished or not self.process.is_alive()) #after successful operation, process is deleted
+        self._check_result()
+        return self._finished
     
     def get_error(self):
         self._check_result()
@@ -218,8 +298,9 @@ class WriteWorker(object):
     def _check_result(self):
         if self._finished:
             return
-        if not self._result_queue.empty(): 
-            result = self._result_queue.get()
+        if not self.process.result_queue.empty(): 
+            result = self.process.result_queue.get()
+            self.end_time = self.process.parameters[_WriteWorkerProcesses.END_TIME]
             self._clean_up()
             if isinstance( result, ( int, long, float ) ):
                 self._update_time = result
@@ -235,6 +316,9 @@ class WriteWorker(object):
     def stop(self):
         if self._finished:
             return
+        while not self.process.is_alive():
+            time.sleep(1)
+            self.logger.error("Trying to stop process that has not yet started.")
         self.interrupt_event.set()
         self.process.join(60)
         if not self.process.is_alive():
@@ -246,7 +330,7 @@ class WriteWorker(object):
 
             self._error = Exception("Forcefully terminated WriteWorker process %s to write %s", self.process.pid, self.path) 
         self.process.terminate()
-        self.end_time.value = time.time()
+        self.end_time = time.time()
         self._clean_up()
         self.logger.debug("Stopped WriteWorker process %s to write %s", self._pid, self.path)
         
@@ -256,7 +340,7 @@ class WriteWorker(object):
         self.store = None
         self.interrupt_event = None
         self._result_queue = None
-        self.end_time = LeightWeightValue(self.end_time.value) 
+        WriteWorker.pool.recycle_worker(self.process)
         self.process = None
         self._finished = True
     
@@ -265,29 +349,8 @@ class WriteWorker(object):
             return
         self.start_time = time.time()
         self.logger.debug("Create WriteWorker process to write %s", self.path)
-        self.process.start()
+        self.process = WriteWorker.pool.get_worker(self._filename, self.path)
         self._pid = self.process.pid
-        
-    def _run(self, result_queue, interrupt_event, end_time):
-        self.logger = db_logging_thread.make_logger_multiprocessingsave(self.logger)
-        self.logger.debug("Start WriteWorker process %s to write %s", os.getpid(), self.path)
-        try:
-            update_time = self.store.store_file(self._filename, os.path.dirname(self.path), os.path.basename(self.path), interrupt_event)
-            end_time.value = time.time()
-            if not update_time:
-                update_time = end_time.value
-            result_queue.put(update_time)
-        except Exception, e:
-            self.logger.exception("Error on storing %s in WriteWorker", self.path)
-            try:
-                pickle.loads(pickle.dumps(e)) #check if exception can be de/serialized
-                result_queue.put(e)
-            except Exception:
-                self.logger.error("Error on serializing exception in WriteWorker: %s", repr(e))
-                result_queue.put(Exception(repr(e)))
-        self.logger.debug("Finish WriteWorker process %s to write %s", os.getpid(), self.path)
-
-
 
                     
 class RemoveWorker(object):
