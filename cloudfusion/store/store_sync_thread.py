@@ -31,7 +31,6 @@ class StoreSyncThread(object):
         self._heartbeat = time.time()
         #used for waiting when quota errors occur
         self.skip_starting_new_writers_for_next_x_cycles = 0
-        self._finished_writers_of_last_round = 0
         self.do_profiling = False
         self.logger.info("initialized StoreSyncThread")
     
@@ -115,7 +114,6 @@ class StoreSyncThread(object):
                             if self.cache.exists(writer.path) and self.cache.get_modified(writer.path) < writer.get_updatetime(): 
                                 self.set_modified_cache_entry(writer.path, writer.get_updatetime()) #[shares_resource: write self.entries] #FIXME: stops here
                 del self.oldest_modified_date[writer.path]
-        self._finished_writers_of_last_round = len(writers_to_be_removed)
         for writer in writers_to_be_removed:
             self.writers.remove(writer)
     
@@ -196,17 +194,6 @@ class StoreSyncThread(object):
             time.sleep( time_to_sleep_in_s )
         self.__sleep.im_func.last_call = time.time()
 
-    def _get_time_to_sleep(self):
-        if self._finished_writers_of_last_round > 1:
-            return 0.5
-        if self._finished_writers_of_last_round > 0:
-            return 1
-        if len(self.writers) > 3:
-            return 1
-        if len(self.writers) > 0:
-            return 15
-        return 60
-        
     def run(self): 
         #TODO: check if the cached entries have changed remotely (delta request) and update asynchronously
         #TODO: check if entries being transferred have changed and stop transfer
@@ -224,7 +211,17 @@ class StoreSyncThread(object):
             self._heartbeat = time.time()
             self._reconnect()
             self.tidy_up()
-            self.__sleep( self._get_time_to_sleep() )
+            cnt_writers = len(self.writers)
+            self.__sleep(1)
+            while True:
+                self.tidy_up()
+                if cnt_writers == 0:
+                    self.__sleep(60)
+                    break
+                elif len(self.writers) <= cnt_writers / 3:
+                    # wait until two thirds of the writers could finish
+                    break
+                self.__sleep(0.25)
             if self.skip_starting_new_writers_for_next_x_cycles > 0:
                 self.skip_starting_new_writers_for_next_x_cycles -= 1
                 continue
@@ -234,8 +231,17 @@ class StoreSyncThread(object):
         self.logger.debug("StoreSyncThread run")
         self._heartbeat = time.time()
         self._reconnect()
-        self.tidy_up()
-        self.__sleep( self._get_time_to_sleep() )
+        cnt_writers = len(self.writers)
+        self.__sleep(1)
+        while True:
+            self.tidy_up()
+            if cnt_writers == 0:
+                self.__sleep(60)
+                break
+            elif len(self.writers) <= cnt_writers / 3:
+                # wait until two thirds of the writers could finish
+                break
+            self.__sleep(0.25)
         if self.skip_starting_new_writers_for_next_x_cycles > 0:
             self.skip_starting_new_writers_for_next_x_cycles -= 1
             return
