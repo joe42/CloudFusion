@@ -11,12 +11,13 @@ import xml.dom.minidom as dom
 import logging
 from cloudfusion.util.exponential_retry import retry
 import socket
-import multiprocessing
+from multiprocessing import Manager, RLock
 import cloudfusion.util.pickle_methods
 import signal
 import sys
 from cloudfusion.mylogging import db_logging_thread
 import httplib
+import bisect
 
 signal.signal(signal.SIGTERM, lambda signum, stack_frame: sys.exit(1))
 
@@ -128,7 +129,13 @@ class SugarsyncStore(Store):
         self._logging_handler = 'sugarsync'
         self.logger = logging.getLogger(self._logging_handler)
         self.logger = db_logging_thread.make_logger_multiprocessingsave(self.logger)
-        self.path_cache = {}
+        manager = Manager()
+        self.path_cache = manager.dict()
+        # use a lock for synchronized appends
+        self._dir_listing_cache = manager.dict()
+        self._dir_listing_cache_lock = RLock()
+        self._last_partial_cache = manager.list()
+        self._time_of_last_partial_cache = 0
         #error handling for authorization error
         self.root = config["root"]
         try:
@@ -170,6 +177,12 @@ class SugarsyncStore(Store):
                 setattr(result, k, self.logger)
             elif k == '_logging_handler':                        
                 setattr(result, k, self._logging_handler) 
+            elif k == 'path_cache':
+                setattr(result, k, self.path_cache)
+            elif k == '_dir_listing_cache':
+                setattr(result, k, self._dir_listing_cache)
+            elif k == '_dir_listing_cache_lock':
+                setattr(result, k, self._dir_listing_cache_lock)
             else:
                 setattr(result, k, deepcopy(v, memo))
         return result
@@ -189,15 +202,21 @@ class SugarsyncStore(Store):
             parent_dir = to_unicode( os.path.dirname(path), "utf8")
             self.path_cache[parent_dir] = self._translate_path(parent_dir)
             collection = self._parse_collection(self.path_cache[parent_dir])
-            for item in collection:
-                if parent_dir[-1] != "/":
-                    parent_dir += "/"
-                self.path_cache[ parent_dir+to_unicode( item["name"], "utf8") ] = item["reference"]
+            self._cache(parent_dir, collection) 
             if not path in self.path_cache:
                 self.logger.warning("could not translate path: %s", path)
                 raise NoSuchFilesytemObjectError(path,0)
             return self.path_cache[path]
             
+    def _cache(self, directory, collection):
+        listing = []
+        d = directory
+        if d[-1] != "/":
+            d += "/"
+        for item in collection:
+            self.path_cache[ d+to_unicode( item["name"], "utf8") ] = item["reference"]
+            listing.append(d+to_unicode( item["name"], "utf8"))
+        self.__set_dir_listing(directory, listing)
             
     def _parse_collection(self, translated_path):
         """:returns: dict a dictionary with all paths of the collection at *translated_path* as keys and the corresponding nested dictionaries with the key/value pair for is_dir and reference."""
@@ -207,14 +226,12 @@ class SugarsyncStore(Store):
             self.logger.warning("could not get directory listing: %s\nstatus: %s reason: %s", translated_path, resp.status, resp.reason)
             HTTP_STATUS.generate_exception(resp.status, str(resp))
         xml_tree = dom.parseString(resp.data)
-        for collection in xml_tree.documentElement.getElementsByTagName("collection"): 
-            item = {}
-            item["is_dir"] = collection.getAttribute("type") == "folder"
-            item["name"] = collection.getElementsByTagName("displayName")[0].firstChild.nodeValue.encode('utf8')
-            reference_url = collection.getElementsByTagName("ref")[0].firstChild.nodeValue
-            reference_uid = regSearchString('.*:(.*)', reference_url)
-            item["reference"] = reference_uid
-            ret.append(item)
+        ret.extend(self._extract_folders(xml_tree))
+        ret.extend(self._extract_files(xml_tree))
+        return ret
+    
+    def _extract_files(self, xml_tree):
+        ret = []
         for collection in xml_tree.documentElement.getElementsByTagName("file"): 
             item = {}
             item["is_dir"] = False
@@ -228,6 +245,27 @@ class SugarsyncStore(Store):
             ret.append(item)
         return ret
     
+    def _extract_folders(self, xml_tree):
+        ret = []
+        for collection in xml_tree.documentElement.getElementsByTagName("collection"): 
+            item = {}
+            item["is_dir"] = collection.getAttribute("type") == "folder"
+            item["name"] = collection.getElementsByTagName("displayName")[0].firstChild.nodeValue.encode('utf8')
+            reference_url = collection.getElementsByTagName("ref")[0].firstChild.nodeValue
+            reference_uid = regSearchString('.*:(.*)', reference_url)
+            item["reference"] = reference_uid
+            ret.append(item)
+        return ret
+    
+#<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+#<collectionContents start="0" hasMore="false" end="4">
+    def _is_end_of_collection(self, xml_tree):
+        ''':returns: True iff. the partial directory listing in *xml_tree* contains the last file system item.'''
+        try:
+            collectionContents = xml_tree.documentElement
+            return collectionContents.getAttribute("hasMore") == "false"
+        except Exception, e:
+            self.logger.exception(e)
     
     def account_info(self):
         self.logger.debug("retrieving account info")
@@ -298,6 +336,10 @@ class SugarsyncStore(Store):
         if not resp.status in HTTP_STATUS.OK:
             self.logger.warning("could not create file %s\nstatus: %s reason: %s", path, resp.status, resp.reason)
             HTTP_STATUS.generate_exception(resp.status, str(resp))
+        location = resp.getheader("location")
+        # Location: https://api.sugarsync.com/file/:sc:566494:190_137264710
+        self.path_cache[path] = location.split(':')[-1]
+        self.__insert_dir_listing(path)
     
     # worst case: object still exists and takes up space or is appended to, by mistake
     # with caching_store, the entry in cache is deleted anyways 
@@ -318,6 +360,7 @@ class SugarsyncStore(Store):
             HTTP_STATUS.generate_exception(resp.status, str(resp))
         else:
             del self.path_cache[path]
+            self.__remove_from_dir_listing(path)
         return resp.status
         
     # worst case: would be annoying  when copying nested directory structure and failure occurs
@@ -337,6 +380,10 @@ class SugarsyncStore(Store):
         if not resp.status in HTTP_STATUS.OK:
             self.logger.warning("could not create directory: %s\nstatus: %s reason: %s", path, resp.status, resp.reason)
             HTTP_STATUS.generate_exception(resp.status, str(resp), "create_directory")
+        location = resp.getheader("location")
+        # Location: https://api.sugarsync.com/file/:sc:566494:190_137264710
+        self.path_cache[path] = location.split(':')[-1]
+        self.__insert_dir_listing(path)
         return resp.status
     
     # worst case: might be critical with backups when only updating changed items in nested structure
@@ -348,12 +395,139 @@ class SugarsyncStore(Store):
             return self.root_folders.keys()
         translated_dir = self._translate_path(directory)
         collection = self._parse_collection(translated_dir)
+        self._cache(directory, collection)
         if directory[-1] != "/":
             directory += "/"
         for item in collection:
             ret.append( directory+item['name'] )
         #self.logger.warning(str(ret))
         return ret 
+    
+    def __remove_from_dir_listing(self, path):
+        '''Remove *path* from the cached directory listing. '''
+        parent_dir = os.path.dirname(path)
+        with self._dir_listing_cache_lock:
+            try:
+                listing = self._dir_listing_cache[parent_dir]
+                listing.remove(path)
+                self._dir_listing_cache[parent_dir] = listing
+            except Exception, e:
+                pass
+    
+    def __insert_dir_listing(self, path):
+        '''Insert *path* into the cached directory listing,
+        keeping the order sorted,
+        retrieving the listing if it does not yet exist.'''
+        parent_dir = os.path.dirname(path)
+        with self._dir_listing_cache_lock:
+            print "append: "+path
+            listing = self.__get_dir_listing(parent_dir)
+            bisect.insort(listing,path)
+            self._dir_listing_cache[parent_dir] = listing
+            
+    def __set_dir_listing(self, directory, listing):
+        '''Set the directory listing of directory.'''
+        with self._dir_listing_cache_lock:
+            self._dir_listing_cache[directory] = listing
+            
+    def __get_dir_listing(self, directory):
+        ''':returns: The cached directory listing of directory,
+        retrieving the listing if it does not yet exist.'''
+        with self._dir_listing_cache_lock:
+            if directory == '/':
+                return self.root_folders.keys()
+            if not directory in self._dir_listing_cache:
+                self.get_directory_listing(directory)
+            return self._dir_listing_cache[directory]
+        
+    def __is_in_dir_listing(self, path):
+        ''':returns: True iff. path is in the cache of directory listings.'''
+        if path == '/':
+            return True
+        parent_dir = os.path.dirname(path)
+        if parent_dir == '/':
+            return path in self.root_folders.keys()
+        with self._dir_listing_cache_lock:
+            if not parent_dir in self._dir_listing_cache:
+                try:
+                    self.get_directory_listing(parent_dir)
+                except NoSuchFilesytemObjectError, e:
+                    return False
+            return path in self._dir_listing_cache[parent_dir]
+    
+    def __is_in_partial_dir_listing(self, path, cached_listing):
+        '''Check if path exists on the remote server.
+        Tries to do only a partial listing to find out if path exists remotely, also caches this listing
+        for three seconds. 
+        :param cached_listing: a locally cached listing used to determine the position of *path* in the remote listing
+        :returns: True if *path* exists in the actual listing or in a partial listing \
+that is cached for 3 seconds, False if it is not in the actual listing, or None if the existence is uncertain'''
+        # assume the listing has only changed a few items
+        parent_dir = os.path.dirname(path)
+        if self._time_of_last_partial_cache+3 > time.time():
+            # make a copy of the shared resource instead of locking it
+            cached_listing = self._last_partial_cache
+            if len(cached_listing) > 0:
+                # check if it is the fitting parent directory for path
+                if parent_dir == os.path.dirname(cached_listing[0]):
+                    if path in cached_listing:
+                        return True
+                    i = bisect.bisect_left(cached_listing, path)
+                    should_be_in_listing = (i > 0 and i < len(cached_listing))
+                    if should_be_in_listing:
+                        return False # we just checked that it is not in the listing
+        ret = []
+        translated_parent_dir = self._translate_path(parent_dir)
+        # guess index of path in sorted listing
+        start = bisect.bisect_left(cached_listing, path) - 5
+        if start < 0:
+            start = 0
+        resp = self.client.get_dir_listing(translated_parent_dir, index=start, max=50)
+        if not resp.status in HTTP_STATUS.OK:
+            self.logger.warning("could not get directory listing: %s\nstatus: %s reason: %s", parent_dir, resp.status, resp.reason)
+            HTTP_STATUS.generate_exception(resp.status, str(resp))
+        xml_tree = dom.parseString(resp.data)
+        ret.extend(self._extract_folders(xml_tree))
+        ret.extend(self._extract_files(xml_tree))
+        end_of_collection = self._is_end_of_collection(xml_tree)
+        paths = [os.path.join(parent_dir,item['name']) for item in ret]
+        # the multiprocessing list must be modified to 'delete' it, 
+        # instead of assigning an empty list
+        del self._last_partial_cache[:]
+        self._last_partial_cache.extend(paths)
+        self._time_of_last_partial_cache = time.time()
+        if path in paths:
+            return True
+        i = bisect.bisect_left(paths, path)
+        should_be_in_listing = (i > 0 and i < len(paths)) or\
+            (len(paths) < 20 and i == len(paths)) or\
+            (start == 0 and i == 0) or\
+            (end_of_collection and i == len(paths))
+        if should_be_in_listing:
+            return path in paths
+        return None
+    
+    
+    def exists(self, path):
+        if path == '/' or path in self.root_folders.keys():
+            return True
+        parent_dir = os.path.dirname(path)
+        # check if the file exists
+        listing = self.__get_dir_listing(parent_dir)
+        if path in listing:
+            return True
+        size = len(listing)
+        #print "cached directory listing: "+repr((listing))
+        if size < 100:
+            self.get_directory_listing(parent_dir)
+        else:
+            exists = self.__is_in_partial_dir_listing(path, listing)
+            #print "paths: "+repr(paths)
+            if exists != None:
+                return exists
+            # if it was not found in the listing, refresh the cached listing
+            self.get_directory_listing(parent_dir)
+        return self.__is_in_dir_listing(path)
     
     # worst case: should happen mostly with user interaction, so fast feedback is more important
     @retry((Exception,socket.error), tries=1, delay=0)
@@ -480,6 +654,8 @@ class SugarsyncStore(Store):
         if path[-1] == "/":
             path = path[0:-1]
         is_file = True
+        if not self.exists(path):
+            HTTP_STATUS.generate_exception(HTTP_STATUS.NOT_FOUND, "%s does not exist" % path)
         sugarsync_path =  self._translate_path(path)
         resp = self.client.get_file_metadata( sugarsync_path )
         if resp.status == HTTP_STATUS.BAD_REQUEST: # status means "is no folder" in this case

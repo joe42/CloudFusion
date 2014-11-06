@@ -94,13 +94,14 @@ class SugarsyncClient(object):
 #     <fileData>http://api.sugarsync.com/file/abc123/data</fileData>
 # </file>
 #===============================================================================
-    def get_dir_listing(self, path):
+    def get_dir_listing(self, path, index=0, max=1000000):
         headers = {"Host": self.host, "Authorization: ": self.token}
         conn = httplib2.Http(timeout=30)
-        response, content = conn.request("https://"+self.host+ "/folder/:sc:%s:%s/contents?max=100000" % (self.uid, path),"GET",None,headers)
+        url = "https://"+self.host+ "/folder/:sc:%s:%s/contents" % (self.uid, path)
+        parameters = "?max=%s&start=%s&order=name" % (max, index)
+        response, content = conn.request(url+parameters,"GET",None,headers)
         ret = HTTPResponse( response, content )
         return ret
-    
     
     def get_folder_metadata(self, path):
         headers = {"Host": self.host, "Authorization: ": self.token}
@@ -177,6 +178,7 @@ class SugarsyncClient(object):
         conn = httplib2.Http(timeout=30)
         response, content = conn.request("https://"+self.host+ "/folder/:sc:%s:%s" % (self.uid, directory),"POST",params,headers)
         ret = HTTPResponse( response, content )
+
         return ret
     
     def duplicate_file(self, path_to_src, path_to_dest, name):
@@ -186,7 +188,6 @@ class SugarsyncClient(object):
         response, content = conn.request("https://"+self.host+ "/folder/:sc:%s:%s" % (self.uid, path_to_dest),"POST",params,headers)
         ret = HTTPResponse( response, content )
         return ret
-    
         
     
 class HTTPResponse(object):
