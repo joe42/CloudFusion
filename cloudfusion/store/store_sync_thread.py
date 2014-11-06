@@ -36,17 +36,31 @@ class StoreSyncThread(object):
         self.logger.info("initialized StoreSyncThread")
     
     def _get_max_threads(self, size_in_mb):
-        '''Tries to increase the number of threads so that only 25% of the threads finish
-        in every round.'''
+        ''':returns: the number of upload worker threads that should be used
+        according to the the file size and the average time needed to upload a file.'''
+        def get_average_upload_time():
+            upload_time = 0
+            write_workers = self.stats.write_workers[-10:]
+            if len(write_workers) == 0:
+                return 0
+            for ww in write_workers:
+                upload_time += ww.get_endtime() - ww.get_starttime()
+            return upload_time / len(write_workers)
+        
         if size_in_mb <= 0.1:
             return self.max_writer_threads
-        if size_in_mb > 5: # 25 MBps
-            return 5 
-        ret = self._finished_writers_of_last_round * 4
-        if ret < 5:
-            ret = 5
-        if ret > self.max_writer_threads:
-            ret = self.max_writer_threads
+        # use less threads if they are not finished within one point five seconds
+        # also use less threads if the files are larger
+        average_upload_time = get_average_upload_time()
+        if average_upload_time < 1.5:
+            slowdown = 1
+        elif average_upload_time < 2:
+            slowdown = 2
+        else:
+            slowdown = 4
+        ret = self.max_writer_threads / (size_in_mb+1) / slowdown
+        if ret < 3:
+            ret = 3
         return ret
     
     def restart(self):
