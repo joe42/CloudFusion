@@ -581,7 +581,17 @@ class ChunkStoreSyncThread(object):
             self._heartbeat = time.time()
             self.__sleep( self._get_time_to_sleep() )
             self._reconnect()
-            self.tidy_up()
+            cnt_writers = len(self.writers)
+            self.__sleep(1)
+            while True:
+                self.tidy_up()
+                if cnt_writers == 0:
+                    self.__sleep(60)
+                    break
+                elif len(self.writers) <= cnt_writers / 3:
+                    # wait until two thirds of the writers could finish
+                    break
+                self.__sleep(0.25)
             if self.skip_starting_new_writers_for_next_x_cycles > 0:
                 self.skip_starting_new_writers_for_next_x_cycles -= 1
                 continue
