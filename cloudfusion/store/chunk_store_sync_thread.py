@@ -649,13 +649,15 @@ class ChunkStoreSyncThread(object):
         #TODO: check for user quota error and pause or do exponential backoff
         #TODO: check for internet connection availability and pause or do exponential backoff
         #Entries can be deleted during this method!!!
-        #TODO: only access entries through store_sync_thread methods synchronized with self.lock
-        self._acquire_two_locks() #otherwise, fuse thread could delete current cache entry
         dirty_entry_keys = self.cache.get_dirty_lru_entries(800)##KeyError: '########################## ######## list_tail ###### #############################' lru_cache.py return self.entries[self.entries[LISTTAIL]] if self.entries[LISTTAIL] else None
         for path in dirty_entry_keys:
-            if not self.cache.is_expired(path): ##KeyError: '/fstest.7548/d010/66334873' cache.py return time.time() > self.entries[key].updated + self.expire
-                break
-            if self.is_in_progress(path):
+            try:
+                if not self.cache.is_expired(path): ##KeyError: '/fstest.7548/d010/66334873' cache.py return time.time() > self.entries[key].updated + self.expire
+                    break
+                if self.is_in_progress(path):
+                    continue
+            except KeyError:
+                self.logger.exception("Key was deleted during synchronization")
                 continue
             size_in_mb = self.chunk_factory.get_size_of_next_chunk()
             if len(self.writers) >= self._get_max_threads(size_in_mb):
@@ -680,7 +682,6 @@ class ChunkStoreSyncThread(object):
             new_worker = ChunkWriteWorker(self.store, chunk.parent_dir, chunk_uuid, chunk.fileobject, chunk.filepaths, self.logger)
             new_worker.start()
             self.writers.append(new_worker)
-        self._release_two_locks()
     
     def enqueue_dirty_entries(self): 
         """Start new writer jobs with dirty cache entries to synchronize *all* files."""

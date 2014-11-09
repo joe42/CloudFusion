@@ -278,7 +278,7 @@ class StoreSyncThread(object):
                     continue
                 self.oldest_modified_date[path] = self.cache.get_modified(path)  # might change during upload, if new file contents is written to the cache entry
                 file = self.cache.peek_file(path)
-            except KeyError:
+            except (KeyError, IOError):
                 self.logger.exception("Key was deleted during synchronization")
                 continue
             size_in_mb = self.__get_file_size_in_mb(file)
