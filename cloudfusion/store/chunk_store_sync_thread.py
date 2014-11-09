@@ -381,7 +381,6 @@ class ChunkStoreSyncThread(object):
         self._heartbeat = time.time()
         #used for waiting when quota errors occur
         self.skip_starting_new_writers_for_next_x_cycles = 0
-        self._finished_writers_of_last_round = 0
         self.logger.info("initialized ChunkStoreSyncThread")
         self.chunk_factory = ChunkFactory(self.logger) 
     
@@ -444,7 +443,6 @@ class ChunkStoreSyncThread(object):
             if writer.is_finished():
                 writers_to_be_removed.append(writer)
                 self.stats.add_finished_worker(writer)
-                filepaths = writer.filepaths
                 with self.protect_cache_from_write_access: #otherwise, fuse thread could delete current cache entry
                     if writer.is_successful():
                         self.chunk_mapper.put(writer.chunk_uuid, writer.filepaths)
@@ -461,7 +459,6 @@ class ChunkStoreSyncThread(object):
                             else:
                                 self.logger.debug("remove old modified path: "+path)
                                 del self.oldest_modified_date[path]
-        self._finished_writers_of_last_round = len(writers_to_be_removed)
         for writer in writers_to_be_removed:
             self.writers.remove(writer)
             
