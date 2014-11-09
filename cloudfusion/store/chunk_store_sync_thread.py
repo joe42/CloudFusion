@@ -476,17 +476,11 @@ class ChunkStoreSyncThread(object):
         for writer in writers_to_be_removed:
             self.writers.remove(writer)
             
-    def _remove_slow_writers(self):
+    def _remove_sleeping_writers(self):
         for writer in self.writers:
-            if not writer.is_finished(): 
-                try:
-                    writer_run_too_long = writer.get_starttime() < time.time() - self.WRITE_TIMELIMIT
-                    if writer_run_too_long:
-                        writer.stop()
-                        self._heartbeat = time.time()
-                        self.logger.exception('Terminated slow writer after 2h.')
-                except RuntimeError, writer_has_not_yet_started:
-                    self.logger.exception('Trying to remove slow writer trying to write %s failed.'%writer.path)
+            if writer.is_sleeping(): 
+                writer.kill()
+                self.logger.exception('Terminated sleeping writer.')
                 
     def _check_for_failed_writers(self):
         for writer in self.writers:
@@ -605,7 +599,7 @@ class ChunkStoreSyncThread(object):
             self._garbage_collect_chunks()
             self._check_for_failed_writers()
             self._remove_finished_writers()
-            self._remove_slow_writers()
+            self._remove_sleeping_writers()
             self._remove_finished_readers()
             self._remove_successful_removers()
             self._restart_unsuccessful_removers()
