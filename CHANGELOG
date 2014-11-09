@@ -4,7 +4,21 @@ B: Added Features
 C: Bugfixes
 _stable means that the changes were successfully tested with all tests in the test suite, and a stress test for at least 24h
 
-v.6.4_16:
+v.7.5.13_stable:
+    * Add Support for Google Drive
+    * Add ~/.cache/cloudfusion as default cache directory
+    * Add methods set_configuration, and get_configuration to interface Store, to configure store instances dynamically through Cloudfusions configuration interface config/config
+    * Add on Demand Logging
+    * Add on Demand Profiling
+    * Bugfix WebDAV, handle redirects, as well as URLs with subdirectories 
+    * Bugfix Dropbox handle conflict when uploading large files that already exist
+    * Bugfix static bucket names in amazon S3 and google storage
+    * Bugfix problem with deepcopying boto library objects in amazon S3 and google storage
+    * Add partial directory listings for Sugarsync, for smaller overhead when working with directories with many files
+    * Stop upload workers that hang
+    * Adapt Upload Speed According to File Throughput
+    * Add support for mounting any directory in the file system for local testing using Local.ini
+v.6.4.16:
     * Add automatic registration for Dropbox (set autoregister = true in the configuration file in the section [store])
     * Add automatic registration for T-Online
 v.6.2.16:
