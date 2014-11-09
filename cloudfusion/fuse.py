@@ -305,7 +305,8 @@ class FUSE(object):
             return -(e.errno or EFAULT)
         except KeyboardInterrupt, e:
             raise SystemExit()
-        except:
+        except Exception, e:
+            print "Exception in %s: %s" % (func.__name__, e)
             print_exc()
             return -EFAULT
     
