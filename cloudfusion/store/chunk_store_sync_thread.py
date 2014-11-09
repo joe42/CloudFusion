@@ -559,7 +559,7 @@ class ChunkStoreSyncThread(object):
             self.__sleep.im_func.last_call = time.time()
         last_call = self.__sleep.im_func.last_call
         time_since_last_call = time.time() - last_call
-        time_to_sleep_in_s = 1 - time_since_last_call
+        time_to_sleep_in_s = seconds - time_since_last_call
         if time_to_sleep_in_s > 0:
             time.sleep( time_to_sleep_in_s )
         self.__sleep.im_func.last_call = time.time()
