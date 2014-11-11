@@ -120,7 +120,7 @@ class TinyDAVClient(object):
     def get_overall_space(self):
         path = self.root
         if self.root == '':
-            path = '.'
+            path = '/'
         response = self._get_client().propfind(path, depth=0, properties=["quota-available-bytes"])
         response_soup = BeautifulSoup(response.content)
         try:
@@ -136,7 +136,7 @@ class TinyDAVClient(object):
         ret = 0
         path = self.root
         if self.root == '':
-            path = '.'
+            path = '/'
         responses = self._get_client().propfind(path, depth=1)
         try:
             for status in responses:
