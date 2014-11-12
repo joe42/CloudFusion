@@ -301,9 +301,10 @@ class GoogleDrive(Store):
         if isinstance(error, AttributeError):
             self.logger.debug("Retrying on funny socket error: %s", error)
             #funny socket error in httplib2: AttributeError 'NoneType' object has no attribute 'makefile'
-        elif isinstance(error, NoSuchFilesytemObjectError):
-                self.logger.debug("Error could not be handled: %s", error)
-                raise error
+        elif isinstance(error, NoSuchFilesytemObjectError) or\
+                isinstance(error, AlreadyExistsError):
+            self.logger.debug("Error could not be handled: %s", error)
+            raise error
         #elif isinstance(error, GSResponseError) and error.status == 404:
         #    self.logger.debug('file object does not exist in %s: %s' % (method_name, str(GSResponseError)))
         #    raise NoSuchFilesytemObjectError('file object does not exist in %s: %s' % (method_name, str(GSResponseError)))
