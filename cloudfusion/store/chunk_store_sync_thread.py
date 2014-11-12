@@ -1,5 +1,6 @@
 from __future__ import division
-from cloudfusion.store.store_worker import ReadWorker, RemoveWorker, WorkerStats
+from cloudfusion.store.store_worker import ReadWorker, RemoveWorker, WorkerStats,\
+    WriteWorkerProcesses
 from cloudfusion.store.chunk_store_worker import ChunkWriteWorker
 from threading import Thread, RLock
 import time
@@ -381,6 +382,7 @@ class ChunkStoreSyncThread(object):
         self._heartbeat = time.time()
         #used for waiting when quota errors occur
         self.skip_starting_new_writers_for_next_x_cycles = 0
+        self.upload_process_pool = WriteWorkerProcesses(store, logger)
         self.logger.info("initialized ChunkStoreSyncThread")
         self.chunk_factory = ChunkFactory(self.logger) 
     
@@ -679,7 +681,7 @@ class ChunkStoreSyncThread(object):
             chunk = self.chunk_factory.get_new_chunk()
             if chunk:
                 chunk_uuid = self.chunk_mapper.get_next_chunk_uuid()
-                new_worker = ChunkWriteWorker(self.store, chunk.parent_dir, chunk_uuid, chunk.fileobject, chunk.filepaths, self.logger)
+                new_worker = ChunkWriteWorker(self.store, chunk.parent_dir, chunk_uuid, chunk.fileobject, chunk.filepaths, self.upload_process_pool, self.logger)
                 new_worker.start()
                 self.writers.append(new_worker)
         
@@ -689,7 +691,7 @@ class ChunkStoreSyncThread(object):
         chunk = self.chunk_factory.get_new_chunk()
         if chunk:
             chunk_uuid = self.chunk_mapper.get_next_chunk_uuid()
-            new_worker = ChunkWriteWorker(self.store, chunk.parent_dir, chunk_uuid, chunk.fileobject, chunk.filepaths, self.logger)
+            new_worker = ChunkWriteWorker(self.store, chunk.parent_dir, chunk_uuid, chunk.fileobject, chunk.filepaths, self.upload_process_pool, self.logger)
             new_worker.start()
             self.writers.append(new_worker)
     
@@ -709,13 +711,13 @@ class ChunkStoreSyncThread(object):
             chunk = self.chunk_factory.get_new_chunk()
             if chunk:
                 chunk_uuid = self.chunk_mapper.get_next_chunk_uuid()
-                new_worker = ChunkWriteWorker(self.store, chunk.parent_dir, chunk_uuid, chunk.fileobject, chunk.filepaths, self.logger)
+                new_worker = ChunkWriteWorker(self.store, chunk.parent_dir, chunk_uuid, chunk.fileobject, chunk.filepaths, self.upload_process_pool, self.logger)
                 new_worker.start()
                 self.writers.append(new_worker)
         chunk_list = self.chunk_factory.force_get_all_chunks() # force factory to return all chunks, to synchronize all files
         for chunk in chunk_list:
             chunk_uuid = self.chunk_mapper.get_next_chunk_uuid()
-            new_worker = ChunkWriteWorker(self.store, chunk.parent_dir, chunk_uuid, chunk.fileobject, chunk.filepaths, self.logger)
+            new_worker = ChunkWriteWorker(self.store, chunk.parent_dir, chunk_uuid, chunk.fileobject, chunk.filepaths, self.upload_process_pool, self.logger)
             new_worker.start()
             self.writers.append(new_worker)        
         self._release_two_locks()

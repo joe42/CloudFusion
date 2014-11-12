@@ -1,5 +1,6 @@
 from __future__ import division
-from cloudfusion.store.store_worker import WriteWorker, ReadWorker, RemoveWorker, WorkerStats
+from cloudfusion.store.store_worker import WriteWorker, ReadWorker, RemoveWorker, WorkerStats,\
+    WriteWorkerProcesses
 from threading import Thread, RLock
 import time
 from cloudfusion.store.store import StoreSpaceLimitError, StoreAccessError, NoSuchFilesytemObjectError,\
@@ -32,6 +33,7 @@ class StoreSyncThread(object):
         #used for waiting when quota errors occur
         self.skip_starting_new_writers_for_next_x_cycles = 0
         self.do_profiling = False
+        self.upload_process_pool = WriteWorkerProcesses(store, logger)
         self.logger.info("initialized StoreSyncThread")
     
     def _get_max_threads(self, size_in_mb):
@@ -285,7 +287,7 @@ class StoreSyncThread(object):
             if len(self.writers) >= self._get_max_threads(size_in_mb):
                 break
             new_writers += 1 
-            new_worker = WriteWorker(self.store, path, file, self.logger)
+            new_worker = WriteWorker(self.store, path, file, self.upload_process_pool, self.logger)
             self.writers.append(new_worker)
             new_worker.start()
         self.logger.debug("enqueue_lru_entries dirty key: %s    writers: %s    new writers: %s" % (len(dirty_entry_keys), len(self.writers), new_writers))
@@ -303,7 +305,7 @@ class StoreSyncThread(object):
             if len(self.writers) >= self._get_max_threads(size_in_mb):
                 break
             self.oldest_modified_date[path] = self.cache.get_modified(path) #might change during upload, if new file contents is written to the cache entry
-            new_worker = WriteWorker(self.store, path, file, self.logger)
+            new_worker = WriteWorker(self.store, path, file, self.upload_process_pool, self.logger)
             new_worker.start()
             self.writers.append(new_worker)
         self._release_two_locks()

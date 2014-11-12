@@ -153,7 +153,7 @@ class GetFreeSpaceWorker(object):
                 setattr(result, k, deepcopy(v, memo))
         return result
 
-class _WriteWorkerProcesses(object):
+class WriteWorkerProcesses(object):
     '''Process pool for WriteWorker.'''
     END_TIME = 'end_time'
     LOCAL_FILEPATH = 'local_filepath'
@@ -235,15 +235,14 @@ class WriteWorker(object):
     The start method is used to begin the upload. The method is_finished can be used to check
     if the worker is done. is_successful shows if it has been successful after it is done. If not successful, an error message can be retrieved with get_error.
     Other methods can be used to get upload statistics.'''
-    pool = None
-    def __init__(self, store, path, file, logger):
+    def __init__(self, store, path, file, pool, logger):
         ''':param store: Store instance that will be deepcopied and used in a newly created process to upload file
         :param path: path that is used in the store as a reference to the uploaded file
         :param file: fileobject with a name attribute; file.name needs to be a file on the local harddrive; the file is removed after the worker is finished
+        :param pool: a process pool of type WriteWorkerProcesses  
         :param logger: a multiprocessing logger 
         '''
-        if not WriteWorker.pool:
-            WriteWorker.pool = _WriteWorkerProcesses(store, logger)
+        self.pool = pool
         self.store = store
         self.path = path
         self._filename = file.name
@@ -318,7 +317,7 @@ class WriteWorker(object):
             return
         if not self.process.result_queue.empty(): 
             result = self.process.result_queue.get()
-            self.end_time = self.process.parameters[_WriteWorkerProcesses.END_TIME]
+            self.end_time = self.process.parameters[WriteWorkerProcesses.END_TIME]
             self._clean_up()
             if isinstance( result, ( int, long, float ) ):
                 self._update_time = result
@@ -358,7 +357,7 @@ class WriteWorker(object):
         self.store = None
         self.interrupt_event = None
         self._result_queue = None
-        WriteWorker.pool.recycle_worker(self.process)
+        self.pool.recycle_worker(self.process)
         self.process = None
         self._finished = True
     
@@ -367,7 +366,7 @@ class WriteWorker(object):
             return
         self.start_time = time.time()
         self.logger.debug("Create WriteWorker process to write %s", self.path)
-        self.process = WriteWorker.pool.get_worker(self._filename, self.path)
+        self.process = self.pool.get_worker(self._filename, self.path)
         self._pid = self.process.pid
 
                     
