@@ -74,7 +74,7 @@ bash -c "nosetests -v -s -x cloudfusion/tests/store_test_webdav.py  &>test4_log;
 pid4=$!
 bash -c "nosetests -v -s -x cloudfusion/tests/store_test_webdav2.py  &>test5_log; status=$?; exit $status" &                  
 pid5=$!
-nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py -I store_test2.py  -I store_test_webdav.py  -I store_test_webdav2.py -I transparent_store_test_no_sync.py -I transparent_store_test_with_sync.py   
+nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py -I store_test2.py  -I store_test_webdav.py  -I store_test_webdav2.py -I transparent_store_test_no_sync.py -I transparent_store_test_with_sync.py -I store_test_gdrive.py
 
 
 #wait $pid1    #wait for test process to end
