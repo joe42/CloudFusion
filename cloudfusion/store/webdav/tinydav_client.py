@@ -69,8 +69,8 @@ class TinyDAVClient(object):
         if isinstance(error, socket.error):
             msg = 'Retry on socket error'
             if isinstance(error.args, tuple):
-                msg += " with errno %d" % error[0]
-                if error[0] == errno.EPIPE:
+                msg += " with errno %d" % error.errno
+                if error.errno == errno.EPIPE:
                     msg += ". Detected remote disconnect"
                 self.logger.error(msg+'.')
             return False
