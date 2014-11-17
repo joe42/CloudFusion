@@ -204,7 +204,7 @@ class GoogleDrive(Store):
             parent_dir = os.path.dirname(path)
             parent_id = self._get_fileobject_id(parent_dir)
             file = self.drive.CreateFile({ "parents": [{"id": parent_id}], 'title':title}) #does this work if path is a nested file? 
-        file.SetContentString(fileobject.read())
+        file.SetContentString(fileobject.read().decode('cp437'))
         file.Upload()
         return int(time.time()) 
     
