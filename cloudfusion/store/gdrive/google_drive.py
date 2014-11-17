@@ -21,6 +21,7 @@ import cloudfusion.third_party.parsedatetime.parsedatetime as pdt
 from string import Template
 from cloudfusion.util.string import get_id_key, get_secret_key
 import httplib2
+from pydrive.files import ApiRequestError
 
 class GoogleDrive(Store):
     '''Subclass of Store implementing an interface to the Google Drive.'''
@@ -174,7 +175,7 @@ class GoogleDrive(Store):
         self.logger.info("getting name")
         return self.name
     
-    
+    @retry(Exception) 
     def get_file(self, path_to_file): 
         self.logger.debug("getting file: %s", path_to_file)
         #self._raise_error_if_invalid_path(path_to_file)
@@ -305,6 +306,9 @@ class GoogleDrive(Store):
                 isinstance(error, AlreadyExistsError):
             self.logger.debug("Error could not be handled: %s", error)
             raise error
+        elif isinstance(error, ApiRequestError):#403 "Rate Limit Exceeded"
+            if str(error).find("Rate Limit Exceeded") != -1:
+                time.sleep(1)
         #elif isinstance(error, GSResponseError) and error.status == 404:
         #    self.logger.debug('file object does not exist in %s: %s' % (method_name, str(GSResponseError)))
         #    raise NoSuchFilesytemObjectError('file object does not exist in %s: %s' % (method_name, str(GSResponseError)))
