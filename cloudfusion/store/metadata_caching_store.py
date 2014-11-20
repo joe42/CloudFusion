@@ -183,12 +183,23 @@ class MetadataCachingStore(Store):
     def store_fileobject(self, fileobject, path, interrupt_event=None):
         self.logger.debug("meta cache store_fileobject %s", path)
         data_len = file_util.get_file_size_in_bytes(fileobject)
-        try:
-            ret = self.store.store_fileobject(fileobject, path, interrupt_event)
-        finally:
-            fileobject.close()
         if not self.entries.exists(path):
             self.entries.write(path, Entry())
+        entry = self.entries.get_value(path)
+        entry.set_is_file()
+        entry.size = data_len
+        entry.set_modified()
+        self.entries.write(path, entry)
+        try:
+            self._acquire_uploading_lock()
+            ret = self.store.store_fileobject(fileobject, path, interrupt_event)
+        except:
+            # delete entry
+            self.entries.delete(path)
+            raise
+        finally:
+            self._release_uploading_lock()
+            fileobject.close()
         entry = self.entries.get_value(path)
         entry.set_is_file()
         entry.size = data_len
