@@ -11,6 +11,7 @@ from cloudfusion.util.mp_synchronize_proxy import MPSynchronizeProxy
 from cloudfusion.store.bulk_get_metadata import BulkGetMetadata
 from multiprocessing import Manager, Lock
 from cloudfusion.util import file_util
+from cloudfusion.util.mp_cache import MPCache
 
 class Entry(object):
     def __init__(self):
@@ -48,7 +49,7 @@ class MetadataCachingStore(Store):
         self.store = store
         self.logger = logging.getLogger(self.get_logging_handler())
         self.logger.debug("creating MetadataCachingStore object")
-        self.entries = MPSynchronizeProxy( Cache(cache_expiration_time) ) 
+        self.entries = MPSynchronizeProxy( MPCache(cache_expiration_time) ) 
         if cache_expiration_time < 240:
             self.logger.warning("Be aware of the synchronization issue https://github.com/joe42/CloudFusion/issues/16 \
                     or to avoid the issue set cache_expiration_time to more than 240 seconds.")
