@@ -16,22 +16,36 @@ To install CloudFusion do the following::
 
     sudo apt-get install git
     git clone git://github.com/joe42/CloudFusion.git
+
+The packages you need to install have slightly different names on Ubuntu and Debian.
+Also, on Ubuntu, you just need to add yourself to the fuse group, while on Debian 
+you might need to install fuseand set permissions to use it as a normal user.
+
+On Ubuntu::
+
     # For using automatic registration with Sikuli: opencv-dev libhighgui2.4 libcvaux2.4 sikuli-ide
     # For using Google Storage: gcc libssl-dev libffi-dev python-dev
     # For automatic handling of captchas in the registration process: python-pycurl python-libxml2 python-imaging tesseract-ocr
     sudo apt-get install python-setuptools gcc libssl-dev libffi-dev python-dev fuse-utils opencv-dev libhighgui2.4 libcvaux2.4 sikuli-ide python-pycurl python-libxml2 python-imaging  tesseract-ocr
+
+    # Finally install CloudFusion
     cd CloudFusion
     sudo python setup.py install
     
-On Ubuntu, you just need to add yourself to the fuse group::
 
+On Debian::
+
+    # These are the same packages as for Ubuntu with slightly different names
+    sudo apt-get install python-setuptools gcc libssl-dev libffi-dev python-dev fuse-utils libopencv-dev libhighgui-dev libcvaux-dev sikuli-ide python-pycurl python-libxml2 python-imaging  tesseract-ocr
+
+    cd CloudFusion
+    sudo python setup.py install
+
+    # Add yourself to the group fuse
     sudo usermod -a -G fuse "$USER"
+    # add the group for the current shell session (or restart your computer so it works in every shell)
     newgrp fuse
-
-On Debian though, you also need to install fuse, and set permissions to use it as normal user::
-
-    sudo usermod -a -G fuse "$USER"
-    newgrp fuse
+    # allow users in the fuse group access to fuse filesystems
     sudo chgrp fuse /dev/fuse 
     sudo chmod g+wr /dev/fuse
 
