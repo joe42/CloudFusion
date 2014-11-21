@@ -355,14 +355,13 @@ class StoreSyncThread(object):
             #disk_entry_is_newer = modified > self.entries[key].modified
             content = reader.get_result() # block until read is done
             self.stats.add_finished_worker(reader)
+            self.readers.remove(reader)
             if reader.get_error():
                 err = reader.get_error()
                 if not err in [StoreAccessError, NoSuchFilesytemObjectError, StoreAutorizationError]:
-                    self.readers.remove(reader)
                     err = StoreAccessError(str(err),0)
                 raise err
             self.refresh_cache_entry(path, content, self.store.get_metadata(path)['modified']) #[shares_resource: write self.entries]
-            self.readers.remove(reader)
             
     def delete_cache_entry(self, path):
         with self.protect_cache_from_write_access:
