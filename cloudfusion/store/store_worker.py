@@ -474,7 +474,8 @@ class ReadWorker(object):
         return ret
     
     def stop(self):
-        self.process.join() #Remove terminate to allow for logging with multiprocessing
+        if self.process:
+            self.process.join() #Remove terminate to allow for logging with multiprocessing
     
     def start(self):
         if self._finished:
