@@ -317,8 +317,11 @@ class MetadataCachingStore(Store):
         uploaded recently and might not be retrievable by a directory listing from the storage provider.'''
         for path in self.entries.get_keys():
             if os.path.dirname(path) == dir_entry_path and path != '/':
-                if not self.entries.is_expired(path):
-                    dir_entry.add_to_listing(path)
+                try:
+                    if not self.entries.is_expired(path): 
+                        dir_entry.add_to_listing(path)
+                except KeyError, e: #KeyError means that the entry has been deleted by __clean_cache
+                    pass
     
     def get_bytes(self, path):
         self.logger.debug("meta cache get_bytes %s", path)
