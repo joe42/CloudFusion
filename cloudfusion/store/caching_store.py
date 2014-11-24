@@ -42,7 +42,9 @@ class MultiprocessingCachingStore(Store):
         self.cache_expiration_time = cache_expiration_time
         self.time_of_last_flush = time.time()
         self.cache_dir = cache_dir[:-1] if cache_dir[-1:] == '/' else cache_dir # remove slash at the end
-        self.entries = SynchronizeProxy( PersistentLRUCache(self.cache_dir+"/cachingstore_"+cache_id, cache_expiration_time, cache_size_in_mb) ) #[shares_resource: write self.entries]
+        cache = PersistentLRUCache(self.cache_dir+"/cachingstore_"+cache_id, cache_expiration_time, cache_size_in_mb)
+        cache.set_resize_intervall(10)
+        self.entries = SynchronizeProxy( cache ) #[shares_resource: write self.entries]
         self.sync_thread = StoreSyncThread(self.entries, self.store, self.logger)
         self.sync_thread.start()
     

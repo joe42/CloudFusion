@@ -38,7 +38,9 @@ class ChunkMultiprocessingCachingStore(Store):
         self.time_of_last_flush = time.time()
         self.cache_dir = cache_dir[:-1] if cache_dir[-1:] == '/' else cache_dir # remove slash at the end
         temp_dir = self.cache_dir+"/cachingstore_"+cache_id
-        self.entries = SynchronizeProxy( PersistentLRUCache(temp_dir, cache_expiration_time, cache_size_in_mb) ) #[shares_resource: write self.entries]
+        cache = PersistentLRUCache(temp_dir, cache_expiration_time, cache_size_in_mb)
+        cache.set_resize_intervall(10)
+        self.entries = SynchronizeProxy( cache ) #[shares_resource: write self.entries]
         self.sync_thread = ChunkStoreSyncThread(self.entries, self.store, temp_dir, self.logger)
         self.sync_thread.start()
         
