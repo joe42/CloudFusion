@@ -21,6 +21,15 @@ The Amazon S3 example is a simple Hello World! example.
 The WebDAV example shows how to use the BulkGetMetadata interface to quickly get the metadata of all files within a single directory.
 Every example has been tested before it was written. If you find any bug, please report it as an issue at github: https://github.com/joe42/CloudFusion/issues.
 
+Here are a few Screencasts
+----------------------------------
+
+Tutorial 1: Dropbox - Screencast1_
+
+Tutorial 2: Directories - Screencast2_
+
+.. _Screencast1: tutorial1_dropbox.html
+.. _Screencast2: tutorial2_directories.html
 
 
 Extensive Example with Dropbox
