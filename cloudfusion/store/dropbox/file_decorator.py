@@ -51,6 +51,12 @@ class NameableFile(object):
         return repr(self.file_object)
     def __str__(self):
         return str(self.file_object)
+    # extension to serve as a StringIO like instance:
+    def getvalue(self):
+        old_pos = self.file_object.tell()
+        ret = self.file_object.read()
+        self.file_object.seek(old_pos)
+        return ret 
     
 class NonclosingFile(object):
     def __init__(self, file_object):
@@ -98,6 +104,12 @@ class NonclosingFile(object):
         return repr(self.file_object)
     def __str__(self):
         return str(self.file_object)
+    # extension to serve as a StringIO like instance:
+    def getvalue(self):
+        old_pos = self.file_object.tell()
+        ret = self.file_object.read()
+        self.file_object.seek(old_pos)
+        return ret
     
         
 class DataFileWrapper(file):
@@ -145,5 +157,11 @@ class DataFileWrapper(file):
         return repr(self.file_object)
     def __str__(self):
         return str(self.file_object)
+    # extension to serve as a StringIO like instance:
+    def getvalue(self):
+        old_pos = self.file_object.tell()
+        ret = self.file_object.read()
+        self.file_object.seek(old_pos)
+        return ret
 
 
