@@ -268,6 +268,9 @@ class DropboxStore(Store):
                 isinstance(error, NoSuchFilesytemObjectError):
                 self.logger.exception("Error could not be handled: %s", error)
                 raise error
+            elif error.status == HTTP_STATUS.TOO_MANY_REQUESTS:
+                self.logger.exception("Trying to handle TOO_MANY_REQUESTS error by delaying next request: %s", error)
+                time.sleep(random.uniform(0.5, 5))
         else:
             if isinstance(error, RESTSocketError):
                 error = Exception(str(error)) #wrap exception, as logger cannot handle socket.error exceptions
@@ -382,7 +385,7 @@ class DropboxStore(Store):
             self.move(resp_path, path)
 
     # retry does not really matter with caching_store
-    @retry((Exception,RESTSocketError), tries=2, delay=0) 
+    @retry((Exception,RESTSocketError), tries=10, delay=0.2) 
     def store_fileobject(self, fileobject, path, interrupt_event=None):
         size = self.__get_size(fileobject)
         self.logger.info("Storing file object of size %s to %s", size, path)
@@ -472,7 +475,7 @@ class DropboxStore(Store):
         self._add_revision(path_to_dest, resp['rev'])
     
     # worst case: should happen mostly with user interaction, so fast feedback is more important
-    @retry((Exception,RESTSocketError), tries=2, delay=0)
+    @retry((Exception,RESTSocketError), tries=3, delay=0.5)
     def move(self, path_to_src, path_to_dest):
         self.logger.info("moving %s to %s", path_to_src, path_to_dest)
         self._raise_error_if_invalid_path(path_to_src)
