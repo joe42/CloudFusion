@@ -668,7 +668,7 @@ class ChunkStoreSyncThread(object):
                     break
                 if self.is_in_progress(path):
                     continue
-            except KeyError:
+            except (KeyError, IOError):
                 self.logger.exception("Key was deleted during synchronization")
                 continue
             size_in_mb = self.chunk_factory.get_size_of_next_chunk()
