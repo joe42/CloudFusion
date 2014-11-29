@@ -42,6 +42,7 @@ class HTTP_STATUS(object):
     NOT_FOUND = 404   
     UNEXPECTED_REQUEST = 405  
     TOO_MANY_ITEMS = 406  
+    CONFLICT_OCCURRED = 409
     TOO_MANY_REQUESTS = 503          
     OVER_STORAGE_LIMIT = 507    
     
@@ -409,13 +410,15 @@ class DropboxStore(Store):
                     HTTP_STATUS.generate_exception(e.status, str(e))
         try:
             resp = uploader.finish(path, overwrite=False, parent_rev=self._get_revision(path))
+        except rest.ErrorResponse as resp:
+            if resp.status == HTTP_STATUS.CONFLICT_OCCURRED:
+                # There already exists a file with the same name: 
+                # This is handled by _backup_overwritten 
+                pass
         except Exception, e:
-            try:
-                resp = uploader.finish(path, overwrite=False, parent_rev=self._get_revision(path))
-            except rest.ErrorResponse as resp:
-                msg= "Could not store file: " +path+remote_file_name 
-                self._log_http_error("store_fileobject", path, resp, msg)
-                HTTP_STATUS.generate_exception(resp.status, str(resp))
+            msg= "Could not store file: " +path+remote_file_name 
+            self._log_http_error("store_fileobject", path, resp, msg)
+            HTTP_STATUS.generate_exception(resp.status, str(resp))
         self._add_revision(path, resp['rev'])
         self._backup_overwritten(path, resp['path'])
         return self._parse_filesys_obj(resp)["modified"]
