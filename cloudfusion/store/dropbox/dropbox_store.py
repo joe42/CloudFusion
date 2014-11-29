@@ -404,6 +404,9 @@ class DropboxStore(Store):
                 resp = uploader.upload_chunked(5 * 1000 * 1000)
             except rest.ErrorResponse, e:
                 retry -= 1
+                if e.status == HTTP_STATUS.TOO_MANY_REQUESTS:
+                    self.logger.exception("Trying to handle TOO_MANY_REQUESTS error during upload by delaying next request: %s", e)
+                    time.sleep(random.uniform(0.5, 5))
                 if retry == 0:
                     msg= "Could not store file: " +path+remote_file_name 
                     self._log_http_error("store_fileobject", path, resp, msg)
