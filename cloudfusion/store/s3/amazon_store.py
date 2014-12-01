@@ -82,7 +82,7 @@ class AmazonStore(Store):
             except boto.exception.StorageCreateError, e:
                 self.logger.error('Failed to create bucket:'+ repr(e))
                 sys.exit()
-        self.bucket = self.conn.get_bucket('cloudfusion')
+        self.bucket = self.conn.get_bucket(self.bucket_name)
 
         
     def __deepcopy__(self, memo):
