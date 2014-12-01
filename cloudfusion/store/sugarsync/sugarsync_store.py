@@ -420,7 +420,6 @@ class SugarsyncStore(Store):
         retrieving the listing if it does not yet exist.'''
         parent_dir = os.path.dirname(path)
         with self._dir_listing_cache_lock:
-            print "append: "+path
             listing = self.__get_dir_listing(parent_dir)
             bisect.insort(listing,path)
             self._dir_listing_cache[parent_dir] = listing
