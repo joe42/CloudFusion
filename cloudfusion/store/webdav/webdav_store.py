@@ -74,15 +74,11 @@ class WebdavStore(Store):
         if hasattr(fileobject, 'name') and fileobject.name is not None:
             file_name = fileobject.name
         else:
-            t1 = datetime.now()
             with tempfile.NamedTemporaryFile(delete=False) as fh:
                 for line in fileobject:
                     fh.write(line)
                 fh.flush()
                 file_name = fh.name
-            t2 = datetime.now()
-            diff = (t2-t1)
-            self.logger.info("Store file to disk in %s" % (diff.total_seconds()))
         self.tinyclient.upload(file_name, path)
         return int(time.time())
     
