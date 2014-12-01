@@ -62,7 +62,7 @@ class GoogleDrive(Store):
         with open('client_secrets.json', 'w') as client_secrets:
             client_secrets.write(self.client_auth)
         self._credentials_db_path = self._get_credentials_db_path(config)
-        key = self._credentials_db_path# use db path as database key to store credentials under
+        key = 'credentials'
         try:
             credentials_db = shelve.open(self._credentials_db_path)
         except Exception, e:
@@ -352,4 +352,4 @@ class GoogleDrive(Store):
     
     def get_max_filesize(self):
         """Return maximum number of bytes per file"""
-        return 1000*1000*1000*1000
+        return 5000*1000*1000
