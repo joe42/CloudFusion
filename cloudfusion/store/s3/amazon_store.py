@@ -15,7 +15,7 @@ from cloudfusion.util.exponential_retry import retry
 from cloudfusion.mylogging import db_logging_thread
 import sys
 from ConfigParser import DuplicateSectionError
-from cloudfusion.util.string import get_id_key, get_secret_key
+from cloudfusion.util.string import get_id_key, get_secret_key, get_uuid
 
 class AmazonStore(Store):
     '''Subclass of Store implementing an interface to the Amazon S3 storage.
@@ -70,6 +70,15 @@ class AmazonStore(Store):
             try:
                 self.conn.create_bucket(self.bucket_name)
                 self.logger.info('Successfully created bucket "%s"' % self.bucket_name)
+            except boto.exception.S3CreateError, e:
+                uuid = "cloudfusion_"+get_uuid()
+                msg = "Failed to create bucket %s; You can try another bucket name, for instance %s" % (self.bucket_name, uuid)
+                if len(buckets) > 0:
+                    msg += "\nor an already existing bucket: %s" % buckets
+                self.logger.error('Failed to create bucket:'+ repr(e))
+                self.logger.debug(msg)
+                print msg
+                sys.exit()
             except boto.exception.StorageCreateError, e:
                 self.logger.error('Failed to create bucket:'+ repr(e))
                 sys.exit()
