@@ -118,6 +118,10 @@ class GoogleStore(Store):
                 setattr(result, k, self.logger)
             elif k == '_logging_handler':
                 setattr(result, k, self._logging_handler)
+            elif k == 'conn':
+                setattr(result, k, self.conn)
+            elif k == 'bucket':
+                setattr(result, k, self.bucket)
             else:
                 setattr(result, k, deepcopy(v, memo))
         return result
