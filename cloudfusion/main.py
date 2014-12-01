@@ -14,6 +14,7 @@ import argparse
 import time
 import multiprocessing
 import signal
+from cloudfusion.util.string import get_uuid
 
 class MyParser(argparse.ArgumentParser):
     def error(self, message):
@@ -34,10 +35,12 @@ def print_help(args):
     print '  usage2: %s mountpoint stop' % args[0]
     print '      This command will stop Cloudfusion.'
     print '          mountpoint: The same folder in which the virtual file system has been created with usage1'
+    print '  usage3: %s uuid' % args[0]
+    print '      This command will output a unique name that can be used as bucket_name for google storage or amazon S3.'
     print ''
 
 def check_arguments(args):
-    if not len(args) in [2,3,4,5,6,7]:
+    if not len(args) in [1,2,3,4,5,6,7]:
         print_help(args)
         exit(1)
 
@@ -92,6 +95,10 @@ def main():
     signal.signal(signal.SIGUSR1, handle_ipdb)
     set_umask()
     check_arguments(sys.argv)
+    if sys.argv[1] == 'uuid':
+        print "You can use the following unique name as your bucket name for amazon S3 or google storage:"
+        print "cloudfusion_"+get_uuid()
+        sys.exit()
     parser = MyParser()
     parser.add_argument('mountpoint')
     parser.add_argument('--config', help='Configuration file.')

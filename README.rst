@@ -75,11 +75,17 @@ Google Storage
 ++++++++++++++
 Copy the Google Storage configuration file located at **cloudfusion/cloudfusion/config/Google.ini** to your home directory.
 Add your access_key_id, and secret_access_key to the configuration file. Details on obtaining these are inside the configuration file.
+Add a unique bucket_name to the configuration file. To create a unique name, you can simply call ::
+
+    cloudfusion uuid
 
 Amazon S3
 +++++++++
 Copy the Amazon S3 configuration file located at **cloudfusion/cloudfusion/config/AmazonS3.ini** to your home directory.
 Add your access_key_id, and secret_access_key to the configuration file. Details on obtaining these are inside the configuration file.
+Add a unique bucket_name to the configuration file. To create a unique name, you can simply call ::
+
+    cloudfusion uuid
 
 WebDAV
 ++++++

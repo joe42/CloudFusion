@@ -1,5 +1,25 @@
 import re
+import base64
+import ntplib
+import time
 
+def __num_to_alpha(num):
+    '''From: http://stackoverflow.com/questions/10326118/encoding-a-numeric-string-into-a-shortened-alphanumeric-string-and-back-again'''
+    num = hex(num)[2:].rstrip("L")
+    if len(num) % 2:
+        num = "0" + num
+    ret = base64.b32encode(num.decode('hex'))
+    return ret
+
+def get_uuid():
+    '''Get globally unique identifier'''
+    try:
+        time_offset = ntplib.NTPClient().request('pool.ntp.org').offset
+    except Exception, e:
+        time_offset = 0
+    unique_num = int( 100 * (time.time() + time_offset) ) #get globally unique number
+    ret = __num_to_alpha(unique_num)
+    return ret
 
 def get_id_key(dictionary):
     '''Get the key for the id defined in dictionary from a list of synonyms.
