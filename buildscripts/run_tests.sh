@@ -3,9 +3,6 @@
 #Running sequences in background do not seem to work using paranthesis in travis-ci.
 #Instead, use a subshell.
 
-# exit if any command returns non-zero status
-set -e 
-
 wd=`pwd`
 
 ##Prepare
@@ -80,7 +77,7 @@ bash -c 'nosetests -v -s -x cloudfusion/tests/store_test_webdav2.py  &>test5_log
 pid5=$!
 nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py -I store_test2.py  -I store_test_webdav.py  -I store_test_webdav2.py -I transparent_store_test_no_sync.py -I transparent_store_test_with_sync.py -I store_test_gdrive.py
 
-
+exit_status=0
 #wait $pid1    #wait for test process to end
 #(exit $?)     #set exit code to stop the script in case the test failed
 #cat test1_log #and print output
@@ -88,13 +85,22 @@ nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py -I 
 #(exit $?)
 #cat test2_log
 wait $pid3
-(exit $?)
+status=$?
+if [ "$status" -ne "0" ] ; then 
+    exit_status=$status
+fi
 cat test3_log
 wait $pid4
-(exit $?)
+status=$?
+if [ "$status" -ne "0" ] ; then 
+    exit_status=$status
+fi
 cat test4_log
 wait $pid5
-(exit $?)
+status=$?
+if [ "$status" -ne "0" ] ; then 
+    exit_status=$status
+fi
 cat test5_log
 
 
@@ -116,4 +122,6 @@ deactivate || true
 rm -fr virt_env/ 
 rm -fr development
 cd $wd
+
+exit $exit_status
 
