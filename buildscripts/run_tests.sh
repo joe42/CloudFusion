@@ -60,6 +60,10 @@ perl -pi -e "s/password =.*/password =${WEBDAV3_PWD}/g" cloudfusion/config/Webda
 perl -pi -e "s/user =.*/user =${WEBDAV4_USR}/g" cloudfusion/config/Webdav_yandex_testing.ini
 perl -pi -e "s/password =.*/password =${WEBDAV4_PWD}/g" cloudfusion/config/Webdav_yandex_testing.ini
 
+
+perl -pi -e "s/bucket_name =.*/bucket_name = cloudfusion/g" cloudfusion/config/Google_testing.ini
+perl -pi -e "s/bucket_name =.*/bucket_name = cloudfusion/g" cloudfusion/config/AmazonS3_testing.ini
+
 # This tests is interdependent, so wait before store_test, and store_test2 begin
 nosetests -v -s -x cloudfusion/tests/transparent_store_test_no_sync.py
 
