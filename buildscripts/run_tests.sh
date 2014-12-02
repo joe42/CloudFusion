@@ -68,15 +68,15 @@ perl -pi -e "s/bucket_name =.*/bucket_name = cloudfusion/g" cloudfusion/config/A
 nosetests -v -s -x cloudfusion/tests/transparent_store_test_no_sync.py
 
 #options: -x stop on first error, -v verbose, -s output stdout messgages immediately
-#bash -c "nosetests -v -s -x cloudfusion/tests/db_logging_thread_test.py &>test1_log; status=$?; exit $status" & #about 18 Min runtime
+#bash -c 'nosetests -v -s -x cloudfusion/tests/db_logging_thread_test.py &>test1_log; status=$?; exit $status' & #about 18 Min runtime
 #pid1=$!
-#bash -c "nosetests -v -s -x cloudfusion/tests/synchronize_proxy_test.py &>test2_log; status=$?; exit $status" & #about 17 Min runtime
+#bash -c 'nosetests -v -s -x cloudfusion/tests/synchronize_proxy_test.py &>test2_log; status=$?; exit $status' & #about 17 Min runtime
 #pid2=$!                          
-bash -c "nosetests -v -s -x cloudfusion/tests/store_test2.py  &>test3_log; status=$?;exit $status" &    #about 20 Min runtime                  
+bash -c 'nosetests -v -s -x cloudfusion/tests/store_test2.py  &>test3_log; status=$?;exit $status' &    #about 20 Min runtime                  
 pid3=$!
-bash -c "nosetests -v -s -x cloudfusion/tests/store_test_webdav.py  &>test4_log; status=$?; exit $status" &                  
+bash -c 'nosetests -v -s -x cloudfusion/tests/store_test_webdav.py  &>test4_log; status=$?; exit $status' &                  
 pid4=$!
-bash -c "nosetests -v -s -x cloudfusion/tests/store_test_webdav2.py  &>test5_log; status=$?; exit $status" &                  
+bash -c 'nosetests -v -s -x cloudfusion/tests/store_test_webdav2.py  &>test5_log; status=$?; exit $status' &                  
 pid5=$!
 nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py -I store_test2.py  -I store_test_webdav.py  -I store_test_webdav2.py -I transparent_store_test_no_sync.py -I transparent_store_test_with_sync.py -I store_test_gdrive.py
 
