@@ -3,15 +3,6 @@
 #Running sequences in background do not seem to work using paranthesis in travis-ci.
 #Instead, use a subshell.
 
-wd=`pwd`
-
-##Prepare
-#setup virtualenv
-cd $HOME
-virtualenv virt_env
-source virt_env/bin/activate || true # does not work in travis, which has its own virtualenv
-cd -
-
 #configure git user for push
 git config --global user.email "travis@travis-ci.org"
 git config --global user.name "Travis" 
@@ -117,11 +108,8 @@ rm cloudfusion/config/Webdav_yandex_testing.ini
 
 #clean up
 cd $HOME
-#deactivate does not work in travis pre setup virtualenv, so don't stop, just if this commmand would fail
-deactivate || true
-rm -fr virt_env/ 
 rm -fr development
-cd $wd
+
 
 exit $exit_status
 
