@@ -36,6 +36,9 @@ class TinyDAVClient(object):
         self.pwd = pwd
         self.root = ''
         self.port = 80
+        # Remove last slash from url.
+        if self.url[-1] == '/':
+            self.url = self.url[:-1]
         #parse url (port)
         if self.url.lower().startswith('https://'):
             self.port = 443
