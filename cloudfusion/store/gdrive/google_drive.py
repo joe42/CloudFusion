@@ -11,7 +11,7 @@ from cloudfusion.store.store import *
 import logging
 from cloudfusion.util.exponential_retry import retry
 from cloudfusion.mylogging import db_logging_thread
-from pydrive.auth import GoogleAuth
+from pydrive.auth import GoogleAuth, AuthenticationError
 from pydrive.drive import GoogleDrive as Drive
 import shelve
 from oauth2client.client import OAuth2Credentials
@@ -68,11 +68,16 @@ class GoogleDrive(Store):
         except Exception, e:
             self.logger.debug("Credentials database could not be loaded.")
             credentials_db = {}
+        is_authentication_successful = False
         if key in credentials_db: 
             self.gauth = GoogleAuth()
             self.gauth.credentials = credentials_db[key]
-            self.gauth.Authorize()
-        else: # get credentials manually
+            try:
+                self.gauth.Authorize()
+            except AuthenticationError, e:
+                self.logger.info("Authentication error: %s", e)
+                is_authentication_successful = True
+        if not key in credentials_db or not is_authentication_successful: # get credentials manually
             self.gauth = GoogleAuth()
             self.gauth.LocalWebserverAuth()
             self.gauth.Authorize()
