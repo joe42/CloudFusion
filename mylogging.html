@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The nullhandler Module &mdash; CloudFusion 0.01 documentation</title>
+    <title>The db_logging_thread Module &mdash; CloudFusion 0.01 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -54,41 +54,7 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-cloudfusion.mylogging.nullhandler">
-<span id="the-nullhandler-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">nullhandler</span></tt> Module<a class="headerlink" href="#module-cloudfusion.mylogging.nullhandler" title="Permalink to this headline">¶</a></h1>
-<p>Created on May 7, 2013</p>
-<p>&#64;author: joe</p>
-<dl class="class">
-<dt id="cloudfusion.mylogging.nullhandler.NullHandler">
-<em class="property">class </em><tt class="descclassname">cloudfusion.mylogging.nullhandler.</tt><tt class="descname">NullHandler</tt><big>(</big><em>level=0</em><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.nullhandler.NullHandler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">logging.Handler</span></tt></p>
-<p>Logging handler doing nothing (if python 2.6 is used this handler is not available by default).</p>
-<p>Initializes the instance - basically setting the formatter to None
-and the filter list to empty.</p>
-<dl class="method">
-<dt id="cloudfusion.mylogging.nullhandler.NullHandler.createLock">
-<tt class="descname">createLock</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.nullhandler.NullHandler.createLock" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.mylogging.nullhandler.NullHandler.emit">
-<tt class="descname">emit</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.nullhandler.NullHandler.emit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.mylogging.nullhandler.NullHandler.handle">
-<tt class="descname">handle</tt><big>(</big><em>record</em><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.nullhandler.NullHandler.handle" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="cloudfusion.mylogging.nullhandler.NullHandler.lock">
-<tt class="descname">lock</tt><em class="property"> = None</em><a class="headerlink" href="#cloudfusion.mylogging.nullhandler.NullHandler.lock" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.mylogging.db_logging_thread">
+  <div class="section" id="module-cloudfusion.mylogging.db_logging_thread">
 <span id="the-db-logging-thread-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">db_logging_thread</span></tt> Module<a class="headerlink" href="#module-cloudfusion.mylogging.db_logging_thread" title="Permalink to this headline">¶</a></h1>
 <p>Created on Jul 29, 2013</p>
 <p>&#64;author: joe</p>
@@ -181,6 +147,40 @@ Only call this method after calling <a class="reference internal" href="#cloudfu
 </dd></dl>
 
 </div>
+<div class="section" id="module-cloudfusion.mylogging.nullhandler">
+<span id="the-nullhandler-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">nullhandler</span></tt> Module<a class="headerlink" href="#module-cloudfusion.mylogging.nullhandler" title="Permalink to this headline">¶</a></h1>
+<p>Created on May 7, 2013</p>
+<p>&#64;author: joe</p>
+<dl class="class">
+<dt id="cloudfusion.mylogging.nullhandler.NullHandler">
+<em class="property">class </em><tt class="descclassname">cloudfusion.mylogging.nullhandler.</tt><tt class="descname">NullHandler</tt><big>(</big><em>level=0</em><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.nullhandler.NullHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">logging.Handler</span></tt></p>
+<p>Logging handler doing nothing (if python 2.6 is used this handler is not available by default).</p>
+<p>Initializes the instance - basically setting the formatter to None
+and the filter list to empty.</p>
+<dl class="method">
+<dt id="cloudfusion.mylogging.nullhandler.NullHandler.createLock">
+<tt class="descname">createLock</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.nullhandler.NullHandler.createLock" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.mylogging.nullhandler.NullHandler.emit">
+<tt class="descname">emit</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.nullhandler.NullHandler.emit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.mylogging.nullhandler.NullHandler.handle">
+<tt class="descname">handle</tt><big>(</big><em>record</em><big>)</big><a class="headerlink" href="#cloudfusion.mylogging.nullhandler.NullHandler.handle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cloudfusion.mylogging.nullhandler.NullHandler.lock">
+<tt class="descname">lock</tt><em class="property"> = None</em><a class="headerlink" href="#cloudfusion.mylogging.nullhandler.NullHandler.lock" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 
 
           </div>
@@ -190,9 +190,9 @@ Only call this method after calling <a class="reference internal" href="#cloudfu
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">nullhandler</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.mylogging.db_logging_thread">The <tt class="docutils literal"><span class="pre">db_logging_thread</span></tt> Module</a></li>
+<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">db_logging_thread</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-cloudfusion.mylogging.db_handler">The <tt class="docutils literal"><span class="pre">db_handler</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.mylogging.nullhandler">The <tt class="docutils literal"><span class="pre">nullhandler</span></tt> Module</a></li>
 </ul>
 
   <h4>Previous topic</h4>

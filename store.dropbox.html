@@ -25,8 +25,8 @@
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
     <link rel="up" title="Subpackages" href="store.html" />
-    <link rel="next" title="The xmlparser_test Module" href="tests.html" />
-    <link rel="prev" title="The google_store Module" href="store.gs.html" /> 
+    <link rel="next" title="The google_drive Module" href="store.gdrive.html" />
+    <link rel="prev" title="Subpackages" href="store.html" /> 
   </head>
   <body>
     <div class="related">
@@ -39,10 +39,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tests.html" title="The xmlparser_test Module"
+          <a href="store.gdrive.html" title="The google_drive Module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="store.gs.html" title="The google_store Module"
+          <a href="store.html" title="Subpackages"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li>
@@ -78,6 +78,11 @@
 <dl class="method">
 <dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.flush">
 <tt class="descname">flush</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.flush" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.DataFileWrapper.getvalue">
+<tt class="descname">getvalue</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.DataFileWrapper.getvalue" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -157,6 +162,11 @@
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.getvalue">
+<tt class="descname">getvalue</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.getvalue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="cloudfusion.store.dropbox.file_decorator.NameableFile.isatty">
 <tt class="descname">isatty</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NameableFile.isatty" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -230,6 +240,11 @@
 <dl class="method">
 <dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.flush">
 <tt class="descname">flush</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.flush" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.dropbox.file_decorator.NonclosingFile.getvalue">
+<tt class="descname">getvalue</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.file_decorator.NonclosingFile.getvalue" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -373,7 +388,7 @@ This means there has already been a file stored to path and instead of overwriti
 
 <dl class="method">
 <dt id="cloudfusion.store.dropbox.dropbox_store.DropboxStore._handle_error">
-<tt class="descname">_handle_error</tt><big>(</big><em>error</em>, <em>method_name</em>, <em>remaining_tries</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.dropbox_store.DropboxStore._handle_error" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">_handle_error</tt><big>(</big><em>error</em>, <em>stacktrace</em>, <em>method_name</em>, <em>remaining_tries</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.dropbox.dropbox_store.DropboxStore._handle_error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Used by retry decorator to react to errors.</p>
 </dd></dl>
 
@@ -507,6 +522,11 @@ This means there has already been a file stored to path and instead of overwriti
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="cloudfusion.store.dropbox.dropbox_store.HTTP_STATUS.CONFLICT_OCCURRED">
+<tt class="descname">CONFLICT_OCCURRED</tt><em class="property"> = 409</em><a class="headerlink" href="#cloudfusion.store.dropbox.dropbox_store.HTTP_STATUS.CONFLICT_OCCURRED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="cloudfusion.store.dropbox.dropbox_store.HTTP_STATUS.FORBIDDEN">
 <tt class="descname">FORBIDDEN</tt><em class="property"> = 403</em><a class="headerlink" href="#cloudfusion.store.dropbox.dropbox_store.HTTP_STATUS.FORBIDDEN" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -578,11 +598,11 @@ This means there has already been a file stored to path and instead of overwriti
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="store.gs.html"
-                        title="previous chapter">The <tt class="docutils literal"><span class="pre">google_store</span></tt> Module</a></p>
+  <p class="topless"><a href="store.html"
+                        title="previous chapter">Subpackages</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="tests.html"
-                        title="next chapter">The <tt class="docutils literal"><span class="pre">xmlparser_test</span></tt> Module</a></p>
+  <p class="topless"><a href="store.gdrive.html"
+                        title="next chapter">The <tt class="docutils literal"><span class="pre">google_drive</span></tt> Module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/store.dropbox.txt"
@@ -615,10 +635,10 @@ This means there has already been a file stored to path and instead of overwriti
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tests.html" title="The xmlparser_test Module"
+          <a href="store.gdrive.html" title="The google_drive Module"
              >next</a> |</li>
         <li class="right" >
-          <a href="store.gs.html" title="The google_store Module"
+          <a href="store.html" title="Subpackages"
              >previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li>

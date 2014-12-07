@@ -24,7 +24,7 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
-    <link rel="next" title="The nullhandler Module" href="mylogging.html" />
+    <link rel="next" title="The db_logging_thread Module" href="mylogging.html" />
     <link rel="prev" title="Users documentation" href="user.html" /> 
   </head>
   <body>
@@ -38,7 +38,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="mylogging.html" title="The nullhandler Module"
+          <a href="mylogging.html" title="The db_logging_thread Module"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="user.html" title="Users documentation"
@@ -68,7 +68,13 @@ though using it through the file system interface has the advantage that it can 
 The implementations are interchangeable. If you want to use Amazon S3 instead of Dropbox,
 you only need to change the client and everything else stays the same.
 The Amazon S3 example is a simple Hello World! example.
-The WebDAV example shows how to use the BulkGetMetadata interface to quickly get the metadata of all file within a single directory.</p>
+The WebDAV example shows how to use the BulkGetMetadata interface to quickly get the metadata of all files within a single directory.
+Every example has been tested before it was written. If you find any bug, please report it as an issue at github: <a class="reference external" href="https://github.com/joe42/CloudFusion/issues">https://github.com/joe42/CloudFusion/issues</a>.</p>
+</div>
+<div class="section" id="here-are-a-few-screencasts">
+<h2>Here are a few Screencasts<a class="headerlink" href="#here-are-a-few-screencasts" title="Permalink to this headline">¶</a></h2>
+<p>Tutorial 1: Dropbox - <a class="reference external" href="tutorial1_dropbox.html">Screencast1</a></p>
+<p>Tutorial 2: Directories - <a class="reference external" href="tutorial2_directories.html">Screencast2</a></p>
 <div class="section" id="extensive-example-with-dropbox">
 <h3>Extensive Example with Dropbox<a class="headerlink" href="#extensive-example-with-dropbox" title="Permalink to this headline">¶</a></h3>
 <p>This is an extensive example script on how to use CloudFusion&#8217;s internal API to access Dropbox.
@@ -310,8 +316,8 @@ Key and secret can be obtained from the developer&#8217;s console:</p>
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">config</span><span class="p">[</span><span class="s">&#39;consumer_key&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;FDS54548SDF8D2S311DF&#39;</span>
-    <span class="n">config</span><span class="p">[</span><span class="s">&#39;consumer_secret&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;D370JKD=564++873ZHFD9FDKDD&#39;</span>
+    <span class="n">config</span><span class="p">[</span><span class="s">&#39;client_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;FDS54548SDF8D2S311DF&#39;</span>
+    <span class="n">config</span><span class="p">[</span><span class="s">&#39;client_secret&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;D370JKD=564++873ZHFD9FDKDD&#39;</span>
     <span class="n">config</span><span class="p">[</span><span class="s">&#39;bucket_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;cloudfusion&#39;</span>
 
     <span class="c">#Create the actual client</span>
@@ -388,6 +394,34 @@ Key and secret can be obtained from the developer&#8217;s console:</p>
 
     <span class="c">#Create the actual client</span>
     <span class="n">client</span> <span class="o">=</span> <span class="n">SugarsyncStore</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="c">#Get directory listing (may take a few seconds)</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">get_directory_listing</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    [u&#39;/ordner&#39;, u&#39;/neuer ordner&#39;, u&#39;/test_4&#39;, u&#39;/My DB&#39;]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c">#...</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="google-drive">
+<h3>Google Drive<a class="headerlink" href="#google-drive" title="Permalink to this headline">¶</a></h3>
+<p>Here is an example for accessing Google Drive:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cloudfusion.store.gdrive.google_drive</span> <span class="kn">import</span> <span class="n">GoogleDrive</span>
+<span class="kn">from</span> <span class="nn">cloudfusion.store.metadata_caching_store</span> <span class="kn">import</span> <span class="n">MetadataCachingStore</span>
+<span class="kn">from</span> <span class="nn">cloudfusion.store.transparent_caching_store</span> <span class="kn">import</span> <span class="n">TransparentMultiprocessingCachingStore</span>
+<span class="kn">from</span> <span class="nn">StringIO</span> <span class="kn">import</span> <span class="n">StringIO</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">config</span><span class="p">[</span><span class="s">&#39;client_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;FDS54548SDF8D2S311DF&#39;</span>
+    <span class="n">config</span><span class="p">[</span><span class="s">&#39;client_secret&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;D370JKD=564++873ZHFD9FDKDD&#39;</span>
+
+    <span class="c">#Create the actual client</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">GoogleDrive</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
 
     <span class="c">#Get directory listing (may take a few seconds)</span>
     <span class="n">client</span><span class="o">.</span><span class="n">get_directory_listing</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
@@ -500,117 +534,95 @@ nosetests -v -s cloudfusion.tests.cache_test cloudfusion.tests.lru_cache_test  c
 <h2>Modules:<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="mylogging.html">The <tt class="docutils literal"><span class="pre">nullhandler</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mylogging.html#module-cloudfusion.mylogging.db_logging_thread">The <tt class="docutils literal"><span class="pre">db_logging_thread</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mylogging.html">The <tt class="docutils literal"><span class="pre">db_logging_thread</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mylogging.html#module-cloudfusion.mylogging.db_handler">The <tt class="docutils literal"><span class="pre">db_handler</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mylogging.html#module-cloudfusion.mylogging.nullhandler">The <tt class="docutils literal"><span class="pre">nullhandler</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pyfusebox.html">The <tt class="docutils literal"><span class="pre">virtualfile</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pyfusebox.html#module-cloudfusion.pyfusebox.virtualconfigfile">The <tt class="docutils literal"><span class="pre">virtualconfigfile</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pyfusebox.html#module-cloudfusion.pyfusebox.transparent_configurable_pyfusebox">The <tt class="docutils literal"><span class="pre">transparent_configurable_pyfusebox</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pyfusebox.html#module-cloudfusion.pyfusebox.pyfusebox">The <tt class="docutils literal"><span class="pre">pyfusebox</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyfusebox.html#module-cloudfusion.pyfusebox.transparent_configurable_pyfusebox">The <tt class="docutils literal"><span class="pre">transparent_configurable_pyfusebox</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pyfusebox.html#module-cloudfusion.pyfusebox.configurable_pyfusebox">The <tt class="docutils literal"><span class="pre">configurable_pyfusebox</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="store.html">Subpackages</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="store.webdav.html">The <tt class="docutils literal"><span class="pre">webdav_store</span></tt> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="store.webdav.html#module-cloudfusion.store.webdav.tinydav_client">The <tt class="docutils literal"><span class="pre">tinydav_client</span></tt> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="store.webdav.html#the-cadaver-client-module">The <tt class="docutils literal"><span class="pre">cadaver_client</span></tt> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="store.webdav.html#module-cloudfusion.store.webdav.bulk_get_metadata_webdav_store">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_webdav_store</span></tt> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="store.sugarsync.html">The <tt class="docutils literal"><span class="pre">sugarsync_store</span></tt> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="store.sugarsync.html#module-cloudfusion.store.sugarsync.client">The <tt class="docutils literal"><span class="pre">client</span></tt> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="store.s3.html">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_amazon_store</span></tt> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="store.s3.html#module-cloudfusion.store.s3.amazon_store">The <tt class="docutils literal"><span class="pre">amazon_store</span></tt> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="store.gs.html">The <tt class="docutils literal"><span class="pre">google_store</span></tt> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="store.gs.html#module-cloudfusion.store.gs.bulk_get_metadata_google_store">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_google_store</span></tt> Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="store.dropbox.html">The <tt class="docutils literal"><span class="pre">file_decorator</span></tt> Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="store.dropbox.html#module-cloudfusion.store.dropbox.dropbox_store">The <tt class="docutils literal"><span class="pre">dropbox_store</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.gdrive.html">The <tt class="docutils literal"><span class="pre">google_drive</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.sugarsync.html">The <tt class="docutils literal"><span class="pre">sugarsync_store</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.sugarsync.html#module-cloudfusion.store.sugarsync.client">The <tt class="docutils literal"><span class="pre">client</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.s3.html">The <tt class="docutils literal"><span class="pre">amazon_store</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.s3.html#module-cloudfusion.store.s3.bulk_get_metadata_amazon_store">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_amazon_store</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.gs.html">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_google_store</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.gs.html#module-cloudfusion.store.gs.google_store">The <tt class="docutils literal"><span class="pre">google_store</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.webdav.html">The <tt class="docutils literal"><span class="pre">webdav_store</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.webdav.html#module-cloudfusion.store.webdav.bulk_get_metadata_webdav_store">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_webdav_store</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.webdav.html#module-cloudfusion.store.webdav.tinydav_client">The <tt class="docutils literal"><span class="pre">tinydav_client</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.webdav.html#the-cadaver-client-module">The <tt class="docutils literal"><span class="pre">cadaver_client</span></tt> Module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.transparent_store">The <tt class="docutils literal"><span class="pre">transparent_store</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.transparent_chunk_caching_store">The <tt class="docutils literal"><span class="pre">transparent_chunk_caching_store</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.transparent_caching_store">The <tt class="docutils literal"><span class="pre">transparent_caching_store</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.store_worker">The <tt class="docutils literal"><span class="pre">store_worker</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.store_sync_thread">The <tt class="docutils literal"><span class="pre">store_sync_thread</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.store">The <tt class="docutils literal"><span class="pre">store</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.metadata_caching_store">The <tt class="docutils literal"><span class="pre">metadata_caching_store</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.chunk_store_worker">The <tt class="docutils literal"><span class="pre">chunk_store_worker</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.chunk_store_sync_thread">The <tt class="docutils literal"><span class="pre">chunk_store_sync_thread</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.chunk_caching_store">The <tt class="docutils literal"><span class="pre">chunk_caching_store</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.caching_store">The <tt class="docutils literal"><span class="pre">caching_store</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.bulk_get_metadata">The <tt class="docutils literal"><span class="pre">bulk_get_metadata</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html">The <tt class="docutils literal"><span class="pre">xmlparser_test</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.transparent_store_test_with_sync">The <tt class="docutils literal"><span class="pre">transparent_store_test_with_sync</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.transparent_store_test_no_sync">The <tt class="docutils literal"><span class="pre">transparent_store_test_no_sync</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.chunk_caching_store">The <tt class="docutils literal"><span class="pre">chunk_caching_store</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.transparent_store">The <tt class="docutils literal"><span class="pre">transparent_store</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.chunk_store_worker">The <tt class="docutils literal"><span class="pre">chunk_store_worker</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.metadata_caching_store">The <tt class="docutils literal"><span class="pre">metadata_caching_store</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.store">The <tt class="docutils literal"><span class="pre">store</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.transparent_caching_store">The <tt class="docutils literal"><span class="pre">transparent_caching_store</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.store_sync_thread">The <tt class="docutils literal"><span class="pre">store_sync_thread</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.store_worker">The <tt class="docutils literal"><span class="pre">store_worker</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.transparent_chunk_caching_store">The <tt class="docutils literal"><span class="pre">transparent_chunk_caching_store</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="store.html#module-cloudfusion.store.caching_store">The <tt class="docutils literal"><span class="pre">caching_store</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">The <tt class="docutils literal"><span class="pre">cache_test</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.synchronize_proxy_test">The <tt class="docutils literal"><span class="pre">synchronize_proxy_test</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.store_test_webdav2">The <tt class="docutils literal"><span class="pre">store_test_webdav2</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.store_test_webdav">The <tt class="docutils literal"><span class="pre">store_test_webdav</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.store_test2">The <tt class="docutils literal"><span class="pre">store_test2</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.transparent_store_test_no_sync">The <tt class="docutils literal"><span class="pre">transparent_store_test_no_sync</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.db_logging_thread_test">The <tt class="docutils literal"><span class="pre">db_logging_thread_test</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.transparent_store_test_with_sync">The <tt class="docutils literal"><span class="pre">transparent_store_test_with_sync</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.store_test">The <tt class="docutils literal"><span class="pre">store_test</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.persistent_lru_cache_test">The <tt class="docutils literal"><span class="pre">persistent_lru_cache_test</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.mp_lru_cache_test">The <tt class="docutils literal"><span class="pre">mp_lru_cache_test</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.store_test2">The <tt class="docutils literal"><span class="pre">store_test2</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.xmlparser_test">The <tt class="docutils literal"><span class="pre">xmlparser_test</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.store_test_gdrive">The <tt class="docutils literal"><span class="pre">store_test_gdrive</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.store_test_webdav">The <tt class="docutils literal"><span class="pre">store_test_webdav</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.mp_cache_test">The <tt class="docutils literal"><span class="pre">mp_cache_test</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.store_test_webdav2">The <tt class="docutils literal"><span class="pre">store_test_webdav2</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.lru_cache_test">The <tt class="docutils literal"><span class="pre">lru_cache_test</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.db_logging_thread_test">The <tt class="docutils literal"><span class="pre">db_logging_thread_test</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html#module-cloudfusion.tests.cache_test">The <tt class="docutils literal"><span class="pre">cache_test</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="third_party.html">Subpackages</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="third_party.requests_1_2_3.html">Subpackages</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.html">Subpackages</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html">Subpackages</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.util">The <tt class="docutils literal"><span class="pre">util</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.response">The <tt class="docutils literal"><span class="pre">response</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request">The <tt class="docutils literal"><span class="pre">request</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager">The <tt class="docutils literal"><span class="pre">poolmanager</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost">The <tt class="docutils literal"><span class="pre">filepost</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions">The <tt class="docutils literal"><span class="pre">exceptions</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool">The <tt class="docutils literal"><span class="pre">connectionpool</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections">The <tt class="docutils literal"><span class="pre">_collections</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3">The <tt class="docutils literal"><span class="pre">urllib3</span></tt> Package</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html">The <tt class="docutils literal"><span class="pre">utf8prober</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.universaldetector">The <tt class="docutils literal"><span class="pre">universaldetector</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.sjisprober">The <tt class="docutils literal"><span class="pre">sjisprober</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.sbcsgroupprober">The <tt class="docutils literal"><span class="pre">sbcsgroupprober</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.sbcharsetprober">The <tt class="docutils literal"><span class="pre">sbcharsetprober</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.mbcsgroupprober">The <tt class="docutils literal"><span class="pre">mbcsgroupprober</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.mbcharsetprober">The <tt class="docutils literal"><span class="pre">mbcharsetprober</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.latin1prober">The <tt class="docutils literal"><span class="pre">latin1prober</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.jpcntx">The <tt class="docutils literal"><span class="pre">jpcntx</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.hebrewprober">The <tt class="docutils literal"><span class="pre">hebrewprober</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.gb2312prober">The <tt class="docutils literal"><span class="pre">gb2312prober</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.euctwprober">The <tt class="docutils literal"><span class="pre">euctwprober</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.euckrprober">The <tt class="docutils literal"><span class="pre">euckrprober</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.eucjpprober">The <tt class="docutils literal"><span class="pre">eucjpprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html">The <tt class="docutils literal"><span class="pre">mbcharsetprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade">The <tt class="docutils literal"><span class="pre">charade</span></tt> Package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.charsetprober">The <tt class="docutils literal"><span class="pre">charsetprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.chardistribution">The <tt class="docutils literal"><span class="pre">chardistribution</span></tt> Module</a></li>
 <li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.escprober">The <tt class="docutils literal"><span class="pre">escprober</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.cp949prober">The <tt class="docutils literal"><span class="pre">cp949prober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.eucjpprober">The <tt class="docutils literal"><span class="pre">eucjpprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.euctwprober">The <tt class="docutils literal"><span class="pre">euctwprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.sbcsgroupprober">The <tt class="docutils literal"><span class="pre">sbcsgroupprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.gb2312prober">The <tt class="docutils literal"><span class="pre">gb2312prober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.jpcntx">The <tt class="docutils literal"><span class="pre">jpcntx</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.charsetgroupprober">The <tt class="docutils literal"><span class="pre">charsetgroupprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.universaldetector">The <tt class="docutils literal"><span class="pre">universaldetector</span></tt> Module</a></li>
 <li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.compat">The <tt class="docutils literal"><span class="pre">compat</span></tt> Module</a></li>
 <li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.codingstatemachine">The <tt class="docutils literal"><span class="pre">codingstatemachine</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.charsetprober">The <tt class="docutils literal"><span class="pre">charsetprober</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.charsetgroupprober">The <tt class="docutils literal"><span class="pre">charsetgroupprober</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.chardistribution">The <tt class="docutils literal"><span class="pre">chardistribution</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.latin1prober">The <tt class="docutils literal"><span class="pre">latin1prober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.euckrprober">The <tt class="docutils literal"><span class="pre">euckrprober</span></tt> Module</a></li>
 <li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.big5prober">The <tt class="docutils literal"><span class="pre">big5prober</span></tt> Module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade">The <tt class="docutils literal"><span class="pre">charade</span></tt> Package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.cp949prober">The <tt class="docutils literal"><span class="pre">cp949prober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.utf8prober">The <tt class="docutils literal"><span class="pre">utf8prober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.sjisprober">The <tt class="docutils literal"><span class="pre">sjisprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.sbcharsetprober">The <tt class="docutils literal"><span class="pre">sbcharsetprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.mbcsgroupprober">The <tt class="docutils literal"><span class="pre">mbcsgroupprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.charade.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.charade.hebrewprober">The <tt class="docutils literal"><span class="pre">hebrewprober</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html">Subpackages</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3">The <tt class="docutils literal"><span class="pre">urllib3</span></tt> Package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3._collections">The <tt class="docutils literal"><span class="pre">_collections</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.filepost">The <tt class="docutils literal"><span class="pre">filepost</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.util">The <tt class="docutils literal"><span class="pre">util</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.exceptions">The <tt class="docutils literal"><span class="pre">exceptions</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.connectionpool">The <tt class="docutils literal"><span class="pre">connectionpool</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.poolmanager">The <tt class="docutils literal"><span class="pre">poolmanager</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.request">The <tt class="docutils literal"><span class="pre">request</span></tt> Module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="third_party.requests_1_2_3.requests.packages.urllib3.html#module-cloudfusion.third_party.requests_1_2_3.requests.packages.urllib3.response">The <tt class="docutils literal"><span class="pre">response</span></tt> Module</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.utils">The <tt class="docutils literal"><span class="pre">utils</span></tt> Module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-utils">requests.utils</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.structures">The <tt class="docutils literal"><span class="pre">structures</span></tt> Module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-structures">requests.structures</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.sessions">The <tt class="docutils literal"><span class="pre">sessions</span></tt> Module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-session">requests.session</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.models">The <tt class="docutils literal"><span class="pre">models</span></tt> Module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-models">requests.models</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.hooks">The <tt class="docutils literal"><span class="pre">hooks</span></tt> Module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-hooks">requests.hooks</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.exceptions">The <tt class="docutils literal"><span class="pre">exceptions</span></tt> Module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-exceptions">requests.exceptions</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.cookies">The <tt class="docutils literal"><span class="pre">cookies</span></tt> Module</a></li>
@@ -618,16 +630,40 @@ nosetests -v -s cloudfusion.tests.cache_test cloudfusion.tests.lru_cache_test  c
 <li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#certs-py">certs.py</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.auth">The <tt class="docutils literal"><span class="pre">auth</span></tt> Module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-auth">requests.auth</a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.api">The <tt class="docutils literal"><span class="pre">api</span></tt> Module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-api">requests.api</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.structures">The <tt class="docutils literal"><span class="pre">structures</span></tt> Module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-structures">requests.structures</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.adapters">The <tt class="docutils literal"><span class="pre">adapters</span></tt> Module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-adapters">requests.adapters</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.models">The <tt class="docutils literal"><span class="pre">models</span></tt> Module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-models">requests.models</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.auth">The <tt class="docutils literal"><span class="pre">auth</span></tt> Module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-auth">requests.auth</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.utils">The <tt class="docutils literal"><span class="pre">utils</span></tt> Module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-utils">requests.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.exceptions">The <tt class="docutils literal"><span class="pre">exceptions</span></tt> Module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-exceptions">requests.exceptions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.hooks">The <tt class="docutils literal"><span class="pre">hooks</span></tt> Module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-hooks">requests.hooks</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#module-cloudfusion.third_party.requests_1_2_3.requests.sessions">The <tt class="docutils literal"><span class="pre">sessions</span></tt> Module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="third_party.requests_1_2_3.requests.html#requests-session">requests.session</a></li>
 </ul>
 </li>
 </ul>
@@ -641,16 +677,17 @@ nosetests -v -s cloudfusion.tests.cache_test cloudfusion.tests.lru_cache_test  c
 <li class="toctree-l2"><a class="reference internal" href="third_party.parsedatetime.html#module-cloudfusion.third_party.parsedatetime.run_tests">The <tt class="docutils literal"><span class="pre">run_tests</span></tt> Module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="util.html">The <tt class="docutils literal"><span class="pre">xmlparser</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.synchronize_proxy">The <tt class="docutils literal"><span class="pre">synchronize_proxy</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.string">The <tt class="docutils literal"><span class="pre">string</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.pickle_methods">The <tt class="docutils literal"><span class="pre">pickle_methods</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.persistent_lru_cache">The <tt class="docutils literal"><span class="pre">persistent_lru_cache</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.mp_synchronize_proxy">The <tt class="docutils literal"><span class="pre">mp_synchronize_proxy</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.mp_lru_cache">The <tt class="docutils literal"><span class="pre">mp_lru_cache</span></tt> Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.lru_cache">The <tt class="docutils literal"><span class="pre">lru_cache</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">The <tt class="docutils literal"><span class="pre">string</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.mp_cache">The <tt class="docutils literal"><span class="pre">mp_cache</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.file_util">The <tt class="docutils literal"><span class="pre">file_util</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.exponential_retry">The <tt class="docutils literal"><span class="pre">exponential_retry</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.xmlparser">The <tt class="docutils literal"><span class="pre">xmlparser</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.pickle_methods">The <tt class="docutils literal"><span class="pre">pickle_methods</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.mp_synchronize_proxy">The <tt class="docutils literal"><span class="pre">mp_synchronize_proxy</span></tt> Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.cache">The <tt class="docutils literal"><span class="pre">cache</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.synchronize_proxy">The <tt class="docutils literal"><span class="pre">synchronize_proxy</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.persistent_lru_cache">The <tt class="docutils literal"><span class="pre">persistent_lru_cache</span></tt> Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html#module-cloudfusion.util.lru_cache">The <tt class="docutils literal"><span class="pre">lru_cache</span></tt> Module</a></li>
 </ul>
 </div>
 </div>
@@ -666,12 +703,14 @@ nosetests -v -s cloudfusion.tests.cache_test cloudfusion.tests.lru_cache_test  c
   <ul>
 <li><a class="reference internal" href="#">Developers documentation</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
-<li><a class="reference internal" href="#using-the-api-directly">Using the API Directly</a><ul>
+<li><a class="reference internal" href="#using-the-api-directly">Using the API Directly</a></li>
+<li><a class="reference internal" href="#here-are-a-few-screencasts">Here are a few Screencasts</a><ul>
 <li><a class="reference internal" href="#extensive-example-with-dropbox">Extensive Example with Dropbox</a></li>
 <li><a class="reference internal" href="#webdav-and-the-bulkgetmetadata-interface">WebDAV and the BulkGetMetadata Interface</a></li>
 <li><a class="reference internal" href="#amazon-s3-and-hello-world">Amazon S3 and Hello World!</a></li>
 <li><a class="reference internal" href="#google-storage-and-the-archiving-layer">Google Storage and the Archiving Layer</a></li>
 <li><a class="reference internal" href="#sugarsync">Sugarsync</a></li>
+<li><a class="reference internal" href="#google-drive">Google Drive</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#extensions">Extensions</a></li>
@@ -694,7 +733,7 @@ nosetests -v -s cloudfusion.tests.cache_test cloudfusion.tests.lru_cache_test  c
                         title="previous chapter">Users documentation</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="mylogging.html"
-                        title="next chapter">The <tt class="docutils literal"><span class="pre">nullhandler</span></tt> Module</a></p>
+                        title="next chapter">The <tt class="docutils literal"><span class="pre">db_logging_thread</span></tt> Module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/develop.txt"
@@ -727,7 +766,7 @@ nosetests -v -s cloudfusion.tests.cache_test cloudfusion.tests.lru_cache_test  c
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="mylogging.html" title="The nullhandler Module"
+          <a href="mylogging.html" title="The db_logging_thread Module"
              >next</a> |</li>
         <li class="right" >
           <a href="user.html" title="Users documentation"

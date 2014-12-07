@@ -25,8 +25,8 @@
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
     <link rel="up" title="Subpackages" href="store.html" />
-    <link rel="next" title="The bulk_get_metadata_amazon_store Module" href="store.s3.html" />
-    <link rel="prev" title="The webdav_store Module" href="store.webdav.html" /> 
+    <link rel="next" title="The amazon_store Module" href="store.s3.html" />
+    <link rel="prev" title="The google_drive Module" href="store.gdrive.html" /> 
   </head>
   <body>
     <div class="related">
@@ -39,10 +39,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="store.s3.html" title="The bulk_get_metadata_amazon_store Module"
+          <a href="store.s3.html" title="The amazon_store Module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="store.webdav.html" title="The webdav_store Module"
+          <a href="store.gdrive.html" title="The google_drive Module"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li>
@@ -159,8 +159,80 @@ but you need to add user and password:</p>
 </tbody>
 </table>
 <dl class="method">
+<dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._SugarsyncStore__get_dir_listing">
+<tt class="descname">_SugarsyncStore__get_dir_listing</tt><big>(</big><em>directory</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._SugarsyncStore__get_dir_listing" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The cached directory listing of directory,</td>
+</tr>
+</tbody>
+</table>
+<p>retrieving the listing if it does not yet exist.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._SugarsyncStore__insert_dir_listing">
+<tt class="descname">_SugarsyncStore__insert_dir_listing</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._SugarsyncStore__insert_dir_listing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert <em>path</em> into the cached directory listing,
+keeping the order sorted,
+retrieving the listing if it does not yet exist.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._SugarsyncStore__is_in_dir_listing">
+<tt class="descname">_SugarsyncStore__is_in_dir_listing</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._SugarsyncStore__is_in_dir_listing" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True iff. path is in the cache of directory listings.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._SugarsyncStore__is_in_partial_dir_listing">
+<tt class="descname">_SugarsyncStore__is_in_partial_dir_listing</tt><big>(</big><em>path</em>, <em>cached_listing</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._SugarsyncStore__is_in_partial_dir_listing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if path exists on the remote server.
+Tries to do only a partial listing to find out if path exists remotely, also caches this listing
+for three seconds. 
+:param cached_listing: a locally cached listing used to determine the position of <em>path</em> in the remote listing
+:returns: True if <em>path</em> exists in the actual listing or in a partial listing that is cached for 3 seconds, False if it is not in the actual listing, or None if the existence is uncertain</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._SugarsyncStore__remove_from_dir_listing">
+<tt class="descname">_SugarsyncStore__remove_from_dir_listing</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._SugarsyncStore__remove_from_dir_listing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove <em>path</em> from the cached directory listing.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._SugarsyncStore__set_dir_listing">
+<tt class="descname">_SugarsyncStore__set_dir_listing</tt><big>(</big><em>directory</em>, <em>listing</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._SugarsyncStore__set_dir_listing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the directory listing of directory.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._cache">
+<tt class="descname">_cache</tt><big>(</big><em>directory</em>, <em>collection</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._create_file">
 <tt class="descname">_create_file</tt><big>(</big><em>path</em>, <em>mime='text/x-cloudfusion'</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._create_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._extract_files">
+<tt class="descname">_extract_files</tt><big>(</big><em>xml_tree</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._extract_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._extract_folders">
+<tt class="descname">_extract_folders</tt><big>(</big><em>xml_tree</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._extract_folders" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -170,8 +242,21 @@ but you need to add user and password:</p>
 
 <dl class="method">
 <dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._handle_error">
-<tt class="descname">_handle_error</tt><big>(</big><em>error</em>, <em>method_name</em>, <em>remaining_tries</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._handle_error" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">_handle_error</tt><big>(</big><em>error</em>, <em>stacktrace</em>, <em>method_name</em>, <em>remaining_tries</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._handle_error" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._is_end_of_collection">
+<tt class="descname">_is_end_of_collection</tt><big>(</big><em>xml_tree</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._is_end_of_collection" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True iff. the partial directory listing in <em>xml_tree</em> contains the last file system item.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore._parse_collection">
@@ -221,6 +306,11 @@ but you need to add user and password:</p>
 <dl class="method">
 <dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore.duplicate">
 <tt class="descname">duplicate</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore.duplicate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore.exists">
+<tt class="descname">exists</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore.exists" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
@@ -277,21 +367,11 @@ but you need to add user and password:</p>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore.store_file">
-<tt class="descname">store_file</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore.store_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore.store_fileobject">
 <tt class="descname">store_fileobject</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.SugarsyncStore.store_fileobject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
-
-<dl class="function">
-<dt id="cloudfusion.store.sugarsync.sugarsync_store.wait_for_event">
-<tt class="descclassname">cloudfusion.store.sugarsync.sugarsync_store.</tt><tt class="descname">wait_for_event</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.sugarsync_store.wait_for_event" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </div>
 <div class="section" id="module-cloudfusion.store.sugarsync.client">
@@ -371,7 +451,7 @@ but you need to add user and password:</p>
 
 <dl class="method">
 <dt id="cloudfusion.store.sugarsync.client.SugarsyncClient.get_dir_listing">
-<tt class="descname">get_dir_listing</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.get_dir_listing" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_dir_listing</tt><big>(</big><em>path</em>, <em>index=0</em>, <em>max=1000000</em><big>)</big><a class="headerlink" href="#cloudfusion.store.sugarsync.client.SugarsyncClient.get_dir_listing" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -426,11 +506,11 @@ but you need to add user and password:</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="store.webdav.html"
-                        title="previous chapter">The <tt class="docutils literal"><span class="pre">webdav_store</span></tt> Module</a></p>
+  <p class="topless"><a href="store.gdrive.html"
+                        title="previous chapter">The <tt class="docutils literal"><span class="pre">google_drive</span></tt> Module</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="store.s3.html"
-                        title="next chapter">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_amazon_store</span></tt> Module</a></p>
+                        title="next chapter">The <tt class="docutils literal"><span class="pre">amazon_store</span></tt> Module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/store.sugarsync.txt"
@@ -463,10 +543,10 @@ but you need to add user and password:</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="store.s3.html" title="The bulk_get_metadata_amazon_store Module"
+          <a href="store.s3.html" title="The amazon_store Module"
              >next</a> |</li>
         <li class="right" >
-          <a href="store.webdav.html" title="The webdav_store Module"
+          <a href="store.gdrive.html" title="The google_drive Module"
              >previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li>
