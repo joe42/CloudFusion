@@ -6,6 +6,7 @@ import shelve
 import os
 import atexit
 import tempfile
+import codecs
 
 LASTFILEID = "############################## #### file_id ###### #############################'"
 
@@ -68,8 +69,8 @@ class PersistentLRUCache(LRUCache):
     def _write_to_file(self, filename, key, value):
         if key in self.entries: # check if file exists
             self.entries[CACHESIZE] -= self._get_persistent_size(filename)
-        fh = open(filename,"w")
-        fh.write(str(value))
+        fh = codecs.open(filename,"w", "utf-8")
+        fh.write(value)
         fh.close()
         self.entries[CACHESIZE] += self._get_persistent_size(filename)
         self._resize()
@@ -81,7 +82,7 @@ class PersistentLRUCache(LRUCache):
             return 0
     
     def _get_file_content(self, filepath):
-        with open(filepath) as fh:
+        with codecs.open(filepath, "r", "utf-8") as fh:
             return fh.read()
     
     def write(self, key, value): 
