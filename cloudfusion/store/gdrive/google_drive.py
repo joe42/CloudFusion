@@ -22,13 +22,38 @@ from string import Template
 from cloudfusion.util.string import get_id_key, get_secret_key
 import httplib2
 from pydrive.files import ApiRequestError
+import tempfile
+
+
+
 
 class GoogleDrive(Store):
     '''Subclass of Store implementing an interface to the Google Drive.'''
     #hardcode client configuration
     #client_id 1086226639551-skahka58ohaabuq28vnogehtjrpocu8s.apps.googleusercontent.com
     #client_secret nDbxJU06oANOqdQIACTRfaIQ
-    CLIENT_AUTH_TEMPLATE = Template('{"installed":{"auth_uri":"https://accounts.google.com/o/oauth2/auth","client_secret":"$SECRET","token_uri":"https://accounts.google.com/o/oauth2/token","client_email":"","redirect_uris":["urn:ietf:wg:oauth:2.0:oob","oob"],"client_x509_cert_url":"","client_id":"$ID","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs"}}')
+    CLIENT_AUTH_TEMPLATE = Template('''
+{
+    "installed": {
+        "auth_uri":"https://accounts.google.com/o/oauth2/auth",
+        "client_secret":"$SECRET",
+        "token_uri":"https://accounts.google.com/o/oauth2/token",
+        "client_email":"",
+        "redirect_uris":["urn:ietf:wg:oauth:2.0:oob","oob"],
+        "client_x509_cert_url":"",
+        "client_id":"$ID",
+        "auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs"
+    }
+}
+''')
+    SETTINGS_YAML_TEMPLATE = Template('''
+client_config_backend: file
+client_config_file: $CLIENT_SECRETS
+save_credentials: True
+save_credentials_backend: file
+save_credentials_file: $CREDENTIALS_DB
+get_refresh_token: True
+''')
     
     def __init__(self, config):
         '''*config* can be obtained from the function :func:`cloudfusion.store.gdrive.google_drive.GoogleDrive.get_config`,
@@ -58,37 +83,28 @@ class GoogleDrive(Store):
         self.logger.info("creating %s store", self.name)
         id_key = get_id_key(config)
         secret_key = get_secret_key(config)
-        self.client_auth = self.CLIENT_AUTH_TEMPLATE.substitute(SECRET=config[secret_key], ID=config[id_key])
-        with open('client_secrets.json', 'w') as client_secrets:
-            client_secrets.write(self.client_auth)
-        self._credentials_db_path = self._get_credentials_db_path(config)
-        key = 'credentials'
+        client_auth = self.CLIENT_AUTH_TEMPLATE.substitute(SECRET=config[secret_key], ID=config[id_key])
+        # workaround for possible side effect in fuse when called without foreground option
+        self._settings_yaml = self._get_cachedir_name(config)+'/settings.yaml'
+        self._client_secrets = self._get_cachedir_name(config)+'/client_secrets.json'
+        credentials = self._get_cachedir_name(config)+'/credentials.json'
+        settings_yaml = self.SETTINGS_YAML_TEMPLATE.substitute(CLIENT_SECRETS=self._client_secrets, 
+                                                               CREDENTIALS_DB=credentials)
+        with open(self._settings_yaml, 'w') as fh:
+            fh.write(settings_yaml)
+        with open(self._client_secrets, 'w') as client_secrets:
+            client_secrets.write(client_auth)
+        self.gauth = GoogleAuth(settings_file=self._settings_yaml)
         try:
-            credentials_db = shelve.open(self._credentials_db_path)
-        except Exception, e:
-            self.logger.debug("Credentials database could not be loaded.")
-            credentials_db = {}
-        is_authentication_successful = False
-        if key in credentials_db: 
-            self.gauth = GoogleAuth()
-            self.gauth.credentials = credentials_db[key]
-            try:
-                self.gauth.Authorize()
-            except AuthenticationError, e:
-                self.logger.info("Authentication error: %s", e)
-                is_authentication_successful = True
-        if not key in credentials_db or not is_authentication_successful: # get credentials manually
-            self.gauth = GoogleAuth()
+            self.gauth.Authorize()
+        except AuthenticationError, e:
+            self.logger.info("Authentication error: %s", e)
+            self.gauth = GoogleAuth(settings_file=self._settings_yaml)
             self.gauth.LocalWebserverAuth()
             self.gauth.Authorize()
-        credentials_db[key] = self.gauth.credentials #store token for further sessions  
-        try:
-            credentials_db.close()
-        except Exception, e:
-            pass     
         self.drive = Drive(self.gauth)
         self.logger.info("api initialized")
-        
+    
     @staticmethod
     def get_config(path_to_configfile=None):
         '''Get initial google drive configuration to initialize :class:`cloudfusion.store.gdrive.google_drive.GoogleDrive`
@@ -148,7 +164,7 @@ class GoogleDrive(Store):
         '''Create a deep copy of the GoogleAuth object,
         and the GoogleDrive object for use by another thread.
         :returns: a tuple with the copies of the GoogleAuth and the GoogelDrive object'''
-        gauth = GoogleAuth()
+        gauth = GoogleAuth(settings_file=self._settings_yaml)
         gauth.credentials = self.gauth.credentials
         gauth.http = None
         gauth.Authorize()
