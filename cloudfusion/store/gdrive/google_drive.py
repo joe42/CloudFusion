@@ -59,6 +59,8 @@ class GoogleDrive(Store):
         id_key = get_id_key(config)
         secret_key = get_secret_key(config)
         self.client_auth = self.CLIENT_AUTH_TEMPLATE.substitute(SECRET=config[secret_key], ID=config[id_key])
+        # workaround for possible side effect in fuse when called without foreground option
+        self.__set_working_dir(config)
         with open('client_secrets.json', 'w') as client_secrets:
             client_secrets.write(self.client_auth)
         self._credentials_db_path = self._get_credentials_db_path(config)
@@ -89,6 +91,13 @@ class GoogleDrive(Store):
         self.drive = Drive(self.gauth)
         self.logger.info("api initialized")
         
+    def __set_working_dir(self, config):
+        '''Set cache directory as current working directory, if the 
+        current working directory is '/', which might be caused by a side effect in fuse.'''
+        if os.getcwd() == '/':
+            working_dir = self._get_cachedir_name(config)
+            os.chdir(working_dir)
+    
     @staticmethod
     def get_config(path_to_configfile=None):
         '''Get initial google drive configuration to initialize :class:`cloudfusion.store.gdrive.google_drive.GoogleDrive`
