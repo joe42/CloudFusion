@@ -203,7 +203,10 @@ get_refresh_token: True
         path_to_file = path_to_file[1:]
         file_id = self._get_fileobject_id(path_to_file)
         file = self.drive.CreateFile({'id': file_id}) # Initialize GoogleDriveFile instance with file id
-        content = file.GetContentString() 
+        # GetContentString encodes content to utf8, and 
+        # GetContentFile writes the contents to disk unnecessarily.
+        file.FetchContent()
+        content = file.content.getvalue()
         return content
         
     def __get_size(self, fileobject):
@@ -225,8 +228,13 @@ get_refresh_token: True
             title = os.path.basename(path)
             parent_dir = os.path.dirname(path)
             parent_id = self._get_fileobject_id(parent_dir)
-            file = self.drive.CreateFile({ "parents": [{"id": parent_id}], 'title':title}) #does this work if path is a nested file? 
-        file.SetContentString(fileobject.read().decode('cp437'))
+            file = self.drive.CreateFile({ "parents": [{"id": parent_id}], 
+                                          'title':title, 
+                                          'mimeType':'application/octet-stream'}) #does this work if path is a nested file?
+        # SetContentString encodes input as utf9 and 
+        # SetContentFile needs a local copy of the file.
+        # Therefore, access content directly. 
+        file.content = fileobject
         file.Upload()
         return int(time.time()) 
     
