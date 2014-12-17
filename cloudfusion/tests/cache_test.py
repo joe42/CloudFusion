@@ -71,6 +71,7 @@ def test_get_modified():
     test_obj.refresh(KEY1, VALUE2, modified_time)
     assert test_obj.get_modified(KEY1) == modified_time
     test_obj.write(KEY1, VALUE1)
+    time.sleep(0.01)
     assert test_obj.get_modified(KEY1) < time.time()
     
 def test_set_modified():
@@ -78,6 +79,7 @@ def test_set_modified():
     modified_time = VALUE1
     before_modification = time.time()
     test_obj.write(KEY1, VALUE3)
+    time.sleep(0.01)
     assert test_obj.get_modified(KEY1) < time.time()
     assert test_obj.get_modified(KEY1) > before_modification
     test_obj.set_modified(KEY1, modified_time)
