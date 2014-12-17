@@ -41,10 +41,19 @@ def get_secret_key(dictionary):
     except StopIteration:
         return None
 
-def to_unicode(text, encoding):
+def to_unicode(text, encoding="utf8"):
+    ''':returns: *text* as unicode, decoded with *encoding*, if it is a bytestring,
+    and returns *text* otherwise'''
+    if isinstance(text, str):
+        return unicode(text, encoding)
+    return text
+
+def to_str(text, encoding="utf8"):
+    ''':returns: *text* as a byte string, encoded with *encoding*, 
+    if it is a unicode object and returns *text* otherwise'''
     if isinstance(text, unicode):
-        return text
-    return unicode(text, encoding)
+        return text.encode(encoding)
+    return text
 
 def regSearchInt(needle, haystack, grp=1):
     match = re.search(needle,haystack)
