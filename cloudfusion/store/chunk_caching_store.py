@@ -1,6 +1,6 @@
 from cloudfusion.store.store_sync_thread import StoreSyncThread
 from cloudfusion.util.persistent_lru_cache import PersistentLRUCache
-from cloudfusion.store.dropbox.file_decorator import *
+from cloudfusion.util.file_decorator import *
 from cloudfusion.store.store import *
 from cloudfusion.store.chunk_store_sync_thread import ChunkStoreSyncThread, get_parent_dir
 from cloudfusion.util.synchronize_proxy import SynchronizeProxy

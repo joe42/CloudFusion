@@ -11,7 +11,7 @@ from cloudfusion.dropbox import rest
 from cloudfusion.dropbox.rest import RESTSocketError
 from cloudfusion.store.store import *
 import logging
-from cloudfusion.store.dropbox.file_decorator import NameableFile
+from cloudfusion.util.file_decorator import NameableFile
 import webbrowser
 import base64
 import shelve

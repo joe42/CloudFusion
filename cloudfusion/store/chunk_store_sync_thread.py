@@ -13,7 +13,7 @@ import tempfile
 import ntplib
 import base64
 import types
-from cloudfusion.store.dropbox.file_decorator import DataFileWrapper
+from cloudfusion.util.file_decorator import DataFileWrapper
 from contextlib import closing
 import atexit
 from cloudfusion.util import file_util

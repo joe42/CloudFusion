@@ -5,7 +5,7 @@ Created on Jun 10, 2013
 '''
 #TODO: implement reading slowly from cache, to reduce memory
 from cloudfusion.util.persistent_lru_cache import PersistentLRUCache
-from cloudfusion.store.dropbox.file_decorator import *
+from cloudfusion.util.file_decorator import *
 from cloudfusion.store.store import *
 from cloudfusion.store.store_sync_thread import StoreSyncThread
 from cloudfusion.util.synchronize_proxy import SynchronizeProxy

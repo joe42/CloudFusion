@@ -3,7 +3,7 @@ Created on 24.08.2011
 '''
 from ConfigParser import SafeConfigParser
 from cloudfusion.pyfusebox.virtualfile import VirtualFile
-from cloudfusion.store.dropbox import file_decorator
+from cloudfusion.util import file_decorator
 from cloudfusion.store.transparent_caching_store import TransparentMultiprocessingCachingStore
 from cloudfusion.store.metadata_caching_store import MetadataCachingStore
 import random
