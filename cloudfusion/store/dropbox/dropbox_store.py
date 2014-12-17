@@ -303,8 +303,6 @@ class DropboxStore(Store):
             except Exception, e: 
                 import sys
                 sys.stderr("Could not store Dropbox file revisions: %s" % e)
-                import traceback
-                traceback.print_exc()
     
     def __deepcopy__(self, memo):
         from copy import deepcopy
