@@ -4,7 +4,7 @@ Created on 04.06.2011
 
 @author: joe
 '''
-from cloudfusion.util.lru_cache import LRUCache
+from cloudfusion.util.lru_cache import LRUCache, LISTHEAD
 import time
 import sys
 from nose.tools import *
@@ -133,6 +133,18 @@ def test_delete():
     assert_raises( KeyError, test_obj.get_value, (KEY1) )
     assert not test_obj.exists(VALUE1)
     assert not test_obj.exists(KEY1)
+    
+def test_reorder():
+    test_obj = LRUCache(1)
+    test_obj.write(KEY1, "")
+    test_obj.write(KEY2, "")
+    test_obj.get_value(KEY1)
+    assert test_obj.entries[LISTHEAD] == KEY1
+    test_obj.peek(KEY2)
+    assert test_obj.entries[LISTHEAD] == KEY1
+    test_obj.delete(KEY1)
+    assert test_obj.entries[LISTHEAD] == KEY2
+    test_obj.delete(KEY2)
 
 def test_resize_zerosize():
     test_obj = LRUCache(0.001,0)

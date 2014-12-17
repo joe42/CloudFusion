@@ -8,6 +8,7 @@ from cloudfusion.util.persistent_lru_cache import PersistentLRUCache
 import time, os
 from nose.tools import *
 import shutil
+from cloudfusion.util.lru_cache import LISTHEAD
 
 KEY1 = "KEY1𠀋"
 KEY2 = "KEY2𠀋"
@@ -161,7 +162,12 @@ def test_reorder():
     test_obj.write(KEY1, "")
     test_obj.write(KEY2, "")
     test_obj.get_value(KEY1)
+    assert test_obj.entries[LISTHEAD] == KEY1
+    test_obj.peek(KEY2)
+    test_obj.peek_file(KEY2)
+    assert test_obj.entries[LISTHEAD] == KEY1
     test_obj.delete(KEY1)
+    assert test_obj.entries[LISTHEAD] == KEY2
     test_obj.delete(KEY2)
         
 @with_setup(set_up, tear_down)   
