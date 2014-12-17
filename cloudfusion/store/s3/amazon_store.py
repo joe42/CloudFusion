@@ -78,7 +78,6 @@ class AmazonStore(Store):
                     msg += "\nor an already existing bucket: %s" % buckets
                 self.logger.error('Failed to create bucket:'+ repr(e))
                 self.logger.debug(msg)
-                print msg
                 sys.exit()
             except boto.exception.StorageCreateError, e:
                 self.logger.error('Failed to create bucket:'+ repr(e))
@@ -139,6 +138,7 @@ class AmazonStore(Store):
     def delete(self, path, is_dir=False): 
         self.logger.info("deleting %s", path)
         self._raise_error_if_invalid_path(path)
+        path = to_unicode( path )
         delete_list = []
         delete_list.append(path[1:])
         if is_dir:
