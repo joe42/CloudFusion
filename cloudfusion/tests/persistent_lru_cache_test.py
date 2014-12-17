@@ -83,7 +83,7 @@ def test_set_modified():
     test_obj = PersistentLRUCache(directory=directory)
     modified_time = 42
     before_modification = time.time()
-    test_obj.write("some_key", 101)
+    test_obj.write("some_key", "101")
     assert test_obj.get_modified("some_key") < time.time()
     assert test_obj.get_modified("some_key") > before_modification
     test_obj.set_modified("some_key", modified_time)
@@ -97,7 +97,7 @@ def test_get_size_of_dirty_data():
     assert test_obj.get_size_of_dirty_data() == 0
     test_obj.write("some_other_key", "42")
     assert test_obj.get_size_of_dirty_data() == 2
-    test_obj.write("some_other_key", 52)
+    test_obj.write("some_other_key", "52")
     assert test_obj.get_size_of_dirty_data() == 2
     test_obj.write("some_key", "abcd")
     assert test_obj.get_size_of_dirty_data() == 6
@@ -113,7 +113,7 @@ def test_get_size_of_cached_data():
     assert test_obj.get_size_of_cached_data() == 4
     test_obj.write("some_other_key", "42")
     assert test_obj.get_size_of_cached_data() == 6
-    test_obj.write("some_other_key", 52)
+    test_obj.write("some_other_key", "52")
     assert test_obj.get_size_of_cached_data() == 6
     test_obj.refresh("some_key", "abcd", modified_time)
     assert test_obj.get_size_of_cached_data() == 6

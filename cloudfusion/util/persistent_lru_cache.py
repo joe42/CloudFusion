@@ -12,7 +12,9 @@ LASTFILEID = "############################## #### file_id ###### ###############
 class PersistentLRUCache(LRUCache):
     '''
     A persistent LRU cache for restricting memory usage to a minimum and 
-    carrying the cache information over several sessions even after application crashes. 
+    carrying the cache information over several sessions even after application crashes.
+    This subclass of LRUCache restricts values to byte strings, so for instance,
+    you cannot store integers as values.
     '''
 
 
@@ -51,7 +53,8 @@ class PersistentLRUCache(LRUCache):
         return keys
         
     def refresh(self, key, disk_value, modified):
-        """ Refreshes an entry with *disk_value*, if *modified* is bigger than the entry's modified date. """
+        """ Refreshes an entry with *disk_value*, if *modified* is bigger than the entry's modified date.
+        :param maxsize_in_MB: Approximate limit of the cache in MB. """
         if key in self.entries:
             disk_entry_is_newer = modified > self.entries[key].modified
             if not disk_entry_is_newer:
@@ -69,7 +72,7 @@ class PersistentLRUCache(LRUCache):
         if key in self.entries: # check if file exists
             self.entries[CACHESIZE] -= self._get_persistent_size(filename)
         fh = open(filename,"w")
-        fh.write(str(value))
+        fh.write(value)
         fh.close()
         self.entries[CACHESIZE] += self._get_persistent_size(filename)
         self._resize()
@@ -114,7 +117,7 @@ class PersistentLRUCache(LRUCache):
         """Like peek, but memory efficient
         The temporary file needs to be closed if it is not used anymore
         :returns: temporary file object with the value """
-        ret = tempfile.NamedTemporaryFile(delete=False)
+        ret = tempfile.NamedTemporaryFile(delete=False, suffix="_persistent_lru")
         filepath = super( PersistentLRUCache, self ).get_value(key)
         with open(filepath) as fh:
             while True:
