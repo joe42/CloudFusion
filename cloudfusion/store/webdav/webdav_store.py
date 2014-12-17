@@ -73,13 +73,14 @@ class WebdavStore(Store):
         self.logger.info("Storing file object of size %s to %s", size, path)
         if hasattr(fileobject, 'name') and fileobject.name is not None:
             file_name = fileobject.name
+            self.tinyclient.upload(file_name, path)
         else:
-            with tempfile.NamedTemporaryFile(delete=False) as fh:
+            with tempfile.NamedTemporaryFile() as fh:
                 for line in fileobject:
                     fh.write(line)
                 fh.flush()
                 file_name = fh.name
-        self.tinyclient.upload(file_name, path)
+                self.tinyclient.upload(file_name, path)
         return int(time.time())
     
     
