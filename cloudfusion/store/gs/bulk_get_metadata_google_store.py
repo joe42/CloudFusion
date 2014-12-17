@@ -3,6 +3,7 @@ import time
 import cloudfusion.third_party.parsedatetime.parsedatetime as pdt
 from cloudfusion.store.gs.google_store import GoogleStore
 from cloudfusion.util.exponential_retry import retry
+from cloudfusion.util.string import to_str
 
 
 class BulkGetMetadataGoogleStore(GoogleStore, BulkGetMetadata):
@@ -27,6 +28,7 @@ class BulkGetMetadataGoogleStore(GoogleStore, BulkGetMetadata):
         listing = self.bucket.list(directory[1:], "/")
         for obj in listing:
             path = '/'+obj.name if obj.name[-1] != '/' else '/'+obj.name[:-1]
+            path = to_str(path)
             if path == directory[:-1]:
                 continue
             metadata = {}

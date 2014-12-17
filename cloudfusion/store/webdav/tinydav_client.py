@@ -89,14 +89,14 @@ class TinyDAVClient(object):
         ''':raises: StoreAccessError if propfind does not return getcontentlength or getlastmodified property
         :raises: NoSuchFilesytemObjectError if path does not exist'''
         # if path is a directory we need to append / or handle a redirect there
-        response = self._get_client().propfind(self.root + path, depth=0)
+        response = self._get_client().propfind(self.root + path, depth=0, headers = {"Content-Type": "application/xml; charset=utf-8"})
         # redirects can mean that this is a directory
         if response.numerator == 301:
             location = response.headers['location']
             _, location_url = location.split('//',1) # remove protocol
             _, location_path = location_url.split('/',1) # remove domain 
             self.logger.debug("redirect to %s", location_path)
-            response = self._get_client().propfind(location_path, depth=0) 
+            response = self._get_client().propfind(location_path, depth=0, headers = {"Content-Type": "application/xml; charset=utf-8"}) 
         response_soup = BeautifulSoup(response.content)
         response = response_soup.find(re.compile(r'(?i)[a-z0-9]:response'))
         ret = {}
@@ -124,7 +124,7 @@ class TinyDAVClient(object):
         path = self.root
         if self.root == '':
             path = '/'
-        response = self._get_client().propfind(path, depth=0, properties=["quota-available-bytes"])
+        response = self._get_client().propfind(path, depth=0, properties=["quota-available-bytes"], headers = {"Content-Type": "application/xml; charset=utf-8"})
         response_soup = BeautifulSoup(response.content)
         try:
             response = response_soup.find(re.compile(r'(?i)[a-z0-9]:response'))
@@ -140,7 +140,7 @@ class TinyDAVClient(object):
         path = self.root
         if self.root == '':
             path = '/'
-        responses = self._get_client().propfind(path, depth=1)
+        responses = self._get_client().propfind(path, depth=1, headers = {"Content-Type": "application/xml; charset=utf-8"})
         try:
             for status in responses:
                 response_soup = BeautifulSoup(ElementTree.tostring(status.response, 'utf8'))
@@ -156,11 +156,11 @@ class TinyDAVClient(object):
     def upload(self, local_file_path, remote_file_path):
         '''Upload the file at *local_file_path* to the path *remote_file_path* at the remote server'''
         with open(local_file_path) as fd:
-            self._get_client().put(self.root + remote_file_path, fd)
+            self._get_client().put(self.root + remote_file_path, fd, headers = {"Content-Type": "application/xml; charset=utf-8"})
         
     @retry((Exception), tries=1, delay=0)    
     def get_file(self, path_to_file): 
-        response = self._get_client().get(self.root + path_to_file)
+        response = self._get_client().get(self.root + path_to_file, headers = {"Content-Type": "application/xml; charset=utf-8"})
         return response.content 
     
     def _get_client(self):
@@ -173,13 +173,13 @@ class TinyDAVClient(object):
     def move(self, source, target):
         ''':raises: NoSuchFilesytemObjectError if source does not exist'''
         target = quote(target)
-        self._get_client().move(self.root + source, self.root + target, overwrite=True)
+        self._get_client().move(self.root + source, self.root + target, overwrite=True, headers = {"Content-Type": "application/xml; charset=utf-8"})
         
     @retry((Exception), tries=2, delay=1)
     def copy(self, source, target):
         ''':raises: NoSuchFilesytemObjectError if source does not exist'''
         target = quote(target)
-        self._get_client().copy(self.root + source, self.root + target, overwrite=True)
+        self._get_client().copy(self.root + source, self.root + target, overwrite=True, headers = {"Content-Type": "application/xml; charset=utf-8"})
     
     @retry((Exception), tries=2, delay=1)
     def rmdir(self, directory):
@@ -187,7 +187,7 @@ class TinyDAVClient(object):
         :raises: NoSuchFilesytemObjectError if path does not exist'''
         if not directory.endswith('/'):
             directory += '/'
-        self._get_client().delete(self.root + directory, {'Depth':"infinity"})
+        self._get_client().delete(self.root + directory, headers = {'Depth':"infinity", "Content-Type": "application/xml; charset=utf-8"})
     
     @retry((Exception), tries=2, delay=1)
     def rm(self, filepath):
@@ -195,12 +195,12 @@ class TinyDAVClient(object):
         :raises: NoSuchFilesytemObjectError if path does not exist'''
         if filepath.endswith('/'):
             filepath = filepath[0:-1]
-        self._get_client().delete(self.root + filepath).content
+        self._get_client().delete(self.root + filepath, headers = {"Content-Type": "application/xml; charset=utf-8"}).content
         
     @retry((Exception), tries=1, delay=0)
     def mkdir(self, dirpath):
         ''':raises: StoreAccessError if the directory cannot be created'''
-        self._get_client().mkcol(self.root + dirpath).content
+        self._get_client().mkcol(self.root + dirpath, headers = {"Content-Type": "application/xml; charset=utf-8"}).content
     
     @retry((Exception), tries=1, delay=0)
     def get_directory_listing(self, directory):
@@ -208,14 +208,14 @@ class TinyDAVClient(object):
         :raises: NoSuchFilesytemObjectError if path does not exist'''
         if not directory.endswith('/'):
             directory += '/'
-        response = self._get_client().propfind(self.root + directory, depth=1)
+        response = self._get_client().propfind(self.root + directory, depth=1, headers = {"Content-Type": "application/xml; charset=utf-8"})
         if response.content == '':
             return []
         response_soup = BeautifulSoup(response.content)
         multi_response = response_soup.findAll(re.compile(r'(?i)[a-z0-9]:response'))
         ret = []
         for response in multi_response:
-            path = response.find(re.compile(r'(?i)[a-z0-9]:href')).text
+            path = response.find(re.compile(r'(?i)[a-z0-9]:href')).text.encode("utf8")
             path = unquote(path)
             if path.endswith('/'):
                 path = path[:-1]
@@ -241,12 +241,12 @@ class TinyDAVClient(object):
         '''
         if not directory.endswith('/'):
             directory += '/'
-        response = self._get_client().propfind(self.root + directory, depth=1)
+        response = self._get_client().propfind(self.root + directory, depth=1, headers = {"Content-Type": "application/xml; charset=utf-8"})
         response_soup = BeautifulSoup(response.content)
         multi_response = response_soup.findAll(re.compile(r'(?i)[a-z0-9]:response'))
         ret = {}
         for response in multi_response:
-            path = response.find(re.compile(r'(?i)[a-z0-9]:href')).text
+            path = response.find(re.compile(r'(?i)[a-z0-9]:href')).text.encode("utf8")
             path = unquote(path)
             item = {}
             if path.endswith('/'):

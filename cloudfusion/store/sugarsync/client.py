@@ -39,7 +39,7 @@ class SugarsyncClient(object):
         self.token = response.getheader("location")
         partial_tree = {"authorization": {"user": ""}}
         DictXMLParser().populate_dict_with_XML_leaf_textnodes(response.data, partial_tree)
-        self.uid= regSearchString(self.server_url+'user/(.*)', partial_tree['authorization']['user'])
+        self.uid = to_str( regSearchString(self.server_url+'user/(.*)', partial_tree['authorization']['user']) )
         
     
     def create_token(self):
@@ -60,11 +60,11 @@ class SugarsyncClient(object):
         ret = {}
         for dom_collection in dom_collections:
             partial_tree = {"collection": {"displayName": "", "contents": ""}}
-            DictXMLParser().populate_dict_with_XML_leaf_textnodes(str(dom_collection.toxml()), partial_tree)
+            DictXMLParser().populate_dict_with_XML_leaf_textnodes(to_str(dom_collection.toxml()), partial_tree)
             #https://api.sugarsync.com/folder/:sc:7585140:36733670_13234/contents
             user_id = regSearchString(".*:sc:"+self.uid+":(.*)/.*", partial_tree['collection']['contents'])
-            displayname =  partial_tree['collection']['displayName']
-            ret[displayname] = user_id
+            displayname = partial_tree['collection']['displayName']
+            ret[to_str( displayname )] = to_str( user_id )
         return ret
 
     

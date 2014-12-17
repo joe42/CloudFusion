@@ -19,7 +19,7 @@ import random
 from apiclient import errors
 import cloudfusion.third_party.parsedatetime.parsedatetime as pdt
 from string import Template
-from cloudfusion.util.string import get_id_key, get_secret_key
+from cloudfusion.util.string import get_id_key, get_secret_key, to_unicode, to_str
 import httplib2
 from pydrive.files import ApiRequestError
 import tempfile
@@ -142,7 +142,7 @@ get_refresh_token: True
         #print "'%s' in parents and title='%s'" % (parent, title)
         parent_id = self._get_fileobject_id(parent)
         #print "pid:"+repr(parent_id)
-        fileobjects = self.drive.ListFile({'q': "'%s' in parents and title='%s'" % (parent_id, title) }).GetList()
+        fileobjects = self.drive.ListFile({'q': "'%s' in parents and title='%s'" % (parent_id, to_unicode(title)) }).GetList()
         if len(fileobjects) == 0:
             raise NoSuchFilesytemObjectError(path, 404)
         return fileobjects[0]['id']
@@ -324,8 +324,8 @@ get_refresh_token: True
         fileobjects = self.drive.ListFile({'q': "'"+dir_id+"' in parents and trashed=false"}).GetList()
         for fileobj in fileobjects: #fileobj['title'], fileobj['id']
             listing.append(fileobj['title'])
-        DELIMITER = '' if directory == '/' else '/' 
-        listing = [ directory + DELIMITER + basename for basename in listing] 
+        DELIMITER = '' if directory == '/' else '/'
+        listing = [ directory + DELIMITER + to_str(basename) for basename in listing]
         return listing
     
     def _handle_error(self, error, stacktrace, method_name, remaining_tries, *args, **kwargs):

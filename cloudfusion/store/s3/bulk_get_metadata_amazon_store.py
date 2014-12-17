@@ -3,6 +3,7 @@ from cloudfusion.store.bulk_get_metadata import BulkGetMetadata
 import time
 import cloudfusion.third_party.parsedatetime.parsedatetime as pdt
 from cloudfusion.util.exponential_retry import retry
+from cloudfusion.util.string import to_str
 
 
 class BulkGetMetadataAmazonStore(AmazonStore, BulkGetMetadata):
@@ -27,6 +28,7 @@ class BulkGetMetadataAmazonStore(AmazonStore, BulkGetMetadata):
         listing = self.bucket.list(directory[1:], "/")
         for obj in listing:
             path = '/'+obj.name if obj.name[-1] != '/' else '/'+obj.name[:-1]
+            path = to_str(path)
             if path == directory[:-1]:
                 continue
             metadata = {}

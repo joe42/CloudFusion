@@ -191,7 +191,6 @@ class SugarsyncStore(Store):
         """Translate unix style path into Sugarsync style path.
         :raise NoSuchFilesytemObjectError: if there is no such path"""
         self.logger.debug("translating path: %s", path) #+" cache: "+str(self.path_cache)
-        path = to_unicode( path, "utf8")
         if path in self.path_cache:
             return self.path_cache[path]
         if path in self.root_folders.keys():
@@ -199,7 +198,7 @@ class SugarsyncStore(Store):
         elif path == "/":
             return self.root
         else:
-            parent_dir = to_unicode( os.path.dirname(path), "utf8")
+            parent_dir = os.path.dirname(path)
             self.path_cache[parent_dir] = self._translate_path(parent_dir)
             collection = self._parse_collection(self.path_cache[parent_dir])
             self._cache(parent_dir, collection) 
@@ -214,8 +213,8 @@ class SugarsyncStore(Store):
         if d[-1] != "/":
             d += "/"
         for item in collection:
-            self.path_cache[ d+to_unicode( item["name"], "utf8") ] = item["reference"]
-            listing.append(d+to_unicode( item["name"], "utf8"))
+            self.path_cache[ d+ item["name"] ] = item["reference"]
+            listing.append(d+ item["name"])
         self.__set_dir_listing(directory, listing)
             
     def _parse_collection(self, translated_path):
@@ -235,11 +234,11 @@ class SugarsyncStore(Store):
         for collection in xml_tree.documentElement.getElementsByTagName("file"): 
             item = {}
             item["is_dir"] = False
-            item["name"] = collection.getElementsByTagName("displayName")[0].firstChild.nodeValue
-            item["size"] = collection.getElementsByTagName("size")[0].firstChild.nodeValue
-            item["lastModified"] = collection.getElementsByTagName("lastModified")[0].firstChild.nodeValue
-            item["presentOnServer"] = collection.getElementsByTagName("lastModified")[0].firstChild.nodeValue
-            reference_url = collection.getElementsByTagName("ref")[0].firstChild.nodeValue
+            item["name"] = to_str( collection.getElementsByTagName("displayName")[0].firstChild.nodeValue )
+            item["size"] = to_str( collection.getElementsByTagName("size")[0].firstChild.nodeValue )
+            item["lastModified"] = to_str( collection.getElementsByTagName("lastModified")[0].firstChild.nodeValue )
+            item["presentOnServer"] = to_str( collection.getElementsByTagName("lastModified")[0].firstChild.nodeValue )
+            reference_url = to_str( collection.getElementsByTagName("ref")[0].firstChild.nodeValue )
             reference_uid = regSearchString('.*:(.*)', reference_url)
             item["reference"] = reference_uid
             ret.append(item)
@@ -249,9 +248,9 @@ class SugarsyncStore(Store):
         ret = []
         for collection in xml_tree.documentElement.getElementsByTagName("collection"): 
             item = {}
-            item["is_dir"] = collection.getAttribute("type") == "folder"
-            item["name"] = collection.getElementsByTagName("displayName")[0].firstChild.nodeValue.encode('utf8')
-            reference_url = collection.getElementsByTagName("ref")[0].firstChild.nodeValue
+            item["is_dir"] = to_str( collection.getAttribute("type") ) == "folder"
+            item["name"] = to_str( collection.getElementsByTagName("displayName")[0].firstChild.nodeValue )
+            reference_url = to_str( collection.getElementsByTagName("ref")[0].firstChild.nodeValue )
             reference_uid = regSearchString('.*:(.*)', reference_url)
             item["reference"] = reference_uid
             ret.append(item)

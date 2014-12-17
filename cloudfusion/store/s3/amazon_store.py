@@ -15,7 +15,8 @@ from cloudfusion.util.exponential_retry import retry
 from cloudfusion.mylogging import db_logging_thread
 import sys
 from ConfigParser import DuplicateSectionError
-from cloudfusion.util.string import get_id_key, get_secret_key, get_uuid
+from cloudfusion.util.string import get_id_key, get_secret_key, get_uuid,\
+    to_unicode, to_str
 
 class AmazonStore(Store):
     '''Subclass of Store implementing an interface to the Amazon S3 storage.
@@ -172,13 +173,13 @@ class AmazonStore(Store):
         path_to_dest += '/'  
         path_to_src += '/'  
         listing = self.bucket.list(path_to_src, '/')  
-        directories = [d for d in listing if self._is_dir(d)]
-        files = [f for f in listing if not self._is_dir(d)]
+        directories = [to_str(d) for d in listing if self._is_dir(d)]
+        files = [to_str(f) for f in listing if not self._is_dir(d)]
         for key in directories:
-            new_path = path_to_dest+key.name.split(path_to_src,1)[1]
+            new_path = path_to_dest+to_str(key.name).split(path_to_src,1)[1]
             self.create_directory('/'+new_path[:-1])
         for key in files:
-            new_path = path_to_dest+key.name.split(path_to_src,1)[1]
+            new_path = path_to_dest+to_str(key.name).split(path_to_src,1)[1]
             key.copy(self.bucket, new_path)
     
     @retry((Exception), tries=1)
@@ -200,12 +201,12 @@ class AmazonStore(Store):
         directories = [d for d in listing if self._is_dir(d)]
         files = [f for f in listing if not self._is_dir(d)]
         for key in directories:
-            new_path = path_to_dest+key.name.split(path_to_src,1)[1]
+            new_path = path_to_dest+to_str(key.name).split(path_to_src,1)[1]
             self.create_directory('/'+new_path[:-1])
         for key in files:
-            new_path = path_to_dest+key.name.split(path_to_src,1)[1]
+            new_path = path_to_dest+to_str(key.name).split(path_to_src,1)[1]
             key.copy(self.bucket, new_path)
-        self.bucket.delete_keys([key.name for key in listing])
+        self.bucket.delete_keys([to_unicode(key.name) for key in listing])
     
     def get_overall_space(self):
         self.logger.debug("retrieving all space")
@@ -225,8 +226,8 @@ class AmazonStore(Store):
         directory += '/' if directory != '/' else ''
         listing = self.bucket.list(directory[1:], "/") 
         if directory != '/':            
-            listing = [o for o in listing if o.name != directory[1:]]           
-        listing = ['/'+o.name if o.name[-1] != '/' else '/'+o.name[:-1] for o in listing] #remove trailing slash and add preceding slash
+            listing = [to_str(o) for o in listing if to_str(o.name) != directory[1:]]           
+        listing = [to_str('/'+o.name) if o.name[-1] != '/' else '/'+to_str(o.name[:-1]) for o in listing] #remove trailing slash and add preceding slash
         return listing
 
     def _handle_error(self, error, stacktrace, method_name, remaining_tries, *args, **kwargs):
@@ -273,7 +274,7 @@ class AmazonStore(Store):
     def _is_dir(self, key):
         ''':param key: instance of boto's Key class
         :returns: True iff key is a directory '''
-        return key.name[-1] == '/' or key.name.endswith('_$folder$') or key.get_metadata('Content-Type') == 'application/x-directory'
+        return to_str(key.name)[-1] == '/' or to_str(key.name).endswith('_$folder$') or key.get_metadata('Content-Type') == 'application/x-directory'
     
     def _get_time_difference(self):
         self.logger.debug("getting time difference")

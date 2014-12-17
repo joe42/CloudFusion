@@ -20,7 +20,7 @@ import atexit
 from cloudfusion.util.exponential_retry import retry
 import re
 import hashlib
-from cloudfusion.util.string import get_id_key, get_secret_key
+from cloudfusion.util.string import get_id_key, get_secret_key, to_str
 '''  requests bug with requests 2.0.1, so use local requests version 1.2.3:
 #    File "/usr/local/lib/python2.7/dist-packages/requests/cookies.py", line 311, in _find_no_duplicates
 #    raise KeyError('name=%r, domain=%r, path=%r' % (name, domain, path))
@@ -377,9 +377,11 @@ class DropboxStore(Store):
         If a new file is stored to path, the response from dropbox may say it was stored in to resp_path, instead.
         This means there has already been a file stored to path and instead of overwriting it, the new file was stored to resp_path, instead.
         """
+        resp_path = to_str(resp_path)
         if resp_path != path:
             if not self.exists('/overwritten'):
                 self.create_directory('/overwritten')
+            
             self.move(path, '/overwritten' + path)
             self.move(resp_path, path)
 
@@ -535,7 +537,7 @@ class DropboxStore(Store):
             if resp.status == HTTP_STATUS.NOT_CHANGED: 
                 self.logger.debug("retrieving listing from cache %s", directory)
                 ret = self.dir_listing_cache[directory]['dir_listing']
-                return ret.keys()
+                return [to_str(path) for path in ret.keys()]
             else:
                 msg= "could not get directory listing for " +directory
                 self._log_http_error("get_directory_listing", None, resp, msg)
@@ -544,7 +546,7 @@ class DropboxStore(Store):
         self.dir_listing_cache[directory] = {}
         self.dir_listing_cache[directory]['hash'] = resp["hash"]
         self.dir_listing_cache[directory]['dir_listing'] = ret
-        return ret.keys()
+        return [to_str(path) for path in ret.keys()]
     
     def _parse_dir_list(self, data):
         #OverflowError or ValueError
