@@ -118,7 +118,7 @@ class PersistentLRUCache(LRUCache):
         The temporary file needs to be closed if it is not used anymore
         :returns: temporary file object with the value """
         ret = tempfile.NamedTemporaryFile(delete=False, suffix="_persistent_lru")
-        filepath = super( PersistentLRUCache, self ).get_value(key)
+        filepath = super( PersistentLRUCache, self ).peek(key)
         with open(filepath) as fh:
             while True:
                 data = fh.read(1000000)
