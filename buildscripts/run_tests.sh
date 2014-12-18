@@ -67,6 +67,8 @@ bash -c 'nosetests -v -s -x cloudfusion/tests/store_test_webdav2.py  &>test5_log
 pid5=$!
 nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py -I store_test2.py  -I store_test_webdav.py  -I store_test_webdav2.py -I transparent_store_test_no_sync.py -I transparent_store_test_with_sync.py -I store_test_gdrive.py
 
+bash -c '(for i in {1..3} ; do sleep 180; echo -e "\nkeep alive\n"; done)' &
+
 exit_status=0
 #wait $pid1    #wait for test process to end
 #(exit $?)     #set exit code to stop the script in case the test failed
