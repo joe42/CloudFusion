@@ -51,8 +51,8 @@ perl -pi -e "s/password =.*/password =${WEBDAV4_PWD}/g" cloudfusion/config/Webda
 perl -pi -e "s/bucket_name =.*/bucket_name = cloudfusion/g" cloudfusion/config/Google_testing.ini
 perl -pi -e "s/bucket_name =.*/bucket_name = cloudfusion/g" cloudfusion/config/AmazonS3_testing.ini
 
-# This tests is interdependent, so wait before store_test, and store_test2 begin
-nosetests -v -s -x cloudfusion/tests/transparent_store_test_no_sync.py
+# This tests is interdependent, so wait before transparent_store_test_no_sync.py begins
+nosetests -v -s -x cloudfusion/tests/store_test_webdav2.py
 
 #options: -x stop on first error, -v verbose, -s output stdout messgages immediately
 #bash -c 'nosetests -v -s -x cloudfusion/tests/db_logging_thread_test.py &>test1_log; status=$?; exit $status' & #about 18 Min runtime
@@ -63,7 +63,7 @@ bash -c 'nosetests -v -s -x cloudfusion/tests/store_test2.py  &>test3_log; statu
 pid3=$!
 bash -c 'nosetests -v -s -x cloudfusion/tests/store_test_webdav.py  &>test4_log; status=$?; exit $status' &                  
 pid4=$!
-bash -c 'nosetests -v -s -x cloudfusion/tests/store_test_webdav2.py  &>test5_log; status=$?; exit $status' &                  
+bash -c 'nosetests -v -s -x cloudfusion/tests/transparent_store_test_no_sync.py &>test5_log; status=$?; exit $status' &                  
 pid5=$!
 nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py -I store_test2.py  -I store_test_webdav.py  -I store_test_webdav2.py -I transparent_store_test_no_sync.py -I transparent_store_test_with_sync.py -I store_test_gdrive.py
 
