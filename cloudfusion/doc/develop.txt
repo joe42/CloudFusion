@@ -440,7 +440,10 @@ Then call::
 	make -f cloudfusion/doc/Makefile html
 	
 * -f means to override existing files
-	
+
+Also, to be able to use the generated stylesheets run::
+
+	mv cloudfusion/doc/_build/html/_static cloudfusion/doc/_build/html/static
 
 Tests
 ---------------------
@@ -461,32 +464,23 @@ of the configuration files that are required for each service.
 :GMX: Webdav_gmx_testing.ini
 :T-Online: Webdav_tonline_testing.ini
 
-To run all tests call::
+Simple tests that need no setup can be run with::
 
-	nosetests -v -s cloudfusion.tests.store_test
+	nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py -I store_tests.py -I transparent_store_test_with_sync.py -I store_test_gdrive.py
 
-Individual test can be run as well::
-   
-   #run only tests for Dropbox and Sugarsync:
-   nosetests -v -s cloudfusion.tests.store_test
-   
-   #run only tests for Amazon S3 and Google Storage:
-   nosetests -v -s cloudfusion.tests.store_test2
-   
-   #run only tests for GMX and T-Online:
-   nosetests -v -s cloudfusion.tests.store_test_webdav
-   
-   #run only tests for box.com and yandex.com:
-   nosetests -v -s cloudfusion.tests.store_test_webdav2
-   
-   #running several individual tests:
-   nosetests -v -s cloudfusion.tests.cache_test cloudfusion.tests.lru_cache_test  cloudfusion.tests.persistent_lru_cache_test
+See the store_tests.py_ module on how to run provider specific tests. For example, the module contains a test for the local harddrive store which can be executed with::
+
+	nosetests -v -s -x cloudfusion.tests.store_tests:test_local 
+
+.. _store_tests.py_: tests.html#module-cloudfusion.tests.store_tests
 
 -v and -s are optional flags for verbose output and output of anything printed to stdout.
 
 To run tests automagically during development, as soon as you change something call::
 
 	nosy -c cloudfusion/config/nosy.cfg 
+
+The configuration file nosy.cfg needs to be adapted first.
 
 .. include:: modules.txt
 
