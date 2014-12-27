@@ -10,14 +10,23 @@ The tests can be executed in parallel by calling each test individually
 in a separate nosetests process like this:
 
 nosetests -v -s -x cloudfusion.tests.store_tests:test_dropbox &
+
 nosetests -v -s -x cloudfusion.tests.store_tests:test_sugarsync &
+
 nosetests -v -s -x cloudfusion.tests.store_tests:test_local &
+
 nosetests -v -s -x cloudfusion.tests.store_tests:test_amazon &
+
 nosetests -v -s -x cloudfusion.tests.store_tests:test_google &
+
 nosetests -v -s -x cloudfusion.tests.store_tests:test_gdrive &
+
 nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_tonline &
+
 nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_gmx &
+
 nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_box &
+
 nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_yandex &
 
 
