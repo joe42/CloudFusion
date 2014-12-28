@@ -88,9 +88,6 @@ class LocalHDStore(Store):
     @retry((Exception))
     def create_directory(self, directory):
         self.logger.info("creating directory %s", directory)
-        if directory.find("moving") != -1:
-            import ipdb
-            #ipdb.set_trace()
         try:
             os.mkdir(self.root+directory)
         except OSError, e:
