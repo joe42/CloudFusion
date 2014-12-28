@@ -233,7 +233,7 @@ class GoogleStore(Store):
         for key in files:
             new_path = path_to_dest+key.name.split(path_to_src,1)[1]
             key.copy(self.bucket, new_path)
-        gsutil('rm', 'gs://cloudfusion/%s**' % path_to_src )
+        gsutil('rm', 'gs://%s/%s**' % (self.bucket_name, path_to_src) )
     
     def get_overall_space(self):
         self.logger.debug("retrieving all space")
