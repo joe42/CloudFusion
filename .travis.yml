@@ -3,10 +3,10 @@ python:
 - '2.6'
 install: true
 script:
-- sh buildscripts/run_tests.sh
+- bash buildscripts/run_tests.sh
 after_success:
-- sh buildscripts/generate_documentation.sh
-- sh buildscripts/publish_developer_branch.sh
+- bash buildscripts/generate_documentation.sh
+- bash buildscripts/publish_developer_branch.sh
 branches:
   only:
   - development

@@ -3,6 +3,44 @@
 #Running sequences in background do not seem to work using paranthesis in travis-ci.
 #Instead, use a subshell.
 
+### Function definition
+
+# Capture all output of the command passed as an argument and output it once
+# the command is finished. The command is run in background.
+# If the exit status is not zero, the status is written to /tmp/exit_status.
+# The output is captured to a temporary file ending in .running_process_log.
+capture_output () {
+    TMP=$(mktemp -d).running_process_log
+    bash -c "$1 &>$TMP;
+        status=\$?;
+        cat $TMP;
+        rm $TMP; 
+        if [ \$status -ne 0 ] ; then 
+            echo \$status > /tmp/exit_status;
+        fi;" &
+}
+
+cleanup_and_exit () {
+    echo "Exit tests with return value $1."
+    mv cloudfusion/config/Dropbox.ini.bck cloudfusion/config/Dropbox.ini
+    rm cloudfusion/config/sugarsync_testing.ini
+    rm cloudfusion/config/Google_testing.ini
+    rm cloudfusion/config/AmazonS3_testing.ini
+    rm cloudfusion/config/Webdav_gmx_testing.ini
+    rm cloudfusion/config/Webdav_tonline_testing.ini
+
+    rm cloudfusion/config/Webdav_box_testing.ini
+    rm cloudfusion/config/Webdav_yandex_testing.ini
+
+    #clean up
+    cd $HOME
+    rm -fr development
+    
+    exit $1
+}
+
+### End function definition
+
 #configure git user for push
 git config --global user.email "travis@travis-ci.org"
 git config --global user.name "Travis" 
@@ -51,149 +89,58 @@ perl -pi -e "s/password =.*/password =${WEBDAV4_PWD}/g" cloudfusion/config/Webda
 perl -pi -e "s/bucket_name =.*/bucket_name = cloudfusion42/g" cloudfusion/config/Google_testing.ini
 perl -pi -e "s/bucket_name =.*/bucket_name = cloudfusion42/g" cloudfusion/config/AmazonS3_testing.ini
 
-# The test modules must be executed sequentially, but the test cases inside the module can run concurrently
-#options: -x stop on first error, -v verbose, -s output stdout messgages immediately
-exit_status=0
+# The test modules must be executed sequentially, but the test cases inside the module can run concurrently.
+# Each test runs in background, and outputs the results immediately after it has finished. Then it exists
+# with the exit status of nosetests to reflect if the test has succeeded or not, in which case the trap 
+# defined above is triggered and the script is aborted.
+
+# nosetests options: -x stop on first error, -v verbose, -s output stdout messgages immediately
 
 #bash -c 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_chunk_cache_store &>test1_log; status=$?; exit $status' & 
-#pid1=$!
 #bash -c 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_chunk_metadata_cache_store &>test2_log; status=$?; exit $status' & 
-#pid2=$!
 #bash -c 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_cache_store &>test3_log; status=$?; exit $status' & 
-#pid3=$!
 #bash -c 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_metadata_cache_store &>test4_log; status=$?; exit $status' & 
-#pid4=$!
-#
-#wait $pid1
-#status=$?
-#if [ "$status" -ne "0" ] ; then 
-#    exit_status=$status
-#fi
-#cat test1_log
-#wait $pid2
-#status=$?
-#if [ "$status" -ne "0" ] ; then 
-#    exit_status=$status
-#fi
-#cat test2_log
-#wait $pid3
-#status=$?
-#if [ "$status" -ne "0" ] ; then 
-#    exit_status=$status
-#fi
-#cat test3_log
-#wait $pid4
-#status=$?
-#if [ "$status" -ne "0" ] ; then 
-#    exit_status=$status
-#fi
-#cat test4_log
 
 
-#options: -x stop on first error, -v verbose, -s output stdout messgages immediately
 #bash -c 'nosetests -v -s -x cloudfusion/tests/db_logging_thread_test.py &>test1_log; status=$?; exit $status' & #about 18 Min runtime
 #pid1=$!
 #bash -c 'nosetests -v -s -x cloudfusion/tests/synchronize_proxy_test.py &>test2_log; status=$?; exit $status' & #about 17 Min runtime
 #pid2=$!                          
-bash -c 'nosetests -v -s -x cloudfusion.tests.store_tests:test_dropbox  &>test5_log; status=$?;exit $status' &    #about 20 Min runtime                  
-pid5=$!
-bash -c 'nosetests -v -s -x cloudfusion.tests.store_tests:test_sugarsync  &>test6_log; status=$?; exit $status' &                  
-pid6=$!
-bash -c 'nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_yandex &>test7_log; status=$?; exit $status' &                  
-pid7=$!
-bash -c 'nosetests -v -s -x cloudfusion.tests.store_tests:test_local &>test8_log; status=$?; exit $status' &                  
-pid8=$!
-bash -c 'nosetests -v -s -x cloudfusion.tests.store_tests:test_amazon &>test9_log; status=$?; exit $status' &                  
-pid9=$!
-bash -c 'nosetests -v -s -x cloudfusion.tests.store_tests:test_google &>test10_log; status=$?; exit $status' &                  
-pid10=$!
-bash -c 'nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_tonline &>test11_log; status=$?; exit $status' &                  
-pid11=$!
-bash -c 'nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_gmx &>test12_log; status=$?; exit $status' &                  
-pid12=$!
-bash -c 'nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_box &>test13_log; status=$?; exit $status' &                  
-pid13=$!
-nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py -I store_tests.py -I transparent_store_test_with_sync.py -I store_test_gdrive.py -I store_sync_thread.py
-
-bash -c '(for i in {1..3} ; do sleep 180; echo -e "\nkeep alive\n"; done)' &
-
-wait $pid5
-status=$?
-if [ "$status" -ne "0" ] ; then 
-    exit_status=$status
-fi
-cat test5_log
-wait $pid6
-status=$?
-if [ "$status" -ne "0" ] ; then 
-    exit_status=$status
-fi
-cat test6_log
-wait $pid7
-status=$?
-if [ "$status" -ne "0" ] ; then 
-    exit_status=$status
-fi
-cat test7_log
-wait $pid8
-status=$?
-if [ "$status" -ne "0" ] ; then 
-    exit_status=$status
-fi
-cat test8_log
-wait $pid9
-status=$?
-if [ "$status" -ne "0" ] ; then 
-    exit_status=$status
-fi
-cat test9_log
-wait $pid10
-status=$?
-if [ "$status" -ne "0" ] ; then 
-    exit_status=$status
-fi
-cat test10_log
-wait $pid11
-status=$?
-if [ "$status" -ne "0" ] ; then 
-    exit_status=$status
-fi
-cat test11_log
-wait $pid12
-status=$?
-if [ "$status" -ne "0" ] ; then 
-    exit_status=$status
-fi
-cat test12_log
-wait $pid13
-status=$?
-if [ "$status" -ne "0" ] ; then 
-    exit_status=$status
-fi
-cat test13_log
-wait $pid14
-status=$?
-if [ "$status" -ne "0" ] ; then 
-    exit_status=$status
-fi
-cat test14_log
+capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_dropbox'
+capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_sugarsync'
+capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_yandex'
+capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_local'
+capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_amazon'
+capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_google'
+capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_tonline'
+capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_gmx'
+capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_box'
+capture_output 'nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py -I store_tests.py -I transparent_store_test_with_sync.py -I store_test_gdrive.py'
 
 
-mv cloudfusion/config/Dropbox.ini.bck cloudfusion/config/Dropbox.ini
-rm cloudfusion/config/sugarsync_testing.ini
-rm cloudfusion/config/Google_testing.ini
-rm cloudfusion/config/AmazonS3_testing.ini
-rm cloudfusion/config/Webdav_gmx_testing.ini
-rm cloudfusion/config/Webdav_tonline_testing.ini
+# Keep travis session alive by producing output for 20 minutes.
+# If exit status of job in background is non-zero, exit.
+for i in {1..20} ; do 
+    sleep 60; # 1 Min
+    if [ -e /tmp/exit_status ] ; then 
+        exit_status=$(cat /tmp/exit_status) 
+        echo 'A test failed.'
+        cleanup_and_exit $exit_status
+    fi
+    # If there is no background job anymore:
+    if ! jobs %% &>/dev/null ; then
+        sleep 10;
+        echo 'All tests have finished successfully.'
+        cleanup_and_exit 0
+    fi
+    echo -e "."; 
+done
 
+echo "Waited over 20 minutes for tests to finish - exiting."
+echo "Running jobs:"
+jobs
+echo "Incomplete log files:"
+cat /tmp/*.running_process_log
 
-rm cloudfusion/config/Webdav_box_testing.ini
-rm cloudfusion/config/Webdav_yandex_testing.ini
-
-#clean up
-cd $HOME
-rm -fr development
-
-
-exit $exit_status
+cleanup_and_exit 1
 
