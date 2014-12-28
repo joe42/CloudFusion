@@ -110,9 +110,10 @@ class LocalHDStore(Store):
         self.logger.info("moving %s to %s", path_to_src, path_to_dest)
         if not os.path.isdir(self.root+path_to_src):
             shutil.copyfile(self.root+path_to_src, self.root+path_to_dest)
+            self.delete(path_to_src)
         else:
             shutil.copytree(self.root+path_to_src, self.root+path_to_dest)
-        self.delete(path_to_src)
+            self.delete(path_to_src, is_dir=True)
     
     def get_overall_space(self):
         self.logger.debug("retrieving all space")
