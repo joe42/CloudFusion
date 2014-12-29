@@ -94,13 +94,9 @@ def test_webdav_tonline():
     global store 
     config = get_webdav_tonline_config()
     store = BulkGetMetadataWebdavStore(config)
-    transparent_store = TransparentMultiprocessingCachingStore(store)
     for test in _generate_store_tests(store, "BulkGetMetadataWebdavStore tonline"):
         yield test
     for test in _generate_bulk_get_metadata_tests(store, "BulkGetMetadataWebdavStore tonline"):
-        yield test
-    for test in _generate_store_tests(transparent_store, "TransparentCachingStore  tonline", 
-                                      include_space_tests=False):
         yield test
 
 @with_setup(teardown=teardown_func)
