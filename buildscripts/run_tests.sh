@@ -112,7 +112,7 @@ capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_yan
 capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_local'
 capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_amazon'
 capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_google'
-capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_tonline'
+# capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_tonline' # This test takes too long on Travis CI.
 capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_gmx'
 capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_box'
 capture_output 'nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py -I store_tests.py -I transparent_store_test_with_sync.py -I store_test_gdrive.py'
