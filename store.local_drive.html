@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The local_hd_store Module &mdash; CloudFusion 0.01 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
+    <link rel="up" title="Subpackages" href="store.html" />
+    <link rel="next" title="The google_store Module" href="store.gs.html" />
+    <link rel="prev" title="The bulk_get_metadata_amazon_store Module" href="store.s3.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="store.gs.html" title="The google_store Module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="store.s3.html" title="The bulk_get_metadata_amazon_store Module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
+          <li><a href="develop.html" >Developers documentation</a> &raquo;</li>
+          <li><a href="store.html" accesskey="U">Subpackages</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-cloudfusion.store.local_drive.local_hd_store">
+<span id="the-local-hd-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">local_hd_store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.local_drive.local_hd_store" title="Permalink to this headline">¶</a></h1>
+<p>Created on 08.04.2011</p>
+<p>&#64;author: joe</p>
+<dl class="class">
+<dt id="cloudfusion.store.local_drive.local_hd_store.LocalHDStore">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.local_drive.local_hd_store.</tt><tt class="descname">LocalHDStore</tt><big>(</big><em>config</em><big>)</big><a class="headerlink" href="#cloudfusion.store.local_drive.local_hd_store.LocalHDStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="store.html#cloudfusion.store.store.Store" title="cloudfusion.store.store.Store"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.store.Store</span></tt></a></p>
+<p>Subclass of Store implementing an interface to the local file system.</p>
+<dl class="method">
+<dt id="cloudfusion.store.local_drive.local_hd_store.LocalHDStore._get_time_difference">
+<tt class="descname">_get_time_difference</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.local_drive.local_hd_store.LocalHDStore._get_time_difference" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.local_drive.local_hd_store.LocalHDStore._handle_error">
+<tt class="descname">_handle_error</tt><big>(</big><em>error</em>, <em>stacktrace</em>, <em>method_name</em>, <em>remaining_tries</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.local_drive.local_hd_store.LocalHDStore._handle_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used by retry decorator to react to errors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.local_drive.local_hd_store.LocalHDStore.account_info">
+<tt class="descname">account_info</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.local_drive.local_hd_store.LocalHDStore.account_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.local_drive.local_hd_store.LocalHDStore.create_directory">
+<tt class="descname">create_directory</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.local_drive.local_hd_store.LocalHDStore.create_directory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.local_drive.local_hd_store.LocalHDStore.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.local_drive.local_hd_store.LocalHDStore.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.local_drive.local_hd_store.LocalHDStore.duplicate">
+<tt class="descname">duplicate</tt><big>(</big><em>path_to_src</em>, <em>path_to_dest</em><big>)</big><a class="headerlink" href="#cloudfusion.store.local_drive.local_hd_store.LocalHDStore.duplicate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.local_drive.local_hd_store.LocalHDStore.get_directory_listing">
+<tt class="descname">get_directory_listing</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.local_drive.local_hd_store.LocalHDStore.get_directory_listing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.local_drive.local_hd_store.LocalHDStore.get_file">
+<tt class="descname">get_file</tt><big>(</big><em>path_to_file</em><big>)</big><a class="headerlink" href="#cloudfusion.store.local_drive.local_hd_store.LocalHDStore.get_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.local_drive.local_hd_store.LocalHDStore.get_logging_handler">
+<tt class="descname">get_logging_handler</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.local_drive.local_hd_store.LocalHDStore.get_logging_handler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.local_drive.local_hd_store.LocalHDStore.get_max_filesize">
+<tt class="descname">get_max_filesize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.local_drive.local_hd_store.LocalHDStore.get_max_filesize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return maximum number of bytes per file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.local_drive.local_hd_store.LocalHDStore.get_metadata">
+<tt class="descname">get_metadata</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.local_drive.local_hd_store.LocalHDStore.get_metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.local_drive.local_hd_store.LocalHDStore.get_name">
+<tt class="descname">get_name</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.local_drive.local_hd_store.LocalHDStore.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.local_drive.local_hd_store.LocalHDStore.get_overall_space">
+<tt class="descname">get_overall_space</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.local_drive.local_hd_store.LocalHDStore.get_overall_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.local_drive.local_hd_store.LocalHDStore.get_used_space">
+<tt class="descname">get_used_space</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.local_drive.local_hd_store.LocalHDStore.get_used_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.local_drive.local_hd_store.LocalHDStore.move">
+<tt class="descname">move</tt><big>(</big><em>path_to_src</em>, <em>path_to_dest</em><big>)</big><a class="headerlink" href="#cloudfusion.store.local_drive.local_hd_store.LocalHDStore.move" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.local_drive.local_hd_store.LocalHDStore.store_fileobject">
+<tt class="descname">store_fileobject</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.local_drive.local_hd_store.LocalHDStore.store_fileobject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="store.s3.html"
+                        title="previous chapter">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_amazon_store</span></tt> Module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="store.gs.html"
+                        title="next chapter">The <tt class="docutils literal"><span class="pre">google_store</span></tt> Module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/store.local_drive.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="store.gs.html" title="The google_store Module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="store.s3.html" title="The bulk_get_metadata_amazon_store Module"
+             >previous</a> |</li>
+        <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
+          <li><a href="develop.html" >Developers documentation</a> &raquo;</li>
+          <li><a href="store.html" >Subpackages</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Johannes Müller.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
