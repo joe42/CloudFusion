@@ -162,8 +162,9 @@ def _test_get_file(io_api):
     second_resp = io_api.get_file(REMOTE_TESTDIR+"/"+REMOTE_TESTFILE_NAME)
     _delete_file(io_api, REMOTE_TESTFILE_NAME, REMOTE_TESTDIR)
     assert first_resp == second_resp, "first response should be same as second response, but %s != %s" % (first_resp, second_resp)
-    assert len(first_resp) == 4, "length of file from remote side should be 4 bytes, since in testfile I stored the word 'test' but is %s bytes" % len(first_resp)
-    
+    with open(LOCAL_TESTFILE_PATH) as file:
+        assert file.read() == first_resp, "Remote file differs from the local file."
+      
 def _test_fail_on_is_dir(io_api): 
     assert_raises(NoSuchFilesytemObjectError, io_api.is_dir, REMOTE_NON_EXISTANT_FILE)
     assert_raises(NoSuchFilesytemObjectError, io_api.is_dir, REMOTE_NON_EXISTANT_DIR)
@@ -202,7 +203,7 @@ def _test_get_bytes(io_api):
     finish_upload(io_api)
     res = io_api.get_bytes(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME)
     io_api.delete(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME, False)
-    assert res == 4, "stored file should be 4 bytes big, but has a size of %s bytes" % res
+    assert res > 0 and res < 10, "stored file should be between one and ten bytes big, but has a size of %s bytes" % res
 
 def _test_is_dir(io_api):
     assert io_api.is_dir(REMOTE_TESTDIR) == True

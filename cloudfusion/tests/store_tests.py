@@ -312,8 +312,9 @@ def _test_get_file(store):
     second_resp = store.get_file(REMOTE_TESTDIR+"/"+REMOTE_TESTFILE_NAME)
     _delete_file(store, REMOTE_TESTFILE_NAME, REMOTE_TESTDIR)
     assert first_resp == second_resp, "first response should be same as second response, but %s != %s" % (first_resp, second_resp)
-    assert len(first_resp) == 4, "length of file from remote side should be 4 bytes, since in testfile I stored the word 'test' but is %s bytes" % len(first_resp)
-    
+    with open(LOCAL_TESTFILE_PATH) as file:
+        assert file.read() == first_resp, "Remote file differs from the local file."
+            
 def _test_fail_on_is_dir(store): 
     assert_raises(NoSuchFilesytemObjectError, store.is_dir, REMOTE_NON_EXISTANT_FILE)
     assert_raises(NoSuchFilesytemObjectError, store.is_dir, REMOTE_NON_EXISTANT_DIR)
@@ -348,7 +349,7 @@ def _test_get_bytes(store):
     store.store_file(LOCAL_TESTFILE_PATH, REMOTE_TESTDIR) 
     res = store.get_bytes(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME)
     store.delete(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME, False)
-    assert res == 4, "stored file should be 4 bytes big, but has a size of %s bytes" % res
+    assert res > 0 and res < 10, "stored file should be between one and ten bytes big, but has a size of %s bytes" % res
 
 def _test_is_dir(store):
     assert store.is_dir(REMOTE_TESTDIR) == True
@@ -429,7 +430,7 @@ def _test_bulk_get_metadata(store):
                 assert 'modified' in metadata[path]
             else:
                 assert metadata[path]['is_dir'] == False
-                assert metadata[path]['bytes'] == 4
+                assert metadata[path]['bytes'] > 0 and metadata[path]['bytes'] < 10, "stored file should be between one and ten bytes big, but has a size of %s bytes" % metadata[path]['bytes']
                 assert 'modified' in metadata[path]  
 
 def _test_move_directory(store):
