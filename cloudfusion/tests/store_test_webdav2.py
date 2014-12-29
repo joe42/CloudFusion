@@ -68,65 +68,66 @@ def tearDown():
  
 def test_io_apis():
     for io_api in io_apis:
+        file_and_store_name = os.path.basename(__file__) + " - " + io_api.get_name()+": " 
 #        test = partial(_test_with_root_filepath, io_api)
-#        test.description = io_api.get_name()+":"+" "+"fail on determining if file system object is a file or a directory"
+#        test.description = file_and_store_name+"fail on determining if file system object is a file or a directory"
 #        yield (test, ) 
         test = partial(_test_bulk_get_metadata, io_api)
-        test.description = io_api.get_name()+":"+" "+"get bulk metadata"
+        test.description = file_and_store_name+"get bulk metadata"
         yield (test, ) 
         test = partial(_test_fail_on_is_dir, io_api)
-        test.description = io_api.get_name()+":"+" "+"fail on determining if file system object is a file or a directory"
+        test.description = file_and_store_name+"fail on determining if file system object is a file or a directory"
         yield (test, ) 
         test = partial(_test_fail_on_get_bytes, io_api)
-        test.description = io_api.get_name()+":"+" "+"fail on getting number of bytes from file"
+        test.description = file_and_store_name+"fail on getting number of bytes from file"
         yield (test, ) 
         test = partial(_test_fail_on_get_modified, io_api)
-        test.description = io_api.get_name()+":"+" "+"fail on getting modified time"
+        test.description = file_and_store_name+"fail on getting modified time"
         yield (test, ) 
         test = partial(_test_create_delete_directory, io_api)
-        test.description = io_api.get_name()+":"+" "+"creating and deleting directory"
+        test.description = file_and_store_name+"creating and deleting directory"
         yield (test, )
         test = partial(_test_store_delete_file, io_api)
-        test.description = io_api.get_name()+":"+" "+"creating and deleting file"
+        test.description = file_and_store_name+"creating and deleting file"
         yield (test, )
         test = partial(_test_get_file, io_api)
-        test.description = io_api.get_name()+":"+" "+"getting file"
+        test.description = file_and_store_name+"getting file"
         yield (test, )
         test = partial(_test_duplicate, io_api)
-        test.description = io_api.get_name()+":"+" "+"copying (duplicating) file and directory"
+        test.description = file_and_store_name+"copying (duplicating) file and directory"
         yield (test, )
         test = partial(_test_move_directory, io_api)
-        test.description = io_api.get_name()+":"+" "+"moving directory"
+        test.description = file_and_store_name+"moving directory"
         yield (test, )
         test = partial(_test_move_file, io_api)
-        test.description = io_api.get_name()+":"+" "+"moving file"
+        test.description = file_and_store_name+"moving file"
         yield (test, )
         test = partial(_test_get_bytes, io_api)
-        test.description = io_api.get_name()+":"+" "+"getting number of bytes from file"
+        test.description = file_and_store_name+"getting number of bytes from file"
         yield (test, )
         test = partial(_test_is_dir, io_api)
-        test.description = io_api.get_name()+":"+" "+"determine if file system object is a file or a directory"
+        test.description = file_and_store_name+"determine if file system object is a file or a directory"
         yield (test, )
         test = partial(_test_account_info, io_api)
-        test.description = io_api.get_name()+":"+" "+"getting account info"
+        test.description = file_and_store_name+"getting account info"
         yield (test, )
         test = partial(_test_get_modified, io_api)
-        test.description = io_api.get_name()+":"+" "+"getting modified time"
+        test.description = file_and_store_name+"getting modified time"
         yield (test, )
         test = partial(_test_get_free_space, io_api)
-        test.description = io_api.get_name()+":"+" "+"getting free space"
+        test.description = file_and_store_name+"getting free space"
         yield (test, )
         test = partial(_test_get_overall_space, io_api)
-        test.description = io_api.get_name()+":"+" "+"getting overall space"
+        test.description = file_and_store_name+"getting overall space"
         yield (test, )
         test = partial(_test_get_used_space, io_api)
-        test.description = io_api.get_name()+":"+" "+"getting used space"
+        test.description = file_and_store_name+"getting used space"
         yield (test, )
         test = partial(_test_get_directory_listing, io_api)
-        test.description = io_api.get_name()+":"+" "+"getting directory listing"
+        test.description = file_and_store_name+"getting directory listing"
         yield (test, )  
         test = partial(_test_exists, io_api)
-        test.description = io_api.get_name()+":"+" "+"determine if file and directory exists"
+        test.description = file_and_store_name+"determine if file and directory exists"
         yield (test, ) 
 
 def _assert_all_in(in_list, all_list):
