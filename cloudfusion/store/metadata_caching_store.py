@@ -358,7 +358,7 @@ class MetadataCachingStore(Store):
         :returns: True iff the cache could be cleaned.'''
         with self._is_cleaning_cache:
             # do not clean cache during uploads
-            if self._is_uploading > 0:
+            if self._is_uploading.value > 0:
                 return False
             for path in self.entries.get_keys():
                 if self.entries.is_expired(path):
