@@ -99,6 +99,10 @@ get_refresh_token: True
             self.gauth.Authorize()
         except AuthenticationError, e:
             self.logger.info("Authentication error: %s", e)
+            # The call to LocalWebserverAuth raises RefreshError if credentials are out of date.
+            # Thus, remove credentials and reinitialize gauth:
+            if os.path.exists(credentials):
+                os.remove(credentials)
             self.gauth = GoogleAuth(settings_file=self._settings_yaml)
             self.gauth.LocalWebserverAuth()
             self.gauth.Authorize()
