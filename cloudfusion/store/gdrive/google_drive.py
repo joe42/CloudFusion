@@ -11,7 +11,7 @@ from cloudfusion.store.store import *
 import logging
 from cloudfusion.util.exponential_retry import retry
 from cloudfusion.mylogging import db_logging_thread
-from pydrive.auth import GoogleAuth, AuthenticationError
+from pydrive.auth import GoogleAuth, AuthenticationError, RefreshError
 from pydrive.drive import GoogleDrive as Drive
 import shelve
 from oauth2client.client import OAuth2Credentials
@@ -346,7 +346,7 @@ get_refresh_token: True
         #    self.logger.debug('file object does not exist in %s: %s' % (method_name, str(GSResponseError)))
         #    raise NoSuchFilesytemObjectError('file object does not exist in %s: %s' % (method_name, str(GSResponseError)))
         else:
-            self.logger.debug("Error is not covered by _handle_error: %s", error)
+            self.logger.error("Error could not be handled: \n%s", stacktrace)
         if remaining_tries == 0: # throw error after last try
             raise StoreAccessError(str(error), 0) 
         return False
