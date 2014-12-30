@@ -551,7 +551,7 @@ that is cached for 3 seconds, False if it is not in the actual listing, or None 
                     self.duplicate(path_to_src+"/"+item['name'], path_to_dest+"/"+item['name'])
                 else:
                     resp = self.client.duplicate_file(item['reference'], translated_dest_dir, dest_name)
-                    if resp.status != 200:
+                    if not resp.status in HTTP_STATUS.OK:
                         self.logger.warning("could not duplicate %s to %s\nstatus: %s reason: %s", path_to_src, path_to_dest, resp.status, resp.reason)
                         HTTP_STATUS.generate_exception(resp.status, str(resp))
         else:
