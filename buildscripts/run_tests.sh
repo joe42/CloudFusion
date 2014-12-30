@@ -90,22 +90,43 @@ perl -pi -e "s/bucket_name =.*/bucket_name = cloudfusion42/g" cloudfusion/config
 perl -pi -e "s/bucket_name =.*/bucket_name = cloudfusion42/g" cloudfusion/config/AmazonS3_testing.ini
 
 # The test modules must be executed sequentially, but the test cases inside the module can run concurrently.
-# Each test runs in background, and outputs the results immediately after it has finished. Then it exists
-# with the exit status of nosetests to reflect if the test has succeeded or not, in which case the trap 
-# defined above is triggered and the script is aborted.
+# Each test runs in background, and outputs the results immediately after it has finished. 
+# The script exits immediately with the exit status of nosetests if the test has failed.
 
 # nosetests options: -x stop on first error, -v verbose, -s output stdout messgages immediately
 
-#bash -c 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_chunk_cache_store &>test1_log; status=$?; exit $status' & 
-#bash -c 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_chunk_metadata_cache_store &>test2_log; status=$?; exit $status' & 
-#bash -c 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_cache_store &>test3_log; status=$?; exit $status' & 
-#bash -c 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_metadata_cache_store &>test4_log; status=$?; exit $status' & 
+capture_output 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_chunk_cache_store'
+capture_output 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_chunk_metadata_cache_store'
+capture_output 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_cache_store'
+capture_output 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_metadata_cache_store'
 
+# Keep travis session alive by producing output for 20 minutes.
+# If exit status of job in background is non-zero, exit.
+for i in {1..20} ; do 
+    sleep 60; # 1 Min
+    if [ -e /tmp/exit_status ] ; then 
+        exit_status=$(cat /tmp/exit_status) 
+        echo 'A test failed.'
+        cleanup_and_exit $exit_status
+    fi
+    # If there is no background job anymore:
+    if ! jobs %% &>/dev/null ; then
+        echo 'TransparentStore tests with synchronization have finished successfully.'
+        break;
+    fi
+    echo -e "."; 
+done
 
-#bash -c 'nosetests -v -s -x cloudfusion/tests/db_logging_thread_test.py &>test1_log; status=$?; exit $status' & #about 18 Min runtime
-#pid1=$!
-#bash -c 'nosetests -v -s -x cloudfusion/tests/synchronize_proxy_test.py &>test2_log; status=$?; exit $status' & #about 17 Min runtime
-#pid2=$!                          
+# If there is still a background job:
+if ! jobs %% &>/dev/null ; then
+    echo 'TransparentStore tests take too long - exiting.'
+    echo "Running jobs:"
+    jobs
+    echo "Incomplete log files:"
+    cat /tmp/*.running_process_log
+    cleanup_and_exit 1
+fi
+                         
 capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_dropbox'
 capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_sugarsync'
 capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_yandex'
