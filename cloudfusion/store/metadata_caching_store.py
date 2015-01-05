@@ -121,7 +121,12 @@ class MetadataCachingStore(Store):
                 self.entries.write(parent_dir, Entry())
             entry = self.entries.get_value(parent_dir) 
             if entry.listing == None:
-                entry.listing = self.store.get_directory_listing(parent_dir)
+                try:
+                    entry.listing = self.store.get_directory_listing(parent_dir)
+                except NoSuchFilesytemObjectError, e:
+                    self.entries.delete(parent_dir)
+                    self._remove_from_parent_dir_listing(parent_dir)
+                    return
             entry.set_is_dir()
             self._add_existing_items(entry, parent_dir)
             self.entries.write(parent_dir, entry)
