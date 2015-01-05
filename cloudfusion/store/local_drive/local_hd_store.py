@@ -128,7 +128,13 @@ class LocalHDStore(Store):
     def get_directory_listing(self, directory):
         self.logger.debug("getting directory listing for %s", directory)
         self._raise_error_if_invalid_path(directory)
-        return [ directory+'/'+filename for filename in os.listdir(self.root+directory)]
+        ret = []
+        for filename in os.listdir(self.root+directory):
+            if directory != '/':
+                ret.append(directory+'/'+filename)
+            else:
+                ret.append('/'+filename)
+        return ret
 
     def _handle_error(self, error, stacktrace, method_name, remaining_tries, *args, **kwargs):
         """Used by retry decorator to react to errors."""
