@@ -266,33 +266,35 @@ class MetadataCachingStore(Store):
     def duplicate(self, path_to_src, path_to_dest):
         self.logger.debug("meta cache duplicate %s to %s", path_to_src, path_to_dest)
         ret = self.store.duplicate(path_to_src, path_to_dest)
-        if self.entries.exists(path_to_src):
-            entry = deepcopy(self.entries.get_value(path_to_src))
-            self.entries.write(path_to_dest, entry)
-        else:
-            self.entries.write(path_to_dest, Entry())
-        entry = self.entries.get_value(path_to_dest)
-        entry.set_modified()
-        self.entries.write(path_to_dest, entry)
-        self._add_to_parent_dir_listing(path_to_dest)
+        self._duplicate_cache_entries(path_to_src, path_to_dest)
         self.logger.debug("duplicated %s to %s", path_to_src, path_to_dest)
         return ret
         
     def move(self, path_to_src, path_to_dest):
         self.logger.debug("meta cache move %s to %s", path_to_src, path_to_dest)
         self.store.move(path_to_src, path_to_dest)
-        if self.entries.exists(path_to_src):
-            entry = self.entries.get_value(path_to_src)
-            self.entries.write(path_to_dest, entry)
-        else:
-            self.entries.write(path_to_dest, Entry())
-        entry = self.entries.get_value(path_to_dest)
-        entry.set_modified()
-        self.entries.write(path_to_dest, entry)
-        self.entries.delete(path_to_src)
-        self._remove_from_parent_dir_listing(path_to_src)
-        self._add_to_parent_dir_listing(path_to_dest)
- 
+        self._duplicate_cache_entries(path_to_src, path_to_dest)
+        self._delete_cache_entries(path_to_src)
+    
+    def _duplicate_cache_entries(self, old_path, new_path):
+        '''Create new cache entries for all cached entries starting with the prefix
+        *old_path*, replacing the prefix of the new entries with *new_path*. 
+        Also replace the entries' names in their respective parent directory listing.
+        Adds new_path to its parent directory listing.'''
+        while True: 
+            with self._is_cleaning_cache:
+                # do not modify cache during uploads
+                if self._is_uploading.value == 0:
+                    for path in self.entries.get_keys():
+                        if os.path.dirname(path).startswith(old_path) or path == old_path:
+                            entry = deepcopy(self.entries.get_value(path))
+                            if entry.listing:
+                                entry.listing = [item.replace(old_path, new_path, 1) for item in entry.listing]
+                            _new_path = path.replace(old_path, new_path, 1)
+                            self.entries.write(_new_path, entry)
+                    self._add_to_parent_dir_listing(new_path)
+                    break
+
     def get_modified(self, path):
         self.logger.debug("meta cache get_modified %s", path)
         if self.entries.exists(path):
