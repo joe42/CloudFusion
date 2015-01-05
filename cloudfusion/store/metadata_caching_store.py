@@ -216,8 +216,18 @@ class MetadataCachingStore(Store):
     def delete(self, path, is_dir): 
         self.logger.debug("meta cache delete %s", path)
         self.store.delete(path, is_dir)
-        self.entries.delete(path)
-        self._remove_from_parent_dir_listing(path)
+        self._delete_cache_entries(path)
+    
+    def _delete_cache_entries(self, path):
+        while True: 
+            with self._is_cleaning_cache:
+                # do not modify cache during uploads
+                if self._is_uploading.value == 0:
+                    for _path in self.entries.get_keys():
+                        if os.path.dirname(_path).startswith(path) or _path == path:
+                            self.entries.delete(_path)
+                            self._remove_from_parent_dir_listing(_path)
+                    break
           
     def account_info(self):
         if not self.store_metadata.exists('account_info'):
