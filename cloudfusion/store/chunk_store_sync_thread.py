@@ -646,13 +646,22 @@ class ChunkStoreSyncThread(object):
                     for item in listing:
                         item = os.path.basename(item)
                         #print "duplicate iterate:"+item
-                        if self.chunk_mapper.get_chunk_uuid(src_directory+item): #if mapping exists, item is a file
+                        # replace path_to_dest with path_to_src
+                        original_path = path_to_src + d.split(path_to_dest,1)[1] + '/' + item
+                        # if mapping exists, item is a file
+                        if self.chunk_mapper.get_files_in_chunk(original_path):  
                             new_chunk_uuid = self.chunk_mapper.get_next_chunk_uuid()
-                            filepaths = self.chunk_mapper.get_files_in_chunk(src_directory+item)
-                            new_filepaths = map(lambda x: d+'/'+os.path.basename(x), filepaths)
-                            #print ("move %s --> %s"%(path_to_src, path_to_dest))
-                            self.store.move(d+'/'+old_chunk_uuid, d+'/'+new_chunk_uuid)
-                            self.chunk_mapper.put(new_chunk_uuid, new_filepaths)
+                            # get files in chunk...
+                            #print "get files in chunk: "+path_to_src+'/'+item
+                            filepaths = self.chunk_mapper.get_files_in_chunk(original_path)
+                            if filepaths:
+                                old_chunk_uuid = self.chunk_mapper.get_chunk_uuid(filepaths[0]) 
+                                new_filepaths = map(lambda x: d+'/'+os.path.basename(x), filepaths)
+                                #print "new filepaths:"+repr(new_filepaths) 
+                                #print ("move %s --> %s"%(path_to_src, path_to_dest))
+                                #print "old_chunk_uuid: "+d+'/'+old_chunk_uuid
+                                self.store.move(d+'/'+old_chunk_uuid, d+'/'+new_chunk_uuid)
+                                self.chunk_mapper.put(new_chunk_uuid, new_filepaths)
                         else:
                             #print ("add dir "+d+'/'+item)
                             dirs.append(d+'/'+item) #add to directories to iterate through
