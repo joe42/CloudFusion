@@ -350,10 +350,23 @@ class SugarsyncStore(Store):
         if path[-1] == "/":
             path = path[0:-1]
         self._raise_error_if_invalid_path(path)
+        translated_path = self._translate_path(path)
         if is_dir:
-            resp = self.client.delete_folder( self._translate_path(path) )
+            for item in self._parse_collection(translated_path):
+                if item['is_dir']:
+                    self.delete(path+"/"+item['name'], is_dir=True)
+                else:
+                    self.logger.info("deleting %s", path+"/"+item['name'])
+                    resp = self.client.delete_file(item['reference'])
+                    if not resp.status in HTTP_STATUS.OK:
+                        self.logger.warning("could not delete %s\nstatus: %s reason: %s", path+"/"+item['name'], resp.status, resp.reason)
+                        HTTP_STATUS.generate_exception(resp.status, str(resp))
+                    else:
+                        del self.path_cache[path+"/"+item['name']]
+                        self.__remove_from_dir_listing(path+"/"+item['name'])
+            resp = self.client.delete_folder( translated_path )
         else:
-            resp = self.client.delete_file( self._translate_path(path) )
+            resp = self.client.delete_file( translated_path )
         if not resp.status in HTTP_STATUS.OK and not resp.status == HTTP_STATUS.NOT_FOUND:
             self.logger.warning("could not delete %s\nstatus: %s reason: %s", path, resp.status, resp.reason)
             HTTP_STATUS.generate_exception(resp.status, str(resp))
@@ -539,7 +552,6 @@ that is cached for 3 seconds, False if it is not in the actual listing, or None 
             path_to_dest = path_to_dest[0:-1]
         dest_name = os.path.basename(path_to_dest)
         dest_dir  = os.path.dirname(path_to_dest)
-        translated_dest_dir = self._translate_path( dest_dir )
         translated_src = self._translate_path(path_to_src)
         if self.is_dir(path_to_src):
             #make destination directory: (might exist)
@@ -550,7 +562,7 @@ that is cached for 3 seconds, False if it is not in the actual listing, or None 
                 if item['is_dir']:#copy all folders form original directory
                     self.duplicate(path_to_src+"/"+item['name'], path_to_dest+"/"+item['name'])
                 else:
-                    resp = self.client.duplicate_file(item['reference'], translated_dest_dir, dest_name)
+                    resp = self.client.duplicate_file(item['reference'], self._translate_path( path_to_dest ), item['name'])
                     if not resp.status in HTTP_STATUS.OK:
                         self.logger.warning("could not duplicate %s to %s\nstatus: %s reason: %s", path_to_src, path_to_dest, resp.status, resp.reason)
                         HTTP_STATUS.generate_exception(resp.status, str(resp))
@@ -562,7 +574,7 @@ that is cached for 3 seconds, False if it is not in the actual listing, or None 
                 meta = None
             if meta: #object exists
                 resp = self.delete(path_to_dest, meta["is_dir"])
-            resp = self.client.duplicate_file(translated_src, translated_dest_dir, dest_name)
+            resp = self.client.duplicate_file(translated_src, self._translate_path( dest_dir ), dest_name)
             if not resp.status in HTTP_STATUS.OK:
                 self.logger.warning("could not duplicate %s to %s\nstatus: %s reason: %s", path_to_src, path_to_dest, resp.status, resp.reason)
                 HTTP_STATUS.generate_exception(resp.status, str(resp))
