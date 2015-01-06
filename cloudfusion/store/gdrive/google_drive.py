@@ -350,8 +350,8 @@ get_refresh_token: True
         elif isinstance(error, SSLError):
             self.logger.debug("Retrying on SSL error: %s", error)
         elif isinstance(error, ApiRequestError):#403 "Rate Limit Exceeded"
-            if str(error).find("Rate Limit Exceeded") != -1:
-                time.sleep(1)
+            if str(error).lower().find("rate limit exceeded") != -1:
+                time.sleep(random.random())
         elif isinstance(error, AuthenticationError):
             try:
                 self.gauth.Authorize()
