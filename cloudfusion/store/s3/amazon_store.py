@@ -144,7 +144,16 @@ class AmazonStore(Store):
         if is_dir:
             if not path.endswith('_$folder$'): #compatibility with different systems
                 delete_list.append(path[1:]+'/')
-        self.bucket.delete_keys(delete_list)
+        listing = self.bucket.list(path[1:])  
+        directories = [d for d in listing if self._is_dir(d)]
+        files = [f for f in listing if not self._is_dir(f)]
+        for key in directories:
+            delete_list.append(key.name)
+            if not key.name.endswith('_$folder$') and not not key.name.endswith('/'): #compatibility with different systems
+                delete_list.append(key.name+'/')
+        for key in files:
+            delete_list.append(key.name)
+        self.bucket.delete_keys([to_unicode(path) for path in delete_list])
         
     @retry((Exception))
     def account_info(self):
