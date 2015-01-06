@@ -529,6 +529,7 @@ def _test_exists(store):
     assert store.exists(path_constants.REMOTE_TESTDIR)
     assert not store.exists(path_constants.REMOTE_NON_EXISTANT_DIR)
     assert not store.exists(path_constants.REMOTE_NON_EXISTANT_FILE)
+    assert not store.exists(path_constants.REMOTE_NON_EXISTANT_DIR+'/'+path_constants.REMOTE_TESTFILE_NAME)
 
 def _delete_file(store, filename, root_dir="/"):
     if root_dir[-1] != "/":
