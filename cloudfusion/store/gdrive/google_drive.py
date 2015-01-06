@@ -352,6 +352,13 @@ get_refresh_token: True
         elif isinstance(error, ApiRequestError):#403 "Rate Limit Exceeded"
             if str(error).find("Rate Limit Exceeded") != -1:
                 time.sleep(1)
+        elif isinstance(error, AuthenticationError):
+            try:
+                self.gauth.Authorize()
+            except Exception,e:
+                print e
+                self.logger.error("Error could not be handled: \n%s", stacktrace)
+          
         #elif isinstance(error, GSResponseError) and error.status == 404:
         #    self.logger.debug('file object does not exist in %s: %s' % (method_name, str(GSResponseError)))
         #    raise NoSuchFilesytemObjectError('file object does not exist in %s: %s' % (method_name, str(GSResponseError)))
