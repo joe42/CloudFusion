@@ -83,8 +83,7 @@ class Store(object):
     def delete(self, path, is_dir):
         '''Delete file or directory tree at path.
         :param path: path to the file or directory to delete
-        :param is_dir: True iff path points to a directory
-        :raises:[Errno 39] Directory not empty:'''
+        :param is_dir: True iff path points to a directory'''
         raise NotImplementedError()
           
     def account_info(self):
