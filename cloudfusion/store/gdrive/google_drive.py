@@ -23,6 +23,7 @@ from cloudfusion.util.string import get_id_key, get_secret_key, to_unicode, to_s
 import httplib2
 from pydrive.files import ApiRequestError
 import tempfile
+from _ssl import SSLError
 
 
 
@@ -109,6 +110,12 @@ get_refresh_token: True
         self.drive = Drive(self.gauth)
         self.logger.info("api initialized")
     
+    def reconnect(self):
+        try:
+            self.gauth.Authorize()
+        except Exception, e:
+            self.logger.error("Error reconnecting: "+str(e))
+    
     @staticmethod
     def get_config(path_to_configfile=None):
         '''Get initial google drive configuration to initialize :class:`cloudfusion.store.gdrive.google_drive.GoogleDrive`
@@ -126,7 +133,8 @@ get_refresh_token: True
         dir_name = self._get_cachedir_name(config)
         ret = dir_name + "/credentials" 
         return ret 
-
+    
+    @retry(SSLError, tries=10, delay=0.1)
     def _get_fileobject_id(self, path):
         if len(path)>0 and path[0] == '/':
             path = path[1:]
@@ -220,7 +228,7 @@ get_refresh_token: True
         fileobject.seek(pos, 0)
         return size
     
-    @retry((Exception), tries=1, delay=0) 
+    @retry((Exception), tries=3, delay=0.1) 
     def store_fileobject(self, fileobject, path, interrupt_event=None):
         size = self.__get_size(fileobject)
         self.logger.debug("Storing file object of size %s to %s", size, path)
@@ -339,6 +347,8 @@ get_refresh_token: True
                 isinstance(error, AlreadyExistsError):
             self.logger.debug("Error could not be handled: %s", error)
             raise error
+        elif isinstance(error, SSLError):
+            self.logger.debug("Retrying on SSL error: %s", error)
         elif isinstance(error, ApiRequestError):#403 "Rate Limit Exceeded"
             if str(error).find("Rate Limit Exceeded") != -1:
                 time.sleep(1)
