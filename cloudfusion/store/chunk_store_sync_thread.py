@@ -17,7 +17,7 @@ from cloudfusion.util.file_decorator import DataFileWrapper
 from contextlib import closing
 import atexit
 from cloudfusion.util import file_util
-from cloudfusion.util.string import to_str
+from cloudfusion.util.string import to_str, regSearchString
 
 def get_parent_dir(path): # helper function to get parent directory ending with '/'
     ret = os.path.dirname(path)
@@ -751,15 +751,35 @@ class ChunkStoreSyncThread(object):
         with self.lock:
             self.chunk_factory.remove(path)
             self.chunk_mapper.remove_file(path)
-            #TODO: stop workers working on "empty" chunks 
-            chunk_uuid = self.chunk_mapper.get_chunk_uuid(path)
-            if not chunk_uuid: # path is a directory
-                try:
-                    remover = RemoveWorker(self.store, path, True, self.logger)
-                    remover.start()
-                except Exception, e:
-                    print str(e)
-                    pass #TODO:log exception
+            self.delete_cache_entry(path)
+            #TODO: stop workers working on "empty" chunks
+            self.sync()
+            if is_dir:
+                dirs = [path]
+                while len(dirs)>0:
+                    d = dirs.pop()
+                    #self.logger.debug( "chunk directory pop: "+d)
+                    listing = self.store.get_directory_listing(d)
+                    for item in listing:
+                        item = os.path.basename(item)
+                        self.logger.debug( "delete chunk "+d+'/'+item)
+                        if regSearchString(".*/chunk_[a-zA-Z0-9_=]+\.tar", d+'/'+item, grp=0): #if mapping exists, item is a file or an empty chunk
+                            filepaths = self.chunk_mapper.get_files_in_chunk(d+'/'+item)
+                            self.logger.debug( "filepaths:"+repr(filepaths))
+                            for _path in filepaths:
+                                #self.logger.debug("delete _path:"+_path)
+                                self.chunk_factory.remove(_path)
+                                self.chunk_mapper.remove_file(_path)
+                                self.delete_cache_entry(_path)
+                        else:
+                            #self.logger.debug("add dir "+d+'/'+item)
+                            dirs.append(d+'/'+item) #add to directories to iterate through
+            try:
+                remover = RemoveWorker(self.store, path, is_dir, self.logger)
+                remover.start()
+            except Exception, e:
+                print str(e)
+                pass #TODO:log exception
             
             
             
