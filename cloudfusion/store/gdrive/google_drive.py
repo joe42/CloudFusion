@@ -287,22 +287,25 @@ get_refresh_token: True
         
     def duplicate(self, path_to_src, path_to_dest):
         self.logger.debug("duplicating %s to %s", path_to_src, path_to_dest)
-        dest_name = os.path.basename(path_to_dest)
-        dest_dir  = os.path.dirname(path_to_dest)
-        dest_dir_id = self._get_fileobject_id( dest_dir )
         src_id = self._get_fileobject_id(path_to_src)
         if self.is_dir(path_to_src):
             #make destination directory: (might exist)
+            #import ipdb; ipdb.set_trace()
             if not self.exists(path_to_dest):
                 self.create_directory(path_to_dest)
+            dest_dir_id = self._get_fileobject_id( path_to_dest )
             #copy all files from original directory:
             for item in self.drive.ListFile({'q': "'"+src_id+"' in parents and trashed=false"}).GetList():
                 if item['mimeType'] == 'application/vnd.google-apps.folder':#copy all folders from original directory
-                    self.duplicate(path_to_src+"/"+item['name'], path_to_dest+"/"+item['name'])
+                    self.duplicate(path_to_src+"/"+to_str(item['title']), path_to_dest+"/"+to_str(item['title']))
                 else:
-                    copied_file = {"parents": [{"id": dest_dir_id}], 'title': dest_name}
+                    self.logger.debug("duplicating %s to %s", path_to_src+"/"+to_str(item['title']), path_to_dest+"/"+to_str(item['title']))
+                    copied_file = {"parents": [{"id": dest_dir_id}], 'title': item['title']}
                     new_file_id = self.drive.auth.service.files().copy(fileId=item['id'], body=copied_file).execute()
         else:
+            dest_name = os.path.basename(path_to_dest)
+            dest_dir  = os.path.dirname(path_to_dest)
+            dest_dir_id = self._get_fileobject_id( dest_dir )
             #if dest exists remove
             try:
                 meta = self.get_metadata(path_to_dest)
