@@ -122,11 +122,7 @@ class ChunkMultiprocessingCachingStore(Store):
 
     def delete(self, path, is_dir):#should be atomic
         self.logger.debug("delete %s", path)
-        if is_dir:
-            self.store.delete(path, is_dir)
-        else:
-            self.sync_thread.delete(path, is_dir)
-            self.sync_thread.delete_cache_entry(path) #[shares_resource: write self.entries]
+        self.sync_thread.delete(path, is_dir)
           
     def account_info(self):
         return self.store.account_info()

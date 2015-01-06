@@ -521,8 +521,12 @@ class ChunkStoreSyncThread(object):
         '''Garbage collect stale chunks'''
         garbage_chunks = self.chunk_mapper.get_empty_chunks()
         for chunk in garbage_chunks:
-            remover = RemoveWorker(self.store, chunk, False, self.logger)
-            remover.start()
+            try:
+                self.logger.debug("garbage collect chunk:"+chunk)
+                remover = RemoveWorker(self.store, chunk, False, self.logger)
+                remover.start()
+            except Exception, e:
+                pass 
     
     def is_in_progress(self, path):
         ''':returns: True iff *path* is currently uploaded or being removed'''
