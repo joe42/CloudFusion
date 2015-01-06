@@ -530,7 +530,10 @@ that is cached for 3 seconds, False if it is not in the actual listing, or None 
         size = len(listing)
         #print "cached directory listing: "+repr((listing))
         if size < 100:
-            self.get_directory_listing(parent_dir)
+            try:
+                self.get_directory_listing(parent_dir)
+            except NoSuchFilesytemObjectError, e:
+                return False
         else:
             exists = self.__is_in_partial_dir_listing(path, listing)
             #print "paths: "+repr(paths)
