@@ -182,8 +182,8 @@ class AmazonStore(Store):
         path_to_dest += '/'  
         path_to_src += '/'  
         listing = self.bucket.list(path_to_src, '/')  
-        directories = [to_str(d) for d in listing if self._is_dir(d)]
-        files = [to_str(f) for f in listing if not self._is_dir(d)]
+        directories = [d for d in listing if self._is_dir(d)]
+        files = [f for f in listing if not self._is_dir(f)]
         for key in directories:
             new_path = path_to_dest+to_str(key.name).split(path_to_src,1)[1]
             self.create_directory('/'+new_path[:-1])
@@ -208,7 +208,7 @@ class AmazonStore(Store):
         path_to_src += '/'  
         listing = self.bucket.list(path_to_src, '/')  
         directories = [d for d in listing if self._is_dir(d)]
-        files = [f for f in listing if not self._is_dir(d)]
+        files = [f for f in listing if not self._is_dir(f)]
         for key in directories:
             new_path = path_to_dest+to_str(key.name).split(path_to_src,1)[1]
             self.create_directory('/'+new_path[:-1])
