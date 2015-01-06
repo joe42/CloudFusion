@@ -166,14 +166,7 @@ class GoogleStore(Store):
         if not is_dir:
             self.bucket.delete_key(path[1:])
         else:
-            if not path.endswith('_$folder$'): #compatibility with different systems
-                self.bucket.delete_key(path[1:]+'/')
-            else:
-                self.bucket.delete_key(path[1:])
-
-
-
-
+            gsutil('rm', 'gs://%s/%s**' % (self.bucket_name, path[1:]) )
         
     @retry((Exception))
     def account_info(self):
