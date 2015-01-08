@@ -313,6 +313,13 @@ def _generate_store_tests(store, description_of_store, include_space_tests=True)
     test = partial(_test_exists, store)
     test.description = description_of_store+": determine if file and directory exists"
     yield (test, )  
+    test = partial(_test_nested_move, store)
+    test.description = description_of_store+": move nested files"
+    yield (test, ) 
+    _create_test_directory(store)
+    test = partial(_test_nested_duplicate, store)
+    test.description = description_of_store+": duplicate nested files"
+    yield (test, ) 
     store.delete(path_constants.REMOTE_TESTDIR, True)
 
 def _assert_all_in(in_list, all_list):
@@ -457,6 +464,26 @@ def _test_move_file(store):
     store.move(path_constants.REMOTE_TESTDIR+"/"+path_constants.LOCAL_TESTFILE_NAME, path_constants.REMOTE_TESTDIR+"/"+path_constants.REMOTE_MOVE_TESTFILE_RENAMED)
     assert store.exists(path_constants.REMOTE_TESTDIR+"/"+path_constants.REMOTE_MOVE_TESTFILE_RENAMED) 
     store.delete(path_constants.REMOTE_TESTDIR+"/"+path_constants.REMOTE_MOVE_TESTFILE_RENAMED, False)
+    
+def _test_nested_move(store):
+    store.create_directory(path_constants.REMOTE_MOVE_TESTDIR_ORIGIN)
+    store.store_file(path_constants.LOCAL_TESTFILE_PATH, path_constants.REMOTE_MOVE_TESTDIR_ORIGIN)
+    store.store_file(path_constants.LOCAL_TESTFILE_PATH, path_constants.REMOTE_MOVE_TESTDIR_ORIGIN, remote_file_name=path_constants.REMOTE_TESTFILE_NAME2)
+    store.store_file(path_constants.LOCAL_TESTFILE_PATH, path_constants.REMOTE_MOVE_TESTDIR_ORIGIN, remote_file_name=path_constants.REMOTE_TESTFILE_NAME3)
+    store.create_directory(path_constants.REMOTE_MOVE_NESTED_TESTDIR_ORIGIN)
+    store.store_file(path_constants.LOCAL_TESTFILE_PATH, path_constants.REMOTE_MOVE_NESTED_TESTDIR_ORIGIN, remote_file_name=path_constants.REMOTE_NESTED_FILE_NAME)
+    store.move(path_constants.REMOTE_MOVE_TESTDIR_ORIGIN, path_constants.REMOTE_MOVE_TESTDIR_RENAMED)
+    assert _dir_exists(store, path_constants.REMOTE_MOVE_NESTED_TESTDIR_RENAMED)
+    assert store.exists(path_constants.REMOTE_MOVE_NESTED_TESTFILE_RENAMED)
+    contents = store.get_file(path_constants.REMOTE_MOVE_NESTED_TESTFILE_RENAMED)
+    with open(path_constants.LOCAL_TESTFILE_PATH) as _file:
+        assert _file.read() == contents, "move file differs from the local file."
+    contents = store.get_file(path_constants.REMOTE_MOVE_TESTDIR_RENAMED + "/" +path_constants.REMOTE_TESTFILE_NAME2)
+    with open(path_constants.LOCAL_TESTFILE_PATH) as _file:
+        assert _file.read() == contents, "move file differs from the local file."
+    assert not store.exists(path_constants.REMOTE_MOVE_NESTED_TESTFILE_ORIGIN)
+    assert not store.exists(path_constants.REMOTE_MOVE_NESTED_TESTDIR_ORIGIN)
+    store.delete(path_constants.REMOTE_MOVE_TESTDIR_RENAMED, True)
 
 def _test_create_delete_directory(store):
     _create_directories(store, path_constants.REMOTE_TESTDIR)
@@ -550,7 +577,31 @@ def _test_duplicate(store):
     store.delete(path_constants.REMOTE_DUPLICATE_TESTFILE_ORIGIN, False)
     store.delete(path_constants.REMOTE_DUPLICATE_TESTFILE_COPY, False)
     
+def _test_nested_duplicate(store):
+    store.create_directory(path_constants.REMOTE_DUPLICATE_TESTDIR_ORIGIN)
+    store.store_file(path_constants.LOCAL_TESTFILE_PATH, path_constants.REMOTE_DUPLICATE_TESTDIR_ORIGIN)
+    store.store_file(path_constants.LOCAL_TESTFILE_PATH, path_constants.REMOTE_DUPLICATE_TESTDIR_ORIGIN, remote_file_name=path_constants.REMOTE_TESTFILE_NAME2)
+    store.store_file(path_constants.LOCAL_TESTFILE_PATH, path_constants.REMOTE_DUPLICATE_TESTDIR_ORIGIN, remote_file_name=path_constants.REMOTE_TESTFILE_NAME3)
+    store.create_directory(path_constants.REMOTE_DUPLICATE_NESTED_TESTDIR_ORIGIN)
+    store.store_file(path_constants.LOCAL_TESTFILE_PATH, path_constants.REMOTE_DUPLICATE_NESTED_TESTDIR_ORIGIN, remote_file_name=path_constants.REMOTE_NESTED_FILE_NAME)
+    store.duplicate(path_constants.REMOTE_DUPLICATE_TESTDIR_ORIGIN, path_constants.REMOTE_DUPLICATE_TESTDIR_COPY)
+    assert _dir_exists(store, path_constants.REMOTE_DUPLICATE_TESTDIR_COPY)
+    assert _dir_exists(store, path_constants.REMOTE_DUPLICATE_NESTED_TESTDIR_COPY)
+    assert store.exists(path_constants.REMOTE_DUPLICATE_NESTED_TESTFILE_COPY)
+    contents = store.get_file(path_constants.REMOTE_DUPLICATE_NESTED_TESTFILE_COPY)
+    with open(path_constants.LOCAL_TESTFILE_PATH) as file:
+        assert file.read() == contents, "duplicated file differs from the local file."
+    contents = store.get_file(path_constants.REMOTE_DUPLICATE_TESTDIR_COPY + "/" +path_constants.REMOTE_TESTFILE_NAME2)
+    with open(path_constants.LOCAL_TESTFILE_PATH) as file:
+        assert file.read() == contents, "duplicated file differs from the local file."
+    store.delete(path_constants.REMOTE_DUPLICATE_TESTDIR_ORIGIN, True)
+    store.delete(path_constants.REMOTE_DUPLICATE_TESTDIR_COPY, True)
+    assert not store.exists(path_constants.REMOTE_DUPLICATE_TESTDIR_COPY)
+    assert not store.exists(path_constants.REMOTE_DUPLICATE_NESTED_TESTFILE_COPY)
+    assert not store.exists(path_constants.REMOTE_DUPLICATE_TESTDIR_COPY+"/"+path_constants.REMOTE_TESTFILE_NAME3)
+    
 #assert_all_in(resp.data.keys(), [u'is_deleted', u'thumb_exists',u'bytes', u'modified', u'path', u'is_dir',u'size', u'root', u'hash', u'contents', u'icon'])
        
 
         
+# TODO: list root directory
