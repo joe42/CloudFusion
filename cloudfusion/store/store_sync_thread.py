@@ -180,6 +180,20 @@ class StoreSyncThread(object):
                 return reader
         return None
     
+    def _get_writers(self, directory):
+        ret = []
+        for writer in self.writers:
+            if writer.path.startswith(directory+'/'):
+                ret.append(writer)
+        return ret
+    
+    def _get_readers(self, directory):
+        ret = []
+        for reader in self.readers:
+            if reader.path.startswith(directory+'/'):
+                ret.append(reader)
+        return ret
+    
     def last_heartbeat(self):
         ''''Get time since last heartbeat in seconds.'''
         last_heartbeat = self._heartbeat
@@ -330,16 +344,32 @@ class StoreSyncThread(object):
     
     def delete(self, path, is_dir):
         with self.lock:
-            if self._get_writer(path):
-                writer = self._get_writer(path)
-                writer.stop()
-            if self._get_reader(path):
-                reader = self._get_reader(path)
-                reader.stop()
-            remover = RemoveWorker(self.store, path, is_dir, self.logger)
-            remover.start()
-            self.removers.append(remover)
-            
+            if not is_dir:
+                if self._get_writer(path):
+                    writer = self._get_writer(path)
+                    writer.stop()
+                if self._get_reader(path):
+                    reader = self._get_reader(path)
+                    reader.stop()
+                self._remove_finished_writers()
+                self._remove_finished_readers()
+                self.delete_cache_entry(path) #[shares_resource: write self.entries]
+            else:
+                for writer in self._get_writers(path):
+                    writer.stop()
+                for reader in self._get_readers(path):
+                    reader.stop()
+                # If writer is successful before stopping:
+                self._remove_finished_writers()
+                self._remove_finished_readers()
+                self.delete_cache_entries(path) #[shares_resource: write self.entries]
+            try:
+                remover = RemoveWorker(self.store, path, is_dir, self.logger)
+                remover.start()
+                self.removers.append(remover)
+            except Exception, e:
+                self.logger.error(e)
+                
     def read(self, path):
         with self.lock:
             if not self._get_reader(path): #ongoing read operation 
@@ -367,6 +397,12 @@ class StoreSyncThread(object):
         with self.protect_cache_from_write_access:
             self.cache.delete(path)
             
+    def delete_cache_entries(self, directory):
+        with self.protect_cache_from_write_access:
+            for path in self.cache.get_keys():
+                if path.startswith(directory+'/'):
+                    self.cache.delete(path)
+    
     def _acquire_two_locks(self):
         while self.protect_cache_from_write_access.acquire(True) and not self.lock.acquire(False): #acquire(False) returns False if it cannot acquire the lock
             self.protect_cache_from_write_access.release()
