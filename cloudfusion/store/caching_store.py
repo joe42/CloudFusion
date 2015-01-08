@@ -181,7 +181,8 @@ class MultiprocessingCachingStore(Store):
                 self.sync_thread.sync()
             if source_is_in_store: 
                 self.store.duplicate(path_to_src, path_to_dest)
-        
+                self.sync_thread.duplicate_cache_entries(path_to_src, path_to_dest)
+     
     def move(self, path_to_src, path_to_dest): #TODO: move all cached entries
         with self.sync_thread.protect_cache_from_write_access:
             self.sync_thread.delete_cache_entry(path_to_dest) # delete possible locally cached entry at destination  #[shares_resource: write self.entries]
@@ -194,6 +195,7 @@ class MultiprocessingCachingStore(Store):
                 self.sync_thread.sync()                
             if source_is_in_store: 
                 self.store.move(path_to_src, path_to_dest)
+                self.sync_thread.move_cache_entries(path_to_src, path_to_dest) # delete possible locally cached entry at destination  #[shares_resource: write self.entries]              
  
     def get_modified(self, path):
         if self.entries.exists(path):

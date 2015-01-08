@@ -403,6 +403,23 @@ class StoreSyncThread(object):
                 if path.startswith(directory+'/'):
                     self.cache.delete(path)
     
+    def move_cache_entries(self, path_to_src, path_to_dest):
+        with self.protect_cache_from_write_access:
+            self.duplicate_cache_entries(path_to_src, path_to_dest)
+            self.delete_cache_entries(path_to_src)
+    
+    def duplicate_cache_entries(self, path_to_src, path_to_dest):
+        with self.protect_cache_from_write_access:
+            self.delete_cache_entries(path_to_dest)
+            for path in self.cache.get_keys():
+                if path.startswith(path_to_src+'/') or path_to_src == path:
+                    new_path = path.replace(path_to_src, path_to_dest, 1)
+                    try:
+                        contents = self.cache.peek(path)
+                    except Exception, e:
+                        self.logger.debug("Expired cache entry for %s has already been deleted.", path)
+                    self.cache.write(new_path, contents)
+            
     def _acquire_two_locks(self):
         while self.protect_cache_from_write_access.acquire(True) and not self.lock.acquire(False): #acquire(False) returns False if it cannot acquire the lock
             self.protect_cache_from_write_access.release()
