@@ -9,25 +9,25 @@ or :class:`MultiprocessingCachingStore`.
 The tests can be executed in parallel by calling each test individually
 in a separate nosetests process like this:
 
-nosetests -v -s -x cloudfusion.tests.store_tests:test_dropbox &
+nosetests -v -s -x --logging-filter=dropbox cloudfusion.tests.store_tests:test_dropbox &
 
-nosetests -v -s -x cloudfusion.tests.store_tests:test_sugarsync &
+nosetests -v -s -x --logging-filter=sugarsync cloudfusion.tests.store_tests:test_sugarsync &
 
-nosetests -v -s -x cloudfusion.tests.store_tests:test_local &
+nosetests -v -s -x --logging-filter=harddrive cloudfusion.tests.store_tests:test_local &
 
-nosetests -v -s -x cloudfusion.tests.store_tests:test_amazon &
+nosetests -v -s -x --logging-filter=amazon cloudfusion.tests.store_tests:test_amazon &
 
-nosetests -v -s -x cloudfusion.tests.store_tests:test_google &
+nosetests -v -s -x --logging-filter=google cloudfusion.tests.store_tests:test_google &
 
-nosetests -v -s -x cloudfusion.tests.store_tests:test_gdrive &
+nosetests -v -s -x --logging-filter=google_drive cloudfusion.tests.store_tests:test_gdrive &
 
-nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_tonline &
+nosetests -v -s -x --logging-filter=webdav cloudfusion.tests.store_tests:test_webdav_tonline &
 
-nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_gmx &
+nosetests -v -s -x --logging-filter=webdav cloudfusion.tests.store_tests:test_webdav_gmx &
 
-nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_box &
+nosetests -v -s -x --logging-filter=webdav cloudfusion.tests.store_tests:test_webdav_box &
 
-nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_yandex &
+nosetests -v -s -x --logging-filter=webdav cloudfusion.tests.store_tests:test_webdav_yandex &
 
 
 Created on Dec 18, 2014
