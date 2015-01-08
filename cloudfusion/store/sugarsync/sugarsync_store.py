@@ -362,7 +362,11 @@ class SugarsyncStore(Store):
                         self.logger.warning("could not delete %s\nstatus: %s reason: %s", path+"/"+item['name'], resp.status, resp.reason)
                         HTTP_STATUS.generate_exception(resp.status, str(resp))
                     else:
-                        del self.path_cache[path+"/"+item['name']]
+                        try:
+                            del self.path_cache[path+"/"+item['name']]
+                        except Exception, e:
+                            print "could not remove %s from path cache"% path+"/"+item['name']
+                            self.logger.debug("could not remove %s from path cache", path+"/"+item['name'])
                         self.__remove_from_dir_listing(path+"/"+item['name'])
             resp = self.client.delete_folder( translated_path )
         else:
