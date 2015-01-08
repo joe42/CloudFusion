@@ -179,14 +179,17 @@ class AmazonStore(Store):
         if not is_dir:
             k.copy(self.bucket, path_to_dest)
             return
+        else:
+            self.create_directory('/'+path_to_dest)
         path_to_dest += '/'  
         path_to_src += '/'  
         listing = self.bucket.list(path_to_src, '/')  
         directories = [d for d in listing if self._is_dir(d)]
         files = [f for f in listing if not self._is_dir(f)]
         for key in directories:
-            new_path = path_to_dest+to_str(key.name).split(path_to_src,1)[1]
-            self.create_directory('/'+new_path[:-1])
+            if not to_str(key.name) == path_to_src:
+                new_path = path_to_dest+to_str(key.name).split(path_to_src,1)[1]
+                self.duplicate(to_str('/'+key.name[:-1]), '/'+new_path[:-1])
         for key in files:
             new_path = path_to_dest+to_str(key.name).split(path_to_src,1)[1]
             key.copy(self.bucket, new_path)
@@ -204,16 +207,20 @@ class AmazonStore(Store):
             k.copy(self.bucket, path_to_dest)
             k.delete()
             return
+        else:
+            self.create_directory('/'+path_to_dest)
         path_to_dest += '/'  
         path_to_src += '/'  
         listing = self.bucket.list(path_to_src, '/')  
         directories = [d for d in listing if self._is_dir(d)]
         files = [f for f in listing if not self._is_dir(f)]
         for key in directories:
-            new_path = path_to_dest+to_str(key.name).split(path_to_src,1)[1]
-            self.create_directory('/'+new_path[:-1])
+            if not to_str(key.name) == path_to_src:
+                new_path = to_str(key.name).replace(path_to_src, path_to_dest, 1)
+                self.move(to_str('/'+key.name[:-1]), '/'+new_path[:-1])
         for key in files:
-            new_path = path_to_dest+to_str(key.name).split(path_to_src,1)[1]
+            new_path = to_str(key.name).replace(path_to_src, path_to_dest, 1)
+
             key.copy(self.bucket, new_path)
         self.bucket.delete_keys([to_unicode(key.name) for key in listing])
     
