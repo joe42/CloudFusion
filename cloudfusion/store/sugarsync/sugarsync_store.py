@@ -528,7 +528,10 @@ that is cached for 3 seconds, False if it is not in the actual listing, or None 
             return True
         parent_dir = os.path.dirname(path)
         # check if the file exists
-        listing = self.__get_dir_listing(parent_dir)
+        try:
+            listing = self.__get_dir_listing(parent_dir)
+        except NoSuchFilesytemObjectError, e:
+            return False
         if path in listing:
             return True
         size = len(listing)
@@ -544,7 +547,10 @@ that is cached for 3 seconds, False if it is not in the actual listing, or None 
             if exists != None:
                 return exists
             # if it was not found in the listing, refresh the cached listing
-            self.get_directory_listing(parent_dir)
+            try:
+                self.get_directory_listing(parent_dir)
+            except NoSuchFilesytemObjectError, e:
+                return False
         return self.__is_in_dir_listing(path)
     
     # worst case: should happen mostly with user interaction, so fast feedback is more important
