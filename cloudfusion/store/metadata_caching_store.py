@@ -224,7 +224,7 @@ class MetadataCachingStore(Store):
                 # do not modify cache during uploads
                 if self._is_uploading.value == 0:
                     for _path in self.entries.get_keys():
-                        if os.path.dirname(_path).startswith(path) or _path == path:
+                        if _path.startswith(path+'/') or _path == path:
                             self.entries.delete(_path)
                             self._remove_from_parent_dir_listing(_path)
                     break
@@ -286,7 +286,7 @@ class MetadataCachingStore(Store):
                 # do not modify cache during uploads
                 if self._is_uploading.value == 0:
                     for path in self.entries.get_keys():
-                        if os.path.dirname(path).startswith(old_path) or path == old_path:
+                        if path.startswith(old_path+'/') or path == old_path:
                             entry = deepcopy(self.entries.get_value(path))
                             if entry.listing:
                                 entry.listing = [item.replace(old_path, new_path, 1) for item in entry.listing]
