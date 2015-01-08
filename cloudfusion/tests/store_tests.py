@@ -574,8 +574,6 @@ def _test_duplicate(store):
     assert store.exists(path_constants.REMOTE_DUPLICATE_TESTFILE_COPY)
     store.delete(path_constants.REMOTE_DUPLICATE_TESTDIR_ORIGIN, True)
     store.delete(path_constants.REMOTE_DUPLICATE_TESTDIR_COPY, True)
-    store.delete(path_constants.REMOTE_DUPLICATE_TESTFILE_ORIGIN, False)
-    store.delete(path_constants.REMOTE_DUPLICATE_TESTFILE_COPY, False)
     
 def _test_nested_duplicate(store):
     store.create_directory(path_constants.REMOTE_DUPLICATE_TESTDIR_ORIGIN)
