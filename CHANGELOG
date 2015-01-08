@@ -4,11 +4,13 @@ B: Added Features
 C: Bugfixes
 _stable means that the changes were successfully tested with all tests in the test suite, and a stress test for at least 24h
 
-v.7.5.17:
+v.7.5.19:
     * Workaround fuse bug that changed working directory -> Bugfix Google Drive; now works without foreground option
     * Adapt to interface change of Dropbox registration, to fix autoregistration
     * Bugfix Google Drive, to be able to store binary data
     * Bugfix Google Store, fix hard coded bucket name in method move (this bug does not affect the file system)
+    * Bugfix Google Store, fix authentication issue when token is expired
+    * Bugfix in metadata caching layer, only delete cache entries while no uploads are going on
 v.7.5.13_stable:
     * Add Support for Google Drive
     * Add ~/.cache/cloudfusion as default cache directory
