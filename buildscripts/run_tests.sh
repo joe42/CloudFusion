@@ -126,16 +126,16 @@ if ! jobs %% &>/dev/null ; then
     cat /tmp/*.running_process_log
     cleanup_and_exit 1
 fi
-                         
-capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_dropbox'
-capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_sugarsync'
-capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_yandex'
-capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_local'
-capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_amazon'
-capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_google'
-# capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_tonline' # This test takes too long on Travis CI.
-capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_gmx'
-capture_output 'nosetests -v -s -x cloudfusion.tests.store_tests:test_webdav_box'
+
+capture_output 'nosetests -v -s -x --logging-filter=dropbox cloudfusion.tests.store_tests:test_dropbox'
+capture_output 'nosetests -v -s -x --logging-filter=sugarsync cloudfusion.tests.store_tests:test_sugarsync'
+capture_output 'nosetests -v -s -x --logging-filter=webdav cloudfusion.tests.store_tests:test_webdav_yandex'
+capture_output 'nosetests -v -s -x --logging-filter=harddrive cloudfusion.tests.store_tests:test_local'
+capture_output 'nosetests -v -s -x --logging-filter=amazon cloudfusion.tests.store_tests:test_amazon'
+capture_output 'nosetests -v -s -x --logging-filter=google cloudfusion.tests.store_tests:test_google'
+# capture_output 'nosetests -v -s -x --logging-filter=webdav cloudfusion.tests.store_tests:test_webdav_tonline' # This test takes too long on Travis CI.
+capture_output 'nosetests -v -s -x --logging-filter=webdav cloudfusion.tests.store_tests:test_webdav_gmx'
+capture_output 'nosetests -v -s -x --logging-filter=webdav cloudfusion.tests.store_tests:test_webdav_box'
 capture_output 'nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py -I store_tests.py -I transparent_store_test_with_sync.py -I store_test_gdrive.py'
 
 
