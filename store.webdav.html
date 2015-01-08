@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The webdav_store Module &mdash; CloudFusion 0.01 documentation</title>
+    <title>The tinydav_client Module &mdash; CloudFusion 0.01 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -25,8 +25,8 @@
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="CloudFusion 0.01 documentation" href="index.html" />
     <link rel="up" title="Subpackages" href="store.html" />
-    <link rel="next" title="The sugarsync_store Module" href="store.sugarsync.html" />
-    <link rel="prev" title="Subpackages" href="store.html" /> 
+    <link rel="next" title="The bulk_get_metadata_google_store Module" href="store.gs.html" />
+    <link rel="prev" title="The dropbox_store Module" href="store.dropbox.html" /> 
   </head>
   <body>
     <div class="related">
@@ -39,10 +39,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="store.sugarsync.html" title="The sugarsync_store Module"
+          <a href="store.gs.html" title="The bulk_get_metadata_google_store Module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="store.html" title="Subpackages"
+          <a href="store.dropbox.html" title="The dropbox_store Module"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li>
@@ -55,120 +55,7 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-cloudfusion.store.webdav.webdav_store">
-<span id="the-webdav-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">webdav_store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.webdav.webdav_store" title="Permalink to this headline">¶</a></h1>
-<p>Created on 08.04.2011</p>
-<p>&#64;author: joe</p>
-<dl class="class">
-<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore">
-<em class="property">class </em><tt class="descclassname">cloudfusion.store.webdav.webdav_store.</tt><tt class="descname">WebdavStore</tt><big>(</big><em>config</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="store.html#cloudfusion.store.store.Store" title="cloudfusion.store.store.Store"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.store.Store</span></tt></a></p>
-<p><em>config</em> is a dictionary with the keys user, password, and URL. For instance:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#url can also contain an existing subfolder to access, i.e. https://webdav.mediencenter.t-online.de/myfolder</span>
-<span class="c">#url can also contain the port for the WebDAV server, i.e. https://webdav.mediencenter.t-online.de:443</span>
-<span class="n">config</span><span class="p">[</span><span class="s">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;https://webdav.mediencenter.t-online.de&#39;</span> 
-<span class="n">config</span><span class="p">[</span><span class="s">&#39;user&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;me@emailserver.com&#39;</span> <span class="c">#your account username/e-mail address</span>
-<span class="n">config</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;MySecret!23$&#39;</span> <span class="c">#your account password</span>
-</pre></div>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> &#8211; dictionary with key value pairs</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore._WebdavStore__get_size">
-<tt class="descname">_WebdavStore__get_size</tt><big>(</big><em>fileobject</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore._WebdavStore__get_size" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore._get_time_difference">
-<tt class="descname">_get_time_difference</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore._get_time_difference" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore._handle_error">
-<tt class="descname">_handle_error</tt><big>(</big><em>error</em>, <em>stacktrace</em>, <em>method_name</em>, <em>remaining_tries</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore._handle_error" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.account_info">
-<tt class="descname">account_info</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.account_info" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.create_directory">
-<tt class="descname">create_directory</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.create_directory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.delete">
-<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.delete" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.duplicate">
-<tt class="descname">duplicate</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.duplicate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.get_directory_listing">
-<tt class="descname">get_directory_listing</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.get_directory_listing" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.get_file">
-<tt class="descname">get_file</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.get_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.get_logging_handler">
-<tt class="descname">get_logging_handler</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.get_logging_handler" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.get_max_filesize">
-<tt class="descname">get_max_filesize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.get_max_filesize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return maximum number of bytes per file</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.get_metadata">
-<tt class="descname">get_metadata</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.get_metadata" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.get_name">
-<tt class="descname">get_name</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.get_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.get_overall_space">
-<tt class="descname">get_overall_space</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.get_overall_space" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.get_used_space">
-<tt class="descname">get_used_space</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.get_used_space" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.move">
-<tt class="descname">move</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.move" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.store_fileobject">
-<tt class="descname">store_fileobject</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.store_fileobject" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-cloudfusion.store.webdav.tinydav_client">
+  <div class="section" id="module-cloudfusion.store.webdav.tinydav_client">
 <span id="the-tinydav-client-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">tinydav_client</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.webdav.tinydav_client" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="cloudfusion.store.webdav.tinydav_client.TinyDAVClient">
@@ -337,6 +224,119 @@ The value for &#8216;is_dir&#8217; is True if the file object is a directory and
 </dd></dl>
 
 </div>
+<div class="section" id="module-cloudfusion.store.webdav.webdav_store">
+<span id="the-webdav-store-module"></span><h1>The <tt class="xref py py-mod docutils literal"><span class="pre">webdav_store</span></tt> Module<a class="headerlink" href="#module-cloudfusion.store.webdav.webdav_store" title="Permalink to this headline">¶</a></h1>
+<p>Created on 08.04.2011</p>
+<p>&#64;author: joe</p>
+<dl class="class">
+<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore">
+<em class="property">class </em><tt class="descclassname">cloudfusion.store.webdav.webdav_store.</tt><tt class="descname">WebdavStore</tt><big>(</big><em>config</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="store.html#cloudfusion.store.store.Store" title="cloudfusion.store.store.Store"><tt class="xref py py-class docutils literal"><span class="pre">cloudfusion.store.store.Store</span></tt></a></p>
+<p><em>config</em> is a dictionary with the keys user, password, and URL. For instance:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#url can also contain an existing subfolder to access, i.e. https://webdav.mediencenter.t-online.de/myfolder</span>
+<span class="c">#url can also contain the port for the WebDAV server, i.e. https://webdav.mediencenter.t-online.de:443</span>
+<span class="n">config</span><span class="p">[</span><span class="s">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;https://webdav.mediencenter.t-online.de&#39;</span> 
+<span class="n">config</span><span class="p">[</span><span class="s">&#39;user&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;me@emailserver.com&#39;</span> <span class="c">#your account username/e-mail address</span>
+<span class="n">config</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;MySecret!23$&#39;</span> <span class="c">#your account password</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> &#8211; dictionary with key value pairs</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore._WebdavStore__get_size">
+<tt class="descname">_WebdavStore__get_size</tt><big>(</big><em>fileobject</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore._WebdavStore__get_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore._get_time_difference">
+<tt class="descname">_get_time_difference</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore._get_time_difference" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore._handle_error">
+<tt class="descname">_handle_error</tt><big>(</big><em>error</em>, <em>stacktrace</em>, <em>method_name</em>, <em>remaining_tries</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore._handle_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.account_info">
+<tt class="descname">account_info</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.account_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.create_directory">
+<tt class="descname">create_directory</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.create_directory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.duplicate">
+<tt class="descname">duplicate</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.duplicate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.get_directory_listing">
+<tt class="descname">get_directory_listing</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.get_directory_listing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.get_file">
+<tt class="descname">get_file</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.get_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.get_logging_handler">
+<tt class="descname">get_logging_handler</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.get_logging_handler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.get_max_filesize">
+<tt class="descname">get_max_filesize</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.get_max_filesize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return maximum number of bytes per file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.get_metadata">
+<tt class="descname">get_metadata</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.get_metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.get_name">
+<tt class="descname">get_name</tt><big>(</big><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.get_overall_space">
+<tt class="descname">get_overall_space</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.get_overall_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.get_used_space">
+<tt class="descname">get_used_space</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.get_used_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.move">
+<tt class="descname">move</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.move" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cloudfusion.store.webdav.webdav_store.WebdavStore.store_fileobject">
+<tt class="descname">store_fileobject</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cloudfusion.store.webdav.webdav_store.WebdavStore.store_fileobject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="the-cadaver-client-module">
 <h1>The <tt class="xref py py-mod docutils literal"><span class="pre">cadaver_client</span></tt> Module<a class="headerlink" href="#the-cadaver-client-module" title="Permalink to this headline">¶</a></h1>
 </div>
@@ -383,18 +383,18 @@ The value for &#8216;is_dir&#8217; is True if the file object is a directory and
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">webdav_store</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-cloudfusion.store.webdav.tinydav_client">The <tt class="docutils literal"><span class="pre">tinydav_client</span></tt> Module</a></li>
+<li><a class="reference internal" href="#">The <tt class="docutils literal"><span class="pre">tinydav_client</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-cloudfusion.store.webdav.webdav_store">The <tt class="docutils literal"><span class="pre">webdav_store</span></tt> Module</a></li>
 <li><a class="reference internal" href="#the-cadaver-client-module">The <tt class="docutils literal"><span class="pre">cadaver_client</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-cloudfusion.store.webdav.bulk_get_metadata_webdav_store">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_webdav_store</span></tt> Module</a></li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="store.html"
-                        title="previous chapter">Subpackages</a></p>
+  <p class="topless"><a href="store.dropbox.html"
+                        title="previous chapter">The <tt class="docutils literal"><span class="pre">dropbox_store</span></tt> Module</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="store.sugarsync.html"
-                        title="next chapter">The <tt class="docutils literal"><span class="pre">sugarsync_store</span></tt> Module</a></p>
+  <p class="topless"><a href="store.gs.html"
+                        title="next chapter">The <tt class="docutils literal"><span class="pre">bulk_get_metadata_google_store</span></tt> Module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/store.webdav.txt"
@@ -427,10 +427,10 @@ The value for &#8216;is_dir&#8217; is True if the file object is a directory and
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="store.sugarsync.html" title="The sugarsync_store Module"
+          <a href="store.gs.html" title="The bulk_get_metadata_google_store Module"
              >next</a> |</li>
         <li class="right" >
-          <a href="store.html" title="Subpackages"
+          <a href="store.dropbox.html" title="The dropbox_store Module"
              >previous</a> |</li>
         <li><a href="index.html">CloudFusion 0.01 documentation</a> &raquo;</li>
           <li><a href="develop.html" >Developers documentation</a> &raquo;</li>
