@@ -304,7 +304,7 @@ And here is the code::
                 
         #Wrap file content into a file object
         fileobj = StringIO() 
-        fileobj.write(file_content)
+        fileobj.write("Hello World")
         fileobj.seek(0) # set to beginning of file for further read operations
         
         # uploading multiple small files in the same directory (in this case the directory is '/')
