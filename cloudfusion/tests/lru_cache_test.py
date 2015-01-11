@@ -168,8 +168,6 @@ def test_resize():
         assert test_obj.get_size_of_cached_data() < 50000000
         for j in range(10,i-15+1):
             assert not str(j) in test_obj.get_keys()
-        for j in range(10,i+1)[-14:]:
-            assert test_obj.get_value(str(j)) == "a"*2000000
             
 def test_resize_dirty():
     test_obj = LRUCache(1,0)

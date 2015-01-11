@@ -143,7 +143,11 @@ class LRUCache(Cache):
         if self.entries[CACHESIZE]/1000000 < self.maxsize or self._last_resize+self.resize_interval>time.time():
             return
         entry = self._get_listtail_entry()
-        while self.entries[CACHESIZE]/1000000 >= self.maxsize and entry.next:
+        if self.maxsize >= 10:
+            goal_cache_size = self.maxsize * 0.8
+        else:
+            goal_cache_size = self.maxsize
+        while self.entries[CACHESIZE]/1000000 >= goal_cache_size and entry.next:
             if entry.dirty == False and self.is_expired(entry.key):
                 self.delete(entry.key)
             entry = self.entries[entry.next]

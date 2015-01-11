@@ -203,8 +203,6 @@ def test_resize():
         assert test_obj.get_size_of_cached_data() < 30000003
         for j in range(10,i-14+1):
             assert not str(j) in test_obj.get_keys()
-        for j in range(10,i+1)[-14:]:
-            assert test_obj.get_value(str(j)) == "a"*2000000
             
 @with_setup(set_up, tear_down)   
 def test_resize_dirty():
