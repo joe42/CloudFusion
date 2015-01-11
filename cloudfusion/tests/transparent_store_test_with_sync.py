@@ -243,7 +243,7 @@ def _test_get_bytes(store):
     finish_upload(store)
     res = store.get_bytes(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME)
     store.delete(REMOTE_TESTDIR+"/"+LOCAL_TESTFILE_NAME, False)
-    assert res == 4, "stored file should be 4 bytes big, but has a size of %s bytes" % res
+    assert res > 0 and res < 10, "stored file should be between one and ten bytes big, but has a size of %s bytes" % res
 
 def _test_is_dir(store):
     assert store.is_dir(REMOTE_TESTDIR) == True
@@ -277,7 +277,7 @@ def _test_get_free_space(store):
     free_space = store.get_free_space()
     used_space = store.get_used_space()
     overall_space = store.get_overall_space()
-    assert free_space == overall_space - used_space, "free space should amount to overall space minus used space (%s) but is %s" % (overall_space - used_space, free_space)
+    assert abs(free_space - (overall_space - used_space)) < 6000, "free space should amount to overall space minus used space (%s) but is %s" % (overall_space - used_space, free_space)
 
 def _test_get_overall_space(store):
     overall_space = store.get_overall_space()
