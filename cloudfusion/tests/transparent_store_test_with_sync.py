@@ -37,7 +37,7 @@ from cloudfusion.store.transparent_chunk_caching_store import TransparentChunkMu
 from cloudfusion.store.transparent_caching_store import TransparentMultiprocessingCachingStore
 from cloudfusion.store.webdav.webdav_store import WebdavStore
 from time import sleep
-from cloudfusion.tests.utf8_path_constants import *
+from cloudfusion.tests.utf8_path_constants_restricted import *
 from cloudfusion.tests.config import *
 
 
