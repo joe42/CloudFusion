@@ -90,10 +90,13 @@ class WebdavStore(Store):
     def delete(self, path, is_dir=False):
         self.logger.info("deleting %s", path)
         self._raise_error_if_invalid_path(path)
-        if is_dir:
-            self.tinyclient.rmdir(path)
-        else:
-            self.tinyclient.rm(path)
+        try:
+            if is_dir:
+                self.tinyclient.rmdir(path)
+            else:
+                self.tinyclient.rm(path)
+        except NoSuchFilesytemObjectError, e:
+            self.logger.debug("File could not be deleted as it does not exist.")
         
     def account_info(self):
         self.logger.debug("retrieving account info")
