@@ -102,7 +102,7 @@ capture_output 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with
 
 # Keep travis session alive by producing output for 20 minutes.
 # If exit status of job in background is non-zero, exit.
-for i in {1..20} ; do 
+for i in {1..30} ; do 
     sleep 60; # 1 Min
     if [ -e /tmp/exit_status ] ; then 
         exit_status=$(cat /tmp/exit_status) 
