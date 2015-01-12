@@ -53,7 +53,7 @@ class HTTP_STATUS(object):
         elif code == HTTP_STATUS.NOT_CHANGED:
             pass
         elif code == HTTP_STATUS.AUTHORIZATION_REQUIRED:
-            raise StoreAutorizationError("StoreAutorizationError Message: "+msg+"\nStatus description: "+HTTP_STATUS.get_status_desc(code), code)
+            raise StoreAuthorizationError("StoreAuthorizationError Message: "+msg+"\nStatus description: "+HTTP_STATUS.get_status_desc(code), code)
         elif code == HTTP_STATUS.OVER_STORAGE_LIMIT:
             raise StoreSpaceLimitError("StoreSpaceLimitError Message: "+msg+"\nStatus description: "+HTTP_STATUS.get_status_desc(code), code)
         elif code == HTTP_STATUS.NOT_FOUND:
@@ -255,7 +255,7 @@ class DropboxStore(Store):
         if isinstance(error, AttributeError):
             self.logger.exception("Retrying on funny socket error: %s", error)
             #funny socket error in httplib2: AttributeError 'NoneType' object has no attribute 'makefile'
-        elif isinstance(error, StoreAutorizationError):
+        elif isinstance(error, StoreAuthorizationError):
             self.logger.exception("Trying to handle authorization error by reconnecting: %s", error)
             self.reconnect()
             if remaining_tries == 0: # throw error after last try

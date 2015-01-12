@@ -1,5 +1,5 @@
 from cloudfusion.store.store import NoSuchFilesytemObjectError,\
-    AlreadyExistsError, StoreAccessError, StoreAutorizationError
+    AlreadyExistsError, StoreAccessError, StoreAuthorizationError
 from cloudfusion.util import file_util
 import os, stat,  time
 from errno import *
@@ -55,7 +55,7 @@ class PyFuseBox(Operations):
             raise FuseOSError(ENOENT)
         except StoreAccessError:
             raise FuseOSError(EIO)
-        except StoreAutorizationError:
+        except StoreAuthorizationError:
             raise FuseOSError(EACCES) 
         except Exception, e:
             raise FuseOSError(ENOENT)
@@ -103,7 +103,7 @@ class PyFuseBox(Operations):
                 raise FuseOSError(ENOENT)
             except StoreAccessError:
                 raise FuseOSError(EIO)
-            except StoreAutorizationError:
+            except StoreAuthorizationError:
                 raise FuseOSError(EACCES) 
         else:
             data = self.temp_file[path].read()
@@ -126,7 +126,7 @@ class PyFuseBox(Operations):
             raise FuseOSError(ENOENT)
         except StoreAccessError:
             raise FuseOSError(EIO)
-        except StoreAutorizationError:
+        except StoreAuthorizationError:
             raise FuseOSError(EACCES) 
         return 0
         
@@ -142,7 +142,7 @@ class PyFuseBox(Operations):
             raise FuseOSError(EEXIST)
         except StoreAccessError:
             raise FuseOSError(EIO)
-        except StoreAutorizationError:
+        except StoreAuthorizationError:
             raise FuseOSError(EACCES) #keine Berechtigung
         return 0
 
@@ -156,7 +156,7 @@ class PyFuseBox(Operations):
             ret['f_blocks'] = int( self.store.get_overall_space() / ret['f_bsize'] ) #Total number of blocks in the filesystem.
         except StoreAccessError:
             raise FuseOSError(EIO)
-        except StoreAutorizationError:
+        except StoreAuthorizationError:
             raise FuseOSError(EACCES) #keine Berechtigung
         ret['f_favail'] = 810280 #Free nodes available to non-super user -- not sure about this
         ret['f_ffree'] = ret['f_favail'] #Total number of free file nodes.
@@ -185,7 +185,7 @@ class PyFuseBox(Operations):
             raise FuseOSError(ENOENT)
         except StoreAccessError:
             raise FuseOSError(EIO)
-        except StoreAutorizationError:
+        except StoreAuthorizationError:
             raise FuseOSError(EACCES)
         return 0
 
@@ -200,7 +200,7 @@ class PyFuseBox(Operations):
             raise FuseOSError(EEXIST)
         except StoreAccessError:
             raise FuseOSError(EIO)
-        except StoreAutorizationError:
+        except StoreAuthorizationError:
             raise FuseOSError(EACCES) #keine Berechtigung
         return 0
         """       self.files[path] = dict(st_mode=(S_IFREG | mode), st_nlink=1,
@@ -219,7 +219,7 @@ class PyFuseBox(Operations):
             raise FuseOSError(ENOENT)
         except StoreAccessError:
             raise FuseOSError(EIO)
-        except StoreAutorizationError:
+        except StoreAuthorizationError:
             raise FuseOSError(EACCES) #keine Berechtigung
 
     def read(self, path, size, offset, fh):
@@ -233,7 +233,7 @@ class PyFuseBox(Operations):
                 raise FuseOSError(ENOENT)
             except StoreAccessError:
                 raise FuseOSError(EIO)
-            except StoreAutorizationError:
+            except StoreAuthorizationError:
                 raise FuseOSError(EACCES) #keine Berechtigung
             tmp_offset = 0
             chunk_size = 10*1000*1000
@@ -262,7 +262,7 @@ class PyFuseBox(Operations):
                 raise FuseOSError(ENOENT)
             except StoreAccessError:
                 raise FuseOSError(EIO)
-            except StoreAutorizationError:
+            except StoreAuthorizationError:
                 raise FuseOSError(EACCES) #keine Berechtigung
             self.temp_file[path].write(data)
         self.slow_down_if_cache_full(filesize)
@@ -292,7 +292,7 @@ class PyFuseBox(Operations):
                 raise FuseOSError(ENOENT)
             except StoreAccessError:
                 raise FuseOSError(EIO)
-            except StoreAutorizationError:
+            except StoreAuthorizationError:
                 raise FuseOSError(EACCES) #keine Berechtigung
         return 0
     
@@ -317,7 +317,7 @@ class PyFuseBox(Operations):
             raise FuseOSError(ENOENT)
         except StoreAccessError:
             raise FuseOSError(EIO)
-        except StoreAutorizationError:
+        except StoreAuthorizationError:
             raise FuseOSError(EACCES) #keine Berechtigung
         #self.logger.debug("readdir -> "+str(directories)+"")
         file_objects = [".", ".."]

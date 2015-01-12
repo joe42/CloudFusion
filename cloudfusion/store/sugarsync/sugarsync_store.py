@@ -41,7 +41,7 @@ class HTTP_STATUS(object):
         if code in HTTP_STATUS.OK:
             pass
         elif code == HTTP_STATUS.AUTHORIZATION_REQUIRED:
-            raise StoreAutorizationError("StoreAutorizationError Message: "+msg+"\nStatus description: "+HTTP_STATUS.get_status_desc(code), code)
+            raise StoreAuthorizationError("StoreAuthorizationError Message: "+msg+"\nStatus description: "+HTTP_STATUS.get_status_desc(code), code)
         elif code == HTTP_STATUS.OVER_STORAGE_LIMIT:
             raise StoreSpaceLimitError("StoreSpaceLimitError Message: "+msg+"\nStatus description: "+HTTP_STATUS.get_status_desc(code), code)
         elif code == HTTP_STATUS.NOT_FOUND:
@@ -141,7 +141,7 @@ class SugarsyncStore(Store):
         try:
             self.client = SugarsyncClient(config)
         except Exception, e:
-            raise StoreAutorizationError(repr(e), 0)
+            raise StoreAuthorizationError(repr(e), 0)
         self.time_difference = self._get_time_difference()
         self.logger.info("sugarsync store initialized")
         self.root_folders = {}
@@ -598,7 +598,7 @@ that is cached for 3 seconds, False if it is not in the actual listing, or None 
             #funny socket error in httplib2: AttributeError 'NoneType' object has no attribute 'makefile'
         elif isinstance(error, httplib.IncompleteRead):
             self.logger.error("Retrying on incomplete read error: %s", error)
-        elif isinstance(error, StoreAutorizationError):
+        elif isinstance(error, StoreAuthorizationError):
             self.logger.error("Trying to handle authorization error by reconnecting: %s", error)
             self.reconnect()
             if remaining_tries == 0: # throw error after last try

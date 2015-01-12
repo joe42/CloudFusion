@@ -5,7 +5,7 @@ from cloudfusion.store.chunk_store_worker import ChunkWriteWorker
 from threading import Thread, RLock
 import time
 from cloudfusion.store.store import StoreSpaceLimitError, StoreAccessError, NoSuchFilesytemObjectError,\
-    StoreAutorizationError
+    StoreAuthorizationError
 import tarfile
 import os
 import shelve
@@ -823,7 +823,7 @@ class ChunkStoreSyncThread(object):
             self.stats.add_finished_worker(reader)
             if reader.get_error():
                 err = reader.get_error()
-                if not err in [StoreAccessError, NoSuchFilesytemObjectError, StoreAutorizationError]:
+                if not err in [StoreAccessError, NoSuchFilesytemObjectError, StoreAuthorizationError]:
                     err = StoreAccessError(str(err),0)
                 raise err
             for filepath, file_content, modified_date in self.chunk_mapper.iterate_files_from_chunk(tar_content, chunk_id):

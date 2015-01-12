@@ -4,7 +4,7 @@ from cloudfusion.store.store_worker import WriteWorker, ReadWorker, RemoveWorker
 from threading import Thread, RLock
 import time
 from cloudfusion.store.store import StoreSpaceLimitError, StoreAccessError, NoSuchFilesytemObjectError,\
-    StoreAutorizationError
+    StoreAuthorizationError
 import os
 from profilehooks import profile
 
@@ -388,7 +388,7 @@ class StoreSyncThread(object):
             self.readers.remove(reader)
             if reader.get_error():
                 err = reader.get_error()
-                if not err in [StoreAccessError, NoSuchFilesytemObjectError, StoreAutorizationError]:
+                if not err in [StoreAccessError, NoSuchFilesytemObjectError, StoreAuthorizationError]:
                     err = StoreAccessError(str(err),0)
                 raise err
             self.refresh_cache_entry(path, content, self.store.get_metadata(path)['modified']) #[shares_resource: write self.entries]

@@ -18,9 +18,9 @@ class StoreSpaceLimitError(StoreAccessError):
 class NoSuchFilesytemObjectError(StoreAccessError):
     def __init__(self, path, status=0):
         super(NoSuchFilesytemObjectError, self).__init__("%s does not exist." % path, status)
-class StoreAutorizationError(StoreAccessError):
+class StoreAuthorizationError(StoreAccessError):
     def __init__(self, msg, status=0):
-        super(StoreAutorizationError, self).__init__(msg, status)
+        super(StoreAuthorizationError, self).__init__(msg, status)
 class AlreadyExistsError(StoreAccessError):
     def __init__(self, msg, status=0):
         super(AlreadyExistsError, self).__init__(msg, status)
