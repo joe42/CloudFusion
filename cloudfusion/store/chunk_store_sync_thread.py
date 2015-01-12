@@ -763,7 +763,10 @@ class ChunkStoreSyncThread(object):
                 while len(dirs)>0:
                     d = dirs.pop()
                     #self.logger.debug( "chunk directory pop: "+d)
-                    listing = self.store.get_directory_listing(d)
+                    try:
+                        listing = self.store.get_directory_listing(d)
+                    except NoSuchFilesytemObjectError, e:
+                        continue
                     for item in listing:
                         item = os.path.basename(item)
                         self.logger.debug( "delete chunk "+d+'/'+item)
