@@ -4,30 +4,41 @@ Created on 08.04.2011
 import os.path
 
 class StoreAccessError(Exception):
+    '''Most general exception raised by a :class:`Store` implementation.
+    Means that the operation could not be completed successfully.'''
     def __init__(self, msg, status=0):
         if status != 0:
             msg =msg+"\nStatus: %s" %status
         super(StoreAccessError, self).__init__(msg)
         self.status = status
 class DateParseError(Exception):
+    '''Indicates a problem with parsing the date format.
+    For instance when getting meta data like modified time from a store.'''
     def __init__(self, msg):
         super(DateParseError, self).__init__(msg)
 class StoreSpaceLimitError(StoreAccessError):
+    '''Occurs when not enough space is available to execute the operation.'''
     def __init__(self, msg="", status=0):
         super(StoreSpaceLimitError, self).__init__(msg, status)
 class NoSuchFilesytemObjectError(StoreAccessError):
+    '''A file system object passed as a parameter to the operation does not exist.'''
     def __init__(self, path, status=0):
         super(NoSuchFilesytemObjectError, self).__init__("%s does not exist." % path, status)
 class StoreAuthorizationError(StoreAccessError):
+    '''A problem occurred when trying to authorize to the remote store.'''
     def __init__(self, msg, status=0):
         super(StoreAuthorizationError, self).__init__(msg, status)
 class AlreadyExistsError(StoreAccessError):
+    '''A file system object passed as a parameter to the operation does not exist.'''
     def __init__(self, msg, status=0):
         super(AlreadyExistsError, self).__init__(msg, status)
 class InvalidPathValueError(ValueError):
+    '''May be thrown if the path specified as a parameter of the operation is invalid.
+    For instance if it does not start with a slash, or if it contains illegal characters.'''
     def __init__(self, path):
         super(InvalidPathValueError, self).__init__(path+" "+"is no valid path!!") 
 class InterruptedException(Exception):
+    '''Should be raised if a file upload has been interrupted.'''
     def __init__(self, msg):
         super(InterruptedException, self).__init__(msg)
 
@@ -38,7 +49,8 @@ class Store(object):
     After implementing the interface for a new provider, you can add file system access to it by
     introducing a new branch to the if statement in :meth:`cloudfusion.pyfusebox.configurable_pyfusebox.ConfigurablePyFuseBox.__get_new_store`.
     Advanced functionality such as caching and concurrency are supplied by wrappers, which are already implemented.
-    Path parameters are always absolute paths of a file system, starting with a '/'
+    Path parameters are always absolute paths of a file system, starting with a '/'.
+    Methods can raise exceptions of :class:`StoreAccessError`, :class:`DateParseError`, and :class:`InvalidPathValueError` if not mentioned otherwise. 
     '''
     def _is_valid_path(self, path):
         return path[0] == "/";
