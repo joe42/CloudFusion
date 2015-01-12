@@ -358,7 +358,7 @@ class SugarsyncStore(Store):
                 else:
                     self.logger.info("deleting %s", path+"/"+item['name'])
                     resp = self.client.delete_file(item['reference'])
-                    if not resp.status in HTTP_STATUS.OK:
+                    if not resp.status in HTTP_STATUS.OK or resp.status == HTTP_STATUS.NOT_FOUND:
                         self.logger.warning("could not delete %s\nstatus: %s reason: %s", path+"/"+item['name'], resp.status, resp.reason)
                         HTTP_STATUS.generate_exception(resp.status, str(resp))
                     else:
