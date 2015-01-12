@@ -56,8 +56,6 @@ def test_chunk_cache_store():
     store = TransparentChunkMultiprocessingCachingStore( WebdavStore(config),
                                                          cache_expiration_time=1, 
                                                          cache_size_in_mb=0 )
-    # Upload chunks more quickly for testing purposes - this is not a reliable feature of the API
-    store.sync_thread.chunk_factory.max_time_to_upload = 30
     for test in _generate_store_tests(store, "TransparentChunkCachingStore WebdavStore box", 
                                       include_space_tests=False):
         yield test
@@ -69,8 +67,6 @@ def test_chunk_metadata_cache_store():
     store = TransparentChunkMultiprocessingCachingStore( MetadataCachingStore( WebdavStore(config) ),
                                                          cache_expiration_time=1, 
                                                          cache_size_in_mb=0 )
-    # Upload chunks more quickly for testing purposes - this is not a reliable feature of the API
-    store.sync_thread.chunk_factory.max_time_to_upload = 30
     for test in _generate_store_tests(store, "TransparentChunkCachingStore WebdavStore yandex", 
                                       include_space_tests=False):
         yield test

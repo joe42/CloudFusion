@@ -95,8 +95,8 @@ perl -pi -e "s/bucket_name =.*/bucket_name = cloudfusion42/g" cloudfusion/config
 
 # nosetests options: -x stop on first error, -v verbose, -s output stdout messgages immediately
 
-capture_output 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_chunk_cache_store'
-capture_output 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_chunk_metadata_cache_store'
+# capture_output 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_chunk_cache_store'
+# capture_output 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_chunk_metadata_cache_store'
 capture_output 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_cache_store'
 capture_output 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_metadata_cache_store'
 
