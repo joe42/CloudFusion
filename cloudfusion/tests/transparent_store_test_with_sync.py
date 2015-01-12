@@ -111,6 +111,7 @@ def _generate_store_tests(store, description_of_store, include_space_tests=True)
     :param description_of_store: String to describe the store instance.
     :param include_space_tests: Indicates if tests about the free, used, and overall space should be executed.
     :type include_space_tests: boolean'''
+    store.delete(REMOTE_TESTDIR, True)
     _create_test_directory(store)
     if include_space_tests:
         test = partial(_test_get_free_space, store)
