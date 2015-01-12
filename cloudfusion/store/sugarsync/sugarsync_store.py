@@ -374,7 +374,10 @@ class SugarsyncStore(Store):
             self.logger.warning("could not delete %s\nstatus: %s reason: %s", path, resp.status, resp.reason)
             HTTP_STATUS.generate_exception(resp.status, str(resp))
         else:
-            del self.path_cache[path]
+            try:
+                del self.path_cache[path]
+            except KeyError, e:
+                pass
             self.__remove_from_dir_listing(path)
         return resp.status
         
@@ -679,6 +682,7 @@ that is cached for 3 seconds, False if it is not in the actual listing, or None 
         if not self.exists(path):
             HTTP_STATUS.generate_exception(HTTP_STATUS.NOT_FOUND, "%s does not exist" % path)
         sugarsync_path =  self._translate_path(path)
+        # TODO: What if path cache is outdated and a new file has been uploaded in the background?
         resp = self.client.get_file_metadata( sugarsync_path )
         if resp.status == HTTP_STATUS.BAD_REQUEST: # status means "is no folder" in this case
             is_file = False
