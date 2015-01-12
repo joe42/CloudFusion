@@ -118,7 +118,7 @@ for i in {1..20} ; do
 done
 
 # If there is still a background job:
-if ! jobs %% &>/dev/null ; then
+if jobs %% &>/dev/null ; then
     echo 'TransparentStore tests take too long - exiting.'
     echo "Running jobs:"
     jobs
