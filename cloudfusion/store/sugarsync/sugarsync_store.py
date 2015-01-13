@@ -350,7 +350,11 @@ class SugarsyncStore(Store):
         if path[-1] == "/":
             path = path[0:-1]
         self._raise_error_if_invalid_path(path)
-        translated_path = self._translate_path(path)
+        try:
+            translated_path = self._translate_path(path)
+        except NoSuchFilesytemObjectError, e:
+            self.__remove_from_dir_listing(path)
+            return
         if is_dir:
             for item in self._parse_collection(translated_path):
                 if item['is_dir']:
