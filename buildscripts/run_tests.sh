@@ -141,7 +141,7 @@ capture_output 'nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_p
 
 # Keep travis session alive by producing output for 20 minutes.
 # If exit status of job in background is non-zero, exit.
-for i in {1..20} ; do 
+for i in {1..30} ; do 
     sleep 60; # 1 Min
     if [ -e /tmp/exit_status ] ; then 
         exit_status=$(cat /tmp/exit_status) 
@@ -157,9 +157,15 @@ for i in {1..20} ; do
     echo -e "."; 
 done
 
-echo "Waited over 20 minutes for tests to finish - exiting."
 echo "Running jobs:"
 jobs
+
+if ! jobs %% &>/dev/null ; then
+    echo 'All tests have finished successfully .'
+    cleanup_and_exit 0
+fi
+
+echo "Waited over 30 minutes for tests to finish - exiting."
 echo "Incomplete log files:"
 cat /tmp/*.running_process_log
 
