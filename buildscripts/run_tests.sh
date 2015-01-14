@@ -89,43 +89,17 @@ perl -pi -e "s/password =.*/password =${WEBDAV4_PWD}/g" cloudfusion/config/Webda
 perl -pi -e "s/bucket_name =.*/bucket_name = cloudfusion42/g" cloudfusion/config/Google_testing.ini
 perl -pi -e "s/bucket_name =.*/bucket_name = cloudfusion42/g" cloudfusion/config/AmazonS3_testing.ini
 
-# The test modules must be executed sequentially, but the test cases inside the module can run concurrently.
 # Each test runs in background, and outputs the results immediately after it has finished. 
 # The script exits immediately with the exit status of nosetests if the test has failed.
 
 # nosetests options: -x stop on first error, -v verbose, -s output stdout messgages immediately
 
+# The uncommented tests take too long on Travis CI, and are dependend on the other tests, 
+# so they cannot be executed concurrently.
 # capture_output 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_chunk_cache_store'
 # capture_output 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_chunk_metadata_cache_store'
 capture_output 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_cache_store'
 capture_output 'nosetests -v -s -x cloudfusion.tests.transparent_store_test_with_sync:test_metadata_cache_store'
-
-# Keep travis session alive by producing output for 20 minutes.
-# If exit status of job in background is non-zero, exit.
-for i in {1..30} ; do 
-    sleep 60; # 1 Min
-    if [ -e /tmp/exit_status ] ; then 
-        exit_status=$(cat /tmp/exit_status) 
-        echo 'A test failed.'
-        cleanup_and_exit $exit_status
-    fi
-    # If there is no background job anymore:
-    if ! jobs %% &>/dev/null ; then
-        echo 'TransparentStore tests with synchronization have finished successfully.'
-        break;
-    fi
-    echo -e "."; 
-done
-
-# If there is still a background job:
-if jobs %% &>/dev/null ; then
-    echo 'TransparentStore tests take too long - exiting.'
-    echo "Running jobs:"
-    jobs
-    echo "Incomplete log files:"
-    cat /tmp/*.running_process_log
-    cleanup_and_exit 1
-fi
 
 capture_output 'nosetests -v -s -x --logging-filter=dropbox cloudfusion.tests.store_tests:test_dropbox'
 capture_output 'nosetests -v -s -x --logging-filter=sugarsync cloudfusion.tests.store_tests:test_sugarsync'
@@ -133,15 +107,14 @@ capture_output 'nosetests -v -s -x --logging-filter=webdav cloudfusion.tests.sto
 capture_output 'nosetests -v -s -x --logging-filter=harddrive cloudfusion.tests.store_tests:test_local'
 capture_output 'nosetests -v -s -x --logging-filter=amazon cloudfusion.tests.store_tests:test_amazon'
 capture_output 'nosetests -v -s -x --logging-filter=google cloudfusion.tests.store_tests:test_google'
-# capture_output 'nosetests -v -s -x --logging-filter=webdav cloudfusion.tests.store_tests:test_webdav_tonline' # This test takes too long on Travis CI.
+capture_output 'nosetests -v -s -x --logging-filter=webdav cloudfusion.tests.store_tests:test_webdav_tonline'
 capture_output 'nosetests -v -s -x --logging-filter=webdav cloudfusion.tests.store_tests:test_webdav_gmx'
 capture_output 'nosetests -v -s -x --logging-filter=webdav cloudfusion.tests.store_tests:test_webdav_box'
 capture_output 'nosetests -v -s -x -I db_logging_thread_test.py -I synchronize_proxy_test.py -I store_tests.py -I transparent_store_test_with_sync.py -I store_test_gdrive.py'
 
-
-# Keep travis session alive by producing output for 20 minutes.
+# Keep travis session alive by producing output.
 # If exit status of job in background is non-zero, exit.
-for i in {1..30} ; do 
+for i in {1..42} ; do 
     sleep 60; # 1 Min
     if [ -e /tmp/exit_status ] ; then 
         exit_status=$(cat /tmp/exit_status) 
@@ -150,24 +123,21 @@ for i in {1..30} ; do
     fi
     # If there is no background job anymore:
     if ! jobs %% &>/dev/null ; then
-        sleep 10;
-        echo 'All tests have finished successfully.'
-        cleanup_and_exit 0
+        echo 'Tests with synchronization have finished successfully.'
+        break;
     fi
     echo -e "."; 
 done
 
-echo "Running jobs:"
-jobs
-
-if ! jobs %% &>/dev/null ; then
-    echo 'All tests have finished successfully .'
-    cleanup_and_exit 0
+# If there is still a background job:
+if jobs %% &>/dev/null ; then
+    echo 'Tests take too long - exiting.'
+    echo "Running jobs:"
+    jobs
+    echo "Incomplete log files:"
+    cat /tmp/*.running_process_log
+    cleanup_and_exit 1
 fi
 
-echo "Waited over 30 minutes for tests to finish - exiting."
-echo "Incomplete log files:"
-cat /tmp/*.running_process_log
-
-cleanup_and_exit 1
+cleanup_and_exit 0
 
