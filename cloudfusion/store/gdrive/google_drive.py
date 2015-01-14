@@ -284,7 +284,13 @@ get_refresh_token: True
             for _path in self.path_cache.get_keys():
                 if _path.startswith(path+'/') or _path == path:
                     self.path_cache.delete(_path)
-        self.drive.auth.service.files().delete(fileId=file_id).execute()
+        try:
+            self.drive.auth.service.files().delete(fileId=file_id).execute()
+        except HttpError, error:
+            if str(error).lower().find('file not found:') != -1 and\
+                    str(error).lower().find('404') != -1:
+                return False
+            raise error
         
     @retry((Exception))
     def account_info(self):
