@@ -252,7 +252,7 @@ get_refresh_token: True
         size = self.__get_size(fileobject)
         self.logger.debug("Storing file object of size %s to %s", size, path)
         path = path[1:]
-        if self.exists(path):
+        if self.exists('/'+path):
             file_id = self._get_fileobject_id(path)
             file = self.drive.CreateFile({'id': file_id})
         else:
