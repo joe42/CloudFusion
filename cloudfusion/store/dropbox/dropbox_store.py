@@ -473,6 +473,7 @@ class DropboxStore(Store):
         self._raise_error_if_invalid_path(path_to_src)
         self._raise_error_if_invalid_path(path_to_dest)
         try:
+            self.delete(path_to_dest)
             resp = self.client.file_copy(path_to_src, path_to_dest)
         except rest.ErrorResponse as resp:
             msg= "could not duplicate " +path_to_src+" to "+path_to_dest
