@@ -24,6 +24,9 @@ import httplib2
 from pydrive.files import ApiRequestError
 import tempfile
 from _ssl import SSLError
+from cloudfusion.util.mp_synchronize_proxy import MPSynchronizeProxy
+from cloudfusion.util.mp_cache import MPCache
+from apiclient.errors import HttpError
 
 
 
@@ -82,6 +85,7 @@ get_refresh_token: True
         self.logger = logging.getLogger(self._logging_handler)
         self.logger = db_logging_thread.make_logger_multiprocessingsave(self.logger)
         self.logger.info("creating %s store", self.name)
+        self.path_cache = MPSynchronizeProxy( MPCache(60) ) 
         id_key = get_id_key(config)
         secret_key = get_secret_key(config)
         client_auth = self.CLIENT_AUTH_TEMPLATE.substitute(SECRET=config[secret_key], ID=config[id_key])
@@ -140,12 +144,23 @@ get_refresh_token: True
             path = path[1:]
         if path == '':
             return 'root'
+        if self.path_cache.exists('/'+path):
+            try:
+                if self.path_cache.is_expired(path):
+                    self.path_cache.delete(path)
+                else:
+                    return self.path_cache.get_value(path)
+            except KeyError, e:
+                # key has been deleted concurrently
+                pass
         cannot_be_split = len(path.rsplit('/', 1)) == 1
         if cannot_be_split:
             fileobjects = self.drive.ListFile({'q': "'root' in parents and title='%s'" % (path) }).GetList()
             if len(fileobjects) == 0:
                 raise NoSuchFilesytemObjectError(path, 404)
-            return fileobjects[0]['id']
+            _id = fileobjects[0]['id']
+            self.path_cache.write(path, _id)
+            return _id
         parent, title = path.rsplit('/', 1)
         #print "'%s' in parents and title='%s'" % (parent, title)
         parent_id = self._get_fileobject_id(parent)
@@ -153,7 +168,9 @@ get_refresh_token: True
         fileobjects = self.drive.ListFile({'q': "'%s' in parents and title='%s'" % (parent_id, to_unicode(title)) }).GetList()
         if len(fileobjects) == 0:
             raise NoSuchFilesytemObjectError(path, 404)
-        return fileobjects[0]['id']
+        _id = fileobjects[0]['id']
+        self.path_cache.write(path, _id)
+        return _id
         
     def _get_cachedir_name(self, config):
         if 'cache_id' in config:
@@ -194,6 +211,8 @@ get_refresh_token: True
                 setattr(result, k, self.logger)
             elif k == '_logging_handler':
                 setattr(result, k, self._logging_handler)
+            elif k == 'path_cache':
+                setattr(result, k, self.path_cache)
             elif k == 'gauth':
                 self.logger.debug("copy gauth")
                 setattr(result, k, gauth)
@@ -259,6 +278,12 @@ get_refresh_token: True
             file_id = self._get_fileobject_id(path)
         except NoSuchFilesytemObjectError:
             return
+        if not is_dir:
+            self.path_cache.delete(path)
+        else:
+            for _path in self.path_cache.get_keys():
+                if _path.startswith(path+'/') or _path == path:
+                    self.path_cache.delete(_path)
         self.drive.auth.service.files().delete(fileId=file_id).execute()
         
     @retry((Exception))
@@ -268,10 +293,16 @@ get_refresh_token: True
 
     def exists(self, path):
         try:
-            self._get_fileobject_id(path)
-            return True
-        except NoSuchFilesytemObjectError:
+            _id = self._get_fileobject_id(path)
+            _file = self.drive.auth.service.files().get(fileId=_id).execute();
+            return not _file[u'labels'][u'trashed']
+        except NoSuchFilesytemObjectError, e:
             return False
+        except HttpError, error:
+            if str(error).lower().find('file not found:') != -1 and\
+                    str(error).lower().find('404') != -1:
+                return False
+            raise error
 
     @retry((Exception))
     def create_directory(self, directory):
@@ -353,8 +384,16 @@ get_refresh_token: True
         elif isinstance(error, SSLError):
             self.logger.debug("Retrying on SSL error: %s", error)
         elif isinstance(error, ApiRequestError):#403 "Rate Limit Exceeded"
+            if str(error).lower().find('file not found:') != -1 and\
+                    str(error).lower().find('404') != -1:
+                raise NoSuchFilesytemObjectError(str(error)+" File object")
             if str(error).lower().find("rate limit exceeded") != -1:
                 time.sleep(random.random())
+        elif isinstance(error, HttpError):
+            if str(error).lower().find('file not found:') != -1 and\
+                    str(error).lower().find('404') != -1:
+                raise NoSuchFilesytemObjectError(str(error)+" File object")
+            raise error
         elif isinstance(error, AuthenticationError):
             try:
                 self.gauth.Authorize()
