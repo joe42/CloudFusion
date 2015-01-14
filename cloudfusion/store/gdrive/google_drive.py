@@ -11,7 +11,8 @@ from cloudfusion.store.store import *
 import logging
 from cloudfusion.util.exponential_retry import retry
 from cloudfusion.mylogging import db_logging_thread
-from pydrive.auth import GoogleAuth, AuthenticationError, RefreshError
+from pydrive.auth import GoogleAuth, AuthenticationError, RefreshError,\
+    AuthError
 from pydrive.drive import GoogleDrive as Drive
 import shelve
 from oauth2client.client import OAuth2Credentials
@@ -379,7 +380,6 @@ get_refresh_token: True
     def _handle_error(self, error, stacktrace, method_name, remaining_tries, *args, **kwargs):
         """Used by retry decorator to react to errors."""
         #AuthenticationError and RefreshError
-        self.gauth, self.drive = self._copy_drive()
         if isinstance(error, AttributeError):
             self.logger.debug("Retrying on funny socket error: %s", error)
             #funny socket error in httplib2: AttributeError 'NoneType' object has no attribute 'makefile'
@@ -400,7 +400,7 @@ get_refresh_token: True
                     str(error).lower().find('404') != -1:
                 raise NoSuchFilesytemObjectError(str(error)+" File object")
             raise error
-        elif isinstance(error, AuthenticationError):
+        elif isinstance(error, AuthError):
             try:
                 self.gauth.Authorize()
             except Exception,e:
