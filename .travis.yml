@@ -6,11 +6,8 @@ install:
   - sudo apt-get install -qq fuse-utils
   # Add yourself to the group fuse.
   - sudo usermod -a -G fuse "$USER"
-  # Add the group for the current shell session.
-  - newgrp fuse
-  # Allow users in the fuse group access to fuse filesystems.
-  - sudo chgrp fuse /dev/fuse
-  - sudo chmod g+wr /dev/fuse
+  - sudo mknod /dev/fuse c 10 229
+  - sudo chmod 666 /dev/fuse
   - python setup.py -q install
 before_script:
   # Set shared memory permissions for muliprocessing module.
