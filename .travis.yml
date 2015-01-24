@@ -12,7 +12,7 @@ install:
   - sudo chgrp fuse /dev/fuse
   - sudo chmod g+wr /dev/fuse
   - python setup.py -q install
-after_install:
+before_script:
   # Set shared memory permissions for muliprocessing module.
   # Set up configuration files for CloudFusion.
   - sudo rm -rf /dev/shm && sudo ln -s /run/shm /dev/shm
@@ -30,8 +30,9 @@ branches:
   only:
     - development
 env:
-  - TEST_SUITE="integration"
-  - TEST_SUITE="system"
+  matrix:
+    - TEST_SUITE="integration"
+    - TEST_SUITE="system"
   global:
   #usr,pw,gh_token, s3_id&key, gs_id&key, webdav_usr&pwd, webdav2_usr&pwd, webdav3_usr&pwd, webdav4_usr&pwd
     - secure: KlCTerTwn7SZnW8z7wcv0NW2LbVt63HqPddnt6NJEqI0G2VzZbk3HNeWehcll3yPkavE2rQfa58TIN4Tkn03lbDWeTqtPdHD+VR3xkrGhrC672n9YEoM1rgaY5dAmhqbuSXB6EjNwXr/Ry91HtFwC+m0gcvZ1lnnDLoaosV6SYU=
