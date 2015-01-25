@@ -5,7 +5,8 @@ install:
   # Install fuse and CloudFusion from development branch.
   # user-mode-linux allows to run fuse even when the host does not support it.
   # slirp is required for UDP/TCP network access.
-  - sudo apt-get install -qq fuse-utils user-mode-linux slirp
+  # uml-utilities are required for procfs which is used by psutil.
+  - sudo apt-get install -qq fuse-utils user-mode-linux uml-utilities slirp
   # Set permissions to access fuse.
   - sudo usermod -a -G fuse "$USER"
   - sudo mknod /dev/fuse c 10 229

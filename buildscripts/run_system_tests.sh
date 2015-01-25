@@ -43,6 +43,9 @@ cd "$TRAVIS_BUILD_DIR"
 rm -rf /dev/shm
 ln -s /run/shm /dev/shm
 
+# Enable procfs, which is required for python psutil.
+mount none /proc -t hppfs
+
 python -m cloudfusion.main --config cloudfusion/config/Dropbox.ini db foreground &
 
 
