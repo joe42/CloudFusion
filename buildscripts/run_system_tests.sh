@@ -30,10 +30,14 @@ cleanup_and_exit () {
 
 
 insmod /usr/lib/uml/modules/`uname -r`/kernel/fs/fuse/fuse.ko
+
+# Set up TCP/UDP network access.
+ifconfig lo up
+ifconfig eth0 10.0.2.15
+ip route add default via 10.0.2.1
+
 TRAVIS_BUILD_DIR="`cat /tmp/TRAVIS_BUILD_DIR`"
 cd "$TRAVIS_BUILD_DIR"
-pwd
-ls
 
 python -m cloudfusion.main --config cloudfusion/config/Dropbox.ini db foreground &
 

@@ -3,8 +3,10 @@ python:
  - '2.6'
 install:
   # Install fuse and CloudFusion from development branch.
-  - sudo apt-get install -qq fuse-utils user-mode-linux
-  # Add yourself to the group fuse.
+  # user-mode-linux allows to run fuse even when the host does not support it.
+  # slirp is required for UDP/TCP network access.
+  - sudo apt-get install -qq fuse-utils user-mode-linux slirp
+  # Set permissions to access fuse.
   - sudo usermod -a -G fuse "$USER"
   - sudo mknod /dev/fuse c 10 229
   - sudo chmod 666 /dev/fuse

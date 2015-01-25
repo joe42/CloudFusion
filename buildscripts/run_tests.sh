@@ -4,11 +4,12 @@
 
 TEST_SUITE="$1"
 if [ "$TEST_SUITE" = "integration" ] ; then 
-    bash buildscripts/run_integration_tests.sh; 
+    bash buildscripts/run_integration_tests.sh;
+    exit $?
 else
     git clone https://github.com/joe42/fusetests.git /tmp/fusetests
     echo "$TRAVIS_BUILD_DIR" > /tmp/TRAVIS_BUILD_DIR
-    /usr/bin/linux.uml init=`pwd`/buildscripts/run_system_tests.sh rootfstype=hostfs rw
+    /usr/bin/linux.uml init=`pwd`/buildscripts/run_system_tests.sh rootfstype=hostfs rw eth0=slirp
     exit $(<"$TRAVIS_BUILD_DIR/fusetest.status") 
 fi
 
