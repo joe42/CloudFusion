@@ -40,7 +40,8 @@ TRAVIS_BUILD_DIR="`cat /tmp/TRAVIS_BUILD_DIR`"
 cd "$TRAVIS_BUILD_DIR"
 
 
-sudo rm -rf /dev/shm && sudo ln -s /run/shm /dev/shm
+rm -rf /dev/shm
+sudo ln -s /run/shm /dev/shm
 
 python -m cloudfusion.main --config cloudfusion/config/Dropbox.ini db foreground &
 
