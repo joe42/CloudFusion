@@ -30,6 +30,7 @@ cleanup_and_exit () {
 
 
 insmod /usr/lib/uml/modules/`uname -r`/kernel/fs/fuse/fuse.ko
+TRAVIS_BUILD_DIR="`cat /tmp/TRAVIS_BUILD_DIR`"
 cd "$TRAVIS_BUILD_DIR"
 pwd
 ls
