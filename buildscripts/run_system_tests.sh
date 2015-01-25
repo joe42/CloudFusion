@@ -20,7 +20,7 @@ capture_output () {
 
 cleanup_and_exit () {
     echo "Exit tests with return value $1."
-    cloudfusion db stop
+    python -m cloudfusion.main db stop
     /tmp/fusetests/testsuite/fuse_tests.py db test
     echo $1 > "$TRAVIS_BUILD_DIR/fusetest.status"
     halt -f
@@ -33,7 +33,7 @@ insmod /usr/lib/uml/modules/`uname -r`/kernel/fs/fuse/fuse.ko
 cd "$TRAVIS_BUILD_DIR"
 
 
-cloudfusion --config cloudfusion/config/Dropbox.ini db foreground &
+python -m cloudfusion.main --config cloudfusion/config/Dropbox.ini db foreground &
 
 # Each test runs in background, and outputs the results immediately after it has finished. 
 # The script exits immediately with the exit status of nosetests if the test has failed.
