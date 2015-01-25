@@ -31,7 +31,6 @@ cleanup_and_exit () {
 
 insmod /usr/lib/uml/modules/`uname -r`/kernel/fs/fuse/fuse.ko
 cd "$TRAVIS_BUILD_DIR"
-git clone https://github.com/joe42/fusetests.git /tmp/fusetests
 
 
 cloudfusion --config cloudfusion/config/Dropbox.ini db foreground &
