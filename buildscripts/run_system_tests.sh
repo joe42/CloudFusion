@@ -31,7 +31,8 @@ cleanup_and_exit () {
 
 insmod /usr/lib/uml/modules/`uname -r`/kernel/fs/fuse/fuse.ko
 cd "$TRAVIS_BUILD_DIR"
-
+pwd
+ls
 
 python -m cloudfusion.main --config cloudfusion/config/Dropbox.ini db foreground &
 
