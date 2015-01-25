@@ -39,6 +39,9 @@ ip route add default via 10.0.2.1
 TRAVIS_BUILD_DIR="`cat /tmp/TRAVIS_BUILD_DIR`"
 cd "$TRAVIS_BUILD_DIR"
 
+
+sudo rm -rf /dev/shm && sudo ln -s /run/shm /dev/shm
+
 python -m cloudfusion.main --config cloudfusion/config/Dropbox.ini db foreground &
 
 
