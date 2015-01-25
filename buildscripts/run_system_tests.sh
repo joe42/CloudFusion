@@ -40,8 +40,10 @@ TRAVIS_BUILD_DIR="`cat /tmp/TRAVIS_BUILD_DIR`"
 cd "$TRAVIS_BUILD_DIR"
 
 
-rm -rf /dev/shm
+echo 'none /dev/shm tmpfs rw,nosuid,nodev,noexec 0 0' >> /etc/fstab
+rm /dev/shm
 ln -s /run/shm /dev/shm
+mount /dev/shm
 
 # Enable procfs, which is required for python psutil.
 mount none /proc -t hppfs
