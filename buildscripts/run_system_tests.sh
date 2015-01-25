@@ -43,7 +43,7 @@ python -m cloudfusion.main --config cloudfusion/config/Dropbox.ini db foreground
 
 # Each test runs in background, and outputs the results immediately after it has finished. 
 # The script exits immediately with the exit status of nosetests if the test has failed.
-capture_output '/tmp/fusetests/testsuite/fuse_tests.py db testfile'
+capture_output '/tmp/fusetests/testsuite/fuse_tests.py db/data testfile'
 
 # Keep travis session alive by producing output.
 # If exit status of job in background is non-zero, exit.
