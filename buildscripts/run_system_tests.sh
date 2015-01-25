@@ -48,6 +48,8 @@ mount /dev/shm
 # Enable procfs, which is required for python psutil.
 mount none /proc -t hppfs
 
+python setup.py -q install
+
 python -m cloudfusion.main --config cloudfusion/config/Dropbox.ini db foreground &
 
 
