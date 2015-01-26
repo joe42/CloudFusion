@@ -40,16 +40,19 @@ TRAVIS_BUILD_DIR="`cat /tmp/TRAVIS_BUILD_DIR`"
 cd "$TRAVIS_BUILD_DIR"
 
 
+echo "Workaround multiprocessing error."
 echo 'none /dev/shm tmpfs rw,nosuid,nodev,noexec 0 0' >> /etc/fstab
 rm /dev/shm
 ln -s /run/shm /dev/shm
 mount /dev/shm
 
-# Enable procfs, which is required for python psutil.
+echo "Enable procfs, which is required for python psutil."
 mount none /proc -t hppfs
 
-python setup.py -q install
+echo "Install CloudFusion."
+python setup.py install
 
+echo "Start CloudFusion."
 python -m cloudfusion.main --config cloudfusion/config/Dropbox.ini db foreground &
 
 
@@ -58,6 +61,7 @@ sleep 10
 ls -al
 ls -al db
 
+echo "Start Test."
 # Each test runs in background, and outputs the results immediately after it has finished. 
 # The script exits immediately with the exit status of nosetests if the test has failed.
 capture_output '/tmp/fusetests/testsuite/fuse_tests.py db/data testfile'
