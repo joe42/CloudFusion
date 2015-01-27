@@ -11,7 +11,7 @@ install:
   - sudo usermod -a -G fuse "$USER"
   - sudo mknod /dev/fuse c 10 229
   - sudo chmod 666 /dev/fuse
-  - python setup.py -q install
+  - python setup.py install
 before_script:
   # Set shared memory permissions for muliprocessing module.
   # Set up configuration files for CloudFusion.
