@@ -6,6 +6,7 @@ TEST_SUITE="$1"
 if [ "$TEST_SUITE" = "integration" ] ; then 
     #bash buildscripts/run_integration_tests.sh;
     #exit $?
+    echo "Running system tests."
 else
     git clone https://github.com/joe42/fusetests.git /tmp/fusetests
     echo "$TRAVIS_BUILD_DIR" > /tmp/TRAVIS_BUILD_DIR
