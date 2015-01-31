@@ -41,7 +41,7 @@ cd "$TRAVIS_BUILD_DIR"
 
 
 echo "Workaround multiprocessing error."
-echo 'none /dev/shm tmpfs rw,nosuid,nodev,noexec 0 0' >> /etc/fstab
+echo 'none /dev/shm tmpfs rw,nosuid,nodev 0 0' >> /etc/fstab
 rm /dev/shm
 ln -s /run/shm /dev/shm
 mount /dev/shm
