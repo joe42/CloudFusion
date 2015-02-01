@@ -50,8 +50,11 @@ echo "Enable procfs, which is required for python psutil."
 mount none /proc -t hppfs
 #apt-get install python-dev
 apt-get install python-dev
+echo gcc_ecec_prefix1: $GCC_EXEC_PREFIX
+GCC_EXEC_PREFIX=''
 echo "Install CloudFusion."
 python setup.py install
+echo gcc_ecec_prefix2: $GCC_EXEC_PREFIX
 
 echo "Start CloudFusion."
 python -m cloudfusion.main --config cloudfusion/config/Dropbox.ini db foreground &
