@@ -49,7 +49,7 @@ mount /dev/shm
 echo "Enable procfs, which is required for python psutil."
 mount none /proc -t hppfs
 #apt-get install python-dev
-apt-get install python-dev g++
+apt-get install python-dev g++ build-essential
 echo "Link cc to cc1 to prevent compile error of psutil"
 cc1=(/usr/lib/gcc/x86_64-linux-gnu/*/cc1)
 ln -s ${cc1[1]} /usr/bin/cc1
