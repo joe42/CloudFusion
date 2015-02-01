@@ -52,7 +52,7 @@ mount none /proc -t hppfs
 apt-get install python-dev
 echo "Link cc to cc1 to prevent compile error of psutil"
 cc1=(/usr/lib/gcc/x86_64-linux-gnu/*/cc1)
-ln -s ${cc1[1]} /usr/bin/cc
+ln -s ${cc1[1]} /usr/bin/cc1
 echo "Install CloudFusion."
 python setup.py install
 echo gcc_ecec_prefix2: $GCC_EXEC_PREFIX
