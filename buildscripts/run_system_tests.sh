@@ -49,7 +49,7 @@ mount /dev/shm
 echo "Enable procfs, which is required for python psutil."
 mount none /proc -t hppfs
 #apt-get install python-dev
-apt-get install build-dep python-dev
+apt-get install python-dev
 echo "Install CloudFusion."
 python setup.py install
 
