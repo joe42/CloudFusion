@@ -12,6 +12,7 @@ else
     echo "$TRAVIS_BUILD_DIR" > /tmp/TRAVIS_BUILD_DIR
     # Start User Mode Linux with root privileges 
     # to work around multiprocessing bug which requires removing /dev/shm.
+    sudo -- bash -c "echo 'none /dev/shm tmpfs rw,nosuid,nodev 0 0' >> /etc/fstab"
     /usr/bin/linux.uml init=`pwd`/buildscripts/run_system_tests.sh rootfstype=hostfs rw eth0=slirp mem=2G
     exit $(<"$TRAVIS_BUILD_DIR/fusetest.status") 
 fi
