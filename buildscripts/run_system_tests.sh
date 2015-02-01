@@ -50,8 +50,8 @@ echo "Enable procfs, which is required for python psutil."
 mount none /proc -t hppfs
 #apt-get install python-dev
 apt-get install python-dev
-echo gcc_ecec_prefix1: $GCC_EXEC_PREFIX
-GCC_EXEC_PREFIX=''
+echo "Link cc to cc1 to prevent compile error of psutil"
+ln -s /usr/bin/cc /usr/bin/cc1
 echo "Install CloudFusion."
 python setup.py install
 echo gcc_ecec_prefix2: $GCC_EXEC_PREFIX
