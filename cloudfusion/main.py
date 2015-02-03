@@ -15,6 +15,15 @@ import time
 import multiprocessing
 import signal
 from cloudfusion.util.string import get_uuid
+try:
+    from profilehooks import profile
+except ImportError:
+    import functools
+    def profile(obj):
+        @functools.wraps(obj)
+        def forward(*args, **kwargs):
+            return obj(*args, **kwargs)
+        return forward
 
 class MyParser(argparse.ArgumentParser):
     def error(self, message):
@@ -125,7 +134,6 @@ def main():
         os.makedirs(mountpoint)
     if profiling_enabled:
         import inspect
-        from profilehooks import profile
         import types
         for name, fn in inspect.getmembers(TransparentConfigurablePyFuseBox):
             if isinstance(fn, types.UnboundMethodType):

@@ -6,8 +6,16 @@ import time
 from cloudfusion.store.store import StoreSpaceLimitError, StoreAccessError, NoSuchFilesytemObjectError,\
     StoreAuthorizationError
 import os
-from profilehooks import profile
-
+try:
+    from profilehooks import profile
+except ImportError:
+    import functools
+    def profile(obj):
+        @functools.wraps(obj)
+        def forward(*args, **kwargs):
+            return obj(*args, **kwargs)
+        return forward
+   
 class StoreSyncThread(object):
     """Synchronizes between cache and store"""
     def __init__(self, cache, store, logger, max_writer_threads=30):
