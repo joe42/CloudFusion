@@ -11,7 +11,7 @@ try:
     from profilehooks import profile
 except ImportError:
     import functools
-    def profile(obj):
+    def profile(obj, *args, **kwargs):
         def my_forward_decorator(test_func):
             @functools.wraps(obj)
             def forward(*args, **kwargs):
