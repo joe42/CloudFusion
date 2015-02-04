@@ -15,21 +15,18 @@ import time
 import multiprocessing
 import signal
 from cloudfusion.util.string import get_uuid
+# If profilehooks is not available, replace it with a wrapper that only forwards the call.
 try:
     from profilehooks import profile
 except ImportError:
     import functools
     def profile(obj):
-        @functools.wraps(obj)
-        def forward(*args, **kwargs):
-            return obj(*args, **kwargs)
-        return forward
-
-class MyParser(argparse.ArgumentParser):
-    def error(self, message):
-        args= sys.argv
-        print_help(args)
-        sys.exit(1)
+        def my_forward_decorator(test_func):
+            @functools.wraps(obj)
+            def forward(*args, **kwargs):
+                return obj(*args, **kwargs)
+            return forward
+        return my_forward_decorator
 
 def print_help(args):
     print ''
@@ -49,6 +46,8 @@ def print_help(args):
     print ''
 
 def check_arguments(args):
+    if len(args) == 1 and sys.argv[1] == 'uuid':
+        return
     if not len(args) in [1,2,3,4,5,6,7]:
         print_help(args)
         exit(1)

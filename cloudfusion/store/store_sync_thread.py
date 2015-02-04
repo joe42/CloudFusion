@@ -6,15 +6,18 @@ import time
 from cloudfusion.store.store import StoreSpaceLimitError, StoreAccessError, NoSuchFilesytemObjectError,\
     StoreAuthorizationError
 import os
+# If profilehooks is not available, replace it with a wrapper that only forwards the call.
 try:
     from profilehooks import profile
 except ImportError:
     import functools
     def profile(obj):
-        @functools.wraps(obj)
-        def forward(*args, **kwargs):
-            return obj(*args, **kwargs)
-        return forward
+        def my_forward_decorator(test_func):
+            @functools.wraps(obj)
+            def forward(*args, **kwargs):
+                return obj(*args, **kwargs)
+            return forward
+        return my_forward_decorator
    
 class StoreSyncThread(object):
     """Synchronizes between cache and store"""
