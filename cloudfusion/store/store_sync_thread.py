@@ -11,11 +11,11 @@ try:
     from profilehooks import profile
 except ImportError:
     import functools
-    def profile(obj, *args, **kwargs):
-        def my_forward_decorator(test_func):
-            @functools.wraps(obj)
+    def profile(*args, **kwargs):
+        def my_forward_decorator(decorated_function):
+            @functools.wraps(decorated_function)
             def forward(*args, **kwargs):
-                return obj(*args, **kwargs)
+                return decorated_function(*args, **kwargs)
             return forward
         return my_forward_decorator
    
