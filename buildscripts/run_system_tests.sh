@@ -43,7 +43,7 @@ TRAVIS_PYTHON='/home/travis/virtualenv/python2.6.9/bin/python'
 
 echo "Workaround multiprocessing error."
 
-rm /dev/shm
+
 ln -s /run/shm /dev/shm
 mount /dev/shm
 
