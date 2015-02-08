@@ -38,6 +38,7 @@ ip route add default via 10.0.2.1
 
 TRAVIS_BUILD_DIR="`cat /tmp/TRAVIS_BUILD_DIR`"
 cd "$TRAVIS_BUILD_DIR"
+TRAVIS_PYTHON='/home/travis/virtualenv/python2.6.9/bin/python'
 
 
 echo "Workaround multiprocessing error."
@@ -50,7 +51,7 @@ echo "Enable procfs, which is required for python psutil."
 mount none /proc -t hppfs
 
 echo "Start CloudFusion."
-python -m cloudfusion.main --config cloudfusion/config/Dropbox.ini db foreground &
+$TRAVIS_PYTHON -m cloudfusion.main --config cloudfusion/config/Dropbox.ini db foreground &
 
 
 sleep 10
