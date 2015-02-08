@@ -27,6 +27,12 @@ except ImportError:
                 return decorated_function(*args, **kwargs)
             return forward
         return my_forward_decorator
+    
+class MyParser(argparse.ArgumentParser):
+    def error(self, message):
+        args= sys.argv
+        print_help(args)
+        sys.exit(1)
 
 def print_help(args):
     print ''
