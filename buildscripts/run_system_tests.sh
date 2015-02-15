@@ -38,9 +38,8 @@ ip route add default via 10.0.2.1
 
 TRAVIS_BUILD_DIR="`cat /tmp/TRAVIS_BUILD_DIR`"
 cd "$TRAVIS_BUILD_DIR"
-TRAVIS_PYTHON='/home/travis/virtualenv/python2.6.9/bin/python'
+
 source /home/travis/virtualenv/python2.6.9/bin/activate
-sudo python setup.py install
 
 echo "Workaround multiprocessing error."
 
