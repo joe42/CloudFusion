@@ -28,7 +28,7 @@ cleanup_and_exit () {
 
 ### End function definition
 
-
+echo load fuse module
 modprobe fuse
 
 # Set up TCP/UDP network access.
