@@ -29,7 +29,7 @@ cleanup_and_exit () {
 ### End function definition
 
 
-insmod /usr/lib/uml/modules/`uname -r`/kernel/fs/fuse/fuse.ko
+modprobe fuse
 
 # Set up TCP/UDP network access.
 ifconfig lo up
