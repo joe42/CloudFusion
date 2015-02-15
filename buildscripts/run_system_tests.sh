@@ -29,7 +29,7 @@ cleanup_and_exit () {
 ### End function definition
 
 echo load fuse module
-insmod /usr/lib/uml/modules/\`uname -r\`/kernel/fs/fuse/fuse.ko
+insmod /usr/lib/uml/modules/`uname -r`/kernel/fs/fuse/fuse.ko
 
 # Set up TCP/UDP network access.
 ifconfig lo up
