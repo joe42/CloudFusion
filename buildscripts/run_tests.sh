@@ -13,7 +13,7 @@ else
     # Start User Mode Linux with root privileges 
     # to work around multiprocessing bug which requires removing /dev/shm.
     sudo -- bash -c "echo 'none /dev/shm tmpfs rw,nosuid,nodev 0 0' >> /etc/fstab"
-    /usr/bin/linux.uml init=`pwd`/buildscripts/run_system_tests.sh rootfstype=hostfs rw mem=2G
+    /usr/bin/linux.uml init=`pwd`/buildscripts/run_system_tests.sh rootfstype=hostfs rw mem=2G  eth0=slirp
     exit $(<"$TRAVIS_BUILD_DIR/fusetest.status") 
 fi
 
