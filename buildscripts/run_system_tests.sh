@@ -40,6 +40,7 @@ TRAVIS_BUILD_DIR="`cat /tmp/TRAVIS_BUILD_DIR`"
 cd "$TRAVIS_BUILD_DIR"
 TRAVIS_PYTHON='/home/travis/virtualenv/python2.6.9/bin/python'
 
+sudo $TRAVIS_PYTHON setup.py install
 
 echo "Workaround multiprocessing error."
 
