@@ -1,19 +1,21 @@
 #!/bin/bash
-# Executes tests specifed by first parameter TEST_SUITE, which can eiter be "integration" to execute integration tests or 
+# Executes tests specifed by first parameter TEST_SUITE, which can either be "integration" to execute integration tests or 
 # "system" to execute system tests including the fuse environment. 
 
 TEST_SUITE="$1"
 if [ "$TEST_SUITE" = "integration" ] ; then 
-    #bash buildscripts/run_integration_tests.sh;
-    #exit $?
-    echo "Running system tests."
+    bash buildscripts/run_integration_tests.sh;
+    exit $?
 else
-    git clone https://github.com/joe42/fusetests.git /tmp/fusetests
-    echo "$TRAVIS_BUILD_DIR" > /tmp/TRAVIS_BUILD_DIR
-    # Start User Mode Linux with root privileges 
-    # to work around multiprocessing bug which requires removing /dev/shm.
-    sudo -- bash -c "echo 'none /dev/shm tmpfs rw,nosuid,nodev 0 0' >> /etc/fstab"
-    /usr/bin/linux.uml init=`pwd`/buildscripts/run_system_tests.sh rootfstype=hostfs rw mem=1G  eth0=slirp
-    exit $(<"$TRAVIS_BUILD_DIR/fusetest.status") 
+    # Unpack ssh credentials to login to EC2 instance.
+    tar -x buildscripts/.ssh.tar
+    IP=$(bash start_ec2_instance.sh)
+    # Copy Dropbox.ini and system test script to  EC2 instance.
+    scp -r -oStrictHostKeyChecking=no -i ~/.ssh/ec2keypair.pem cloudfusion/config/Dropbox.ini ubuntu@$IP
+    scp -r -oStrictHostKeyChecking=no -i ~/.ssh/ec2keypair.pem buildscripts/run_system_tests.sh; ubuntu@$IP
+    ssh -oStrictHostKeyChecking=no -i ~/.ssh/ec2keypair.pem ubuntu@$IP 'bash run_system_tests.sh'
+    test_result=$?
+    bash terminate_ec2_instance.sh
+    exit $test_result
 fi
 

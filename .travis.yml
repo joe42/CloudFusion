@@ -1,53 +1,48 @@
 language: python
 python:
- - '2.6'
+- '2.6'
 install:
-  # Install fuse and CloudFusion from development branch.
-  # user-mode-linux allows to run fuse even when the host does not support it.
-  # slirp is required for UDP/TCP network access.
-  # uml-utilities are required for procfs which is used by psutil.
-  - sudo apt-get install -qq fuse-utils user-mode-linux uml-utilities slirp fuse libfuse-dev
-  # Set permissions to access fuse.
-  - sudo usermod -a -G fuse "$USER"
-  - sudo mknod /dev/fuse c 10 229
-  - sudo chmod 666 /dev/fuse
-  - python setup.py install
+- sudo apt-get install -qq fuse-utils fuse libfuse-dev ec2-api-tools
+- sudo usermod -a -G fuse "$USER"
+- sudo mknod /dev/fuse c 10 229
+- sudo chmod 666 /dev/fuse
+- python setup.py install
 before_script:
-  # Set shared memory permissions for muliprocessing module.
-  # Set up configuration files for CloudFusion.
-  - sudo rm -rf /dev/shm && sudo ln -s /run/shm /dev/shm
-  - bash buildscripts/configure_cloudfusion.sh
+- bash buildscripts/configure_cloudfusion.sh
 script:
-  # Run either integration tests or system tests. The tests run in parallel on 
-  # separate virtal machines.
-  - bash buildscripts/run_tests.sh "$TEST_SUITE"
+- bash buildscripts/run_tests.sh "$TEST_SUITE"
 after_success:
-  - bash buildscripts/generate_documentation.sh
-  - bash buildscripts/publish_developer_branch.sh
+- bash buildscripts/generate_documentation.sh
+- bash buildscripts/publish_developer_branch.sh
 after_script:
-  - cd "$TRAVIS_BUILD_DIR/.." && sudo rm -rf *
+- cd "$TRAVIS_BUILD_DIR/.." && sudo rm -rf *
 branches:
   only:
-    - development
+  - development
 env:
   matrix:
-    - TEST_SUITE="integration"
-    - TEST_SUITE="system"
+  - TEST_SUITE="integration"
+  - TEST_SUITE="system"
   global:
-  #usr,pw,gh_token, s3_id&key, gs_id&key, webdav_usr&pwd, webdav2_usr&pwd, webdav3_usr&pwd, webdav4_usr&pwd
-    - secure: KlCTerTwn7SZnW8z7wcv0NW2LbVt63HqPddnt6NJEqI0G2VzZbk3HNeWehcll3yPkavE2rQfa58TIN4Tkn03lbDWeTqtPdHD+VR3xkrGhrC672n9YEoM1rgaY5dAmhqbuSXB6EjNwXr/Ry91HtFwC+m0gcvZ1lnnDLoaosV6SYU=
-    - secure: cyBcqoKCisTGGsgPp1F04VYdJTu7d3U5ma4ieP2yfFwIlKLSNg2qtZNf7tMAHYm4cz+dpnksVd54LWjA7XHODmMrBRhp4RwhKDo8835hx2q/KAKCkLD79gXwUVE42QqfyLEYAxBpRe3+ASKtJRDOhdVF6f/hK6XSSo5YcEaWQ4w=
-    - secure: SQQVDBOVZ1Slwnj1yaEh6gpIM+Pdi03b81k+fl+AWwhmVDB1lTXBb3PPI+V8lvLSN3eia9xUIaVOF5B+/wOWbxwR17plD1mD/sVaZn/GkSJtiKLTr+h7goVcFff2toahtuPYg8IhLnaWgUpB7Xqvr739peloCKBRT1HmNuNf2mg=
-    - secure: SXMp/fK1uiWws29A86ox5MX+/6FofUMH5r9NUk2VWeGH9pI04PIbjUPuYtwXOZXWL2YElMj5UW3LnY45JtNpiplv0Gu5G8XOlUrcwY8382fVb81MC8hwkBypU3orkHcy6ZDunsWAY7JPVutBUAEIZOR9+8UJykJ2ajgzriM5tsY=
-    - secure: ZFtAeu/2tm9Na519oQKAszCYm5K+DPHNvkK6GzGtPNuLflJ8+m+rgggpLHnCOWNeNPFjdYeRpTfixMk5fX2N5oePVXoyoYqGMdyMxDDCzkVRi6zJ2oCjKsAjomatQEZeG9vueiUDoLKbB5qKR07XYA6AcTA1gtsUeSABBWD6OUU=
-    - secure: OB+B1kGRnoOqrJPkDciMW9GExRqQmfwV72qOLVU5w91XcSGM6hO+CV729O5vM1W1aEEI6NiYjPsWlmQsRNcMCt/z2A5Ex7etubrjzx4Z3eTznKRA/k3/jveuUhTgedRC3UEOubCgaiY7eZiz/YpT8wVAABaQEGzksI0HM1scsjU=
-    - secure: cCt2w1kO8zd2D2z0xoFp87oODIEYvvlD16LsHqVcI/r/v5xYKubbwbhwyyPQHLxxgndX5w/3DbxAbQFGolEwSRkNSl7tvkFHAbnEKthys40Chv3qOeD2JzLq/H34IRmK39SnH9Y8EBOtVr5FTU6rO0OPa7U1msc3eZU6xgolTnM=
-    - secure: ge8SQDgElJiowWWgCuQj0gqfpGRFPuIXWFx0xrXCtR27OqeUsQasv9cHIwXo0hNiF2l8YiDlaJqcX+OQLxt2Uf2caKWuEd0iYCoas7YU0+xCMUVzlcfb6u0HOjxU4ohsnzZk31q5FquWsUdelG+Ar4BS1+SAwjBedSwXGnKL/jA=
-    - secure: Ud3JlFbRY5zZZ7Njk0B1NV0jSp91g5P2IuDkjkRWe8RGtdhnYnXr2xZfQMlYQ/N/erqyn2rTYjT3CSGf+3s7525HRqvi9VnJon5oy5QCQ4viWEvGg5BcSra5IVLVPcdTVl9AfT5g475IBpc7QcULUJBgRE7C1nJ6kZvSTPrzjIQ=
-    - secure: MXePlDZZ4NmJzCtLS6Ck8gBLJN9zllIAJ/ULvgojqBfzHBDKVZii2AHz/WIBu5gk+8Bs9Fd3BPAsGpWWLaqLyDLyDGO+dP/x4xvp0eOg0A/lLqOaBkGktuCPOyfDVupFZnhgQaAOG09EY5C7j0BCZyX+zF4VMWBWZqa37XqcHSc=
-    - secure: cyQmi1UwNYLTI4qFfhREsGyG2hs8MuENitQ+pAZzsq+rzVRLJbyzyRgj+NH8ORNCMJxSe7frvtRo4C6qTGZsB6FSoSh3diN0sxM73PNx6v2q82e1Z9yPPyZVI77e/0WLjHwhIO1aCxzbfTzMkBurfFhVxdA0hQhwJr2fAq+KtCA=
-    - secure: Q1L5VcrdYyFxUXWXMDHBzVn4vRTSzTUmH4+ylmYCSHgc9HcbyTM8JcSyOxJ2pDKPN1otj6ShxxoAgeiNk4nioTZRXLpiFan+AlMyPaRcWeGq0OOjYXaR32swYs73BbJAHsSwr69bqTOiIaw3Tm54ETFFUzuy/R+nVZX3Q5Yk+Bk=
-    - secure: YVSH7CEgWjUSP1HxY+RIsGKFlIYNOLsDY0F7do+GqiPCa3/iQECAd4FXIPDI4HvFwbVXXCc/jdRKlG84UkyaXmvKD/nBD7sT/PWHVB7LB9zKzGuH7E9PFJeb4GEriH1MHxwDqbbmwJbxxzzJmKiY/nFrVT3Rs530pVB/Y2MaUSE=
-    - secure: YgjH2fYk1GIpzyZRT6gqB4NkbgTcT87fmhIXBMahbag/vcL+9hc0uCq4YQ91WHFYikkPj+wmmdCJg6vrUFWyhQPGnbIKzbEnVmxoe3oM5uEX0Bs3nFHtS4Xx94n4W2TLOHb9Kpw0x0w7nzjK3dUPEdPvQmgfzOKAO8ME+u7xqeU=
-    - secure: KRWpx0bIDAtSDl6ywg70HsLO58AxknvDxhfsrYrV1LktCVZfLI9ST32ygrTKY2/zlpKOcC3jdhNz7uQZa3A0vEarGqa1vHn7MPYbj7OezR00qftDB1qlIsikz4kA0vZO/npEklHcjNRSwgbBnbdjxxTKRCUnyXFHgliIz1lEcb0=
+  - secure: KlCTerTwn7SZnW8z7wcv0NW2LbVt63HqPddnt6NJEqI0G2VzZbk3HNeWehcll3yPkavE2rQfa58TIN4Tkn03lbDWeTqtPdHD+VR3xkrGhrC672n9YEoM1rgaY5dAmhqbuSXB6EjNwXr/Ry91HtFwC+m0gcvZ1lnnDLoaosV6SYU=
+  - secure: cyBcqoKCisTGGsgPp1F04VYdJTu7d3U5ma4ieP2yfFwIlKLSNg2qtZNf7tMAHYm4cz+dpnksVd54LWjA7XHODmMrBRhp4RwhKDo8835hx2q/KAKCkLD79gXwUVE42QqfyLEYAxBpRe3+ASKtJRDOhdVF6f/hK6XSSo5YcEaWQ4w=
+  - secure: SQQVDBOVZ1Slwnj1yaEh6gpIM+Pdi03b81k+fl+AWwhmVDB1lTXBb3PPI+V8lvLSN3eia9xUIaVOF5B+/wOWbxwR17plD1mD/sVaZn/GkSJtiKLTr+h7goVcFff2toahtuPYg8IhLnaWgUpB7Xqvr739peloCKBRT1HmNuNf2mg=
+  - secure: SXMp/fK1uiWws29A86ox5MX+/6FofUMH5r9NUk2VWeGH9pI04PIbjUPuYtwXOZXWL2YElMj5UW3LnY45JtNpiplv0Gu5G8XOlUrcwY8382fVb81MC8hwkBypU3orkHcy6ZDunsWAY7JPVutBUAEIZOR9+8UJykJ2ajgzriM5tsY=
+  - secure: ZFtAeu/2tm9Na519oQKAszCYm5K+DPHNvkK6GzGtPNuLflJ8+m+rgggpLHnCOWNeNPFjdYeRpTfixMk5fX2N5oePVXoyoYqGMdyMxDDCzkVRi6zJ2oCjKsAjomatQEZeG9vueiUDoLKbB5qKR07XYA6AcTA1gtsUeSABBWD6OUU=
+  - secure: OB+B1kGRnoOqrJPkDciMW9GExRqQmfwV72qOLVU5w91XcSGM6hO+CV729O5vM1W1aEEI6NiYjPsWlmQsRNcMCt/z2A5Ex7etubrjzx4Z3eTznKRA/k3/jveuUhTgedRC3UEOubCgaiY7eZiz/YpT8wVAABaQEGzksI0HM1scsjU=
+  - secure: cCt2w1kO8zd2D2z0xoFp87oODIEYvvlD16LsHqVcI/r/v5xYKubbwbhwyyPQHLxxgndX5w/3DbxAbQFGolEwSRkNSl7tvkFHAbnEKthys40Chv3qOeD2JzLq/H34IRmK39SnH9Y8EBOtVr5FTU6rO0OPa7U1msc3eZU6xgolTnM=
+  - secure: ge8SQDgElJiowWWgCuQj0gqfpGRFPuIXWFx0xrXCtR27OqeUsQasv9cHIwXo0hNiF2l8YiDlaJqcX+OQLxt2Uf2caKWuEd0iYCoas7YU0+xCMUVzlcfb6u0HOjxU4ohsnzZk31q5FquWsUdelG+Ar4BS1+SAwjBedSwXGnKL/jA=
+  - secure: Ud3JlFbRY5zZZ7Njk0B1NV0jSp91g5P2IuDkjkRWe8RGtdhnYnXr2xZfQMlYQ/N/erqyn2rTYjT3CSGf+3s7525HRqvi9VnJon5oy5QCQ4viWEvGg5BcSra5IVLVPcdTVl9AfT5g475IBpc7QcULUJBgRE7C1nJ6kZvSTPrzjIQ=
+  - secure: MXePlDZZ4NmJzCtLS6Ck8gBLJN9zllIAJ/ULvgojqBfzHBDKVZii2AHz/WIBu5gk+8Bs9Fd3BPAsGpWWLaqLyDLyDGO+dP/x4xvp0eOg0A/lLqOaBkGktuCPOyfDVupFZnhgQaAOG09EY5C7j0BCZyX+zF4VMWBWZqa37XqcHSc=
+  - secure: cyQmi1UwNYLTI4qFfhREsGyG2hs8MuENitQ+pAZzsq+rzVRLJbyzyRgj+NH8ORNCMJxSe7frvtRo4C6qTGZsB6FSoSh3diN0sxM73PNx6v2q82e1Z9yPPyZVI77e/0WLjHwhIO1aCxzbfTzMkBurfFhVxdA0hQhwJr2fAq+KtCA=
+  - secure: Q1L5VcrdYyFxUXWXMDHBzVn4vRTSzTUmH4+ylmYCSHgc9HcbyTM8JcSyOxJ2pDKPN1otj6ShxxoAgeiNk4nioTZRXLpiFan+AlMyPaRcWeGq0OOjYXaR32swYs73BbJAHsSwr69bqTOiIaw3Tm54ETFFUzuy/R+nVZX3Q5Yk+Bk=
+  - secure: YVSH7CEgWjUSP1HxY+RIsGKFlIYNOLsDY0F7do+GqiPCa3/iQECAd4FXIPDI4HvFwbVXXCc/jdRKlG84UkyaXmvKD/nBD7sT/PWHVB7LB9zKzGuH7E9PFJeb4GEriH1MHxwDqbbmwJbxxzzJmKiY/nFrVT3Rs530pVB/Y2MaUSE=
+  - secure: YgjH2fYk1GIpzyZRT6gqB4NkbgTcT87fmhIXBMahbag/vcL+9hc0uCq4YQ91WHFYikkPj+wmmdCJg6vrUFWyhQPGnbIKzbEnVmxoe3oM5uEX0Bs3nFHtS4Xx94n4W2TLOHb9Kpw0x0w7nzjK3dUPEdPvQmgfzOKAO8ME+u7xqeU=
+  - secure: KRWpx0bIDAtSDl6ywg70HsLO58AxknvDxhfsrYrV1LktCVZfLI9ST32ygrTKY2/zlpKOcC3jdhNz7uQZa3A0vEarGqa1vHn7MPYbj7OezR00qftDB1qlIsikz4kA0vZO/npEklHcjNRSwgbBnbdjxxTKRCUnyXFHgliIz1lEcb0=
 cache: apt
+before_install:
+#ssh keys.
+- openssl aes-256-cbc -K $encrypted_cd8f345ce20d_key -iv $encrypted_cd8f345ce20d_iv -in buildscript/.ssh.tar.enc -out buildscripts/.ssh.tar -d
+#EC2 variables.
+- openssl aes-256-cbc -K $encrypted_cd8f345ce20d_key -iv $encrypted_cd8f345ce20d_iv -in buildscript/ec2_variables.sh.enc -out buildscripts/ec2_variables.sh -d
+

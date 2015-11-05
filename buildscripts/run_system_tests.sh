@@ -28,36 +28,24 @@ cleanup_and_exit () {
 
 ### End function definition
 
-echo load fuse module
-insmod /usr/lib/uml/modules/`uname -r`/kernel/fs/fuse/fuse.ko
+sudo apt-get install -y git python-setuptools python-dev 
+sudo usermod -a -G fuse "$USER"
+sudo mknod /dev/fuse c 10 229
+sudo chmod 666 /dev/fuse
 
-# Set up TCP/UDP network access.
-ifconfig lo up
-ifconfig eth0 10.0.2.15
-ip route add default via 10.0.2.1
+git clone --quiet --depth 1 --branch=development https://github.com/joe42/CloudFusion.git development > /dev/null
+git clone --quiet --depth 1 https://github.com/joe42/fusetests.git /tmp/fusetests > /dev/null
+cd development
 
-TRAVIS_BUILD_DIR="`cat /tmp/TRAVIS_BUILD_DIR`"
-cd "$TRAVIS_BUILD_DIR"
+sudo python setup.py install
 
-source /home/travis/virtualenv/python2.6.9/bin/activate
-
-echo "Workaround multiprocessing error."
-
-
-ln -s /run/shm /dev/shm
-mount /dev/shm
-
-echo "Enable procfs, which is required for python psutil."
-mount none /proc -t hppfs
+cd 
 
 echo "Start CloudFusion."
-python -m cloudfusion.main --config cloudfusion/config/Dropbox.ini db foreground &
+cloudfusion --config Dropbox.ini db foreground &
 
 
 sleep 10
-
-ls -al
-ls -al db
 
 echo "Start Test."
 # Each test runs in background, and outputs the results immediately after it has finished. 
