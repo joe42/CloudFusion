@@ -8,7 +8,8 @@ if [ "$TEST_SUITE" = "integration" ] ; then
     exit $?
 else
     # Unpack ssh credentials to login to EC2 instance.
-    tar -x buildscripts/.ssh.tar
+    tar -xf buildscripts/.ssh_and_ec2_variables.sh.tar
+    mv ec2_variables.sh buildscripts
     IP=$(bash start_ec2_instance.sh)
     # Copy Dropbox.ini and system test script to  EC2 instance.
     scp -r -oStrictHostKeyChecking=no -i ~/.ssh/ec2keypair.pem cloudfusion/config/Dropbox.ini ubuntu@$IP
