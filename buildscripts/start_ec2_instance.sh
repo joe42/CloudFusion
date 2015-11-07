@@ -5,12 +5,10 @@ tries=20
 while ! ec2-describe-instances|grep -q running; do
   let tries=tries-1
   if [ $tries -eq 0 ] ; then
-    echo Waited too long for ec2 instance to start. Continuing without further waiting.
     break
   fi
   sleep 5
 done
-ec2-describe-instances
 sleep 5
 IP=$(ec2-describe-instances|awk '{ if($1=="PRIVATEIPADDRESS") { print $4 } }')
 echo $IP
