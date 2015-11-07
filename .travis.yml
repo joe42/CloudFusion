@@ -42,6 +42,5 @@ env:
 cache: apt
 before_install:
 - openssl aes-256-cbc -K $encrypted_cd8f345ce20d_key -iv $encrypted_cd8f345ce20d_iv
-  -in buildscripts/.ssh.tar.enc -out buildscripts/.ssh.tar -d
-- openssl aes-256-cbc -K $encrypted_cd8f345ce20d_key -iv $encrypted_cd8f345ce20d_iv
-  -in buildscripts/ec2_variables.sh.enc -out buildscripts/ec2_variables.sh -d
+  -in buildscripts/.ssh_and_ec2_variables.sh.tar.enc -out buildscripts/.ssh_and_ec2_variables.sh.tar
+  -d
