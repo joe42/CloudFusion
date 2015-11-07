@@ -9,6 +9,9 @@ if [ "$TEST_SUITE" = "integration" ] ; then
 else
     # Unpack ssh credentials to login to EC2 instance.
     tar -xf buildscripts/.ssh_and_ec2_variables.sh.tar
+    echo Unpacked:
+    pwd
+    ls -al .ssh
     mv ec2_variables.sh buildscripts
     IP=$(bash buildscripts/start_ec2_instance.sh)
     # Copy Dropbox.ini and system test script to  EC2 instance.
