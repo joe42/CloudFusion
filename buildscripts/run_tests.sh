@@ -10,13 +10,13 @@ else
     # Unpack ssh credentials to login to EC2 instance.
     tar -xf buildscripts/.ssh_and_ec2_variables.sh.tar
     mv ec2_variables.sh buildscripts
-    IP=$(bash start_ec2_instance.sh)
+    IP=$(bash buildscripts/start_ec2_instance.sh)
     # Copy Dropbox.ini and system test script to  EC2 instance.
     scp -r -oStrictHostKeyChecking=no -i ~/.ssh/ec2keypair.pem cloudfusion/config/Dropbox.ini ubuntu@$IP
     scp -r -oStrictHostKeyChecking=no -i ~/.ssh/ec2keypair.pem buildscripts/run_system_tests.sh; ubuntu@$IP
     ssh -oStrictHostKeyChecking=no -i ~/.ssh/ec2keypair.pem ubuntu@$IP 'bash run_system_tests.sh'
     test_result=$?
-    bash terminate_ec2_instance.sh
+    bash buildscripts/terminate_ec2_instance.sh
     exit $test_result
 fi
 
