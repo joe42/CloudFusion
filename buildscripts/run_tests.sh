@@ -17,7 +17,7 @@ else
     IP=$(bash buildscripts/start_ec2_instance.sh)
     # Copy Dropbox.ini and system test script to  EC2 instance.
     scp -r -oStrictHostKeyChecking=no -i ~/.ssh/ec2keypair.pem cloudfusion/config/Dropbox.ini ubuntu@$IP
-    scp -r -oStrictHostKeyChecking=no -i ~/.ssh/ec2keypair.pem buildscripts/run_system_tests.sh; ubuntu@$IP
+    scp -r -oStrictHostKeyChecking=no -i ~/.ssh/ec2keypair.pem buildscripts/run_system_tests.sh ubuntu@$IP
     ssh -oStrictHostKeyChecking=no -i ~/.ssh/ec2keypair.pem ubuntu@$IP 'bash run_system_tests.sh'
     test_result=$?
     bash buildscripts/terminate_ec2_instance.sh
