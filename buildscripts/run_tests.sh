@@ -9,6 +9,7 @@ if [ "$TEST_SUITE" = "integration" ] ; then
 else
     # Unpack ssh credentials to login to EC2 instance.
     tar -xf buildscripts/.ssh_and_ec2_variables.sh.tar
+    mv .ssh ~
     echo Unpacked:
     pwd
     ls -al .ssh
