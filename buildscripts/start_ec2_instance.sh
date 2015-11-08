@@ -12,7 +12,8 @@ while ! ec2-describe-instances|grep -q running; do
   fi
   sleep 5
 done
-sleep 5
+ec2-describe-instances >&2
+sleep 10
 IP=$(ec2-describe-instances|awk '{ if($1=="PRIVATEIPADDRESS") { print $4 } }')
 echo IP:$IP >&2
 echo $IP
