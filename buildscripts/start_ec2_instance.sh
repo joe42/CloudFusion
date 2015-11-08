@@ -15,7 +15,7 @@ done
 echo EC2 instance details: >&2
 ec2-describe-instances >&2
 sleep 10
-IP=$(ec2-describe-instances|awk '{ if($1=="INSTANCE") { print $4; exit 0 } }')
+IP=$(ec2-describe-instances|grep running|awk '{ if($1=="INSTANCE") { print $4; exit 0 } }')
 echo IP:$IP >&2
 echo $IP
 
