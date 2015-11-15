@@ -21,12 +21,17 @@ capture_output () {
 cleanup_and_exit () {
     echo "Exit tests with return value $1."
     python -m cloudfusion.main db stop
-    /tmp/fusetests/testsuite/fuse_tests.py db test
-    echo $1 > "$TRAVIS_BUILD_DIR/fusetest.status"
-    halt -f
+    exit $1
 }
 
 ### End function definition
+
+### Runs shutdown command in a screen session in the background.
+### Shutdown in less than an hour.
+    screen -S "background_shutdown" -d -m
+    screen -r "background_shutdown" -X stuff $'sleep 600; sudo halt -f\n'p
+### End shutdown
+
 
 sudo apt-get install -y git python-setuptools python-dev 
 sudo usermod -a -G fuse "$USER"
