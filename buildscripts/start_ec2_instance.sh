@@ -1,6 +1,6 @@
 . buildscripts/ec2_variables.sh
 echo Starting EC2 instance. >&2
-ec2-run-instances ami-57360a20 -t t1.micro --region eu-west-1 -k $key -g sg-8ec476eb >&2
+ec2-run-instances ami-57360a20 -t t1.micro --region eu-west-1 --instance-initiated-shutdown-behavior terminate  -k $key -g sg-8ec476eb >&2
 # Wait for instance to be accessible.
 tries=40
 while ! ec2-describe-instances|grep -q running; do
