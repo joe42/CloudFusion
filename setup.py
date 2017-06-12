@@ -8,7 +8,7 @@ setuptools.setup(
     name = "CloudFusion",
     packages = setuptools.find_packages(),
     include_package_data = True,
-    install_requires = ['requests', 'nose', 'simplejson', 'httplib2>=0.8', 'beautifulsoup4', 'argparse', 'ntplib', 'gsutil', 'sh', 'tinydav', 'PyDrive', 'profilehooks', 'psutil'],
+    install_requires = ['requests', 'nose', 'simplejson', 'httplib2>=0.8', 'beautifulsoup4', 'argparse', 'ntplib', 'gsutil==3.36', 'sh', 'tinydav', 'PyDrive', 'profilehooks', 'psutil'],
     version = "7.5.19",
     description = "Filesystem interface to cloud storage services",
     author = "Johannes Mueller",
